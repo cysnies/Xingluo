@@ -1,0 +1,80 @@
+# Getting Started
+
+This guide helps you bootstrap Xingluo for local development and production builds from scratch.
+
+## Requirements
+
+| Dependency | Minimum version | Notes |
+| --- | --- | --- |
+| Node.js | 22.12.0 | See `engines.node` in `package.json` |
+| pnpm | 10.x | Package manager (the project uses pnpm workspace) |
+
+> Tip: manage Node versions with [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm).
+
+## Installation
+
+After cloning the repository, install dependencies:
+
+```bash
+pnpm install
+```
+
+Once dependencies are installed, the reference projects under `references/` are automatically excluded from TypeScript compilation and builds (see `exclude` in `tsconfig.json`).
+
+## Local Development
+
+Start the dev server (defaults to `http://localhost:4321/`):
+
+```bash
+pnpm dev
+```
+
+In development mode:
+
+- Drafts and scheduled posts are **all visible** (for preview); they are filtered only during production builds
+- Content collection changes trigger hot reload
+- Client-side behaviors (theme toggle, View Transitions, etc.) match production
+
+## Type Sync
+
+After modifying content collection schemas or types, run sync to refresh `.astro/types.d.ts`:
+
+```bash
+pnpm sync
+```
+
+## Build
+
+The production build has three steps (see the `build` script in `package.json`):
+
+```bash
+pnpm build
+```
+
+1. **`astro check`**: TypeScript and Astro template type checking; any error aborts the build
+2. **`astro build`**: statically generates the whole site to `dist/` (including dynamic OG images, RSS, sitemap, robots.txt, pagefind UI assets)
+3. **`pagefind --site dist`**: scans `dist/` to generate the full-text search index into `dist/pagefind/`
+
+> Note: `pagefind` is a binary tool installed as a devDependency; no extra configuration is needed.
+
+## Preview the Build
+
+Preview the build output in `dist/` locally:
+
+```bash
+pnpm preview
+```
+
+## Code Quality
+
+| Command | Purpose |
+| --- | --- |
+| `pnpm format` | Format all code with Prettier (including Astro and Tailwind) |
+| `pnpm format:check` | Check formatting compliance (used in CI) |
+| `pnpm lint` | ESLint checks (including `eslint-plugin-astro`) |
+
+## Next Steps
+
+- Read the [Configuration Guide](./configuration.md) to customize site info and feature toggles
+- Read [Content Authoring](./content.md) to start writing
+- Read [Deployment](./deployment.md) to publish your site
