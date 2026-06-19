@@ -79,6 +79,15 @@ const zhCn: UIStrings = {
     names: {
       "zh-cn": "简体中文",
       en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
     },
   },
   notFound: {
