@@ -6,9 +6,10 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
+import PostCard from "@/components/PostCard.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
-import { getPostUrl } from "@/utils/getPostPaths";
-import { useTranslations } from "@/i18n";
+import { groupPostsByYearMonth } from "@/utils/getPostsByGroupCondition";
+import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
 import dayjs from "@/lib/dayjs";
 
@@ -25,15 +26,11 @@ if (!config.features.showArchives && notFoundUrl) {
 const posts = await getCollection("posts");
 const sortedPosts = getSortedPosts(posts);
 
-/** 按年份分组 */
-const postsByYear = new Map<number, typeof sortedPosts>();
-for (const post of sortedPosts) {
-  const year = dayjs(post.data.pubDatetime).year();
-  if (!postsByYear.has(year)) postsByYear.set(year, []);
-  postsByYear.get(year)!.push(post);
-}
+// 按年→月两级分组，年月均降序
+const yearGroups = groupPostsByYearMonth(sortedPosts, (post) =>
+  dayjs(post.data.pubDatetime).tz(timezone).toDate()
+);
 
-const years = Array.from(postsByYear.keys()).sort((a, b) => b - a);
 const title = t.pages.archivesTitle;
 const description = t.pages.archivesDesc;
 const crumbs = [
@@ -49,29 +46,35 @@ const crumbs = [
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
 
-    <div class="space-y-10">
+    <div class="space-y-12">
       {
-        years.map((year) => (
+        yearGroups.map((yearGroup) => (
           <section>
-            <h2 class="mb-4 text-2xl font-semibold tracking-tight">{year}</h2>
-            <ul class="space-y-2 border-l border-border pl-4">
-              {postsByYear.get(year)?.map((post) => {
-                const date = dayjs(post.data.pubDatetime).tz(timezone).format("MM-DD");
-                return (
-                  <li class="flex items-center gap-3">
-                    <span class="w-12 shrink-0 text-xs text-muted-foreground tabular-nums">
-                      {date}
-                    </span>
-                    <a
-                      href={getPostUrl(post.id, post.filePath, locale)}
-                      class="text-sm transition-colors hover:text-primary"
-                    >
-                      {post.data.title}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
+            <h2 class="mb-4 flex items-center gap-2 text-2xl font-semibold tracking-tight">
+              {yearGroup.year}
+              <sup class="text-sm font-normal text-muted-foreground">
+                {tplStr(t.archives.postCount, { count: String(yearGroup.posts.length) })}
+              </sup>
+            </h2>
+            <div class="space-y-8">
+              {yearGroup.months.map((monthGroup) => (
+                <div>
+                  <h3 class="mb-3 flex items-center gap-2 text-lg font-medium">
+                    {tplStr(t.archives.monthLabel, { month: String(monthGroup.month) })}
+                    <sup class="text-xs font-normal text-muted-foreground">
+                      {tplStr(t.archives.postCount, { count: String(monthGroup.posts.length) })}
+                    </sup>
+                  </h3>
+                  <ul class="grid gap-4 sm:grid-cols-2">
+                    {monthGroup.posts.map((post) => (
+                      <li>
+                        <PostCard post={post} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </section>
         ))
       }

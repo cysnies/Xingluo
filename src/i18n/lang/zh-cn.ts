@@ -41,6 +41,10 @@ const zhCn: UIStrings = {
     recentPosts: "最新文章",
     allPosts: "查看全部文章",
   },
+  archives: {
+    postCount: "{{count}} 篇",
+    monthLabel: "{{month}} 月",
+  },
   footer: {
     copyright: "版权所有",
     allRightsReserved: "保留所有权利。",

@@ -40,8 +40,10 @@ const en: UIStrings = {
     featured: "Featured",
     recentPosts: "Recent posts",
     allPosts: "View all posts",
-  },
-  footer: {
+  },  archives: {
+    postCount: "{{count}} posts",
+    monthLabel: "Month {{month}}",
+  },  footer: {
     copyright: "Copyright",
     allRightsReserved: "All rights reserved.",
   },

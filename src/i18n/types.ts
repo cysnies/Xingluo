@@ -49,6 +49,13 @@ export interface UIStrings {
     recentPosts: string;
     allPosts: string;
   };
+  /** 归档页相关 */
+  archives: {
+    /** 文章计数，如 "{{count}} 篇" */
+    postCount: string;
+    /** 月份标签，如 "{{month}} 月" */
+    monthLabel: string;
+  };
   /** 页脚相关 */
   footer: {
     copyright: string;
