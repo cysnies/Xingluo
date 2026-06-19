@@ -14,8 +14,10 @@ RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # 以生产意向安装（保留 devDependencies，构建期需要 astro/check/pagefind 等）
+# PNPM_VERIFY_DEPS_BEFORE_RUN=false 禁用供应链时效检查（minimumReleaseAge），
+# 避免最近发布的传递依赖阻断 Docker 构建
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
-    pnpm install --frozen-lockfile
+    PNPM_VERIFY_DEPS_BEFORE_RUN=false pnpm install --frozen-lockfile
 
 # ===== 阶段 2：构建静态站点 =====
 FROM node:22-alpine AS builder
