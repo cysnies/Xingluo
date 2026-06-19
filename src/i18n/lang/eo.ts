@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** Esperanto（世界语） */
+const eo: UIStrings = {
+  nav: {
+    home: "Hejmo",
+    posts: "Artikoloj",
+    tags: "Etikedoj",
+    about: "Pri",
+    archives: "Arkivo",
+    search: "Serĉi",
+    rss: "RSS-fluo",
+  },
+  post: {
+    publishedAt: "Publikigita je {{date}}",
+    updatedAt: "Ĝisdatigita je {{date}}",
+    sharePostIntro: "Konigi ĉi tiun artikolon:",
+    sharePostOn: "Konigi per {{name}}",
+    sharePostViaEmail: "Konigi per retpoŝto",
+    tagLabel: "Etikedoj:",
+    backToTop: "Reen al supro",
+    goBack: "Reen",
+    editPage: "Redakti en GitHub",
+    previousPost: "Antaŭa artikolo",
+    nextPost: "Sekva artikolo",
+    tableOfContents: "Enhavtabelo",
+    copyCode: "Kopii",
+    copied: "Kopiita",
+    zoomImage: "Pligrandigi bildon",
+    imagePreview: "Antaŭrigardo: ",
+    closeImagePreview: "Fermi antaŭrigardon",
+  },
+  pagination: {
+    prev: "Antaŭa",
+    next: "Sekva",
+    page: "Paĝo {{current}} el {{total}}",
+  },
+  home: {
+    socialLinks: "Sociaj ligiloj",
+    featured: "Elstaraj",
+    recentPosts: "Lastatempaj artikoloj",
+    allPosts: "Vidi ĉiujn artikolojn",
+  },
+  archives: {
+    postCount: "{{count}} artikoloj",
+    monthLabel: "Monato {{month}}",
+  },
+  footer: {
+    copyright: "Kopirajto",
+    allRightsReserved: "Ĉiuj rajtoj rezervitaj.",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "Ĉiuj artikoloj etikeditaj per {{tag}}",
+    tagsTitle: "Ĉiuj etikedoj",
+    tagsDesc: "Foliumi ĉiujn artikolajn etikedojn",
+    postsTitle: "Ĉiuj artikoloj",
+    postsDesc: "Foliumi ĉiujn artikolojn",
+    archivesTitle: "Arkivo",
+    archivesDesc: "Foliumi ĉiujn artikolojn laŭ kronologio",
+    searchTitle: "Serĉi",
+    searchDesc: "Serĉi artikolojn en ĉi tiu retejo",
+    aboutTitle: "Pri",
+    aboutDesc: "Pri ĉi tiu retejo",
+  },
+  a11y: {
+    skipToContent: "Salti al enhavo",
+    openMenu: "Malfermi menuon",
+    closeMenu: "Fermi menuon",
+    toggleTheme: "Ŝanĝi temon",
+    searchPlaceholder: "Serĉi artikolojn...",
+    noResults: "Neniuj rezultoj trovitaj",
+    goToPreviousPage: "Iri al antaŭa paĝo",
+    goToNextPage: "Iri al sekva paĝo",
+    languageSwitcher: "Ŝanĝi lingvon",
+  },
+  languageSwitcher: {
+    label: "Lingvo",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "Paĝo ne trovita",
+    message: "La paĝo, kiun vi serĉas, ne ekzistas aŭ estis movita.",
+    goHome: "Iri al hejmo",
+  },
+  comments: {
+    title: "Komentoj",
+  },
+};
+
+export default eo;
