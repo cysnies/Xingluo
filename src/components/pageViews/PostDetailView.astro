@@ -11,6 +11,7 @@ import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { useTranslations } from "@/i18n";
+import { DEFAULT_LOCALE } from "@/i18n";
 import EditPost from "@/components/post/EditPost.astro";
 import ShareLinks from "@/components/post/ShareLinks.astro";
 import BackButton from "@/components/post/BackButton.astro";
@@ -62,13 +63,25 @@ const ogImage = ogImageUrl
 /** 编辑链接所需的相对源文件路径 */
 const editPath = post.filePath?.replace(/^src\//, "") ?? "";
 const articleUrl = new URL(getPostUrl(post.id, post.filePath, locale), Astro.site).href;
+
+/**
+ * canonical 规范化：
+ * - 文章自定义了 canonicalURL 时优先使用
+ * - 非默认语言且内容沿用原文（无独立翻译）时，指向默认语言原文，
+ *   避免搜索引擎判定为重复内容；默认语言指向自身
+ */
+const resolvedCanonical =
+  canonicalURL ??
+  (locale === DEFAULT_LOCALE
+    ? articleUrl
+    : new URL(getPostUrl(post.id, post.filePath, DEFAULT_LOCALE), Astro.site).href);
 ---
 
 <PostLayout
   title={`${title} | ${config.site.title}`}
   description={description}
   ogImage={ogImage}
-  canonicalURL={canonicalURL}
+  canonicalURL={resolvedCanonical}
   pubDatetime={pubDatetime}
   modDatetime={modDatetime ?? undefined}
 >
