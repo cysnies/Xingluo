@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./theme.css";
 @import "./typography.css";
+@import "rehype-callouts/theme/obsidian";
 
 /* 加载 Tailwind v4 插件 */
 @plugin "@tailwindcss/typography";
@@ -53,6 +54,14 @@
 @layer base {
   * {
     border-color: var(--color-border);
+    /* 自定义滚动条配色 */
+    scrollbar-width: auto;
+    scrollbar-color: var(--color-muted) transparent;
+  }
+
+  /* 标题锚点跳转留出顶部偏移，避免被吸顶头部遮挡 */
+  :target {
+    scroll-margin-block: 1rem;
   }
 
   html {

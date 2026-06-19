@@ -24,12 +24,60 @@
 
 /* 行号容器样式（配合 Shiki transformers） */
 .app-prose .astro-code {
-  @apply rounded-lg;
+  @apply rounded-lg border border-border bg-(--shiki-light-bg) text-(--shiki-light);
+  [&_span]:text-(--shiki-light);
 }
 
-/* 代码块文件名标签 */
-.app-prose .astro-code .filename {
-  @apply mb-3 inline-block rounded-md bg-code-highlight px-2 py-0.5 text-xs font-medium text-code-foreground;
+/* 暗色代码块切换为暗色 Shiki 主题 */
+.dark .app-prose .astro-code {
+  @apply bg-(--shiki-dark-bg) text-(--shiki-dark);
+  [&_span]:text-(--shiki-dark);
+}
+
+/* 代码块文件名标签（直接子元素，由 transformerFileName 注入） */
+.app-prose .astro-code > .filename {
+  @apply border-border bg-background;
+}
+
+/* Shiki transformer 样式：差异行、高亮行、高亮词 */
+.app-prose .astro-code {
+  .line.diff.add {
+    @apply relative inline-block w-full bg-green-500/20;
+    &::before {
+      @apply absolute -left-3 text-green-500;
+      content: "+";
+    }
+  }
+  .line.diff.remove {
+    @apply relative inline-block w-full bg-red-500/20;
+    &::before {
+      @apply absolute -left-3 text-red-500;
+      content: "-";
+    }
+  }
+  .line.highlighted {
+    @apply inline-block w-full bg-slate-400/20;
+  }
+  .highlighted-word {
+    @apply rounded-sm border border-border px-0.5 py-px;
+  }
+}
+
+/* 折叠块（非 callout）：仅 summary 可点击，内容折叠 */
+.app-prose details:not(.callout) {
+  @apply text-foreground inline-block cursor-pointer select-none;
+}
+
+.app-prose summary {
+  @apply focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-dashed focus-visible:outline-ring;
+}
+
+/* 可放大图片的光标与焦点提示（灯箱由 postEnhancements 注入 role） */
+.app-prose img[role="button"] {
+  @apply cursor-zoom-in;
+  &:focus-visible {
+    @apply outline-2 outline-offset-2 outline-dashed;
+  }
 }
 
 /* 标题锚点链接：跟随标题颜色，悬停时显现 */
