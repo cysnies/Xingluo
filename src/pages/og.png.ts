@@ -26,7 +26,7 @@ export const GET: APIRoute = async ({ url }) => {
       hostname,
       label: config.site.author,
     },
-    fonts
+    fonts,
   );
 
   return new Response(png, {

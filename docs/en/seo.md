@@ -35,11 +35,13 @@ The `<head>` in [`src/layouts/Layout.astro`](../src/layouts/Layout.astro) output
   "image": "OG image URL",
   "datePublished": "2026-06-19T10:00:00.000Z",
   "dateModified": "2026-06-20T10:00:00.000Z",
-  "author": [{
-    "@type": "Person",
-    "name": "Author name",
-    "url": "Author homepage"
-  }]
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Author name",
+      "url": "Author homepage"
+    }
+  ]
 }
 ```
 
@@ -92,7 +94,12 @@ The four-level fallback in `PostDetailView.astro`:
 `Layout.astro` injects the RSS autodiscovery link:
 
 ```html
-<link rel="alternate" type="application/rss+xml" title="..." href=".../rss.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title="..."
+  href=".../rss.xml"
+/>
 ```
 
 ## sitemap

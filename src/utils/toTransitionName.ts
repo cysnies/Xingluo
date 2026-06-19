@@ -11,7 +11,7 @@ export const toTransitionName = (str: string): string => {
     // 编码非 ASCII 字符（中文、日文等）
     .replace(
       /[^\x00-\x7F]/gu,
-      (c) => "u" + c.codePointAt(0)!.toString(16).padStart(6, "0")
+      (c) => "u" + c.codePointAt(0)!.toString(16).padStart(6, "0"),
     )
     // 替换剩余非法字符（冒号、斜杠等）为连字符
     .replace(/[^a-zA-Z0-9_-]/g, "-")

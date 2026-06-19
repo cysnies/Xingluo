@@ -81,9 +81,9 @@ title: "文章标题"
 pubDatetime: 2026-06-19T10:00:00+08:00
 description: "文章描述"
 tags: ["标签1", "标签2"]
-featured: false  # 可选，是否精选
-draft: false     # 可选，是否草稿
-ogImage: "./cover.png"  # 可选，OG 图
+featured: false # 可选，是否精选
+draft: false # 可选，是否草稿
+ogImage: "./cover.png" # 可选，OG 图
 ---
 ```
 
@@ -118,35 +118,35 @@ import { APlayer, DPlayer } from "@/components/mdx";
 
 完整项目文档位于 [`docs/`](./docs/) 目录：
 
-| 文档 | 说明 |
-| --- | --- |
-| [快速开始](./docs/zh-cn/getting-started.md) | 安装、开发与构建 |
-| [配置指南](./docs/zh-cn/configuration.md) | 站点信息与功能开关 |
-| [内容创作](./docs/zh-cn/content.md) | frontmatter 与写作规范 |
-| [架构总览](./docs/zh-cn/architecture.md) | 项目结构与设计决策 |
-| [国际化](./docs/zh-cn/i18n.md) | 多语言适配 |
-| [主题与样式](./docs/zh-cn/theming.md) | shadcn 视觉与 OKLCH |
-| [评论系统](./docs/zh-cn/comments.md) | giscus / twikoo / waline |
-| [媒体播放器](./docs/zh-cn/media-players.md) | APlayer / DPlayer |
-| [SEO](./docs/zh-cn/seo.md) | OG 图、RSS、sitemap |
-| [搜索](./docs/zh-cn/search.md) | Pagefind 索引 |
-| [部署](./docs/zh-cn/deployment.md) | 静态托管与 Docker |
+| 文档                                        | 说明                     |
+| ------------------------------------------- | ------------------------ |
+| [快速开始](./docs/zh-cn/getting-started.md) | 安装、开发与构建         |
+| [配置指南](./docs/zh-cn/configuration.md)   | 站点信息与功能开关       |
+| [内容创作](./docs/zh-cn/content.md)         | frontmatter 与写作规范   |
+| [架构总览](./docs/zh-cn/architecture.md)    | 项目结构与设计决策       |
+| [国际化](./docs/zh-cn/i18n.md)              | 多语言适配               |
+| [主题与样式](./docs/zh-cn/theming.md)       | shadcn 视觉与 OKLCH      |
+| [评论系统](./docs/zh-cn/comments.md)        | giscus / twikoo / waline |
+| [媒体播放器](./docs/zh-cn/media-players.md) | APlayer / DPlayer        |
+| [SEO](./docs/zh-cn/seo.md)                  | OG 图、RSS、sitemap      |
+| [搜索](./docs/zh-cn/search.md)              | Pagefind 索引            |
+| [部署](./docs/zh-cn/deployment.md)          | 静态托管与 Docker        |
 
 ## 🛠️ 技术栈
 
-| 类别 | 项目 |
-| --- | --- |
-| 框架 | [Astro](https://astro.build) 6.x |
-| 样式 | [Tailwind CSS](https://tailwindcss.com) v4、[shadcn/ui](https://ui.shadcn.com) |
-| 图标 | astro-icon + Font Awesome |
-| 代码高亮 | Shiki |
-| 搜索 | [Pagefind](https://pagefind.app) |
-| OG 图 | satori + sharp |
-| 评论 | giscus / twikoo / waline |
-| 播放器 | APlayer / DPlayer |
-| 日期 | [dayjs](https://day.js.org) |
-| 语言 | TypeScript（strict） |
-| 包管理 | pnpm |
+| 类别     | 项目                                                                           |
+| -------- | ------------------------------------------------------------------------------ |
+| 框架     | [Astro](https://astro.build) 6.x                                               |
+| 样式     | [Tailwind CSS](https://tailwindcss.com) v4、[shadcn/ui](https://ui.shadcn.com) |
+| 图标     | astro-icon + Font Awesome                                                      |
+| 代码高亮 | Shiki                                                                          |
+| 搜索     | [Pagefind](https://pagefind.app)                                               |
+| OG 图    | satori + sharp                                                                 |
+| 评论     | giscus / twikoo / waline                                                       |
+| 播放器   | APlayer / DPlayer                                                              |
+| 日期     | [dayjs](https://day.js.org)                                                    |
+| 语言     | TypeScript（strict）                                                           |
+| 包管理   | pnpm                                                                           |
 
 ## 🐳 容器部署
 

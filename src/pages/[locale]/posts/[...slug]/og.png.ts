@@ -23,7 +23,7 @@ export async function getStaticPaths() {
       .map((post) => ({
         params: { locale, slug: getPostSlug(post.id, post.filePath) },
         props: { post },
-      }))
+      })),
   );
 }
 
@@ -32,7 +32,9 @@ export const GET: APIRoute = async ({ props, url }) => {
     return new Response(null, { status: 404, statusText: "Not found" });
   }
 
-  const { post } = props as { post: { data: { title: string; description?: string } } };
+  const { post } = props as {
+    post: { data: { title: string; description?: string } };
+  };
   const fonts = await loadOgFonts(url);
   if (!fonts) {
     // 字体不可用时回退占位图，保证端点始终输出有效文件
@@ -50,7 +52,7 @@ export const GET: APIRoute = async ({ props, url }) => {
       hostname,
       label: config.site.author,
     },
-    fonts
+    fonts,
   );
 
   return new Response(png, {

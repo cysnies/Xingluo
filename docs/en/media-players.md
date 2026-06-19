@@ -23,10 +23,10 @@ The two are independent. When disabled:
 
 ## Two Usage Modes
 
-| Mode | Applicable to | Syntax |
-| --- | --- | --- |
-| MD fence | Plain `.md` and `.mdx` | ` ```aplayer ` / ` ```dplayer ` + JSON config body |
-| MDX component | `.mdx` only | `import { APlayer, DPlayer } from "@/components/mdx"` |
+| Mode          | Applicable to          | Syntax                                                |
+| ------------- | ---------------------- | ----------------------------------------------------- |
+| MD fence      | Plain `.md` and `.mdx` | ` ```aplayer ` / ` ```dplayer ` + JSON config body    |
+| MDX component | `.mdx` only            | `import { APlayer, DPlayer } from "@/components/mdx"` |
 
 Both modes ultimately output the same placeholder div structure (`<div class="xng-aplayer|xng-dplayer" data-config>`), lazy-loaded and instantiated by [`src/scripts/players.ts`](../src/scripts/players.ts).
 
@@ -60,7 +60,12 @@ import { APlayer } from "@/components/mdx";
 
 <APlayer
   audio={[
-    { name: "Song", artist: "Artist", url: "/audio/song.mp3", cover: "/images/cover.jpg" }
+    {
+      name: "Song",
+      artist: "Artist",
+      url: "/audio/song.mp3",
+      cover: "/images/cover.jpg",
+    },
   ]}
   theme="#b7daff"
   loop="all"
@@ -69,29 +74,29 @@ import { APlayer } from "@/components/mdx";
 
 ### Options
 
-| Field | Type | Default | Notes |
-| --- | --- | --- | --- |
-| `audio` | Audio \| Audio[] | required | Audio object or list |
-| `theme` | string | `#b7daff` | Player theme color |
-| `loop` | `"all"` \| `"one"` \| `"none"` | `all` | Loop mode |
-| `order` | `"list"` \| `"random"` | `list` | Play order |
-| `volume` | number | `0.7` | Initial volume (0–1) |
-| `autoplay` | boolean | `false` | Autoplay (subject to browser policy) |
-| `listFolded` | boolean | `false` | List folded |
-| `listMaxHeight` | string | — | List max height (CSS value) |
-| `lrcType` | `0` \| `1` \| `2` \| `3` | `0` | Lyric type: 0 none / 1 string / 2 URL |
+| Field           | Type                           | Default   | Notes                                 |
+| --------------- | ------------------------------ | --------- | ------------------------------------- |
+| `audio`         | Audio \| Audio[]               | required  | Audio object or list                  |
+| `theme`         | string                         | `#b7daff` | Player theme color                    |
+| `loop`          | `"all"` \| `"one"` \| `"none"` | `all`     | Loop mode                             |
+| `order`         | `"list"` \| `"random"`         | `list`    | Play order                            |
+| `volume`        | number                         | `0.7`     | Initial volume (0–1)                  |
+| `autoplay`      | boolean                        | `false`   | Autoplay (subject to browser policy)  |
+| `listFolded`    | boolean                        | `false`   | List folded                           |
+| `listMaxHeight` | string                         | —         | List max height (CSS value)           |
+| `lrcType`       | `0` \| `1` \| `2` \| `3`       | `0`       | Lyric type: 0 none / 1 string / 2 URL |
 
 ### audio Object
 
-| Field | Notes |
-| --- | --- |
-| `name` | Track name (falls back to `title`, then `'Audio name'`) |
-| `artist` | Artist (falls back to `author`) |
-| `url` | Audio URL (required) |
-| `cover` | Cover (falls back to `pic`) |
-| `lrc` | Lyrics (string or URL, paired with `lrcType`) |
-| `theme` | Per-track theme color |
-| `type` | Audio type: `auto` \| `hls` \| `normal` |
+| Field    | Notes                                                   |
+| -------- | ------------------------------------------------------- |
+| `name`   | Track name (falls back to `title`, then `'Audio name'`) |
+| `artist` | Artist (falls back to `author`)                         |
+| `url`    | Audio URL (required)                                    |
+| `cover`  | Cover (falls back to `pic`)                             |
+| `lrc`    | Lyrics (string or URL, paired with `lrcType`)           |
+| `theme`  | Per-track theme color                                   |
+| `type`   | Audio type: `auto` \| `hls` \| `normal`                 |
 
 ## DPlayer Video Player
 
@@ -126,50 +131,50 @@ import { DPlayer } from "@/components/mdx";
 
 ### Options
 
-| Field | Type | Default | Notes |
-| --- | --- | --- | --- |
-| `video` | Video | required | Video config |
-| `theme` | string | `#b7daff` | Theme color |
-| `autoplay` | boolean | `false` | Autoplay |
-| `loop` | boolean | `false` | Loop playback |
-| `screenshot` | boolean | `false` | Screenshot feature |
-| `hotkey` | boolean | `true` | Hotkeys |
-| `preload` | `"none"` \| `"metadata"` \| `"auto"` | `auto` | Preload |
-| `volume` | number | `0.7` | Initial volume |
-| `playbackSpeed` | number[] | — | Playback speed list |
-| `subtitle` | Subtitle | — | Subtitles |
-| `danmaku` | Danmaku | — | Danmaku (bullet comments) |
-| `live` | boolean | `false` | Live mode |
-| `mutex` | boolean | `true` | Mutex (only one player per page) |
+| Field           | Type                                 | Default   | Notes                            |
+| --------------- | ------------------------------------ | --------- | -------------------------------- |
+| `video`         | Video                                | required  | Video config                     |
+| `theme`         | string                               | `#b7daff` | Theme color                      |
+| `autoplay`      | boolean                              | `false`   | Autoplay                         |
+| `loop`          | boolean                              | `false`   | Loop playback                    |
+| `screenshot`    | boolean                              | `false`   | Screenshot feature               |
+| `hotkey`        | boolean                              | `true`    | Hotkeys                          |
+| `preload`       | `"none"` \| `"metadata"` \| `"auto"` | `auto`    | Preload                          |
+| `volume`        | number                               | `0.7`     | Initial volume                   |
+| `playbackSpeed` | number[]                             | —         | Playback speed list              |
+| `subtitle`      | Subtitle                             | —         | Subtitles                        |
+| `danmaku`       | Danmaku                              | —         | Danmaku (bullet comments)        |
+| `live`          | boolean                              | `false`   | Live mode                        |
+| `mutex`         | boolean                              | `true`    | Mutex (only one player per page) |
 
 ### video Object
 
-| Field | Notes |
-| --- | --- |
-| `url` | Video URL (required) |
-| `pic` | Cover |
-| `thumbnails` | Thumbnail URL |
-| `type` | Video type: `auto` \| `hls` \| `flv` \| `dash` \| `normal` |
-| `quality` | Quality list + `defaultQuality` index |
+| Field        | Notes                                                      |
+| ------------ | ---------------------------------------------------------- |
+| `url`        | Video URL (required)                                       |
+| `pic`        | Cover                                                      |
+| `thumbnails` | Thumbnail URL                                              |
+| `type`       | Video type: `auto` \| `hls` \| `flv` \| `dash` \| `normal` |
+| `quality`    | Quality list + `defaultQuality` index                      |
 
 ### subtitle Object
 
-| Field | Notes |
-| --- | --- |
-| `url` | Subtitle URL (required) |
-| `type` | `webvtt` \| `ass` |
-| `fontSize` | Font size |
-| `bottom` | Distance from bottom |
-| `color` | Color |
+| Field      | Notes                   |
+| ---------- | ----------------------- |
+| `url`      | Subtitle URL (required) |
+| `type`     | `webvtt` \| `ass`       |
+| `fontSize` | Font size               |
+| `bottom`   | Distance from bottom    |
+| `color`    | Color                   |
 
 ### danmaku Object
 
-| Field | Notes |
-| --- | --- |
-| `id` | Unique danmaku pool ID (required) |
-| `api` | Danmaku API URL (required) |
-| `user` | User identifier |
-| `maximum` | Max danmaku count |
+| Field     | Notes                             |
+| --------- | --------------------------------- |
+| `id`      | Unique danmaku pool ID (required) |
+| `api`     | Danmaku API URL (required)        |
+| `user`    | User identifier                   |
+| `maximum` | Max danmaku count                 |
 
 ## Lazy Loading Mechanism
 

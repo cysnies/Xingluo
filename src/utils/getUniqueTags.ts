@@ -21,7 +21,7 @@ export function getUniqueTags(posts: CollectionEntry<"posts">[]): Tag[] {
     .map((tag) => ({ tag: slugifyStr(tag), tagName: tag }))
     .filter(
       (value, index, self) =>
-        self.findIndex((t) => t.tag === value.tag) === index
+        self.findIndex((t) => t.tag === value.tag) === index,
     )
     .sort((tagA, tagB) => tagA.tag.localeCompare(tagB.tag));
 }

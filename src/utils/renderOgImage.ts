@@ -16,7 +16,10 @@ const PLACEHOLDER_PNG_BASE64 =
 /** 返回占位 PNG 的 ArrayBuffer */
 export function getPlaceholderPng(): ArrayBuffer {
   const buffer = Buffer.from(PLACEHOLDER_PNG_BASE64, "base64");
-  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer;
+  return buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength,
+  ) as ArrayBuffer;
 }
 
 /** 浅色卡片背景 */
@@ -45,7 +48,7 @@ interface RenderOgImageInput {
  */
 export async function renderOgImage(
   input: RenderOgImageInput,
-  fonts: { regular: SatoriFont; bold: SatoriFont }
+  fonts: { regular: SatoriFont; bold: SatoriFont },
 ): Promise<ArrayBuffer> {
   const { title, subtitle, hostname, label } = input;
 
@@ -172,7 +175,7 @@ export async function renderOgImage(
       height: OG_HEIGHT,
       embedFont: true,
       fonts: [fonts.regular, fonts.bold],
-    }
+    },
   );
 
   const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();

@@ -150,12 +150,12 @@ src/pages/
 
 星罗的客户端交互通过 `<script>` 标签在页面底部加载，统一适配 View Transitions：
 
-| 脚本 | 加载位置 | 事件适配 | 职责 |
-| --- | --- | --- | --- |
-| `theme.ts` | `Layout.astro` body 末 | `astro:after-swap` 重绑、`astro:before-swap` 携带 theme-color、`prefers-color-scheme` change | 主题持久化与切换 |
-| `postEnhancements.ts` | `PostDetailView.astro` | `astro:page-load` 重初始化 | 标题锚点、代码复制、阅读进度、图片灯箱 |
-| `comments.ts` | `Comments.astro` | `astro:page-load` 重扫 | 评论懒加载与主题同步 |
-| `players.ts` | `PostDetailView.astro` / `AboutView.astro`（条件） | `astro:page-load` 重扫 | 播放器懒加载 |
+| 脚本                  | 加载位置                                           | 事件适配                                                                                     | 职责                                   |
+| --------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------- |
+| `theme.ts`            | `Layout.astro` body 末                             | `astro:after-swap` 重绑、`astro:before-swap` 携带 theme-color、`prefers-color-scheme` change | 主题持久化与切换                       |
+| `postEnhancements.ts` | `PostDetailView.astro`                             | `astro:page-load` 重初始化                                                                   | 标题锚点、代码复制、阅读进度、图片灯箱 |
+| `comments.ts`         | `Comments.astro`                                   | `astro:page-load` 重扫                                                                       | 评论懒加载与主题同步                   |
+| `players.ts`          | `PostDetailView.astro` / `AboutView.astro`（条件） | `astro:page-load` 重扫                                                                       | 播放器懒加载                           |
 
 > 注意：`comments.ts` 与 `players.ts` 无顶层 import/export，需在文件末尾加 `export {}` 标记为模块，避免与其他文件的全局声明冲突。
 

@@ -117,11 +117,11 @@ waline 在评论容器进入视口时动态 `import("@waline/client")` 与样式
 
 站点主题切换时，评论系统主题自动同步：
 
-| 评论系统 | 同步方式 |
-| --- | --- |
-| giscus | `postMessage({giscus:{setConfig:{theme}}})` 向 iframe 发消息 |
-| waline | `dark:"html.dark"` CSS 选择器自动跟随 |
-| twikoo | 监听 `.dark` 类变化，重建评论实例 |
+| 评论系统 | 同步方式                                                     |
+| -------- | ------------------------------------------------------------ |
+| giscus   | `postMessage({giscus:{setConfig:{theme}}})` 向 iframe 发消息 |
+| waline   | `dark:"html.dark"` CSS 选择器自动跟随                        |
+| twikoo   | 监听 `.dark` 类变化，重建评论实例                            |
 
 主题监听通过 `MutationObserver` 观察 `document.documentElement` 的 `class` 与 `data-theme` 属性变化。
 

@@ -29,9 +29,7 @@ function readLabels(root: HTMLElement) {
 
 /** 为标题元素追加锚点链接 */
 function addHeadingLinks(root: HTMLElement) {
-  const headings = Array.from(
-    root.querySelectorAll("h2, h3, h4, h5, h6")
-  );
+  const headings = Array.from(root.querySelectorAll("h2, h3, h4, h5, h6"));
   for (const heading of headings) {
     if (heading.querySelector(".heading-link")) continue;
     if (!heading.id) continue;
@@ -52,16 +50,25 @@ function addHeadingLinks(root: HTMLElement) {
 }
 
 /** 为代码块追加复制按钮 */
-function attachCopyButtons(root: HTMLElement, labels: { copy: string; copied: string }) {
+function attachCopyButtons(
+  root: HTMLElement,
+  labels: { copy: string; copied: string },
+) {
   const codeBlocks = Array.from(root.querySelectorAll("pre"));
   for (const codeBlock of codeBlocks) {
     // transformerFileName 在 pre 内注入了 .xng-code-header
     // 复制按钮放入 header 右侧操作区，与文件名/语言徽标同行
-    const header = codeBlock.querySelector<HTMLElement>(":scope > .xng-code-header");
-    const actions = header?.querySelector<HTMLElement>(":scope > .xng-code-actions");
+    const header = codeBlock.querySelector<HTMLElement>(
+      ":scope > .xng-code-header",
+    );
+    const actions = header?.querySelector<HTMLElement>(
+      ":scope > .xng-code-actions",
+    );
 
     // 跳过已注入复制按钮的代码块（View Transitions 复用）
-    const existingBtn = (actions ?? codeBlock.parentElement)?.querySelector(":scope > .copy-code, .copy-code");
+    const existingBtn = (actions ?? codeBlock.parentElement)?.querySelector(
+      ":scope > .copy-code, .copy-code",
+    );
     if (existingBtn) continue;
 
     const copyButton = document.createElement("button");
@@ -150,11 +157,14 @@ interface LightboxState {
 }
 
 /** 初始化图片灯箱 */
-function initLightbox(root: HTMLElement, labels: {
-  zoom: string;
-  preview: string;
-  close: string;
-}) {
+function initLightbox(
+  root: HTMLElement,
+  labels: {
+    zoom: string;
+    preview: string;
+    close: string;
+  },
+) {
   const prefersReducedMotion = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -185,7 +195,7 @@ function initLightbox(root: HTMLElement, labels: {
       image.setAttribute("aria-haspopup", "dialog");
       image.setAttribute(
         "aria-label",
-        image.alt ? `${labels.zoom}: ${image.alt}` : labels.zoom
+        image.alt ? `${labels.zoom}: ${image.alt}` : labels.zoom,
       );
       image.dataset.lightboxReady = "true";
     }
@@ -230,7 +240,7 @@ function initLightbox(root: HTMLElement, labels: {
   function trapFocus(e: KeyboardEvent) {
     if (!state.overlay) return;
     const focusables = state.overlay.querySelectorAll(
-      'a[href], button, [tabindex]:not([tabindex="-1"])'
+      'a[href], button, [tabindex]:not([tabindex="-1"])',
     );
     if (focusables.length === 0) return;
     const first = focusables[0] as HTMLElement;
@@ -261,7 +271,7 @@ function initLightbox(root: HTMLElement, labels: {
     overlay.setAttribute("aria-modal", "true");
     overlay.setAttribute(
       "aria-label",
-      alt ? `${labels.preview}${alt}` : labels.zoom
+      alt ? `${labels.preview}${alt}` : labels.zoom,
     );
     overlay.className =
       "fixed inset-0 z-[60] flex cursor-zoom-out items-center justify-center bg-black/70 opacity-0 backdrop-blur-sm transition-opacity duration-200 motion-reduce:transition-none";
@@ -296,7 +306,7 @@ function initLightbox(root: HTMLElement, labels: {
         if (t.length === 2) {
           state.initialDist = Math.hypot(
             t[1].clientX - t[0].clientX,
-            t[1].clientY - t[0].clientY
+            t[1].clientY - t[0].clientY,
           );
           state.initialScale = state.currentScale;
         } else if (t.length === 1) {
@@ -321,7 +331,7 @@ function initLightbox(root: HTMLElement, labels: {
           state.panStartTranslateY = state.translateY;
         }
       },
-      { passive: false }
+      { passive: false },
     );
 
     overlay.addEventListener(
@@ -332,11 +342,11 @@ function initLightbox(root: HTMLElement, labels: {
           e.preventDefault();
           const dist = Math.hypot(
             t[1].clientX - t[0].clientX,
-            t[1].clientY - t[0].clientY
+            t[1].clientY - t[0].clientY,
           );
           state.currentScale = Math.min(
             4,
-            Math.max(1, state.initialScale * (dist / state.initialDist))
+            Math.max(1, state.initialScale * (dist / state.initialDist)),
           );
           applyTransform();
         } else if (t.length === 1 && state.currentScale > 1) {
@@ -349,18 +359,19 @@ function initLightbox(root: HTMLElement, labels: {
             (t[0].clientY - state.panStartY) / state.currentScale;
           const maxX = Math.max(
             0,
-            (image.clientWidth - overlay.clientWidth / state.currentScale) / 2
+            (image.clientWidth - overlay.clientWidth / state.currentScale) / 2,
           );
           const maxY = Math.max(
             0,
-            (image.clientHeight - overlay.clientHeight / state.currentScale) / 2
+            (image.clientHeight - overlay.clientHeight / state.currentScale) /
+              2,
           );
           state.translateX = Math.min(maxX, Math.max(-maxX, state.translateX));
           state.translateY = Math.min(maxY, Math.max(-maxY, state.translateY));
           applyTransform();
         }
       },
-      { passive: false }
+      { passive: false },
     );
 
     overlay.addEventListener("touchend", (e) => {

@@ -4,10 +4,10 @@
 
 ## 环境要求
 
-| 依赖 | 最低版本 | 说明 |
-| --- | --- | --- |
-| Node.js | 22.12.0 | 见 `package.json` 的 `engines.node` |
-| pnpm | 10.x | 包管理器（项目使用 pnpm workspace） |
+| 依赖    | 最低版本 | 说明                                |
+| ------- | -------- | ----------------------------------- |
+| Node.js | 22.12.0  | 见 `package.json` 的 `engines.node` |
+| pnpm    | 10.x     | 包管理器（项目使用 pnpm workspace） |
 
 > 提示：建议使用 [fnm](https://github.com/Schniz/fnm) 或 [nvm](https://github.com/nvm-sh/nvm) 管理 Node 版本。
 
@@ -67,11 +67,11 @@ pnpm preview
 
 ## 代码质量
 
-| 命令 | 用途 |
-| --- | --- |
-| `pnpm format` | 用 Prettier 格式化全部代码（含 Astro 与 Tailwind） |
-| `pnpm format:check` | 检查格式是否合规（CI 用） |
-| `pnpm lint` | ESLint 检查（含 `eslint-plugin-astro`） |
+| 命令                | 用途                                               |
+| ------------------- | -------------------------------------------------- |
+| `pnpm format`       | 用 Prettier 格式化全部代码（含 Astro 与 Tailwind） |
+| `pnpm format:check` | 检查格式是否合规（CI 用）                          |
+| `pnpm lint`         | ESLint 检查（含 `eslint-plugin-astro`）            |
 
 ## 下一步
 

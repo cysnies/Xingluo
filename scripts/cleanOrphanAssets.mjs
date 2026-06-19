@@ -46,7 +46,8 @@ async function walk(dir, files = []) {
 function extractAssetRefs(text, currentFile) {
   const refs = new Set();
   // 匹配所有引号字符串，过滤常见资源扩展名
-  const re = /["'`]([^"'`\s]+\.(?:js|css|woff|woff2|ttf|otf|eot|png|jpg|jpeg|gif|webp|avif|svg))["'`]/g;
+  const re =
+    /["'`]([^"'`\s]+\.(?:js|css|woff|woff2|ttf|otf|eot|png|jpg|jpeg|gif|webp|avif|svg))["'`]/g;
   let m;
   while ((m = re.exec(text)) !== null) {
     const raw = m[1];
@@ -138,7 +139,7 @@ async function main() {
   if (removed > 0) {
     const kb = (removedBytes / 1024).toFixed(1);
     console.log(
-      `[cleanOrphanAssets] 删除 ${removed} 个孤儿资源，释放 ${kb} KB（${relative(distDir, astroDir)}/）`
+      `[cleanOrphanAssets] 删除 ${removed} 个孤儿资源，释放 ${kb} KB（${relative(distDir, astroDir)}/）`,
     );
   } else {
     console.log("[cleanOrphanAssets] 未发现孤儿资源");

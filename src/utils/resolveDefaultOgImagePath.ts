@@ -21,9 +21,13 @@ function existsInPublic(filename: string): boolean {
 export function resolveDefaultOgImagePath(): string {
   const filename = config.site.ogImage ?? "default-og.jpg";
 
-  if (filename.includes("..") || filename.includes("/") || filename.includes("\\")) {
+  if (
+    filename.includes("..") ||
+    filename.includes("/") ||
+    filename.includes("\\")
+  ) {
     throw new Error(
-      `site.ogImage 必须是 public/ 下的单个文件名（如 "default-og.jpg"），实际值为 "${filename}"`
+      `site.ogImage 必须是 public/ 下的单个文件名（如 "default-og.jpg"），实际值为 "${filename}"`,
     );
   }
 
@@ -34,5 +38,7 @@ export function resolveDefaultOgImagePath(): string {
   }
 
   // 未启用动态 OG 图：若配置的文件存在则使用，否则回退到 favicon
-  return existsInPublic(filename) ? getAssetPath(filename) : getAssetPath("favicon.svg");
+  return existsInPublic(filename)
+    ? getAssetPath(filename)
+    : getAssetPath("favicon.svg");
 }

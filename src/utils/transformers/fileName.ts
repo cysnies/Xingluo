@@ -19,14 +19,7 @@ interface FileNameTransformerOptions {
 }
 
 /** 不展示语言徽标的语言（无意义的高亮语言） */
-const HIDDEN_LANGS = new Set([
-  "text",
-  "plaintext",
-  "txt",
-  "plain",
-  "ansi",
-  "",
-]);
+const HIDDEN_LANGS = new Set(["text", "plaintext", "txt", "plain", "ansi", ""]);
 
 /** 从 meta 原始字符串解析文件名，兼容 file= 与 filename= 两种写法 */
 function parseRawMeta(raw: string): string | undefined {
@@ -69,7 +62,7 @@ function parseFileNameFromMeta(meta: unknown): string | undefined {
  * overflow 裁切，复制按钮也共享同一行，避免半在内半在外的错位
  */
 export function transformerFileName(
-  options: FileNameTransformerOptions = {}
+  options: FileNameTransformerOptions = {},
 ): ShikiTransformer {
   const { hideDot = false } = options;
 

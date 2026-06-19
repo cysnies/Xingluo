@@ -150,12 +150,12 @@ src/pages/
 
 Xingluo's client-side interactions are loaded via `<script>` tags at the bottom of pages, all adapted for View Transitions:
 
-| Script | Load location | Event adaptation | Responsibilities |
-| --- | --- | --- | --- |
-| `theme.ts` | end of `Layout.astro` body | rebind on `astro:after-swap`, carry theme-color on `astro:before-swap`, `prefers-color-scheme` change | Theme persistence and toggle |
-| `postEnhancements.ts` | `PostDetailView.astro` | reinit on `astro:page-load` | Heading anchors, code copy, reading progress, image lightbox |
-| `comments.ts` | `Comments.astro` | rescan on `astro:page-load` | Comment lazy loading and theme sync |
-| `players.ts` | `PostDetailView.astro` / `AboutView.astro` (conditional) | rescan on `astro:page-load` | Player lazy loading |
+| Script                | Load location                                            | Event adaptation                                                                                      | Responsibilities                                             |
+| --------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `theme.ts`            | end of `Layout.astro` body                               | rebind on `astro:after-swap`, carry theme-color on `astro:before-swap`, `prefers-color-scheme` change | Theme persistence and toggle                                 |
+| `postEnhancements.ts` | `PostDetailView.astro`                                   | reinit on `astro:page-load`                                                                           | Heading anchors, code copy, reading progress, image lightbox |
+| `comments.ts`         | `Comments.astro`                                         | rescan on `astro:page-load`                                                                           | Comment lazy loading and theme sync                          |
+| `players.ts`          | `PostDetailView.astro` / `AboutView.astro` (conditional) | rescan on `astro:page-load`                                                                           | Player lazy loading                                          |
 
 > Note: `comments.ts` and `players.ts` have no top-level import/export; add `export {}` at the end of the file to mark them as modules and avoid global declaration conflicts with other files.
 

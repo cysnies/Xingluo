@@ -6,11 +6,11 @@
 
 [`src/styles/`](../src/styles/)：
 
-| 文件 | 内容 |
-| --- | --- |
-| `theme.css` | shadcn 主题变量（OKLCH，亮色 `:root` + 暗色 `.dark`） |
-| `global.css` | Tailwind 入口、基础层、自定义工具类、标注框主题 |
-| `typography.css` | `.app-prose` 排版与代码块样式 |
+| 文件             | 内容                                                  |
+| ---------------- | ----------------------------------------------------- |
+| `theme.css`      | shadcn 主题变量（OKLCH，亮色 `:root` + 暗色 `.dark`） |
+| `global.css`     | Tailwind 入口、基础层、自定义工具类、标注框主题       |
+| `typography.css` | `.app-prose` 排版与代码块样式                         |
 
 ## 主题变量
 
@@ -115,13 +115,13 @@
 
 [`src/components/ui/`](../src/components/ui/) 提供 shadcn 风格组件：
 
-| 组件 | 说明 |
-| --- | --- |
-| `Button` | `<a>` / `<button>` 自动切换，cva 变体（variant、size） |
-| `Badge` | 徽章 |
-| `Card` / `CardHeader` / `CardTitle` / `CardDescription` / `CardContent` / `CardFooter` | Card 组件族 |
-| `Input` | 输入框 |
-| `Separator` | 分隔线 |
+| 组件                                                                                   | 说明                                                   |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `Button`                                                                               | `<a>` / `<button>` 自动切换，cva 变体（variant、size） |
+| `Badge`                                                                                | 徽章                                                   |
+| `Card` / `CardHeader` / `CardTitle` / `CardDescription` / `CardContent` / `CardFooter` | Card 组件族                                            |
+| `Input`                                                                                | 输入框                                                 |
+| `Separator`                                                                            | 分隔线                                                 |
 
 变体配置使用 `class-variance-authority`，类名合并用 `cn`（`src/lib/utils.ts`，基于 `tailwind-merge` + `clsx`）。
 
@@ -131,13 +131,13 @@
 
 ### 图标映射（FA5）
 
-| 用途 | 图标名 |
-| --- | --- |
-| 搜索 | `fa-solid:search` |
-| 关闭 | `fa-solid:times` |
-| 邮件 | `fa-solid:envelope` |
-| 其余 socials | `fa-brands:{name}` |
-| x 社交 | `fa-brands:twitter`（FA5 无 x-twitter） |
+| 用途         | 图标名                                  |
+| ------------ | --------------------------------------- |
+| 搜索         | `fa-solid:search`                       |
+| 关闭         | `fa-solid:times`                        |
+| 邮件         | `fa-solid:envelope`                     |
+| 其余 socials | `fa-brands:{name}`                      |
+| x 社交       | `fa-brands:twitter`（FA5 无 x-twitter） |
 
 ### 社交图标动态解析
 

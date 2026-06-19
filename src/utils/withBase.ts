@@ -53,7 +53,7 @@ export function getAssetPath(path: string): string {
  */
 export function getLocaleUrl(
   locale: string = config.site.lang,
-  path: string = "/"
+  path: string = "/",
 ): string {
   return getRelativeLocaleUrl(locale, path.replace(/^\/+/, ""));
 }

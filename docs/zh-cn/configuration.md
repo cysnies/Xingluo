@@ -19,18 +19,18 @@ site: {
 }
 ```
 
-| 字段 | 默认值 | 说明 |
-| --- | --- | --- |
-| `url` | 必填 | 站点根 URL，必须以 `/` 结尾 |
-| `title` | 必填 | 站点标题，用于 `<title>` 与 OG |
-| `description` | 必填 | 站点描述，用于 meta 与 RSS |
-| `author` | 必填 | 默认作者，文章 frontmatter 未指定时回退此值 |
-| `profile` | — | 作者主页，注入 JSON-LD `author.url` |
-| `ogImage` | `default-og.jpg` | 默认 OG 图文件名，位于 `public/` |
-| `lang` | 必填 | 默认语言代码，需与 `astro.config.ts` 的 `i18n.defaultLocale` 一致 |
-| `timezone` | `Asia/Shanghai` | dayjs 时区，影响文章日期显示 |
-| `dir` | `ltr` | 文字方向 |
-| `googleVerification` | — | Google 验证值；也可通过环境变量 `PUBLIC_GOOGLE_SITE_VERIFICATION` 注入 |
+| 字段                 | 默认值           | 说明                                                                   |
+| -------------------- | ---------------- | ---------------------------------------------------------------------- |
+| `url`                | 必填             | 站点根 URL，必须以 `/` 结尾                                            |
+| `title`              | 必填             | 站点标题，用于 `<title>` 与 OG                                         |
+| `description`        | 必填             | 站点描述，用于 meta 与 RSS                                             |
+| `author`             | 必填             | 默认作者，文章 frontmatter 未指定时回退此值                            |
+| `profile`            | —                | 作者主页，注入 JSON-LD `author.url`                                    |
+| `ogImage`            | `default-og.jpg` | 默认 OG 图文件名，位于 `public/`                                       |
+| `lang`               | 必填             | 默认语言代码，需与 `astro.config.ts` 的 `i18n.defaultLocale` 一致      |
+| `timezone`           | `Asia/Shanghai`  | dayjs 时区，影响文章日期显示                                           |
+| `dir`                | `ltr`            | 文字方向                                                               |
+| `googleVerification` | —                | Google 验证值；也可通过环境变量 `PUBLIC_GOOGLE_SITE_VERIFICATION` 注入 |
 
 ## posts 文章配置
 
@@ -62,19 +62,19 @@ features: {
 }
 ```
 
-| 字段 | 默认值 | 说明 |
-| --- | --- | --- |
-| `lightAndDarkMode` | `true` | 是否启用亮/暗模式切换 |
-| `dynamicOgImage` | `true` | 是否动态生成 OG 图（satori + sharp） |
-| `showArchives` | `true` | 是否显示归档页（关闭时 sitemap 同步过滤） |
-| `showBackButton` | `true` | 文章页是否显示返回按钮 |
-| `editPost.enabled` | `false` | 是否显示"编辑此页"链接 |
-| `editPost.url` | `""` | 编辑链接前缀，会拼接文章相对源文件路径 |
-| `search` | `"pagefind"` | 搜索方案：`"pagefind"` 或 `false` |
-| `mdx` | `true` | 是否启用 MDX 解析与渲染（详见 [内容创作](./content.md)） |
-| `comments` | `{provider:false}` | 评论系统配置（详见 [评论系统](./comments.md)） |
-| `players.aplayer` | `false` | 是否启用 APlayer 音乐播放器（详见 [媒体播放器](./media-players.md)） |
-| `players.dplayer` | `false` | 是否启用 DPlayer 视频播放器 |
+| 字段               | 默认值             | 说明                                                                 |
+| ------------------ | ------------------ | -------------------------------------------------------------------- |
+| `lightAndDarkMode` | `true`             | 是否启用亮/暗模式切换                                                |
+| `dynamicOgImage`   | `true`             | 是否动态生成 OG 图（satori + sharp）                                 |
+| `showArchives`     | `true`             | 是否显示归档页（关闭时 sitemap 同步过滤）                            |
+| `showBackButton`   | `true`             | 文章页是否显示返回按钮                                               |
+| `editPost.enabled` | `false`            | 是否显示"编辑此页"链接                                               |
+| `editPost.url`     | `""`               | 编辑链接前缀，会拼接文章相对源文件路径                               |
+| `search`           | `"pagefind"`       | 搜索方案：`"pagefind"` 或 `false`                                    |
+| `mdx`              | `true`             | 是否启用 MDX 解析与渲染（详见 [内容创作](./content.md)）             |
+| `comments`         | `{provider:false}` | 评论系统配置（详见 [评论系统](./comments.md)）                       |
+| `players.aplayer`  | `false`            | 是否启用 APlayer 音乐播放器（详见 [媒体播放器](./media-players.md)） |
+| `players.dplayer`  | `false`            | 是否启用 DPlayer 视频播放器                                          |
 
 ### editPost 编辑链接
 
@@ -93,7 +93,7 @@ socials: [
   { name: "github", url: "https://github.com/xingluo/blog" },
   { name: "x", url: "https://x.com/xingluo" },
   { name: "mail", url: "mailto:hello@xingluo.example.com" },
-]
+];
 ```
 
 - `name`：图标名称，对应 `src/assets/icons/socials/{name}.astro`。内置支持：`github`、`x`、`mail`、`facebook`、`telegram`、`weibo`
@@ -111,7 +111,7 @@ shareLinks: [
   { name: "telegram", url: "https://t.me/share/url?url=" },
   { name: "weibo", url: "https://service.weibo.com/share/share.php?url=" },
   { name: "mail", url: "mailto:?subject=...&body=" },
-]
+];
 ```
 
 文章页底部会展示这些分享入口，`url` 为分享 URL 前缀，星罗会拼接当前文章的绝对 URL。`name` 同样对应 `src/assets/icons/socials/` 下的图标。
@@ -120,8 +120,8 @@ shareLinks: [
 
 通过 `astro.config.ts` 的 `env.schema` 声明：
 
-| 变量 | 访问级别 | 说明 |
-| --- | --- | --- |
+| 变量                              | 访问级别        | 说明                               |
+| --------------------------------- | --------------- | ---------------------------------- |
 | `PUBLIC_GOOGLE_SITE_VERIFICATION` | public / client | Google Search Console 验证值，可选 |
 
 设置方式（PowerShell）：

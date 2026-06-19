@@ -58,9 +58,7 @@ const defaultFeatures = {
 };
 
 /** 合并评论系统配置，保留用户提供的各 provider 子配置 */
-function resolveComments(
-  partial?: Partial<CommentsConfig>
-): CommentsConfig {
+function resolveComments(partial?: Partial<CommentsConfig>): CommentsConfig {
   const userComments = partial ?? {};
   const provider = userComments.provider ?? false;
   const resolved: CommentsConfig = { provider };

@@ -69,6 +69,9 @@ export default defineXingluoConfig({
     { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
     { name: "telegram", url: "https://t.me/share/url?url=" },
     { name: "weibo", url: "https://service.weibo.com/share/share.php?url=" },
-    { name: "mail", url: "mailto:?subject=%E6%8E%A8%E8%8D%90%E6%96%87%E7%AB%A0&body=" },
+    {
+      name: "mail",
+      url: "mailto:?subject=%E6%8E%A8%E8%8D%90%E6%96%87%E7%AB%A0&body=",
+    },
   ],
 });

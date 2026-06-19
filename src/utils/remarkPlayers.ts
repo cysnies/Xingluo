@@ -27,7 +27,7 @@ const PLAYER_LANG_MAP = {
  * 创建 remark 插件，按开关将围栏代码块转为播放器占位 div
  */
 export function remarkPlayers(
-  options: RemarkPlayersOptions
+  options: RemarkPlayersOptions,
 ): (tree: MdastNode) => void {
   // 启用的播放器语言集合
   const enabledLangs = new Set<string>();

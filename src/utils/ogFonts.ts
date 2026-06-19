@@ -29,7 +29,7 @@ export function isOgFontAvailable(): boolean {
  * 字体不可用时返回 null，由调用方决定降级策略
  */
 export async function loadOgFonts(
-  url: URL
+  url: URL,
 ): Promise<{ regular: SatoriFont; bold: SatoriFont } | null> {
   if (!isOgFontAvailable()) {
     console.warn("[OG] 字体未就绪（构建环境可能无网络），跳过动态 OG 图生成");
@@ -48,20 +48,29 @@ export async function loadOgFonts(
   try {
     const [regularData, boldData] = await Promise.all([
       fetch(experimental_getFontFileURL(regularPath, url)).then((res) =>
-        res.arrayBuffer()
+        res.arrayBuffer(),
       ),
       fetch(experimental_getFontFileURL(boldPath, url)).then((res) =>
-        res.arrayBuffer()
+        res.arrayBuffer(),
       ),
     ]);
 
     return {
-      regular: { name: OG_FONT_FAMILY, data: regularData, weight: 400, style: "normal" },
-      bold: { name: OG_FONT_FAMILY, data: boldData, weight: 700, style: "normal" },
+      regular: {
+        name: OG_FONT_FAMILY,
+        data: regularData,
+        weight: 400,
+        style: "normal",
+      },
+      bold: {
+        name: OG_FONT_FAMILY,
+        data: boldData,
+        weight: 700,
+        style: "normal",
+      },
     };
   } catch (error) {
     console.warn("[OG] 字体加载失败，跳过动态 OG 图生成:", error);
     return null;
   }
 }
-

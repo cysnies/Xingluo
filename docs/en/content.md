@@ -6,10 +6,10 @@ Xingluo uses Astro Content Collections to manage content, supporting Markdown (`
 
 Two collections are defined in [`src/content.config.ts`](../src/content.config.ts):
 
-| Collection | Directory | Purpose |
-| --- | --- | --- |
-| `posts` | `src/content/posts/` | Blog posts |
-| `pages` | `src/content/pages/` | Static pages (e.g. the about page) |
+| Collection | Directory            | Purpose                            |
+| ---------- | -------------------- | ---------------------------------- |
+| `posts`    | `src/content/posts/` | Blog posts                         |
+| `pages`    | `src/content/pages/` | Static pages (e.g. the about page) |
 
 File naming conventions:
 
@@ -23,37 +23,37 @@ Full fields for the `posts` collection:
 
 ```markdown
 ---
-title: "Post Title"                       # required
-pubDatetime: 2026-06-19T10:00:00+08:00    # required, publish time
-modDatetime: 2026-06-20T10:00:00+08:00    # optional, update time
+title: "Post Title" # required
+pubDatetime: 2026-06-19T10:00:00+08:00 # required, publish time
+modDatetime: 2026-06-20T10:00:00+08:00 # optional, update time
 description: "Summary, used for SEO and lists" # required
-tags: ["Astro", "blog"]                   # optional, defaults to ["others"]
-featured: true                            # optional, featured (shown on homepage)
-draft: false                              # optional, drafts are not published
-author: "Xingluo"                         # optional, defaults to site.author
-ogImage: "./cover.png"                    # optional, OG image (image import or string path)
-canonicalURL: "https://..."               # optional, canonical link
-hideEditPost: false                       # optional, hide the edit link
-timezone: "Asia/Shanghai"                 # optional, override the site timezone
+tags: ["Astro", "blog"] # optional, defaults to ["others"]
+featured: true # optional, featured (shown on homepage)
+draft: false # optional, drafts are not published
+author: "Xingluo" # optional, defaults to site.author
+ogImage: "./cover.png" # optional, OG image (image import or string path)
+canonicalURL: "https://..." # optional, canonical link
+hideEditPost: false # optional, hide the edit link
+timezone: "Asia/Shanghai" # optional, override the site timezone
 ---
 ```
 
 ### Field Reference
 
-| Field | Type | Default | Notes |
-| --- | --- | --- | --- |
-| `title` | string | required | Post title |
-| `pubDatetime` | date | required | Publish time, ISO 8601 |
-| `modDatetime` | date | — | Update time; shows an "updated" label |
-| `description` | string | required | Summary, used in meta, RSS, and list cards |
-| `tags` | string[] | `["others"]` | Tag array; tag pages are generated automatically |
-| `featured` | boolean | — | Shown in the homepage "Featured" section |
-| `draft` | boolean | — | Draft; filtered out in production builds (visible in dev) |
-| `author` | string | `site.author` | Author name |
-| `ogImage` | image \| string | — | OG image; `image()` goes through Astro's asset pipeline, a string is a `public/` path or external URL |
-| `canonicalURL` | string | — | Canonical link, overrides the default (see [SEO](./seo.md)) |
-| `hideEditPost` | boolean | — | Hide the edit link for this post |
-| `timezone` | string | `site.timezone` | Override the display timezone for this post |
+| Field          | Type            | Default         | Notes                                                                                                 |
+| -------------- | --------------- | --------------- | ----------------------------------------------------------------------------------------------------- |
+| `title`        | string          | required        | Post title                                                                                            |
+| `pubDatetime`  | date            | required        | Publish time, ISO 8601                                                                                |
+| `modDatetime`  | date            | —               | Update time; shows an "updated" label                                                                 |
+| `description`  | string          | required        | Summary, used in meta, RSS, and list cards                                                            |
+| `tags`         | string[]        | `["others"]`    | Tag array; tag pages are generated automatically                                                      |
+| `featured`     | boolean         | —               | Shown in the homepage "Featured" section                                                              |
+| `draft`        | boolean         | —               | Draft; filtered out in production builds (visible in dev)                                             |
+| `author`       | string          | `site.author`   | Author name                                                                                           |
+| `ogImage`      | image \| string | —               | OG image; `image()` goes through Astro's asset pipeline, a string is a `public/` path or external URL |
+| `canonicalURL` | string          | —               | Canonical link, overrides the default (see [SEO](./seo.md))                                           |
+| `hideEditPost` | boolean         | —               | Hide the edit link for this post                                                                      |
+| `timezone`     | string          | `site.timezone` | Override the display timezone for this post                                                           |
 
 ### Scheduled Publishing
 
@@ -66,9 +66,9 @@ The `pages` collection has simpler fields:
 ```markdown
 ---
 title: "About"
-description: "About this site"     # optional
-ogImage: "default-og.jpg"          # optional, string only
-canonicalURL: "https://..."        # optional
+description: "About this site" # optional
+ogImage: "default-og.jpg" # optional, string only
+canonicalURL: "https://..." # optional
 ---
 ```
 
@@ -137,7 +137,11 @@ import { APlayer, DPlayer } from "@/components/mdx";
 
 # My Post
 
-<APlayer audio={[{ name: "Song", artist: "Artist", url: "/audio.mp3", cover: "/cover.jpg" }]} />
+<APlayer
+  audio={[
+    { name: "Song", artist: "Artist", url: "/audio.mp3", cover: "/cover.jpg" },
+  ]}
+/>
 
 <DPlayer video={{ url: "/video.mp4", pic: "/cover.jpg" }} />
 ```

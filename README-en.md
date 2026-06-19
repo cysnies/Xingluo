@@ -85,9 +85,9 @@ title: "Post Title"
 pubDatetime: 2026-06-19T10:00:00+08:00
 description: "Post description"
 tags: ["Tag1", "Tag2"]
-featured: false  # optional, featured post
-draft: false     # optional, draft
-ogImage: "./cover.png"  # optional, OG image
+featured: false # optional, featured post
+draft: false # optional, draft
+ogImage: "./cover.png" # optional, OG image
 ---
 ```
 
@@ -122,35 +122,35 @@ import { APlayer, DPlayer } from "@/components/mdx";
 
 The full project documentation lives in the [`docs/`](./docs/) directory:
 
-| Document | Description |
-| --- | --- |
-| [Getting Started](./docs/en/getting-started.md) | Install, develop, and build |
-| [Configuration Guide](./docs/en/configuration.md) | Site info and feature toggles |
-| [Content Authoring](./docs/en/content.md) | Frontmatter and writing conventions |
+| Document                                           | Description                            |
+| -------------------------------------------------- | -------------------------------------- |
+| [Getting Started](./docs/en/getting-started.md)    | Install, develop, and build            |
+| [Configuration Guide](./docs/en/configuration.md)  | Site info and feature toggles          |
+| [Content Authoring](./docs/en/content.md)          | Frontmatter and writing conventions    |
 | [Architecture Overview](./docs/en/architecture.md) | Project structure and design decisions |
-| [Internationalization](./docs/en/i18n.md) | Multilingual adaptation |
-| [Theme & Styles](./docs/en/theming.md) | shadcn visuals and OKLCH |
-| [Comment System](./docs/en/comments.md) | giscus / twikoo / waline |
-| [Media Players](./docs/en/media-players.md) | APlayer / DPlayer |
-| [SEO](./docs/en/seo.md) | OG images, RSS, sitemap |
-| [Search](./docs/en/search.md) | Pagefind indexing |
-| [Deployment](./docs/en/deployment.md) | Static hosting and Docker |
+| [Internationalization](./docs/en/i18n.md)          | Multilingual adaptation                |
+| [Theme & Styles](./docs/en/theming.md)             | shadcn visuals and OKLCH               |
+| [Comment System](./docs/en/comments.md)            | giscus / twikoo / waline               |
+| [Media Players](./docs/en/media-players.md)        | APlayer / DPlayer                      |
+| [SEO](./docs/en/seo.md)                            | OG images, RSS, sitemap                |
+| [Search](./docs/en/search.md)                      | Pagefind indexing                      |
+| [Deployment](./docs/en/deployment.md)              | Static hosting and Docker              |
 
 ## 🛠️ Tech Stack
 
-| Category | Project |
-| --- | --- |
-| Framework | [Astro](https://astro.build) 6.x |
-| Styling | [Tailwind CSS](https://tailwindcss.com) v4, [shadcn/ui](https://ui.shadcn.com) |
-| Icons | astro-icon + Font Awesome |
-| Code highlighting | Shiki |
-| Search | [Pagefind](https://pagefind.app) |
-| OG images | satori + sharp |
-| Comments | giscus / twikoo / waline |
-| Players | APlayer / DPlayer |
-| Date | [dayjs](https://day.js.org) |
-| Language | TypeScript (strict) |
-| Package manager | pnpm |
+| Category          | Project                                                                        |
+| ----------------- | ------------------------------------------------------------------------------ |
+| Framework         | [Astro](https://astro.build) 6.x                                               |
+| Styling           | [Tailwind CSS](https://tailwindcss.com) v4, [shadcn/ui](https://ui.shadcn.com) |
+| Icons             | astro-icon + Font Awesome                                                      |
+| Code highlighting | Shiki                                                                          |
+| Search            | [Pagefind](https://pagefind.app)                                               |
+| OG images         | satori + sharp                                                                 |
+| Comments          | giscus / twikoo / waline                                                       |
+| Players           | APlayer / DPlayer                                                              |
+| Date              | [dayjs](https://day.js.org)                                                    |
+| Language          | TypeScript (strict)                                                            |
+| Package manager   | pnpm                                                                           |
 
 ## 🐳 Container Deployment
 

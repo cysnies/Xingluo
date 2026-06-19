@@ -21,8 +21,8 @@ The generated `dist/` contains:
 
 Set at build time:
 
-| Variable | Description |
-| --- | --- |
+| Variable                          | Description                                         |
+| --------------------------------- | --------------------------------------------------- |
 | `PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console verification value (optional) |
 
 PowerShell example:
@@ -48,12 +48,12 @@ Before deploying, ensure:
 
 ### Netlify / Vercel / Cloudflare Pages
 
-| Config | Value |
-| --- | --- |
-| Build command | `pnpm build` |
-| Output directory | `dist` |
-| Node version | 22.12.0+ |
-| Package manager | pnpm |
+| Config           | Value        |
+| ---------------- | ------------ |
+| Build command    | `pnpm build` |
+| Output directory | `dist`       |
+| Node version     | 22.12.0+     |
+| Package manager  | pnpm         |
 
 An optional `vercel.json` for Vercel:
 
@@ -132,10 +132,10 @@ server {
 
 If you enable a comment system, deploy the corresponding backend:
 
-| Comment system | Backend requirement |
-| --- | --- |
-| giscus | None; use the giscus.app public service (or self-host [giscus-vercel](https://github.com/giscus/giscus-vercel)) |
-| twikoo | Deploy the twikoo server (Vercel / CloudBase / self-host) |
-| waline | Deploy the waline server (Vercel / Cloudflare / self-host) |
+| Comment system | Backend requirement                                                                                             |
+| -------------- | --------------------------------------------------------------------------------------------------------------- |
+| giscus         | None; use the giscus.app public service (or self-host [giscus-vercel](https://github.com/giscus/giscus-vercel)) |
+| twikoo         | Deploy the twikoo server (Vercel / CloudBase / self-host)                                                       |
+| waline         | Deploy the waline server (Vercel / Cloudflare / self-host)                                                      |
 
 See each comment system's official docs and [Comment System](./comments.md).

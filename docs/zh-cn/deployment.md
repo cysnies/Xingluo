@@ -21,8 +21,8 @@ pnpm build
 
 构建时可设置：
 
-| 变量 | 说明 |
-| --- | --- |
+| 变量                              | 说明                                 |
+| --------------------------------- | ------------------------------------ |
 | `PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console 验证值（可选） |
 
 PowerShell 示例：
@@ -48,12 +48,12 @@ CI 环境（如 GitHub Actions）在 build 步骤前通过 `env` 注入即可。
 
 ### Netlify / Vercel / Cloudflare Pages
 
-| 配置项 | 值 |
-| --- | --- |
-| 构建命令 | `pnpm build` |
-| 输出目录 | `dist` |
-| Node 版本 | 22.12.0+ |
-| 包管理器 | pnpm |
+| 配置项    | 值           |
+| --------- | ------------ |
+| 构建命令  | `pnpm build` |
+| 输出目录  | `dist`       |
+| Node 版本 | 22.12.0+     |
+| 包管理器  | pnpm         |
 
 以 Vercel 为例的 `vercel.json`（可选）：
 
@@ -132,10 +132,10 @@ server {
 
 若启用评论系统，需额外部署对应后端：
 
-| 评论系统 | 后端要求 |
-| --- | --- |
-| giscus | 无需自建，使用 giscus.app 公共服务（或自托管 [giscus-vercel](https://github.com/giscus/giscus-vercel)） |
-| twikoo | 部署 twikoo 服务端（Vercel / CloudBase / 自托管） |
-| waline | 部署 waline 服务端（Vercel / Cloudflare / 自托管） |
+| 评论系统 | 后端要求                                                                                                |
+| -------- | ------------------------------------------------------------------------------------------------------- |
+| giscus   | 无需自建，使用 giscus.app 公共服务（或自托管 [giscus-vercel](https://github.com/giscus/giscus-vercel)） |
+| twikoo   | 部署 twikoo 服务端（Vercel / CloudBase / 自托管）                                                       |
+| waline   | 部署 waline 服务端（Vercel / Cloudflare / 自托管）                                                      |
 
 详见各评论系统官方文档与 [评论系统](./comments.md)。

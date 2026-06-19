@@ -27,9 +27,7 @@ function reflect(): void {
   const root = document.firstElementChild;
   root?.setAttribute("data-theme", themeValue);
   root?.classList.toggle("dark", themeValue === DARK);
-  document
-    .querySelector("#theme-btn")
-    ?.setAttribute("aria-label", themeValue);
+  document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
   // 用 body 的计算背景色填充 <meta name="theme-color">，
   // 使 Android 浏览器顶栏与页面背景一致

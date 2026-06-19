@@ -4,10 +4,10 @@ This guide helps you bootstrap Xingluo for local development and production buil
 
 ## Requirements
 
-| Dependency | Minimum version | Notes |
-| --- | --- | --- |
-| Node.js | 22.12.0 | See `engines.node` in `package.json` |
-| pnpm | 10.x | Package manager (the project uses pnpm workspace) |
+| Dependency | Minimum version | Notes                                             |
+| ---------- | --------------- | ------------------------------------------------- |
+| Node.js    | 22.12.0         | See `engines.node` in `package.json`              |
+| pnpm       | 10.x            | Package manager (the project uses pnpm workspace) |
 
 > Tip: manage Node versions with [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm).
 
@@ -67,11 +67,11 @@ pnpm preview
 
 ## Code Quality
 
-| Command | Purpose |
-| --- | --- |
-| `pnpm format` | Format all code with Prettier (including Astro and Tailwind) |
-| `pnpm format:check` | Check formatting compliance (used in CI) |
-| `pnpm lint` | ESLint checks (including `eslint-plugin-astro`) |
+| Command             | Purpose                                                      |
+| ------------------- | ------------------------------------------------------------ |
+| `pnpm format`       | Format all code with Prettier (including Astro and Tailwind) |
+| `pnpm format:check` | Check formatting compliance (used in CI)                     |
+| `pnpm lint`         | ESLint checks (including `eslint-plugin-astro`)              |
 
 ## Next Steps
 

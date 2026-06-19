@@ -10,13 +10,16 @@ type IconComponent = (props: Record<string, unknown>) => unknown;
 
 const modules = import.meta.glob<{ default: IconComponent }>(
   "../assets/icons/socials/*.astro",
-  { eager: true }
+  { eager: true },
 );
 
 /** 按图标名称索引的组件表 */
 const iconMap: Record<string, IconComponent> = {};
 for (const [path, mod] of Object.entries(modules)) {
-  const name = path.split("/").pop()!.replace(/\.astro$/, "");
+  const name = path
+    .split("/")
+    .pop()!
+    .replace(/\.astro$/, "");
   iconMap[name] = mod.default;
 }
 

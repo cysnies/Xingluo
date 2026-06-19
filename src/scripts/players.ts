@@ -82,7 +82,7 @@ async function mountDPlayer(el: HTMLElement): Promise<void> {
 /** 扫描页面占位并注册懒加载观察 */
 function setupPlayers(): void {
   const els = document.querySelectorAll<HTMLElement>(
-    ".xng-aplayer:not([data-xng-observed]), .xng-dplayer:not([data-xng-observed])"
+    ".xng-aplayer:not([data-xng-observed]), .xng-dplayer:not([data-xng-observed])",
   );
   if (els.length === 0) return;
 
@@ -99,7 +99,7 @@ function setupPlayers(): void {
         }
       }
     },
-    { rootMargin: "200px" }
+    { rootMargin: "200px" },
   );
 
   for (const el of els) {

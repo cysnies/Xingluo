@@ -6,11 +6,11 @@ Xingluo uses shadcn/ui new-york style components and the OKLCH color space, buil
 
 [`src/styles/`](../src/styles/):
 
-| File | Content |
-| --- | --- |
-| `theme.css` | shadcn theme variables (OKLCH, light `:root` + dark `.dark`) |
-| `global.css` | Tailwind entry, base layer, custom utilities, callout themes |
-| `typography.css` | `.app-prose` typography and code block styles |
+| File             | Content                                                      |
+| ---------------- | ------------------------------------------------------------ |
+| `theme.css`      | shadcn theme variables (OKLCH, light `:root` + dark `.dark`) |
+| `global.css`     | Tailwind entry, base layer, custom utilities, callout themes |
+| `typography.css` | `.app-prose` typography and code block styles                |
 
 ## Theme Variables
 
@@ -115,13 +115,13 @@ Post body containers use `<article class="app-prose">`.
 
 [`src/components/ui/`](../src/components/ui/) provides shadcn-style components:
 
-| Component | Notes |
-| --- | --- |
-| `Button` | Auto-switches between `<a>` / `<button>`, cva variants (variant, size) |
-| `Badge` | Badge |
-| `Card` / `CardHeader` / `CardTitle` / `CardDescription` / `CardContent` / `CardFooter` | Card family |
-| `Input` | Input |
-| `Separator` | Separator |
+| Component                                                                              | Notes                                                                  |
+| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `Button`                                                                               | Auto-switches between `<a>` / `<button>`, cva variants (variant, size) |
+| `Badge`                                                                                | Badge                                                                  |
+| `Card` / `CardHeader` / `CardTitle` / `CardDescription` / `CardContent` / `CardFooter` | Card family                                                            |
+| `Input`                                                                                | Input                                                                  |
+| `Separator`                                                                            | Separator                                                              |
 
 Variant configs use `class-variance-authority`; class names are merged with `cn` (`src/lib/utils.ts`, based on `tailwind-merge` + `clsx`).
 
@@ -131,13 +131,13 @@ Xingluo's icons are build-time inlined SVGs via astro-icon + Font Awesome (sprit
 
 ### Icon Mapping (FA5)
 
-| Use | Icon name |
-| --- | --- |
-| Search | `fa-solid:search` |
-| Close | `fa-solid:times` |
-| Mail | `fa-solid:envelope` |
-| Other socials | `fa-brands:{name}` |
-| X (social) | `fa-brands:twitter` (FA5 has no x-twitter) |
+| Use           | Icon name                                  |
+| ------------- | ------------------------------------------ |
+| Search        | `fa-solid:search`                          |
+| Close         | `fa-solid:times`                           |
+| Mail          | `fa-solid:envelope`                        |
+| Other socials | `fa-brands:{name}`                         |
+| X (social)    | `fa-brands:twitter` (FA5 has no x-twitter) |
 
 ### Social Icon Dynamic Resolution
 

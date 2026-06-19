@@ -16,7 +16,10 @@ export function getLocalePrefix(locale: string): string {
  * @param locale 目标语言
  * @returns 带语言前缀的完整路径，如 /en/posts/ 或 /posts/
  */
-export function withLocale(path: string, locale: string = DEFAULT_LOCALE): string {
+export function withLocale(
+  path: string,
+  locale: string = DEFAULT_LOCALE,
+): string {
   const prefix = getLocalePrefix(locale);
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   return `${prefix}${normalizedPath}`;
@@ -31,7 +34,11 @@ export function parseLocaleFromPath(pathname: string): {
   path: string;
 } {
   const segments = pathname.split("/").filter(Boolean);
-  if (segments.length > 0 && segments[0] !== DEFAULT_LOCALE && /^[a-z]{2}(-[a-z0-9]+)?$/i.test(segments[0])) {
+  if (
+    segments.length > 0 &&
+    segments[0] !== DEFAULT_LOCALE &&
+    /^[a-z]{2}(-[a-z0-9]+)?$/i.test(segments[0])
+  ) {
     return {
       locale: segments[0],
       path: "/" + segments.slice(1).join("/"),

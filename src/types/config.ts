@@ -172,7 +172,7 @@ export type PartialXingluoConfig = {
  * 仅做类型约束，实际默认值合并在 src/config.ts 中完成
  */
 export function defineXingluoConfig(
-  config: PartialXingluoConfig
+  config: PartialXingluoConfig,
 ): PartialXingluoConfig {
   return config;
 }

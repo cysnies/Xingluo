@@ -25,7 +25,7 @@ export interface YearGroup {
  */
 export function groupPostsByYearMonth(
   posts: CollectionEntry<"posts">[],
-  getDate: (post: CollectionEntry<"posts">) => Date
+  getDate: (post: CollectionEntry<"posts">) => Date,
 ): YearGroup[] {
   const yearMap = new Map<number, CollectionEntry<"posts">[]>();
 

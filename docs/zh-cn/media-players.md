@@ -23,10 +23,10 @@ features: {
 
 ## 两种使用方式
 
-| 方式 | 适用场景 | 语法 |
-| --- | --- | --- |
-| MD 围栏 | 普通 `.md` 与 `.mdx` | ` ```aplayer ` / ` ```dplayer ` + JSON 配置体 |
-| MDX 组件 | 仅 `.mdx` | `import { APlayer, DPlayer } from "@/components/mdx"` |
+| 方式     | 适用场景             | 语法                                                  |
+| -------- | -------------------- | ----------------------------------------------------- |
+| MD 围栏  | 普通 `.md` 与 `.mdx` | ` ```aplayer ` / ` ```dplayer ` + JSON 配置体         |
+| MDX 组件 | 仅 `.mdx`            | `import { APlayer, DPlayer } from "@/components/mdx"` |
 
 两种方式最终输出相同的占位 div 结构（`<div class="xng-aplayer|xng-dplayer" data-config>`），由 [`src/scripts/players.ts`](../src/scripts/players.ts) 统一懒加载实例化。
 
@@ -34,7 +34,7 @@ features: {
 
 ### MD 围栏
 
-```markdown
+````markdown
 ```aplayer
 {
   "audio": [
@@ -51,7 +51,9 @@ features: {
   "autoplay": false
 }
 ```
-```
+````
+
+````
 
 ### MDX 组件
 
@@ -65,39 +67,39 @@ import { APlayer } from "@/components/mdx";
   theme="#b7daff"
   loop="all"
 />
-```
+````
 
 ### 配置项
 
-| 字段 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `audio` | Audio \| Audio[] | 必填 | 音频对象或列表 |
-| `theme` | string | `#b7daff` | 播放器主题色 |
-| `loop` | `"all"` \| `"one"` \| `"none"` | `all` | 循环模式 |
-| `order` | `"list"` \| `"random"` | `list` | 播放顺序 |
-| `volume` | number | `0.7` | 初始音量（0~1） |
-| `autoplay` | boolean | `false` | 自动播放（受浏览器策略限制） |
-| `listFolded` | boolean | `false` | 列表折叠 |
-| `listMaxHeight` | string | — | 列表最大高度（CSS 值） |
-| `lrcType` | `0` \| `1` \| `2` \| `3` | `0` | 歌词类型：0 不解析 / 1 字符串 / 2 URL |
+| 字段            | 类型                           | 默认值    | 说明                                  |
+| --------------- | ------------------------------ | --------- | ------------------------------------- |
+| `audio`         | Audio \| Audio[]               | 必填      | 音频对象或列表                        |
+| `theme`         | string                         | `#b7daff` | 播放器主题色                          |
+| `loop`          | `"all"` \| `"one"` \| `"none"` | `all`     | 循环模式                              |
+| `order`         | `"list"` \| `"random"`         | `list`    | 播放顺序                              |
+| `volume`        | number                         | `0.7`     | 初始音量（0~1）                       |
+| `autoplay`      | boolean                        | `false`   | 自动播放（受浏览器策略限制）          |
+| `listFolded`    | boolean                        | `false`   | 列表折叠                              |
+| `listMaxHeight` | string                         | —         | 列表最大高度（CSS 值）                |
+| `lrcType`       | `0` \| `1` \| `2` \| `3`       | `0`       | 歌词类型：0 不解析 / 1 字符串 / 2 URL |
 
 ### audio 对象
 
-| 字段 | 说明 |
-| --- | --- |
-| `name` | 曲目名（缺省取 `title`，再缺省 `'Audio name'`） |
-| `artist` | 艺术家（缺省取 `author`） |
-| `url` | 音频地址（必填） |
-| `cover` | 封面（缺省取 `pic`） |
-| `lrc` | 歌词（字符串或 URL，配合 `lrcType`） |
-| `theme` | 单曲主题色 |
-| `type` | 音频类型：`auto` \| `hls` \| `normal` |
+| 字段     | 说明                                            |
+| -------- | ----------------------------------------------- |
+| `name`   | 曲目名（缺省取 `title`，再缺省 `'Audio name'`） |
+| `artist` | 艺术家（缺省取 `author`）                       |
+| `url`    | 音频地址（必填）                                |
+| `cover`  | 封面（缺省取 `pic`）                            |
+| `lrc`    | 歌词（字符串或 URL，配合 `lrcType`）            |
+| `theme`  | 单曲主题色                                      |
+| `type`   | 音频类型：`auto` \| `hls` \| `normal`           |
 
 ## DPlayer 视频播放器
 
 ### MD 围栏
 
-```markdown
+````markdown
 ```dplayer
 {
   "video": {
@@ -110,7 +112,9 @@ import { APlayer } from "@/components/mdx";
   "loop": false
 }
 ```
-```
+````
+
+````
 
 ### MDX 组件
 
@@ -122,54 +126,54 @@ import { DPlayer } from "@/components/mdx";
   theme="#b7daff"
   subtitle={{ url: "/subtitles.vtt", type: "webvtt" }}
 />
-```
+````
 
 ### 配置项
 
-| 字段 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `video` | Video | 必填 | 视频配置 |
-| `theme` | string | `#b7daff` | 主题色 |
-| `autoplay` | boolean | `false` | 自动播放 |
-| `loop` | boolean | `false` | 循环播放 |
-| `screenshot` | boolean | `false` | 截图功能 |
-| `hotkey` | boolean | `true` | 热键 |
-| `preload` | `"none"` \| `"metadata"` \| `"auto"` | `auto` | 预加载 |
-| `volume` | number | `0.7` | 初始音量 |
-| `playbackSpeed` | number[] | — | 播放速度列表 |
-| `subtitle` | Subtitle | — | 字幕 |
-| `danmaku` | Danmaku | — | 弹幕 |
-| `live` | boolean | `false` | 直播模式 |
-| `mutex` | boolean | `true` | 互斥（同页仅一个播放） |
+| 字段            | 类型                                 | 默认值    | 说明                   |
+| --------------- | ------------------------------------ | --------- | ---------------------- |
+| `video`         | Video                                | 必填      | 视频配置               |
+| `theme`         | string                               | `#b7daff` | 主题色                 |
+| `autoplay`      | boolean                              | `false`   | 自动播放               |
+| `loop`          | boolean                              | `false`   | 循环播放               |
+| `screenshot`    | boolean                              | `false`   | 截图功能               |
+| `hotkey`        | boolean                              | `true`    | 热键                   |
+| `preload`       | `"none"` \| `"metadata"` \| `"auto"` | `auto`    | 预加载                 |
+| `volume`        | number                               | `0.7`     | 初始音量               |
+| `playbackSpeed` | number[]                             | —         | 播放速度列表           |
+| `subtitle`      | Subtitle                             | —         | 字幕                   |
+| `danmaku`       | Danmaku                              | —         | 弹幕                   |
+| `live`          | boolean                              | `false`   | 直播模式               |
+| `mutex`         | boolean                              | `true`    | 互斥（同页仅一个播放） |
 
 ### video 对象
 
-| 字段 | 说明 |
-| --- | --- |
-| `url` | 视频地址（必填） |
-| `pic` | 封面 |
-| `thumbnails` | 缩略图地址 |
-| `type` | 视频类型：`auto` \| `hls` \| `flv` \| `dash` \| `normal` |
-| `quality` | 多清晰度列表 + `defaultQuality` 索引 |
+| 字段         | 说明                                                     |
+| ------------ | -------------------------------------------------------- |
+| `url`        | 视频地址（必填）                                         |
+| `pic`        | 封面                                                     |
+| `thumbnails` | 缩略图地址                                               |
+| `type`       | 视频类型：`auto` \| `hls` \| `flv` \| `dash` \| `normal` |
+| `quality`    | 多清晰度列表 + `defaultQuality` 索引                     |
 
 ### subtitle 对象
 
-| 字段 | 说明 |
-| --- | --- |
-| `url` | 字幕地址（必填） |
-| `type` | `webvtt` \| `ass` |
-| `fontSize` | 字号 |
-| `bottom` | 距底部距离 |
-| `color` | 颜色 |
+| 字段       | 说明              |
+| ---------- | ----------------- |
+| `url`      | 字幕地址（必填）  |
+| `type`     | `webvtt` \| `ass` |
+| `fontSize` | 字号              |
+| `bottom`   | 距底部距离        |
+| `color`    | 颜色              |
 
 ### danmaku 对象（弹幕）
 
-| 字段 | 说明 |
-| --- | --- |
-| `id` | 弹幕池唯一 ID（必填） |
-| `api` | 弹幕 API 地址（必填） |
-| `user` | 用户标识 |
-| `maximum` | 最大弹幕数 |
+| 字段      | 说明                  |
+| --------- | --------------------- |
+| `id`      | 弹幕池唯一 ID（必填） |
+| `api`     | 弹幕 API 地址（必填） |
+| `user`    | 用户标识              |
+| `maximum` | 最大弹幕数            |
 
 ## 懒加载机制
 

@@ -53,7 +53,7 @@ const integrations = [
 /** 播放器 remark 插件按需启用：任一播放器开启时才注入 */
 const playersConfig = config.features?.players;
 const playersEnabled = Boolean(
-  playersConfig && (playersConfig.aplayer || playersConfig.dplayer)
+  playersConfig && (playersConfig.aplayer || playersConfig.dplayer),
 );
 const remarkPlugins: any[] = [
   remarkToc,
@@ -84,7 +84,19 @@ export default defineConfig({
   base: baseUrl,
   integrations,
   i18n: {
-    locales: ["zh-cn", "en", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "eo"],
+    locales: [
+      "zh-cn",
+      "en",
+      "ja",
+      "ko",
+      "fr",
+      "de",
+      "es",
+      "pt",
+      "ru",
+      "ar",
+      "eo",
+    ],
     defaultLocale: "zh-cn",
     routing: {
       prefixDefaultLocale: false,

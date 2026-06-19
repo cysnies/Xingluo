@@ -25,12 +25,12 @@ function giscusTheme(): string {
 /** giscus iframe 已挂载后，通过 postMessage 切换主题 */
 function syncGiscusTheme(): void {
   const iframe = document.querySelector<HTMLIFrameElement>(
-    "iframe.giscus-frame"
+    "iframe.giscus-frame",
   );
   if (!iframe || !iframe.contentWindow) return;
   iframe.contentWindow.postMessage(
     { giscus: { setConfig: { theme: giscusTheme() } } },
-    "https://giscus.app"
+    "https://giscus.app",
   );
 }
 
@@ -128,7 +128,7 @@ function setupComments(): void {
             ? ".xng-giscus"
             : provider === "twikoo"
               ? ".xng-twikoo"
-              : ".xng-waline"
+              : ".xng-waline",
         );
         if (!target) continue;
         if (provider === "giscus") initGiscus(target);
@@ -138,7 +138,7 @@ function setupComments(): void {
         break;
       }
     },
-    { rootMargin: "200px" }
+    { rootMargin: "200px" },
   );
   io.observe(section);
 }
@@ -147,8 +147,7 @@ function setupComments(): void {
 function setupThemeSync(): void {
   // MutationObserver 观察 html 的 class 属性变化
   const observer = new MutationObserver(() => {
-    const provider = document
-      .querySelector<HTMLElement>(".xng-comments-mount")
+    const provider = document.querySelector<HTMLElement>(".xng-comments-mount")
       ?.dataset.provider;
     if (!provider) return;
     if (provider === "giscus") {

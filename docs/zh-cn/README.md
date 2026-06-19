@@ -4,19 +4,19 @@
 
 ## 文档导航
 
-| 文档 | 内容 |
-| --- | --- |
-| [快速开始](./getting-started.md) | 环境要求、安装、本地开发、构建与预览 |
-| [配置指南](./configuration.md) | `xingluo.config.ts` 全部配置项详解 |
-| [内容创作](./content.md) | 文章 frontmatter、Markdown/MDX 语法、代码块、标注框 |
-| [架构总览](./architecture.md) | 目录结构、配置流、渲染流、构建流程 |
-| [国际化](./i18n.md) | 多语言路由策略、UI 文案、新增语言 |
-| [主题与样式](./theming.md) | shadcn 主题变量、OKLCH、Tailwind v4、暗色模式 |
-| [评论系统](./comments.md) | giscus / twikoo / waline 三选一配置与接入 |
-| [媒体播放器](./media-players.md) | APlayer / DPlayer 在 MD 与 MDX 中的使用 |
-| [SEO](./seo.md) | OG 图、RSS、sitemap、hreflang、canonical、结构化数据 |
-| [搜索](./search.md) | Pagefind 全文搜索集成 |
-| [部署](./deployment.md) | 静态托管、环境变量、平台适配 |
+| 文档                             | 内容                                                 |
+| -------------------------------- | ---------------------------------------------------- |
+| [快速开始](./getting-started.md) | 环境要求、安装、本地开发、构建与预览                 |
+| [配置指南](./configuration.md)   | `xingluo.config.ts` 全部配置项详解                   |
+| [内容创作](./content.md)         | 文章 frontmatter、Markdown/MDX 语法、代码块、标注框  |
+| [架构总览](./architecture.md)    | 目录结构、配置流、渲染流、构建流程                   |
+| [国际化](./i18n.md)              | 多语言路由策略、UI 文案、新增语言                    |
+| [主题与样式](./theming.md)       | shadcn 主题变量、OKLCH、Tailwind v4、暗色模式        |
+| [评论系统](./comments.md)        | giscus / twikoo / waline 三选一配置与接入            |
+| [媒体播放器](./media-players.md) | APlayer / DPlayer 在 MD 与 MDX 中的使用              |
+| [SEO](./seo.md)                  | OG 图、RSS、sitemap、hreflang、canonical、结构化数据 |
+| [搜索](./search.md)              | Pagefind 全文搜索集成                                |
+| [部署](./deployment.md)          | 静态托管、环境变量、平台适配                         |
 
 ## 核心特性
 
@@ -31,20 +31,20 @@
 
 ## 技术栈
 
-| 类别 | 技术 |
-| --- | --- |
-| 框架 | Astro 6.x（静态生成） |
-| 样式 | Tailwind CSS v4、shadcn/ui 风格组件、@tailwindcss/typography |
-| 图标 | astro-icon + Font Awesome（构建期内联） |
-| 内容 | Astro Content Collections、MDX、remark/rehype 插件链 |
-| 代码高亮 | Shiki（双主题 + 标注转换器） |
-| 搜索 | Pagefind |
-| OG 图 | satori + sharp |
-| 评论 | giscus / twikoo / waline |
-| 播放器 | APlayer / DPlayer |
-| 日期 | dayjs（时区支持） |
-| 包管理 | pnpm |
-| 语言 | TypeScript（strict） |
+| 类别     | 技术                                                         |
+| -------- | ------------------------------------------------------------ |
+| 框架     | Astro 6.x（静态生成）                                        |
+| 样式     | Tailwind CSS v4、shadcn/ui 风格组件、@tailwindcss/typography |
+| 图标     | astro-icon + Font Awesome（构建期内联）                      |
+| 内容     | Astro Content Collections、MDX、remark/rehype 插件链         |
+| 代码高亮 | Shiki（双主题 + 标注转换器）                                 |
+| 搜索     | Pagefind                                                     |
+| OG 图    | satori + sharp                                               |
+| 评论     | giscus / twikoo / waline                                     |
+| 播放器   | APlayer / DPlayer                                            |
+| 日期     | dayjs（时区支持）                                            |
+| 包管理   | pnpm                                                         |
+| 语言     | TypeScript（strict）                                         |
 
 ## 许可证
 

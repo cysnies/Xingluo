@@ -46,7 +46,7 @@ export function getPostSlug(id: string, filePath: string | undefined): string {
 export function getPostUrl(
   id: string,
   filePath: string | undefined,
-  locale: string = config.site.lang
+  locale: string = config.site.lang,
 ): string {
   return getRelativeLocaleUrl(locale, `posts/${getPostSlugPath(id, filePath)}`);
 }

@@ -35,11 +35,13 @@
   "image": "OG 图 URL",
   "datePublished": "2026-06-19T10:00:00.000Z",
   "dateModified": "2026-06-20T10:00:00.000Z",
-  "author": [{
-    "@type": "Person",
-    "name": "作者名",
-    "url": "作者主页"
-  }]
+  "author": [
+    {
+      "@type": "Person",
+      "name": "作者名",
+      "url": "作者主页"
+    }
+  ]
 }
 ```
 
@@ -92,7 +94,12 @@ OG 图使用 Noto Sans SC 字体（见 `astro.config.ts` 的 `fonts` 配置，CS
 `Layout.astro` 注入 RSS 自动发现链接：
 
 ```html
-<link rel="alternate" type="application/rss+xml" title="..." href=".../rss.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title="..."
+  href=".../rss.xml"
+/>
 ```
 
 ## sitemap

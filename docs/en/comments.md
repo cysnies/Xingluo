@@ -117,11 +117,11 @@ See [`src/scripts/comments.ts`](../src/scripts/comments.ts).
 
 When the site theme changes, the comment system theme syncs automatically:
 
-| Comment system | Sync method |
-| --- | --- |
-| giscus | `postMessage({giscus:{setConfig:{theme}}})` to the iframe |
-| waline | `dark:"html.dark"` CSS selector auto-follows |
-| twikoo | watches `.dark` class changes and rebuilds the instance |
+| Comment system | Sync method                                               |
+| -------------- | --------------------------------------------------------- |
+| giscus         | `postMessage({giscus:{setConfig:{theme}}})` to the iframe |
+| waline         | `dark:"html.dark"` CSS selector auto-follows              |
+| twikoo         | watches `.dark` class changes and rebuilds the instance   |
 
 Theme watching uses a `MutationObserver` on `document.documentElement`'s `class` and `data-theme` attributes.
 
