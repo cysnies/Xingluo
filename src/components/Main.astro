@@ -1,22 +1,45 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import type { HTMLAttributes } from "astro/types";
 import { cn } from "@/lib/utils";
+import config from "@/config";
 
-interface Props extends HTMLAttributes<"div"> {
-  /** 页面标题 */
-  title: string;
-  /** 页面描述 */
-  description?: string;
-  /** 是否显示返回按钮（需配合 slot） */
+interface Props extends HTMLAttributes<"main"> {
+  /** 自定义追加的类名，会与默认布局类合并 */
   class?: string;
 }
 
-const { title, description, class: className, ...rest } = Astro.props as Props;
+const { class: className, ...rest } = Astro.props as Props;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+// 记录当前页地址，供文章页返回按钮回跳到来源列表/搜索页
+const backUrl = config.features.showBackButton
+  ? Astro.url.pathname
+  : getRelativeLocaleUrl(locale, "");
 ---
 
-<div class={cn("space-y-2", className)} {...rest}>
-  <slot name="before" />
-  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-  {description && <p class="text-muted-foreground">{description}</p>}
+<main
+  id="main-content"
+  data-backurl={backUrl}
+  class={cn(
+    "mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8",
+    className
+  )}
+  {...rest}
+>
   <slot />
-</div>
+</main>
+
+<script>
+  // 页面加载时将来源页地址写入 sessionStorage，供文章页返回按钮读取
+  function rememberBackUrl() {
+    const main = document.querySelector<HTMLElement>("#main-content");
+    const backUrl = main?.dataset.backurl;
+    if (backUrl) {
+      sessionStorage.setItem("backUrl", backUrl);
+    }
+  }
+
+  document.addEventListener("astro:page-load", rememberBackUrl);
+  rememberBackUrl();
+</script>

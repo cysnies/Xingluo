@@ -4,6 +4,7 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -33,12 +34,12 @@ const crumbs = [
   canonicalURL={canonicalURL}
 >
   <Header />
-  <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
+  <Main>
     <Breadcrumb items={crumbs} class="mb-6" />
     <h1 class="mb-8 text-3xl font-bold tracking-tight sm:text-4xl">{pageTitle}</h1>
     <article class="app-prose max-w-app">
       <Content />
     </article>
-  </main>
+  </Main>
   <Footer />
 </Layout>

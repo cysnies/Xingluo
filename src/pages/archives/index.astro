@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { getPostUrl } from "@/utils/getPostPaths";
@@ -43,7 +44,7 @@ const crumbs = [
 
 <Layout title={title} description={description}>
   <Header />
-  <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
+  <Main>
     <Breadcrumb items={crumbs} class="mb-6" />
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
@@ -75,6 +76,6 @@ const crumbs = [
         ))
       }
     </div>
-  </main>
+  </Main>
   <Footer />
 </Layout>

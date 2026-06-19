@@ -1,17 +1,42 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { useTranslations } from "@/i18n";
-import Button from "@/components/ui/Button.astro";
+import config from "@/config";
+import LinkButton from "@/components/LinkButton.astro";
 import ArrowLeft from "@/assets/icons/ArrowLeft.astro";
 
-const t = useTranslations(Astro.currentLocale);
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+// 默认回首页；若 sessionStorage 存在来源页地址则由脚本覆盖
+const homeHref = getRelativeLocaleUrl(locale, "");
+
 ---
 
-<Button
-  variant="ghost"
-  size="sm"
-  onclick="history.back()"
-  aria-label={t.post.goBack}
->
-  <ArrowLeft class="size-4 rtl:rotate-180" />
-  {t.post.goBack}
-</Button>
+{
+  config.features.showBackButton && (
+    <LinkButton
+      id="back-button"
+      href={homeHref}
+      variant="ghost"
+      size="sm"
+      class="mb-2 -ms-2"
+    >
+      <ArrowLeft class="size-4 rtl:rotate-180" />
+      {t.post.goBack}
+    </LinkButton>
+  )
+}
+
+<script>
+  // 读取来源页地址并覆盖返回按钮链接，无记录时保持默认回首页
+  function updateBackUrl() {
+    const backButton = document.querySelector<HTMLAnchorElement>("#back-button");
+    const backUrl = sessionStorage.getItem("backUrl");
+    if (backUrl && backButton) {
+      backButton.href = backUrl;
+    }
+  }
+
+  document.addEventListener("astro:page-load", updateBackUrl);
+  updateBackUrl();
+</script>

@@ -4,6 +4,7 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
 import Socials from "@/components/Socials.astro";
 import PostCard from "@/components/PostCard.astro";
 import LinkButton from "@/components/LinkButton.astro";
@@ -30,7 +31,7 @@ const rssHref = new URL(
 
 <Layout>
   <Header />
-  <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
+  <Main>
     <!-- Hero 区域 -->
     <section class="border-b border-border pb-8">
       <div class="flex items-center gap-3">
@@ -103,6 +104,6 @@ const rssHref = new URL(
         <ArrowRight class="size-4 rtl:-rotate-180" />
       </LinkButton>
     </div>
-  </main>
+  </Main>
   <Footer />
 </Layout>
