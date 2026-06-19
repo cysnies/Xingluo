@@ -1,0 +1,79 @@
+/** UI 文案类型定义：所有需要本地化的界面字符串 */
+
+export interface UIStrings {
+  /** 导航相关 */
+  nav: {
+    home: string;
+    posts: string;
+    tags: string;
+    about: string;
+    archives: string;
+    search: string;
+  };
+  /** 文章相关 */
+  post: {
+    publishedAt: string;
+    updatedAt: string;
+    sharePostIntro: string;
+    sharePostOn: string;
+    sharePostViaEmail: string;
+    tagLabel: string;
+    backToTop: string;
+    goBack: string;
+    editPage: string;
+    previousPost: string;
+    nextPost: string;
+    tableOfContents: string;
+  };
+  /** 分页相关 */
+  pagination: {
+    prev: string;
+    next: string;
+    page: string;
+  };
+  /** 首页相关 */
+  home: {
+    socialLinks: string;
+    featured: string;
+    recentPosts: string;
+    allPosts: string;
+  };
+  /** 页脚相关 */
+  footer: {
+    copyright: string;
+    allRightsReserved: string;
+  };
+  /** 各页面标题与描述 */
+  pages: {
+    tagTitle: string;
+    tagDesc: string;
+    tagsTitle: string;
+    tagsDesc: string;
+    postsTitle: string;
+    postsDesc: string;
+    archivesTitle: string;
+    archivesDesc: string;
+    searchTitle: string;
+    searchDesc: string;
+    aboutTitle: string;
+    aboutDesc: string;
+  };
+  /** 无障碍标签 */
+  a11y: {
+    skipToContent: string;
+    openMenu: string;
+    closeMenu: string;
+    toggleTheme: string;
+    searchPlaceholder: string;
+    noResults: string;
+    goToPreviousPage: string;
+    goToNextPage: string;
+    languageSwitcher: string;
+  };
+  /** 404 页面 */
+  notFound: {
+    title: string;
+    message: string;
+    goHome: string;
+  };
+}

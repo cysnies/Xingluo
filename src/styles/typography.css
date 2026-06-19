@@ -1,0 +1,33 @@
+/**
+ * 文章正文 prose 排版样式
+ * 基于 @tailwindcss/typography，覆盖为星罗主题配色
+ */
+
+/* prose 容器：在 .app-prose 上应用文章排版 */
+.app-prose {
+  @apply prose prose-neutral dark:prose-invert max-w-none;
+  /* 标题更紧凑 */
+  @apply prose-headings:scroll-mt-20 prose-headings:font-semibold;
+  /* 链接使用主色 */
+  @apply prose-a:font-medium prose-a:text-primary prose-a:underline-offset-4 hover:prose-a:text-primary/80;
+  /* 代码块使用 code 表面色 */
+  @apply prose-code:rounded prose-code:bg-code prose-code:px-1.5 prose-code:py-0.5 prose-code:text-code-foreground prose-code:before:content-none prose-code:after:content-none;
+  /* 预格式化代码块去除内联代码背景 */
+  @apply prose-pre:bg-code prose-pre:text-code-foreground prose-pre:p-0;
+  /* 引用块强调 */
+  @apply prose-blockquote:border-l-primary/40 prose-blockquote:not-italic prose-blockquote:text-muted-foreground;
+  /* 水平线弱化 */
+  @apply prose-hr:border-border;
+  /* 图片圆角 */
+  @apply prose-img:rounded-lg;
+}
+
+/* 行号容器样式（配合 Shiki transformers） */
+.app-prose .astro-code {
+  @apply rounded-lg;
+}
+
+/* 代码块文件名标签 */
+.app-prose .astro-code .filename {
+  @apply mb-3 inline-block rounded-md bg-code-highlight px-2 py-0.5 text-xs font-medium text-code-foreground;
+}

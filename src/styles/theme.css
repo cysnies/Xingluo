@@ -1,0 +1,98 @@
+/**
+ * 星罗主题 CSS 变量
+ * 采用 shadcn/ui 的 OKLCH 色彩空间与 new-york 风格 neutral 基色
+ * 通过 .dark 类切换暗色模式
+ */
+
+:root {
+  /* 圆角基准值（new-york 风格 0.625rem） */
+  --radius: 0.625rem;
+
+  /* 基础表面 */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+
+  /* 卡片 */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+
+  /* 弹层 */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* 主色 */
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* 次要色 */
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+
+  /* 弱化色 */
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+
+  /* 强调色 */
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+
+  /* 危险色 */
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+
+  /* 边框与输入框 */
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* 代码块 */
+  --code: oklch(0.985 0 0);
+  --code-foreground: oklch(0.205 0 0);
+  --code-highlight: oklch(0.96 0 0);
+  --code-number: oklch(0.56 0 0);
+
+  /* 选区 */
+  --selection: oklch(0.205 0 0);
+  --selection-foreground: oklch(0.985 0 0);
+
+  /* 内容容器最大宽度 */
+  --content-width: 72rem;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+
+  --accent: oklch(0.371 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+
+  --code: oklch(0.18 0 0);
+  --code-foreground: oklch(0.985 0 0);
+  --code-highlight: oklch(0.269 0 0);
+  --code-number: oklch(0.708 0 0);
+
+  --selection: oklch(0.922 0 0);
+  --selection-foreground: oklch(0.205 0 0);
+}
