@@ -17,7 +17,7 @@ const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 const timezone = config.site.timezone;
 
-// 关闭档案页时重写到 404
+// 关闭归档页时重写到 404
 const notFoundUrl = getRelativeLocaleUrl(locale, "404");
 if (!config.features.showArchives && notFoundUrl) {
   return Astro.rewrite(notFoundUrl);

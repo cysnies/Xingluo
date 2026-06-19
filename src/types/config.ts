@@ -115,7 +115,7 @@ export interface FeaturesConfig {
   lightAndDarkMode: boolean;
   /** 是否动态生成 OG 图 */
   dynamicOgImage: boolean;
-  /** 是否显示档案页 */
+  /** 是否显示归档页 */
   showArchives: boolean;
   /** 是否显示返回按钮 */
   showBackButton: boolean;
