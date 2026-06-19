@@ -44,6 +44,71 @@ export interface EditPostConfig {
   url: string;
 }
 
+/** 评论系统提供者类型 */
+export type CommentProvider = "giscus" | "twikoo" | "waline" | false;
+
+/** giscus 评论系统配置 */
+export interface GiscusConfig {
+  /** GitHub 仓库，形如 owner/repo */
+  repo: string;
+  /** 仓库 ID（giscus.app 生成） */
+  repoId: string;
+  /** Discussion 分类名 */
+  category: string;
+  /** 分类 ID（giscus.app 生成） */
+  categoryId: string;
+  /** 页面到 discussion 的映射方式 */
+  mapping?: "pathname" | "url" | "title" | "og:title" | "specific" | "number";
+  /** 是否启用严格标题匹配 */
+  strict?: boolean;
+  /** 是否启用表情反应 */
+  reactionsEnabled?: boolean;
+  /** 评论输入框位置 */
+  inputPosition?: "top" | "bottom";
+  /** 加载方式 */
+  loading?: "lazy" | "eager";
+}
+
+/** twikoo 评论系统配置 */
+export interface TwikooConfig {
+  /** 云环境 ID 或自托管服务完整 URL */
+  envId: string;
+  /** 语言代码（如 zh-CN） */
+  lang?: string;
+}
+
+/** waline 评论系统配置 */
+export interface WalineConfig {
+  /** Waline 服务端地址 */
+  serverURL: string;
+  /** 语言代码（如 zh-CN） */
+  lang?: string;
+  /** 评论分页大小 */
+  pageSize?: number;
+  /** 暗色模式选择器或布尔，留空则跟随站点 .dark 类 */
+  dark?: string | boolean;
+}
+
+/** 评论系统统一配置（同时仅启用一个 provider） */
+export interface CommentsConfig {
+  /** 评论系统提供者，false 表示关闭 */
+  provider: CommentProvider;
+  /** giscus 配置，provider 为 giscus 时必填 */
+  giscus?: GiscusConfig;
+  /** twikoo 配置，provider 为 twikoo 时必填 */
+  twikoo?: TwikooConfig;
+  /** waline 配置，provider 为 waline 时必填 */
+  waline?: WalineConfig;
+}
+
+/** 媒体播放器开关配置 */
+export interface PlayersConfig {
+  /** 是否启用 APlayer 音乐播放器 */
+  aplayer: boolean;
+  /** 是否启用 DPlayer 视频播放器 */
+  dplayer: boolean;
+}
+
 /** 功能开关配置 */
 export interface FeaturesConfig {
   /** 是否启用亮/暗模式切换 */
@@ -58,6 +123,12 @@ export interface FeaturesConfig {
   editPost: EditPostConfig;
   /** 搜索方案 */
   search: "pagefind" | false;
+  /** 是否启用 MDX 解析与渲染（关闭时仅收集 .md 且不加载 mdx 集成） */
+  mdx: boolean;
+  /** 评论系统配置 */
+  comments: CommentsConfig;
+  /** 媒体播放器开关 */
+  players: PlayersConfig;
 }
 
 /** 社交链接项 */

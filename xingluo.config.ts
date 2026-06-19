@@ -31,6 +31,33 @@ export default defineXingluoConfig({
       url: "https://github.com/xingluo/blog/edit/main/",
     },
     search: "pagefind",
+    // 是否启用 MDX 解析与渲染（关闭后仅收集 .md，不加载 mdx 集成）
+    mdx: true,
+    // 评论系统配置：三选一或关闭。provider 为某值时需提供对应子配置。
+    comments: {
+      provider: false,
+      // giscus 示例（需在 https://giscus.app 生成 repoId/categoryId）：
+      // giscus: {
+      //   repo: "owner/repo",
+      //   repoId: "R_...",
+      //   category: "Announcements",
+      //   categoryId: "DIC_...",
+      //   mapping: "pathname",
+      //   reactionsEnabled: true,
+      //   inputPosition: "bottom",
+      //   loading: "lazy",
+      // },
+      // twikoo 示例（envId 为云环境 ID 或自托管服务完整 URL）：
+      // twikoo: { envId: "https://your-twikoo.example.com", lang: "zh-CN" },
+      // waline 示例：
+      // waline: { serverURL: "https://waline.example.com", lang: "zh-CN" },
+    },
+    // 媒体播放器开关：在 md 中通过 ```aplayer / ```dplayer 围栏创建，
+    // 在 mdx 中通过 import { APlayer, DPlayer } from "@/components/mdx" 使用。
+    players: {
+      aplayer: false,
+      dplayer: false,
+    },
   },
   socials: [
     { name: "github", url: "https://github.com/xingluo/blog" },

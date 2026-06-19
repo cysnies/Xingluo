@@ -1,5 +1,13 @@
 import userConfig from "../xingluo.config";
-import type { XingluoConfig, PartialXingluoConfig } from "@/types/config";
+import type {
+  CommentsConfig,
+  GiscusConfig,
+  PlayersConfig,
+  TwikooConfig,
+  WalineConfig,
+  XingluoConfig,
+  PartialXingluoConfig,
+} from "@/types/config";
 
 /** 默认 OG 图文件名 */
 const DEFAULT_OG_IMAGE = "default-og.jpg";
@@ -36,7 +44,46 @@ const defaultFeatures = {
     url: "",
   },
   search: "pagefind" as const,
+  /** 默认启用 MDX 解析与渲染 */
+  mdx: true,
+  /** 默认关闭评论系统 */
+  comments: {
+    provider: false as const,
+  },
+  /** 默认关闭媒体播放器 */
+  players: {
+    aplayer: false,
+    dplayer: false,
+  },
 };
+
+/** 合并评论系统配置，保留用户提供的各 provider 子配置 */
+function resolveComments(
+  partial?: Partial<CommentsConfig>
+): CommentsConfig {
+  const userComments = partial ?? {};
+  const provider = userComments.provider ?? false;
+  const resolved: CommentsConfig = { provider };
+  // 仅在用户提供了对应 provider 配置时透传，保持类型安全
+  if (userComments.giscus) {
+    resolved.giscus = userComments.giscus as GiscusConfig;
+  }
+  if (userComments.twikoo) {
+    resolved.twikoo = userComments.twikoo as TwikooConfig;
+  }
+  if (userComments.waline) {
+    resolved.waline = userComments.waline as WalineConfig;
+  }
+  return resolved;
+}
+
+/** 合并播放器开关配置 */
+function resolvePlayers(partial?: Partial<PlayersConfig>): PlayersConfig {
+  return {
+    aplayer: partial?.aplayer ?? false,
+    dplayer: partial?.dplayer ?? false,
+  };
+}
 
 /** 深度合并用户配置与默认值，得到完整配置对象 */
 function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
@@ -47,6 +94,8 @@ function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
       ...defaultFeatures,
       ...partial.features,
       editPost: { ...defaultFeatures.editPost, ...partial.features?.editPost },
+      comments: resolveComments(partial.features?.comments),
+      players: resolvePlayers(partial.features?.players),
     },
     socials: partial.socials ?? [],
     shareLinks: partial.shareLinks ?? [],
