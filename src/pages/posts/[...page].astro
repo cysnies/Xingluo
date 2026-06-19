@@ -1,11 +1,13 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import type { Page } from "astro";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import PostCard from "@/components/PostCard.astro";
 import Pagination from "@/components/Pagination.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -26,11 +28,16 @@ interface Props {
 const { page } = Astro.props as Props;
 const title = t.pages.postsTitle;
 const description = t.pages.postsDesc;
+const crumbs = [
+  { href: getRelativeLocaleUrl(locale), label: t.nav.home },
+  { label: title },
+];
 ---
 
 <Layout title={title} description={description}>
   <Header />
   <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
+    <Breadcrumb items={crumbs} class="mb-6" />
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <ul class="grid gap-4 sm:grid-cols-2">
       {page.data.map((post: any) => (
