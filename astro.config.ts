@@ -34,6 +34,15 @@ const integrations = [
       locales: {
         "zh-cn": "zh-CN",
         en: "en",
+        ja: "ja",
+        ko: "ko",
+        fr: "fr",
+        de: "de",
+        es: "es",
+        pt: "pt",
+        ru: "ru",
+        ar: "ar",
+        eo: "eo",
       },
     },
   }),
@@ -75,7 +84,7 @@ export default defineConfig({
   base: baseUrl,
   integrations,
   i18n: {
-    locales: ["zh-cn", "en"],
+    locales: ["zh-cn", "en", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "eo"],
     defaultLocale: "zh-cn",
     routing: {
       prefixDefaultLocale: false,
