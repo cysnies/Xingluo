@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { getPostUrl } from "@/utils/getPostPaths";
 import { slugifyStr } from "@/utils/slugify";
+import { toTransitionName } from "@/utils/toTransitionName";
 import config from "@/config";
 import Datetime from "./Datetime.astro";
 import Tag from "./Tag.astro";
@@ -27,12 +28,13 @@ const tags = data.tags.map((tag) => ({
   tag: slugifyStr(tag),
   tagName: tag,
 }));
+const transitionName = toTransitionName(data.title);
 ---
 
 <Card class={cn("group overflow-hidden transition-colors hover:bg-accent/30", className)}>
   <a href={href} class="block">
     <CardHeader>
-      <CardTitle class="transition-colors group-hover:text-primary">
+      <CardTitle transition:name={transitionName} class="transition-colors group-hover:text-primary">
         {data.title}
       </CardTitle>
       <Datetime
