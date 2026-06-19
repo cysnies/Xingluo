@@ -1,0 +1,10 @@
+---
+import HomeView from "@/components/pageViews/HomeView.astro";
+import { getLocaleParams } from "@/i18n/staticPaths";
+
+export function getStaticPaths() {
+  return getLocaleParams();
+}
+---
+
+<HomeView />

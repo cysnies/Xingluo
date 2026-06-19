@@ -1,0 +1,10 @@
+---
+import ArchivesView from "@/components/pageViews/ArchivesView.astro";
+import { getLocaleParams } from "@/i18n/staticPaths";
+
+export function getStaticPaths() {
+  return getLocaleParams();
+}
+---
+
+<ArchivesView />

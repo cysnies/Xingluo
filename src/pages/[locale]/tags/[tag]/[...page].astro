@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+import type { GetStaticPathsOptions } from "astro";
+import TagPostListView from "@/components/pageViews/TagPostListView.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getUniqueTags } from "@/utils/getUniqueTags";
+import { slugifyAll } from "@/utils/slugify";
+import { getLocaleParams } from "@/i18n/staticPaths";
+import config from "@/config";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = await getCollection("posts");
+  const sortedPosts = getSortedPosts(posts);
+  const tags = getUniqueTags(sortedPosts);
+
+  // 为每个非默认语言的每个标签生成分页
+  return getLocaleParams().flatMap(({ params: { locale } }) =>
+    tags.flatMap(({ tag, tagName }) => {
+      const tagPosts = sortedPosts.filter(({ data }) =>
+        slugifyAll(data.tags).includes(tag)
+      );
+      return paginate(tagPosts, {
+        params: { locale, tag },
+        props: { tagName },
+        pageSize: config.posts.perPage,
+      });
+    })
+  );
+}
+
+const { page, tagName } = Astro.props as {
+  page: any;
+  tagName: string;
+};
+---
+
+<TagPostListView page={page} tagName={tagName} />

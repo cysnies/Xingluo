@@ -1,0 +1,10 @@
+---
+import SearchView from "@/components/pageViews/SearchView.astro";
+import { getLocaleParams } from "@/i18n/staticPaths";
+
+export function getStaticPaths() {
+  return getLocaleParams();
+}
+---
+
+<SearchView />

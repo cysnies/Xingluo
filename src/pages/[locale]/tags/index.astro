@@ -1,0 +1,10 @@
+---
+import TagsIndexView from "@/components/pageViews/TagsIndexView.astro";
+import { getLocaleParams } from "@/i18n/staticPaths";
+
+export function getStaticPaths() {
+  return getLocaleParams();
+}
+---
+
+<TagsIndexView />
