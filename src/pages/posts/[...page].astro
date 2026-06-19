@@ -1,0 +1,45 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import type { Page } from "astro";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import PostCard from "@/components/PostCard.astro";
+import Pagination from "@/components/Pagination.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+export async function getStaticPaths({ paginate }: any) {
+  const allPosts = await getCollection("posts");
+  const sorted = getSortedPosts(allPosts);
+  return paginate(sorted, { pageSize: config.posts.perPage });
+}
+
+interface Props {
+  page: Page<CollectionEntry<"posts">>;
+}
+
+const { page } = Astro.props as Props;
+const title = t.pages.postsTitle;
+const description = t.pages.postsDesc;
+---
+
+<Layout title={title} description={description}>
+  <Header />
+  <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
+    <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {page.data.map((post: any) => (
+        <li>
+          <PostCard post={post} />
+        </li>
+      ))}
+    </ul>
+    <Pagination page={page} />
+  </main>
+  <Footer />
+</Layout>

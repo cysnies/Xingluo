@@ -2,6 +2,9 @@
 @import "./theme.css";
 @import "./typography.css";
 
+/* 加载 Tailwind v4 插件 */
+@plugin "@tailwindcss/typography";
+
 /* 暗色模式通过 .dark 类触发 */
 @custom-variant dark (&:is(.dark *));
 

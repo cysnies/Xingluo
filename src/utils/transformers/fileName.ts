@@ -1,4 +1,8 @@
-import type { ShikiTransformer } from "@shikijs/transformers";
+/** Shiki 转换器最小类型定义（避免依赖 shiki 主包） */
+interface ShikiTransformer {
+  name: string;
+  code?: (this: any, hast: any) => any;
+}
 
 interface FileNameTransformerOptions {
   /** 样式版本：v1 旧版、v2 新版带文件名标签 */
@@ -9,7 +13,7 @@ interface FileNameTransformerOptions {
 
 /**
  * Shiki 代码块文件名显示转换器
- * 通过 ```ts:filename 语法在代码块上方显示文件名标签
+ * 通过 ```ts filename="filename" 语法在代码块上方显示文件名标签
  */
 export function transformerFileName(
   options: FileNameTransformerOptions = {}
@@ -18,7 +22,7 @@ export function transformerFileName(
 
   return {
     name: "xingluo:filename",
-    code(hast) {
+    code(hast: any) {
       const filename = this.options.meta?.["filename"] as string | undefined;
       if (!filename) return;
       if (hideDot && filename.startsWith(".")) return;

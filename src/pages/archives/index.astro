@@ -1,0 +1,67 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostUrl } from "@/utils/getPostPaths";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import dayjs from "@/lib/dayjs";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+const timezone = config.site.timezone;
+
+const posts = await getCollection("posts");
+const sortedPosts = getSortedPosts(posts);
+
+/** 按年份分组 */
+const postsByYear = new Map<number, typeof sortedPosts>();
+for (const post of sortedPosts) {
+  const year = dayjs(post.data.pubDatetime).year();
+  if (!postsByYear.has(year)) postsByYear.set(year, []);
+  postsByYear.get(year)!.push(post);
+}
+
+const years = Array.from(postsByYear.keys()).sort((a, b) => b - a);
+const title = t.pages.archivesTitle;
+const description = t.pages.archivesDesc;
+---
+
+<Layout title={title} description={description}>
+  <Header />
+  <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
+    <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+    <p class="mb-8 text-muted-foreground">{description}</p>
+
+    <div class="space-y-10">
+      {
+        years.map((year) => (
+          <section>
+            <h2 class="mb-4 text-2xl font-semibold tracking-tight">{year}</h2>
+            <ul class="space-y-2 border-l border-border pl-4">
+              {postsByYear.get(year)?.map((post) => {
+                const date = dayjs(post.data.pubDatetime).tz(timezone).format("MM-DD");
+                return (
+                  <li class="flex items-center gap-3">
+                    <span class="w-12 shrink-0 text-xs text-muted-foreground tabular-nums">
+                      {date}
+                    </span>
+                    <a
+                      href={getPostUrl(post.id, post.filePath, locale)}
+                      class="text-sm transition-colors hover:text-primary"
+                    >
+                      {post.data.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+  <Footer />
+</Layout>

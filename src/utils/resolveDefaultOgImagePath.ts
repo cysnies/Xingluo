@@ -33,11 +33,6 @@ export function resolveDefaultOgImagePath(): string {
       : getAssetPath("og.png");
   }
 
-  if (!existsInPublic(filename)) {
-    throw new Error(
-      `未启用 dynamicOgImage 时，public/${filename} 必须存在`
-    );
-  }
-
-  return getAssetPath(filename);
+  // 未启用动态 OG 图：若配置的文件存在则使用，否则回退到 favicon
+  return existsInPublic(filename) ? getAssetPath(filename) : getAssetPath("favicon.svg");
 }

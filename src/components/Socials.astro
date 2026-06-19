@@ -1,13 +1,11 @@
 ---
 import config from "@/config";
-import { useTranslations } from "@/i18n";
 import LinkButton from "./LinkButton.astro";
 import Github from "@/assets/icons/socials/github.astro";
 import X from "@/assets/icons/socials/x.astro";
 import Mail from "@/assets/icons/socials/mail.astro";
 
 const { site, socials } = config;
-const t = useTranslations(Astro.currentLocale);
 
 /** 社交图标映射 */
 const iconMap: Record<string, typeof Github> = {

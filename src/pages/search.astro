@@ -1,0 +1,119 @@
+---
+import "@pagefind/default-ui/css/ui.css";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { getAssetPath } from "@/utils/withBase";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const t = useTranslations(Astro.currentLocale);
+
+// 搜索未启用时重定向到 404
+if (config.features.search !== "pagefind") {
+  return Astro.rewrite("/404");
+}
+
+const pagefindBundlePath = getAssetPath("pagefind/");
+const title = t.pages.searchTitle;
+const description = t.pages.searchDesc;
+---
+
+<Layout title={title} description={description}>
+  <Header />
+  <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
+    <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+    <p class="mb-8 text-muted-foreground">{description}</p>
+
+    <div
+      id="pagefind-search"
+      transition:persist
+      data-bundle-path={pagefindBundlePath}
+    >
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  function initSearch() {
+    const pageFindSearch = document.querySelector<HTMLElement>(
+      "#pagefind-search"
+    );
+    if (!pageFindSearch) return;
+
+    const bundlePath = pageFindSearch.dataset.bundlePath;
+    if (!bundlePath) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const onIdle =
+      window.requestIdleCallback || ((cb: () => void) => setTimeout(cb, 1));
+
+    onIdle(async () => {
+      // @ts-expect-error - @pagefind/default-ui 缺少类型声明
+      const { PagefindUI } = await import("@pagefind/default-ui");
+
+      // 开发模式提示需先构建
+      if (import.meta.env.DEV) {
+        pageFindSearch.innerHTML = `
+          <div class="mb-4 rounded-md bg-muted p-4 text-sm">
+            <p><strong>开发模式提示：</strong>需至少构建一次项目才能看到搜索结果。</p>
+            <code class="mt-2 block rounded bg-background px-2 py-1">pnpm run build</code>
+          </div>
+        `;
+      }
+
+      const search = new PagefindUI({
+        element: "#pagefind-search",
+        bundlePath,
+        showImages: false,
+        showSubResults: true,
+        processTerm: function (term: string) {
+          params.set("q", term);
+          history.replaceState(history.state, "", "?" + params.toString());
+          return term;
+        },
+      });
+
+      // 触发 URL 中的初始查询
+      const query = params.get("q");
+      if (query) {
+        search.triggerSearch(query);
+      }
+
+      // 清空搜索时重置 URL 参数
+      const searchInput = document.querySelector(".pagefind-ui__search-input");
+      const clearButton = document.querySelector(".pagefind-ui__search-clear");
+      const resetSearchParam = (e: Event) => {
+        if ((e.target as HTMLInputElement)?.value.trim() === "") {
+          history.replaceState(history.state, "", window.location.pathname);
+        }
+      };
+      searchInput?.addEventListener("input", resetSearchParam);
+      clearButton?.addEventListener("click", resetSearchParam);
+    });
+  }
+
+  document.addEventListener("astro:after-swap", () => {
+    const pagefindSearch = document.querySelector("#pagefind-search");
+    // 已存在搜索表单则不重复初始化
+    if (pagefindSearch && pagefindSearch.querySelector("form")) return;
+    initSearch();
+  });
+  initSearch();
+</script>
+
+<style is:global>
+  #pagefind-search {
+    --pagefind-ui-font: var(--font-sans);
+    --pagefind-ui-text: var(--foreground);
+    --pagefind-ui-background: var(--background);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-primary: var(--primary);
+    --pagefind-ui-tag: var(--background);
+    --pagefind-ui-border-radius: 0.375rem;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-box-ratio: 3 / 2;
+  }
+</style>
