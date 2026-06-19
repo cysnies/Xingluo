@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "author": {
+      "default": "星罗",
+      "type": "string"
+    },
+    "pubDatetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modDatetime": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean"
+    },
+    "draft": {
+      "type": "boolean"
+    },
+    "tags": {
+      "default": [
+        "others"
+      ],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ogImage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "canonicalURL": {
+      "type": "string"
+    },
+    "hideEditPost": {
+      "type": "boolean"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "pubDatetime",
+    "title",
+    "description"
+  ]
+}

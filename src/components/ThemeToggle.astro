@@ -1,0 +1,26 @@
+---
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import Sun from "@/assets/icons/Sun.astro";
+import Moon from "@/assets/icons/Moon.astro";
+
+const t = useTranslations(Astro.currentLocale);
+const enabled = config.features.lightAndDarkMode;
+---
+
+{
+  enabled && (
+    <button
+      id="theme-btn"
+      type="button"
+      aria-label={t.a11y.toggleTheme}
+      title={t.a11y.toggleTheme}
+      class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+    >
+      {/* 亮色模式下显示月亮（切换到暗色），暗色模式下显示太阳（切换到亮色） */}
+      <Sun class="size-4 hidden dark:block" />
+      <Moon class="size-4 block dark:hidden" />
+      <span class="sr-only">{t.a11y.toggleTheme}</span>
+    </button>
+  )
+}

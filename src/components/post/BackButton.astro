@@ -1,0 +1,17 @@
+---
+import { useTranslations } from "@/i18n";
+import Button from "@/components/ui/Button.astro";
+import ArrowLeft from "@/assets/icons/ArrowLeft.astro";
+
+const t = useTranslations(Astro.currentLocale);
+---
+
+<Button
+  variant="ghost"
+  size="sm"
+  onclick="history.back()"
+  aria-label={t.post.goBack}
+>
+  <ArrowLeft class="size-4 rtl:rotate-180" />
+  {t.post.goBack}
+</Button>

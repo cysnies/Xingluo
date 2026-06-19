@@ -1,0 +1,50 @@
+---
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import Calendar from "@/assets/icons/Calendar.astro";
+import config from "@/config";
+import { useTranslations } from "@/i18n";
+import { tplStr } from "@/i18n";
+import { cn } from "@/lib/utils";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+interface Props {
+  class?: string;
+  size?: "sm" | "lg";
+  pubDatetime: string | Date;
+  timezone?: string;
+  modDatetime?: string | Date | null;
+}
+
+const {
+  pubDatetime,
+  modDatetime,
+  size = "sm",
+  class: className,
+  timezone: postTimezone,
+} = Astro.props;
+
+const t = useTranslations(Astro.currentLocale);
+
+const isModified = modDatetime && modDatetime > pubDatetime;
+const datetime = dayjs(isModified ? modDatetime : pubDatetime).tz(
+  postTimezone ?? config.site.timezone
+);
+const date = datetime.format("YYYY-MM-DD");
+const label = isModified
+  ? tplStr(t.post.updatedAt, { date })
+  : tplStr(t.post.publishedAt, { date });
+---
+
+<div class={cn("flex items-center gap-x-1.5 text-muted-foreground", className)}>
+  <Calendar class={cn("size-4 shrink-0", size === "sm" && "scale-90")} />
+  <time
+    class={cn("text-sm", size === "lg" && "sm:text-base")}
+    datetime={datetime.toISOString()}
+  >
+    {label}
+  </time>
+</div>

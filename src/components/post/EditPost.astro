@@ -1,0 +1,26 @@
+---
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import Button from "@/components/ui/Button.astro";
+
+interface Props {
+  /** 文章相对源文件路径，用于拼接编辑链接 */
+  editPath: string;
+  /** 是否隐藏编辑按钮（文章级覆盖配置） */
+  hide?: boolean;
+}
+
+const { editPath, hide = false } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+const editConfig = config.features.editPost;
+const visible = editConfig.enabled && !hide;
+const href = visible ? `${editConfig.url}${editPath}` : undefined;
+---
+
+{
+  visible && href && (
+    <Button variant="ghost" size="sm" href={href} target="_blank" rel="noopener noreferrer">
+      {t.post.editPage}
+    </Button>
+  )
+}

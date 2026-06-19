@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getPostUrl } from "@/utils/getPostPaths";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import Button from "@/components/ui/Button.astro";
+import ArrowLeft from "@/assets/icons/ArrowLeft.astro";
+import ArrowRight from "@/assets/icons/ArrowRight.astro";
+
+interface Props {
+  prevPost?: CollectionEntry<"posts">;
+  nextPost?: CollectionEntry<"posts">;
+}
+
+const { prevPost, nextPost } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+const locale = Astro.currentLocale ?? config.site.lang;
+---
+
+<nav class="mt-12 grid gap-4 border-t border-border pt-8 sm:grid-cols-2" aria-label="相邻文章导航">
+  {
+    prevPost ? (
+      <Button variant="outline" class="h-auto justify-start gap-3 py-4" href={getPostUrl(prevPost.id, prevPost.filePath, locale)}>
+        <ArrowLeft class="size-4 shrink-0" />
+        <span class="flex flex-col items-start gap-1 text-left">
+          <span class="text-xs text-muted-foreground">{t.post.previousPost}</span>
+          <span class="line-clamp-1 font-medium">{prevPost.data.title}</span>
+        </span>
+      </Button>
+    ) : (
+      <div class="hidden sm:block" />
+    )
+  }
+  {
+    nextPost ? (
+      <Button variant="outline" class="h-auto justify-end gap-3 py-4 sm:col-start-2" href={getPostUrl(nextPost.id, nextPost.filePath, locale)}>
+        <span class="flex flex-col items-end gap-1 text-right">
+          <span class="text-xs text-muted-foreground">{t.post.nextPost}</span>
+          <span class="line-clamp-1 font-medium">{nextPost.data.title}</span>
+        </span>
+        <ArrowRight class="size-4 shrink-0" />
+      </Button>
+    ) : null
+  }
+</nav>

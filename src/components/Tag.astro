@@ -1,0 +1,35 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Hash from "@/assets/icons/Hash.astro";
+import config from "@/config";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  /** URL slug */
+  tag: string;
+  /** 原始显示名 */
+  tagName: string;
+  size?: "sm" | "lg";
+  class?: string;
+}
+
+const { tag, tagName, size = "lg", class: className } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+---
+
+<li>
+  <a
+    href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
+    transition:name={tag}
+    class={cn(
+      "inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-muted-foreground transition-colors",
+      "hover:bg-accent hover:text-accent-foreground",
+      "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+      size === "sm" ? "text-sm" : "text-base",
+      className
+    )}
+  >
+    <Hash class={cn("opacity-70", size === "lg" ? "size-4" : "size-3.5")} />
+    {tagName}
+  </a>
+</li>

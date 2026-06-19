@@ -1,0 +1,41 @@
+---
+import { useTranslations } from "@/i18n";
+import ArrowUp from "@/assets/icons/ArrowUp.astro";
+
+const t = useTranslations(Astro.currentLocale);
+---
+
+<button
+  id="back-to-top"
+  type="button"
+  aria-label={t.post.backToTop}
+  title={t.post.backToTop}
+  class="fixed bottom-6 right-6 z-40 inline-flex size-10 items-center justify-center rounded-full border border-border bg-background shadow-md transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 opacity-0 pointer-events-none translate-y-2"
+>
+  <ArrowUp class="size-5" />
+  <span class="sr-only">{t.post.backToTop}</span>
+</button>
+
+<script>
+  // 返回顶部按钮：滚动超过阈值显示，点击平滑滚动回顶部
+  function setupBackToTop() {
+    const btn = document.getElementById("back-to-top");
+    if (!btn) return;
+
+    const update = () => {
+      const scrolled = window.scrollY > 400;
+      btn.classList.toggle("opacity-0", !scrolled);
+      btn.classList.toggle("pointer-events-none", !scrolled);
+      btn.classList.toggle("translate-y-2", !scrolled);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    btn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  setupBackToTop();
+  document.addEventListener("astro:after-swap", setupBackToTop);
+</script>

@@ -1,0 +1,41 @@
+---
+import config from "@/config";
+import { useTranslations } from "@/i18n";
+import LinkButton from "./LinkButton.astro";
+import Github from "@/assets/icons/socials/github.astro";
+import X from "@/assets/icons/socials/x.astro";
+import Mail from "@/assets/icons/socials/mail.astro";
+
+const { site, socials } = config;
+const t = useTranslations(Astro.currentLocale);
+
+/** 社交图标映射 */
+const iconMap: Record<string, typeof Github> = {
+  github: Github,
+  x: X,
+  mail: Mail,
+};
+
+/** 计算链接标题 */
+function getTitle(name: string, url: string): string {
+  if (url.startsWith("mailto:") || name === "mail") {
+    return `发送邮件给 ${site.title}`;
+  }
+  return `${site.title} 在 ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+}
+---
+
+<div class="flex flex-wrap items-center gap-1">
+  {
+    socials.map(({ name, url }) => {
+      const Icon = iconMap[name];
+      const title = getTitle(name, url);
+      return Icon ? (
+        <LinkButton href={url} class="size-9" title={title} target="_blank" rel="noopener noreferrer">
+          <Icon class="size-4" />
+          <span class="sr-only">{title}</span>
+        </LinkButton>
+      ) : null;
+    })
+  }
+</div>

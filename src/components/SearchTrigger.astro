@@ -1,0 +1,20 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import Search from "@/assets/icons/Search.astro";
+
+const t = useTranslations(Astro.currentLocale);
+const locale = Astro.currentLocale ?? config.site.lang;
+const searchHref = getRelativeLocaleUrl(locale, "search");
+---
+
+<a
+  href={searchHref}
+  aria-label={t.nav.search}
+  title={t.nav.search}
+  class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+>
+  <Search class="size-4" />
+  <span class="sr-only">{t.nav.search}</span>
+</a>

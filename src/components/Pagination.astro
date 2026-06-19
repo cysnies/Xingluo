@@ -1,0 +1,52 @@
+---
+import type { Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { useTranslations } from "@/i18n";
+import { tplStr } from "@/i18n";
+import Button from "@/components/ui/Button.astro";
+import ArrowLeft from "@/assets/icons/ArrowLeft.astro";
+import ArrowRight from "@/assets/icons/ArrowRight.astro";
+
+interface Props {
+  page: Page<CollectionEntry<"posts">>;
+}
+
+const { page } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+const totalPages = page.lastPage;
+const currentPage = page.currentPage;
+---
+
+{
+  totalPages > 1 && (
+    <nav
+      class="mt-8 flex items-center justify-center gap-4"
+      role="navigation"
+      aria-label="分页导航"
+    >
+      <Button
+        variant="outline"
+        size="sm"
+        href={page.url.prev ?? undefined}
+        disabled={!page.url.prev}
+        aria-label={t.a11y.goToPreviousPage}
+      >
+        <ArrowLeft class="size-4 rtl:rotate-180" />
+        {t.pagination.prev}
+      </Button>
+      <span class="text-sm text-muted-foreground" aria-current="page">
+        {tplStr(t.pagination.page, { current: String(currentPage), total: String(totalPages) })}
+      </span>
+      <Button
+        variant="outline"
+        size="sm"
+        href={page.url.next ?? undefined}
+        disabled={!page.url.next}
+        aria-label={t.a11y.goToNextPage}
+      >
+        {t.pagination.next}
+        <ArrowRight class="size-4 rtl:rotate-180" />
+      </Button>
+    </nav>
+  )
+}

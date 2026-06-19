@@ -1,0 +1,107 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
+import { getAssetPath } from "@/utils/withBase";
+import config from "@/config";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  canonicalURL?: string;
+}
+
+const { site } = config;
+
+const {
+  title = site.title,
+  description = site.description,
+  ogImage = resolveDefaultOgImagePath(),
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+} = Astro.props;
+
+const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
+const rssHref = getRelativeLocaleUrl(
+  Astro.currentLocale ?? site.lang,
+  "rss.xml"
+);
+---
+
+<!doctype html>
+<html
+  dir={site.dir}
+  lang={Astro.currentLocale ?? site.lang}
+  class="overflow-y-scroll scroll-smooth"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- 主要 meta -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content={site.author} />
+    <link rel="sitemap" href={getAssetPath("sitemap-index.xml")} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={socialImageURL} />
+
+    <!-- Twitter / X -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={socialImageURL} />
+
+    <!-- RSS 自动发现 -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={site.title}
+      href={new URL(rssHref, Astro.site)}
+    />
+
+    <!-- 运行时由 theme.ts 填充为当前背景色 -->
+    <meta name="theme-color" content="" />
+
+    <!-- 子布局注入的额外 head 内容（如 JSON-LD、文章 meta） -->
+    <slot name="head" />
+
+    <!--
+      内联 FOUC 防护脚本：在浏览器绘制前设置 <html> 的 data-theme
+      同步执行，无 defer/async
+    -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        window.__theme = { value: theme };
+      })();
+    </script>
+
+    <ClientRouter />
+  </head>
+  <body class="bg-background text-foreground app-layout">
+    <slot />
+    <script>
+      import "@/scripts/theme";
+    </script>
+  </body>
+</html>

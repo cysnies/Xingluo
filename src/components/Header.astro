@@ -1,0 +1,147 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { stripBase, stripLocale } from "@/utils/withBase";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import ThemeToggle from "./ThemeToggle.astro";
+import SearchTrigger from "./SearchTrigger.astro";
+import Menu from "@/assets/icons/Menu.astro";
+import Close from "@/assets/icons/Close.astro";
+
+const { site, features } = config;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+// 剥离 base 前缀，使 isActive 判断不受部署子目录影响
+const relativePath = stripBase(Astro.url.pathname);
+const pathWithoutTrailingSlash =
+  relativePath.endsWith("/") && relativePath !== "/"
+    ? relativePath.slice(0, -1)
+    : relativePath;
+const currentPath = stripLocale(pathWithoutTrailingSlash, locale);
+
+/** 判断导航项是否激活 */
+const isActive = (path: string) => {
+  const currentPathArray = currentPath.split("/").filter((p) => p.trim());
+  const pathArray = path.split("/").filter((p) => p.trim());
+  return currentPath === path || currentPathArray[0] === pathArray[0];
+};
+
+/** 导航菜单项 */
+const navItems = [
+  { href: getRelativeLocaleUrl(locale, "posts"), label: t.nav.posts, path: "/posts" },
+  { href: getRelativeLocaleUrl(locale, "tags"), label: t.nav.tags, path: "/tags" },
+  ...(features.showArchives
+    ? [{ href: getRelativeLocaleUrl(locale, "archives"), label: t.nav.archives, path: "/archives" }]
+    : []),
+  { href: getRelativeLocaleUrl(locale, "about"), label: t.nav.about, path: "/about" },
+];
+---
+
+<a
+  id="skip-to-content"
+  href="#main-content"
+  class="bg-background ring-ring absolute left-4 -top-full z-50 rounded-md px-3 py-2 text-sm font-medium ring-[3px] transition-all focus:top-4"
+>
+  {t.a11y.skipToContent}
+</a>
+
+<header
+  class="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md"
+>
+  <div class="mx-auto flex h-14 max-w-app items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <!-- Logo / 站点标题 -->
+    <a
+      href={getRelativeLocaleUrl(locale)}
+      class="text-base font-semibold tracking-tight transition-colors hover:text-primary"
+    >
+      {site.title}
+    </a>
+
+    <!-- 桌面端导航 -->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="主导航">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+              isActive(item.path)
+                ? "bg-accent text-accent-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- 右侧操作区 -->
+    <div class="flex items-center gap-1">
+      <SearchTrigger />
+      <ThemeToggle />
+      <!-- 移动端菜单按钮 -->
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        aria-label={t.a11y.openMenu}
+        aria-expanded="false"
+        class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 md:hidden"
+      >
+        <Menu class="size-4 md:hidden" id="menu-icon-open" />
+        <Close class="hidden size-4" id="menu-icon-close" />
+      </button>
+    </div>
+  </div>
+
+  <!-- 移动端菜单（默认隐藏，JS 控制） -->
+  <nav
+    id="mobile-menu"
+    class="hidden border-t border-border bg-background md:hidden"
+    aria-label="移动端导航"
+  >
+    <div class="mx-auto flex max-w-app flex-col gap-1 px-4 py-3 sm:px-6">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+              isActive(item.path)
+                ? "bg-accent text-accent-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>
+
+<script>
+  // 移动端菜单展开/收起逻辑
+  function setupMobileMenu() {
+    const btn = document.getElementById("mobile-menu-btn");
+    const menu = document.getElementById("mobile-menu");
+    const iconOpen = document.getElementById("menu-icon-open");
+    const iconClose = document.getElementById("menu-icon-close");
+    if (!btn || !menu) return;
+
+    const toggle = () => {
+      const isOpen = !menu.classList.contains("hidden");
+      menu.classList.toggle("hidden");
+      btn.setAttribute("aria-expanded", String(!isOpen));
+      iconOpen?.classList.toggle("hidden", !isOpen);
+      iconOpen?.classList.toggle("md:hidden", false);
+      iconClose?.classList.toggle("hidden", isOpen);
+    };
+
+    btn.addEventListener("click", toggle);
+  }
+
+  setupMobileMenu();
+  document.addEventListener("astro:after-swap", setupMobileMenu);
+</script>
