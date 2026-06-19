@@ -17,6 +17,7 @@ import ShareLinks from "@/components/post/ShareLinks.astro";
 import BackButton from "@/components/post/BackButton.astro";
 import BackToTopButton from "@/components/post/BackToTopButton.astro";
 import AdjacentPostNav from "@/components/post/AdjacentPostNav.astro";
+import Comments from "@/components/comments/Comments.astro";
 import config from "@/config";
 
 interface Props {
@@ -135,6 +136,9 @@ const resolvedCanonical =
       <ShareLinks url={articleUrl} title={title} />
 
       <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
+
+      {/* 评论区：provider 为 false 时 Comments 组件内部不输出 */}
+      <Comments locale={locale} />
     </article>
   </main>
 
@@ -145,3 +149,12 @@ const resolvedCanonical =
 <script>
   import "@/scripts/postEnhancements";
 </script>
+
+{
+  /* 播放器客户端脚本：仅当任一播放器启用时加载，由脚本内部按占位元素懒实例化 */
+  (config.features.players.aplayer || config.features.players.dplayer) && (
+    <script>
+      import "@/scripts/players";
+    </script>
+  )
+}

@@ -43,3 +43,12 @@ const crumbs = [
   </Main>
   <Footer />
 </Layout>
+
+{
+  /* 播放器客户端脚本：仅当任一播放器启用时加载 */
+  (config.features.players.aplayer || config.features.players.dplayer) && (
+    <script>
+      import "@/scripts/players";
+    </script>
+  )
+}
