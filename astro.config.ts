@@ -7,6 +7,7 @@ import {
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import icon from "astro-icon";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import rehypeCallouts from "rehype-callouts";
@@ -27,6 +28,8 @@ export default defineConfig({
       filter: (page) =>
         config.features?.showArchives !== false || !page.endsWith("/archives/"),
     }),
+    // 构建期内联 Font Awesome SVG 图标，零运行时 JS
+    icon(),
   ],
   i18n: {
     locales: ["zh-cn", "en"],
