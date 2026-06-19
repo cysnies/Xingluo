@@ -1,0 +1,88 @@
+# 星罗 GitHub Pages 部署：main 分支内容变更时构建并发布
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/**"
+  # 支持手动触发，便于在配置/模板变更后强制重新部署
+  workflow_dispatch:
+
+# 同分支仅保留最新一次部署
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: 构建站点
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 计算部署 URL
+        id: urls
+        env:
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          # 优先使用仓库变量自定义域名/子路径；未配置时按 GitHub Pages 项目页默认规则推导
+          SITE_URL="${{ vars.PAGES_SITE_URL }}"
+          BASE_URL="${{ vars.PAGES_BASE_URL }}"
+          if [ -z "$SITE_URL" ]; then
+            SITE_URL="https://${OWNER}.github.io"
+          fi
+          if [ -z "$BASE_URL" ]; then
+            BASE_URL="/${REPO}/"
+          fi
+          echo "site_url=$SITE_URL" >> "$GITHUB_OUTPUT"
+          echo "base_url=$BASE_URL" >> "$GITHUB_OUTPUT"
+          echo "将部署到 $SITE_URL$BASE_URL"
+
+      - name: 构建站点
+        run: pnpm run build
+        env:
+          CI_SITE_URL: ${{ steps.urls.outputs.site_url }}
+          CI_BASE_URL: ${{ steps.urls.outputs.base_url }}
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_VERIFICATION }}
+
+      - name: 上传 Pages 产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: 部署到 GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 部署
+        id: deployment
+        uses: actions/deploy-pages@v4
