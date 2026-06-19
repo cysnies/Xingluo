@@ -55,34 +55,35 @@ function addHeadingLinks(root: HTMLElement) {
 function attachCopyButtons(root: HTMLElement, labels: { copy: string; copied: string }) {
   const codeBlocks = Array.from(root.querySelectorAll("pre"));
   for (const codeBlock of codeBlocks) {
-    if (codeBlock.parentElement?.dataset.copyWrap === "true") continue;
+    // transformerFileName 在 pre 内注入了 .xng-code-header
+    // 复制按钮放入 header 右侧操作区，与文件名/语言徽标同行
+    const header = codeBlock.querySelector<HTMLElement>(":scope > .xng-code-header");
+    const actions = header?.querySelector<HTMLElement>(":scope > .xng-code-actions");
 
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "relative";
-    wrapper.dataset.copyWrap = "true";
-
-    // 根据是否存在文件名标签决定按钮垂直位置
-    // --file-name-offset 由 transformerFileName 写到 pre 上，
-    // 但复制按钮会作为 pre 的兄弟节点放进 wrapper，无法继承 pre 上的自定义属性，
-    // 因此把该值镜像到 wrapper.style，使按钮 top-(--file-name-offset) 能正确解析
-    const computedStyle = getComputedStyle(codeBlock);
-    const fileNameOffset =
-      computedStyle.getPropertyValue("--file-name-offset").trim();
-    const hasFileNameOffset = fileNameOffset !== "";
-    const topClass = hasFileNameOffset ? "top-(--file-name-offset)" : "-top-3";
-    if (hasFileNameOffset) {
-      wrapper.style.setProperty("--file-name-offset", fileNameOffset);
-    }
+    // 跳过已注入复制按钮的代码块（View Transitions 复用）
+    const existingBtn = (actions ?? codeBlock.parentElement)?.querySelector(":scope > .copy-code, .copy-code");
+    if (existingBtn) continue;
 
     const copyButton = document.createElement("button");
     copyButton.type = "button";
-    copyButton.className = `copy-code absolute end-3 ${topClass} z-10 rounded border border-border bg-muted px-2 py-0.5 text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50`;
+    copyButton.className =
+      "copy-code inline-flex items-center rounded border border-border bg-background/60 px-1.5 py-0.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
     copyButton.textContent = labels.copy;
     codeBlock.setAttribute("tabindex", "0");
 
-    codeBlock.parentNode?.insertBefore(wrapper, codeBlock);
-    wrapper.appendChild(codeBlock);
-    wrapper.appendChild(copyButton);
+    if (actions) {
+      // header 存在：复制按钮归入操作区
+      actions.appendChild(copyButton);
+    } else {
+      // 无 header 回退：包裹 pre 并将按钮绝对定位在右上角内侧
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+      wrapper.dataset.copyWrap = "true";
+      copyButton.classList.add("absolute", "end-2", "top-2", "z-10");
+      codeBlock.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+      wrapper.appendChild(copyButton);
+    }
 
     copyButton.addEventListener("click", async () => {
       const code = codeBlock.querySelector("code");

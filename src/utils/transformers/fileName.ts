@@ -14,11 +14,19 @@ interface ShikiTransformer {
 }
 
 interface FileNameTransformerOptions {
-  /** 样式版本：v1 旧版标签式、v2 新版带边框徽标 */
-  style?: "v1" | "v2";
   /** 是否隐藏文件名前的绿色圆点 */
   hideDot?: boolean;
 }
+
+/** 不展示语言徽标的语言（无意义的高亮语言） */
+const HIDDEN_LANGS = new Set([
+  "text",
+  "plaintext",
+  "txt",
+  "plain",
+  "ansi",
+  "",
+]);
 
 /** 从 meta 原始字符串解析文件名，兼容 file= 与 filename= 两种写法 */
 function parseRawMeta(raw: string): string | undefined {
@@ -52,55 +60,83 @@ function parseFileNameFromMeta(meta: unknown): string | undefined {
 }
 
 /**
- * Shiki 代码块文件名显示转换器
- * 通过 ```ts filename="src/lib/utils.ts" 语法在代码块上方显示文件名标签
- * 并写入 --file-name-offset 变量，供复制按钮与文件名标签共享垂直定位
+ * Shiki 代码块头部转换器
+ * 通过 ```ts filename="src/lib/utils.ts" 语法在代码块顶部显示文件名与语言徽标
+ *
+ * 在 pre 内部最前方注入一个 header div（作为 code 的前置兄弟节点），
+ * 左侧放文件名（可选），右侧放语言徽标（可选）与复制按钮占位。
+ * header 为常规文档流块级元素，不依赖绝对定位，因此不会被 pre 的
+ * overflow 裁切，复制按钮也共享同一行，避免半在内半在外的错位
  */
 export function transformerFileName(
   options: FileNameTransformerOptions = {}
 ): ShikiTransformer {
-  const { style = "v2", hideDot = false } = options;
+  const { hideDot = false } = options;
 
   return {
     name: "xingluo:filename",
     pre(node) {
       const filename = parseFileNameFromMeta(this.options?.meta);
-      if (!filename) return;
-      if (hideDot && filename.startsWith(".")) return;
+      const lang = String(this.options?.lang ?? "").toLowerCase();
+      const showLang = !HIDDEN_LANGS.has(lang);
 
-      // 写入垂直偏移变量：复制按钮与文件名标签共用
-      const offset = style === "v1" ? "0.75rem" : "-0.75rem";
-      const existingStyle = (node.properties?.style as string | undefined) ?? "";
-      node.properties = {
-        ...node.properties,
-        style: `${existingStyle}--file-name-offset: ${offset};`,
-      };
+      // header 左侧：文件名（带可选绿色圆点）
+      const leftChildren: ShikiHastNode[] = [];
+      if (filename) {
+        const dotClass = hideDot
+          ? ""
+          : "before:inline-block before:size-1.5 before:rounded-full before:bg-green-500";
+        leftChildren.push({
+          type: "element",
+          tagName: "span",
+          properties: {
+            class: [
+              "xng-code-filename inline-flex items-center gap-1.5 font-medium text-foreground",
+              dotClass,
+            ]
+              .filter(Boolean)
+              .join(" "),
+          },
+          children: [{ type: "text", value: filename }],
+        });
+      }
 
-      this.addClassToHast?.(node, "relative mt-8");
+      // header 右侧操作区：语言徽标 + 复制按钮（复制按钮由 postEnhancements 注入）
+      const actionsChildren: ShikiHastNode[] = [];
+      if (showLang) {
+        actionsChildren.push({
+          type: "element",
+          tagName: "span",
+          properties: {
+            class:
+              "xng-code-lang font-mono text-[0.7rem] uppercase tracking-wide text-muted-foreground",
+          },
+          children: [{ type: "text", value: lang }],
+        });
+      }
 
-      // 文件名标签：绝对定位于代码块，依据样式版本调整外观
-      const dotClass = hideDot
-        ? "px-2"
-        : "pl-4 pr-2 before:inline-block before:size-1 before:bg-green-500 before:rounded-full before:absolute before:top-[45%] before:left-2";
-      const positionClass =
-        style === "v1"
-          ? "left-0 -top-6 rounded-t-md border border-b-0 bg-muted/50"
-          : "left-2 top-(--file-name-offset) border rounded-md bg-background";
-
-      const labelNode: ShikiHastNode = {
+      const actions: ShikiHastNode = {
         type: "element",
-        tagName: "span",
+        tagName: "div",
         properties: {
-          class: [
-            "absolute z-10 py-1 font-medium leading-4 text-xs text-foreground",
-            dotClass,
-            positionClass,
-          ],
+          class: "xng-code-actions ml-auto flex items-center gap-2",
         },
-        children: [{ type: "text", value: filename }],
+        children: actionsChildren,
       };
 
-      node.children = [...(node.children ?? []), labelNode];
+      // header 容器：常规文档流块级，底部边框分隔代码区
+      const header: ShikiHastNode = {
+        type: "element",
+        tagName: "div",
+        properties: {
+          class:
+            "xng-code-header flex items-center gap-2 border-b border-border bg-black/5 px-3 py-1.5 text-xs dark:bg-white/5",
+        },
+        children: [...leftChildren, actions],
+      };
+
+      // header 作为 pre 的首种子节点，置于 code 之前
+      node.children = [header, ...(node.children ?? [])];
     },
   };
 }
