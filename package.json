@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "星罗 - 基于 Astro 与 shadcn 的博客 CMS",
+  "packageManager": "pnpm@10.21.0",
   "engines": {
     "node": ">=22.12.0"
   },
