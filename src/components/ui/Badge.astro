@@ -1,0 +1,34 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+import { badgeVariants, type BadgeVariant } from "./badge";
+
+interface Props extends HTMLAttributes<"span"> {
+  /** 徽章样式变体 */
+  variant?: BadgeVariant;
+  /** 渲染为链接时使用 */
+  href?: string;
+  /** 额外类名 */
+  class?: string;
+}
+
+const {
+  variant = "default",
+  href,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const Tag = href ? "a" : "span";
+const computedClass = badgeVariants({ variant, className });
+---
+
+<Tag
+  data-slot="badge"
+  data-variant={variant}
+  class={computedClass}
+  {...(href ? { href } : {})}
+  {...rest}
+>
+  <slot />
+</Tag>

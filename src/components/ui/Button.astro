@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+import { buttonVariants, type ButtonVariant, type ButtonSize } from "./button";
+
+interface Props extends Omit<HTMLAttributes<"a">, "size"> {
+  /** 按钮样式变体 */
+  variant?: ButtonVariant;
+  /** 按钮尺寸 */
+  size?: ButtonSize;
+  /** 额外类名 */
+  class?: string;
+}
+
+const {
+  variant = "default",
+  size = "default",
+  class: className,
+  href,
+  ...rest
+} = Astro.props;
+
+const Tag = href ? "a" : "button";
+const computedClass = buttonVariants({ variant, size, className });
+---
+
+<Tag
+  data-slot="button"
+  data-variant={variant}
+  data-size={size}
+  class={computedClass}
+  {...(href ? { href } : { type: "button" })}
+  {...rest}
+>
+  <slot />
+</Tag>

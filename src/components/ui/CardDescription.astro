@@ -1,0 +1,18 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+
+interface Props extends HTMLAttributes<"p"> {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props as Props;
+---
+
+<p
+  data-slot="card-description"
+  class={cn("text-sm text-muted-foreground", className)}
+  {...rest}
+>
+  <slot />
+</p>
