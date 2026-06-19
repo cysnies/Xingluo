@@ -10,8 +10,8 @@ WORKDIR /app
 # 启用 corepack 以使用项目锁定的 pnpm
 RUN corepack enable
 
-# 仅复制清单文件，最大化利用层缓存
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# 仅复制清单文件与 pnpm 配置，最大化利用层缓存
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # 以生产意向安装（保留 devDependencies，构建期需要 astro/check/pagefind 等）
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
