@@ -101,4 +101,9 @@ export interface UIStrings {
     message: string;
     goHome: string;
   };
+  /** 评论区 */
+  comments: {
+    /** 评论区标题 */
+    title: string;
+  };
 }

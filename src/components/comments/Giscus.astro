@@ -1,0 +1,46 @@
+---
+/**
+ * Giscus 评论系统组件
+ * 通过 giscus.app 官方 client.js 注入 iframe，data-* 属性承载配置
+ * 主题与语言由 Comments 容器脚本在运行时同步
+ */
+import type { GiscusConfig } from "@/types/config";
+
+interface Props {
+  /** giscus 配置（来自站点配置） */
+  config: GiscusConfig;
+  /** giscus lang 值，如 zh-CN / en */
+  lang: string;
+  /** 初始主题字符串（light/dark/transparent_dark 等） */
+  theme: string;
+}
+
+const { config: giscus, lang, theme } = Astro.props;
+
+// 将布尔/枚举配置归一化为 giscus 期望的 "0"/"1" 字符串
+const reactions = giscus.reactionsEnabled !== false ? "1" : "0";
+const strict = giscus.strict ? "1" : "0";
+const mapping = giscus.mapping ?? "pathname";
+const inputPosition = giscus.inputPosition ?? "bottom";
+const loading = giscus.loading ?? "lazy";
+---
+
+<div class="xng-giscus" data-giscus>
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo={giscus.repo}
+    data-repo-id={giscus.repoId}
+    data-category={giscus.category}
+    data-category-id={giscus.categoryId}
+    data-mapping={mapping}
+    data-strict={strict}
+    data-reactions-enabled={reactions}
+    data-emit-metadata="0"
+    data-input-position={inputPosition}
+    data-theme={theme}
+    data-lang={lang}
+    data-loading={loading}
+    crossorigin="anonymous"
+    async></script>
+</div>

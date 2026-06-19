@@ -86,6 +86,9 @@ const zhCn: UIStrings = {
     message: "你访问的页面不存在或已被移动。",
     goHome: "返回首页",
   },
+  comments: {
+    title: "评论",
+  },
 };
 
 export default zhCn;

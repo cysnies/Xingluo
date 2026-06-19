@@ -1,0 +1,25 @@
+---
+/**
+ * Twikoo 评论系统组件
+ * 仅渲染挂载占位，实际初始化由 comments.ts 在滚动到视口时动态 import twikoo 完成
+ */
+import type { TwikooConfig } from "@/types/config";
+
+interface Props {
+  /** twikoo 配置（来自站点配置） */
+  config: TwikooConfig;
+  /** 语言代码，如 zh-CN */
+  lang: string;
+}
+
+const { config: twikoo, lang } = Astro.props;
+// 唯一挂载点 id，避免同页多次实例冲突
+const mountId = `xng-twikoo-${Math.random().toString(36).slice(2, 10)}`;
+---
+
+<div
+  id={mountId}
+  class="xng-twikoo"
+  data-env-id={twikoo.envId}
+  data-lang={lang}
+></div>
