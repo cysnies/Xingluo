@@ -1,0 +1,79 @@
+---
+/**
+ * APlayer 音乐播放器 MDX 组件
+ *
+ * 在 .mdx 文件中通过 import { APlayer } from "@/components/mdx" 使用：
+ * <APlayer audio={[{ name, artist, url, cover, lrc }]} theme="#b7daff" />
+ *
+ * 渲染为与 remark 围栏播放器相同的占位 div，由 src/scripts/players.ts 统一懒加载实例化
+ */
+
+/** 单首音频对象 */
+export interface APlayerAudio {
+  /** 曲目名 */
+  name?: string;
+  /** 艺术家 */
+  artist?: string;
+  /** 音频地址 */
+  url: string;
+  /** 封面地址 */
+  cover?: string;
+  /** 歌词（字符串或 URL，配合 lrcType） */
+  lrc?: string;
+  /** 单曲主题色 */
+  theme?: string;
+  /** 音频类型：auto/hls/normal */
+  type?: string;
+}
+
+interface Props {
+  /** 音频列表，单曲或多曲 */
+  audio: APlayerAudio | APlayerAudio[];
+  /** 播放器主题色 */
+  theme?: string;
+  /** 循环模式：all/one/none */
+  loop?: "all" | "one" | "none";
+  /** 播放顺序：list/random */
+  order?: "list" | "random";
+  /** 初始音量 0~1 */
+  volume?: number;
+  /** 是否自动播放（受浏览器策略限制） */
+  autoplay?: boolean;
+  /** 列表折叠 */
+  listFolded?: boolean;
+  /** 列表最大高度（CSS 值） */
+  listMaxHeight?: string;
+  /** 歌词类型：0 不解析 / 1 字符串 / 2 URL */
+  lrcType?: 0 | 1 | 2 | 3;
+}
+
+const {
+  audio,
+  theme = "#b7daff",
+  loop = "all",
+  order = "list",
+  volume = 0.7,
+  autoplay = false,
+  listFolded = false,
+  listMaxHeight,
+  lrcType = 0,
+} = Astro.props;
+
+// 归一化为数组，组装 APlayer options
+const audioList = Array.isArray(audio) ? audio : [audio];
+const playerConfig = {
+  audio: audioList,
+  theme,
+  loop,
+  order,
+  volume,
+  autoplay,
+  listFolded,
+  listMaxHeight,
+  lrcType,
+};
+const encoded = encodeURIComponent(JSON.stringify(playerConfig));
+const uid = Math.random().toString(36).slice(2, 10);
+---
+
+<div class="xng-aplayer" data-config={encoded} data-uid={uid}></div>

@@ -8,9 +8,14 @@ export const BLOG_PATH = "src/content/posts";
 /** 静态页面内容目录 */
 export const PAGES_PATH = "src/content/pages";
 
+/** 内容文件 glob 模式：启用 MDX 时收集 md+mdx，否则仅 md */
+const contentPattern = config.features.mdx
+  ? "**/[^_]*.{md,mdx}"
+  : "**/[^_]*.md";
+
 /** 文章集合 schema */
 const posts = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${BLOG_PATH}` }),
+  loader: glob({ pattern: contentPattern, base: `./${BLOG_PATH}` }),
   schema: ({ image }) =>
     z.object({
       author: z.string().default(config.site.author),
@@ -30,7 +35,7 @@ const posts = defineCollection({
 
 /** 静态页面集合 schema */
 const pages = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${PAGES_PATH}` }),
+  loader: glob({ pattern: contentPattern, base: `./${PAGES_PATH}` }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),

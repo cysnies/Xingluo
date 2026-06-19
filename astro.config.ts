@@ -18,27 +18,51 @@ import {
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeWrapTable } from "./src/utils/rehypeWrapTable";
+import { remarkPlayers } from "./src/utils/remarkPlayers";
 import config from "./xingluo.config";
+
+/** MDX 集成按需启用：关闭时既不加载集成，也不收集 .mdx 文件 */
+const mdxEnabled = config.features?.mdx !== false;
+const integrations = [
+  ...(mdxEnabled ? [mdx()] : []),
+  sitemap({
+    filter: (page) =>
+      config.features?.showArchives !== false || !page.endsWith("/archives/"),
+    // 启用 sitemap 内 hreflang 声明，映射 locale 到 hreflang 值
+    i18n: {
+      defaultLocale: "zh-cn",
+      locales: {
+        "zh-cn": "zh-CN",
+        en: "en",
+      },
+    },
+  }),
+  // 构建期内联 Font Awesome SVG 图标，零运行时 JS
+  icon(),
+];
+
+/** 播放器 remark 插件按需启用：任一播放器开启时才注入 */
+const playersConfig = config.features?.players;
+const playersEnabled = Boolean(
+  playersConfig && (playersConfig.aplayer || playersConfig.dplayer)
+);
+const remarkPlugins: any[] = [
+  remarkToc,
+  [remarkCollapse, { test: "Table of contents" }],
+];
+if (playersEnabled) {
+  remarkPlugins.push([
+    remarkPlayers,
+    {
+      aplayer: playersConfig?.aplayer ?? false,
+      dplayer: playersConfig?.dplayer ?? false,
+    },
+  ]);
+}
 
 export default defineConfig({
   site: config.site?.url,
-  integrations: [
-    mdx(),
-    sitemap({
-      filter: (page) =>
-        config.features?.showArchives !== false || !page.endsWith("/archives/"),
-      // 启用 sitemap 内 hreflang 声明，映射 locale 到 hreflang 值
-      i18n: {
-        defaultLocale: "zh-cn",
-        locales: {
-          "zh-cn": "zh-CN",
-          en: "en",
-        },
-      },
-    }),
-    // 构建期内联 Font Awesome SVG 图标，零运行时 JS
-    icon(),
-  ],
+  integrations,
   i18n: {
     locales: ["zh-cn", "en"],
     defaultLocale: "zh-cn",
@@ -47,7 +71,7 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
+    remarkPlugins,
     rehypePlugins: [rehypeCallouts, rehypeWrapTable],
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },

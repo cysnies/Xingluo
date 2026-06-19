@@ -1,0 +1,119 @@
+---
+/**
+ * DPlayer 视频播放器 MDX 组件
+ *
+ * 在 .mdx 文件中通过 import { DPlayer } from "@/components/mdx" 使用：
+ * <DPlayer video={{ url, pic, type: "auto" }} />
+ *
+ * 渲染为与 remark 围栏播放器相同的占位 div，由 src/scripts/players.ts 统一懒加载实例化
+ */
+
+/** 视频对象 */
+export interface DPlayerVideo {
+  /** 视频地址 */
+  url: string;
+  /** 封面 */
+  pic?: string;
+  /** 缩略图地址 */
+  thumbnails?: string;
+  /** 视频类型：auto/hls/flv/dash/normal */
+  type?: string;
+  /** 多清晰度列表 */
+  quality?: Array<{ name: string; url: string; type?: string }>;
+  /** 默认清晰度索引 */
+  defaultQuality?: number;
+}
+
+/** 字幕对象 */
+export interface DPlayerSubtitle {
+  /** 字幕地址 */
+  url: string;
+  /** 字幕类型：webvtt/ass */
+  type?: string;
+  /** 字号 */
+  fontSize?: number;
+  /** 距底部距离 */
+  bottom?: string;
+  /** 颜色 */
+  color?: string;
+}
+
+/** 弹幕配置 */
+export interface DPlayerDanmaku {
+  /** 弹幕池唯一 ID */
+  id: string;
+  /** 弹幕 API 地址 */
+  api: string;
+  /** 用户标识 */
+  user?: string;
+  /** 最大弹幕数 */
+  maximum?: number;
+  /** 额外弹幕池 */
+  addition?: Array<{ url: string }>;
+}
+
+interface Props {
+  /** 视频配置（必需） */
+  video: DPlayerVideo;
+  /** 主题色 */
+  theme?: string;
+  /** 是否自动播放 */
+  autoplay?: boolean;
+  /** 循环播放 */
+  loop?: boolean;
+  /** 截图功能 */
+  screenshot?: boolean;
+  /** 热键 */
+  hotkey?: boolean;
+  /** 预加载：none/metadata/auto */
+  preload?: string;
+  /** 初始音量 0~1 */
+  volume?: number;
+  /** 播放速度列表 */
+  playbackSpeed?: number[];
+  /** 字幕 */
+  subtitle?: DPlayerSubtitle;
+  /** 弹幕 */
+  danmaku?: DPlayerDanmaku;
+  /** 直播模式 */
+  live?: boolean;
+  /** 互斥（同页仅一个播放） */
+  mutex?: boolean;
+}
+
+const {
+  video,
+  theme = "#b7daff",
+  autoplay = false,
+  loop = false,
+  screenshot = false,
+  hotkey = true,
+  preload = "auto",
+  volume = 0.7,
+  playbackSpeed,
+  subtitle,
+  danmaku,
+  live = false,
+  mutex = true,
+} = Astro.props;
+
+const playerConfig = {
+  video,
+  theme,
+  autoplay,
+  loop,
+  screenshot,
+  hotkey,
+  preload,
+  volume,
+  ...(playbackSpeed && { playbackSpeed }),
+  ...(subtitle && { subtitle }),
+  ...(danmaku && { danmaku }),
+  live,
+  mutex,
+};
+const encoded = encodeURIComponent(JSON.stringify(playerConfig));
+const uid = Math.random().toString(36).slice(2, 10);
+---
+
+<div class="xng-dplayer" data-config={encoded} data-uid={uid}></div>
