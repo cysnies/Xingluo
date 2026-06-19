@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** Português */
+const pt: UIStrings = {
+  nav: {
+    home: "Início",
+    posts: "Artigos",
+    tags: "Etiquetas",
+    about: "Sobre",
+    archives: "Arquivo",
+    search: "Pesquisar",
+    rss: "Feed RSS",
+  },
+  post: {
+    publishedAt: "Publicado em {{date}}",
+    updatedAt: "Atualizado em {{date}}",
+    sharePostIntro: "Compartilhar este artigo:",
+    sharePostOn: "Compartilhar no {{name}}",
+    sharePostViaEmail: "Compartilhar por e-mail",
+    tagLabel: "Etiquetas:",
+    backToTop: "Voltar ao topo",
+    goBack: "Voltar",
+    editPage: "Editar no GitHub",
+    previousPost: "Artigo anterior",
+    nextPost: "Próximo artigo",
+    tableOfContents: "Índice",
+    copyCode: "Copiar",
+    copied: "Copiado",
+    zoomImage: "Ampliar imagem",
+    imagePreview: "Pré-visualização: ",
+    closeImagePreview: "Fechar pré-visualização",
+  },
+  pagination: {
+    prev: "Anterior",
+    next: "Seguinte",
+    page: "Página {{current}} de {{total}}",
+  },
+  home: {
+    socialLinks: "Links sociais",
+    featured: "Destaques",
+    recentPosts: "Artigos recentes",
+    allPosts: "Ver todos os artigos",
+  },
+  archives: {
+    postCount: "{{count}} artigos",
+    monthLabel: "Mês {{month}}",
+  },
+  footer: {
+    copyright: "Direitos autorais",
+    allRightsReserved: "Todos os direitos reservados.",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "Todos os artigos com a etiqueta {{tag}}",
+    tagsTitle: "Todas as etiquetas",
+    tagsDesc: "Explorar todas as etiquetas",
+    postsTitle: "Todos os artigos",
+    postsDesc: "Explorar todos os artigos",
+    archivesTitle: "Arquivo",
+    archivesDesc: "Explorar todos os artigos por cronologia",
+    searchTitle: "Pesquisar",
+    searchDesc: "Pesquisar artigos neste site",
+    aboutTitle: "Sobre",
+    aboutDesc: "Sobre este site",
+  },
+  a11y: {
+    skipToContent: "Ir para o conteúdo",
+    openMenu: "Abrir menu",
+    closeMenu: "Fechar menu",
+    toggleTheme: "Alternar tema",
+    searchPlaceholder: "Pesquisar artigos...",
+    noResults: "Nenhum resultado encontrado",
+    goToPreviousPage: "Ir para a página anterior",
+    goToNextPage: "Ir para a próxima página",
+    languageSwitcher: "Alternar idioma",
+  },
+  languageSwitcher: {
+    label: "Idioma",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "Página não encontrada",
+    message: "A página que procura não existe ou foi movida.",
+    goHome: "Ir para o início",
+  },
+  comments: {
+    title: "Comentários",
+  },
+};
+
+export default pt;
