@@ -5,8 +5,13 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/content/**"
-  # 支持手动触发，便于在配置/模板变更后强制重新部署
+      - "src/**"
+      - "public/**"
+      - "astro.config.ts"
+      - "xingluo.config.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
 # 同分支仅保留最新一次部署
@@ -45,22 +50,27 @@ jobs:
 
       - name: 计算部署 URL
         id: urls
-        env:
-          OWNER: ${{ github.repository_owner }}
-          REPO: ${{ github.event.repository.name }}
         run: |
-          # 优先使用仓库变量自定义域名/子路径；未配置时按 GitHub Pages 项目页默认规则推导
+          # 通过仓库变量 PAGES_SITE_URL / PAGES_BASE_URL 自定义部署域名与子路径。
+          # 未设置时按 GitHub Pages 根路径部署（适配自定义域名及用户站点），
+          # 若需部署到 https://<owner>.github.io/<repo>/ 项目页，请设置：
+          #   PAGES_SITE_URL = "https://<owner>.github.io"
+          #   PAGES_BASE_URL = "/<repo>/"
           SITE_URL="${{ vars.PAGES_SITE_URL }}"
           BASE_URL="${{ vars.PAGES_BASE_URL }}"
+          # 默认值：site 取仓库的 GitHub Pages URL，base 设为根路径
           if [ -z "$SITE_URL" ]; then
-            SITE_URL="https://${OWNER}.github.io"
+            SITE_URL="${{ github.event.repository.homepage || '' }}"
+          fi
+          if [ -z "$SITE_URL" ]; then
+            SITE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           fi
           if [ -z "$BASE_URL" ]; then
-            BASE_URL="/${REPO}/"
+            BASE_URL="/"
           fi
           echo "site_url=$SITE_URL" >> "$GITHUB_OUTPUT"
           echo "base_url=$BASE_URL" >> "$GITHUB_OUTPUT"
-          echo "将部署到 $SITE_URL$BASE_URL"
+          echo "将部署到 $SITE_URL（base=$BASE_URL）"
 
       - name: 构建站点
         run: pnpm run build
