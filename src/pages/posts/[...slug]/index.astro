@@ -10,6 +10,7 @@ import { getSortedPosts } from "@/utils/getSortedPosts";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
+import { useTranslations } from "@/i18n";
 import EditPost from "@/components/post/EditPost.astro";
 import ShareLinks from "@/components/post/ShareLinks.astro";
 import BackButton from "@/components/post/BackButton.astro";
@@ -39,6 +40,7 @@ interface Props {
 
 const { post, prevPost, nextPost } = Astro.props;
 const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
 
 const {
   title,
@@ -108,11 +110,17 @@ const articleUrl = new URL(getPostUrl(post.id, post.filePath, locale), Astro.sit
         <EditPost editPath={editPath} hide={hideEditPost} />
       </div>
 
-      <div
+      <article
+        id="article"
+        data-copy={t.post.copyCode}
+        data-copied={t.post.copied}
+        data-zoom={t.post.zoomImage}
+        data-preview={t.post.imagePreview}
+        data-close={t.post.closeImagePreview}
         class="app-prose mt-8 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
       >
         <Content />
-      </div>
+      </article>
 
       <hr class="my-8 border-dashed border-border" />
 
@@ -131,3 +139,7 @@ const articleUrl = new URL(getPostUrl(post.id, post.filePath, locale), Astro.sit
   <BackToTopButton />
   <Footer />
 </PostLayout>
+
+<script>
+  import "@/scripts/postEnhancements";
+</script>

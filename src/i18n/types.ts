@@ -24,6 +24,16 @@ export interface UIStrings {
     previousPost: string;
     nextPost: string;
     tableOfContents: string;
+    /** 代码块复制按钮初始文案 */
+    copyCode: string;
+    /** 代码块复制成功文案 */
+    copied: string;
+    /** 图片放大提示（无 alt 时） */
+    zoomImage: string;
+    /** 图片预览对话框标题前缀（有 alt 时） */
+    imagePreview: string;
+    /** 关闭图片预览按钮标签 */
+    closeImagePreview: string;
   };
   /** 分页相关 */
   pagination: {

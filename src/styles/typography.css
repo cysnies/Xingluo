@@ -31,3 +31,11 @@
 .app-prose .astro-code .filename {
   @apply mb-3 inline-block rounded-md bg-code-highlight px-2 py-0.5 text-xs font-medium text-code-foreground;
 }
+
+/* 标题锚点链接：跟随标题颜色，悬停时显现 */
+.app-prose .heading-link {
+  @apply text-muted-foreground;
+}
+.app-prose .heading-anchor {
+  scroll-margin-top: 5rem;
+}

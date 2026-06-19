@@ -23,6 +23,11 @@ const en: UIStrings = {
     previousPost: "Previous post",
     nextPost: "Next post",
     tableOfContents: "Table of contents",
+    copyCode: "Copy",
+    copied: "Copied",
+    zoomImage: "Zoom image",
+    imagePreview: "Image preview: ",
+    closeImagePreview: "Close image preview",
   },
   pagination: {
     prev: "Previous",

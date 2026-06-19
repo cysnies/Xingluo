@@ -23,6 +23,11 @@ const zhCn: UIStrings = {
     previousPost: "上一篇",
     nextPost: "下一篇",
     tableOfContents: "目录",
+    copyCode: "复制",
+    copied: "已复制",
+    zoomImage: "放大图片",
+    imagePreview: "图片预览：",
+    closeImagePreview: "关闭图片预览",
   },
   pagination: {
     prev: "上一页",
