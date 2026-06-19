@@ -112,7 +112,7 @@ const crumbs = [
   initSearch();
 </script>
 
-<style is:global>
+<style is:global">
   #pagefind-search {
     --pagefind-ui-font: var(--font-sans);
     --pagefind-ui-text: var(--foreground);
@@ -124,5 +124,44 @@ const crumbs = [
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-image-border-radius: 8px;
     --pagefind-ui-image-box-ratio: 3 / 2;
+  }
+
+  /* 搜索框前缀图标配色 */
+  #pagefind-search form::before {
+    background-color: var(--foreground);
+  }
+
+  /* 输入框聚焦态使用主色描边 */
+  #pagefind-search input {
+    font-weight: 400;
+    border: 1px solid var(--border);
+  }
+  #pagefind-search input:focus-visible {
+    outline: 1px solid var(--primary);
+  }
+
+  /* 结果标题链接：主色 + 虚线下划线 */
+  #pagefind-search .pagefind-ui__result-title a {
+    color: var(--primary);
+    outline-offset: 1px;
+    outline-color: var(--primary);
+    text-decoration-style: dashed;
+    text-underline-offset: 4px;
+  }
+  #pagefind-search .pagefind-ui__result-title a:focus-visible,
+  #pagefind-search .pagefind-ui__search-clear:focus-visible {
+    text-decoration-line: none;
+    outline-width: 2px;
+    outline-style: dashed;
+  }
+
+  /* 最后一条结果去除底边 */
+  #pagefind-search .pagefind-ui__result:last-of-type {
+    border-bottom: 0;
+  }
+
+  /* 子结果前缀图标使用系统字体 */
+  #pagefind-search .pagefind-ui__result-nested .pagefind-ui__result-link:before {
+    font-family: system-ui;
   }
 </style>
