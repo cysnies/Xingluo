@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** Deutsch */
+const de: UIStrings = {
+  nav: {
+    home: "Startseite",
+    posts: "Beiträge",
+    tags: "Schlagwörter",
+    about: "Über",
+    archives: "Archiv",
+    search: "Suche",
+    rss: "RSS-Feed",
+  },
+  post: {
+    publishedAt: "Veröffentlicht am {{date}}",
+    updatedAt: "Aktualisiert am {{date}}",
+    sharePostIntro: "Diesen Beitrag teilen:",
+    sharePostOn: "Auf {{name}} teilen",
+    sharePostViaEmail: "Per E-Mail teilen",
+    tagLabel: "Schlagwörter:",
+    backToTop: "Nach oben",
+    goBack: "Zurück",
+    editPage: "Auf GitHub bearbeiten",
+    previousPost: "Vorheriger Beitrag",
+    nextPost: "Nächster Beitrag",
+    tableOfContents: "Inhaltsverzeichnis",
+    copyCode: "Kopieren",
+    copied: "Kopiert",
+    zoomImage: "Bild vergrößern",
+    imagePreview: "Bildvorschau: ",
+    closeImagePreview: "Bildvorschau schließen",
+  },
+  pagination: {
+    prev: "Zurück",
+    next: "Weiter",
+    page: "Seite {{current}} von {{total}}",
+  },
+  home: {
+    socialLinks: "Soziale Links",
+    featured: "Empfohlen",
+    recentPosts: "Neueste Beiträge",
+    allPosts: "Alle Beiträge ansehen",
+  },
+  archives: {
+    postCount: "{{count}} Beiträge",
+    monthLabel: "Monat {{month}}",
+  },
+  footer: {
+    copyright: "Urheberrecht",
+    allRightsReserved: "Alle Rechte vorbehalten.",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "Alle Beiträge mit Schlagwort {{tag}}",
+    tagsTitle: "Alle Schlagwörter",
+    tagsDesc: "Alle Schlagwörter durchsuchen",
+    postsTitle: "Alle Beiträge",
+    postsDesc: "Alle Beiträge durchsuchen",
+    archivesTitle: "Archiv",
+    archivesDesc: "Alle Beiträge nach Zeitachse durchsuchen",
+    searchTitle: "Suche",
+    searchDesc: "Beiträge auf dieser Website suchen",
+    aboutTitle: "Über",
+    aboutDesc: "Über diese Website",
+  },
+  a11y: {
+    skipToContent: "Zum Inhalt springen",
+    openMenu: "Menü öffnen",
+    closeMenu: "Menü schließen",
+    toggleTheme: "Thema wechseln",
+    searchPlaceholder: "Beiträge suchen...",
+    noResults: "Keine Ergebnisse gefunden",
+    goToPreviousPage: "Zur vorherigen Seite",
+    goToNextPage: "Zur nächsten Seite",
+    languageSwitcher: "Sprache wechseln",
+  },
+  languageSwitcher: {
+    label: "Sprache",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "Seite nicht gefunden",
+    message: "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    goHome: "Zur Startseite",
+  },
+  comments: {
+    title: "Kommentare",
+  },
+};
+
+export default de;

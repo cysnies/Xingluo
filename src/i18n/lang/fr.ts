@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** Français */
+const fr: UIStrings = {
+  nav: {
+    home: "Accueil",
+    posts: "Articles",
+    tags: "Étiquettes",
+    about: "À propos",
+    archives: "Archives",
+    search: "Rechercher",
+    rss: "Flux RSS",
+  },
+  post: {
+    publishedAt: "Publié le {{date}}",
+    updatedAt: "Mis à jour le {{date}}",
+    sharePostIntro: "Partager cet article :",
+    sharePostOn: "Partager sur {{name}}",
+    sharePostViaEmail: "Partager par e-mail",
+    tagLabel: "Étiquettes :",
+    backToTop: "Retour en haut",
+    goBack: "Retour",
+    editPage: "Modifier sur GitHub",
+    previousPost: "Article précédent",
+    nextPost: "Article suivant",
+    tableOfContents: "Table des matières",
+    copyCode: "Copier",
+    copied: "Copié",
+    zoomImage: "Agrandir l'image",
+    imagePreview: "Aperçu de l'image : ",
+    closeImagePreview: "Fermer l'aperçu",
+  },
+  pagination: {
+    prev: "Précédent",
+    next: "Suivant",
+    page: "Page {{current}} sur {{total}}",
+  },
+  home: {
+    socialLinks: "Liens sociaux",
+    featured: "Articles à la une",
+    recentPosts: "Articles récents",
+    allPosts: "Voir tous les articles",
+  },
+  archives: {
+    postCount: "{{count}} articles",
+    monthLabel: "Mois {{month}}",
+  },
+  footer: {
+    copyright: "Droits d'auteur",
+    allRightsReserved: "Tous droits réservés.",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "Tous les articles étiquetés {{tag}}",
+    tagsTitle: "Toutes les étiquettes",
+    tagsDesc: "Parcourir toutes les étiquettes",
+    postsTitle: "Tous les articles",
+    postsDesc: "Parcourir tous les articles",
+    archivesTitle: "Archives",
+    archivesDesc: "Parcourir tous les articles par chronologie",
+    searchTitle: "Rechercher",
+    searchDesc: "Rechercher des articles sur ce site",
+    aboutTitle: "À propos",
+    aboutDesc: "À propos de ce site",
+  },
+  a11y: {
+    skipToContent: "Aller au contenu",
+    openMenu: "Ouvrir le menu",
+    closeMenu: "Fermer le menu",
+    toggleTheme: "Changer de thème",
+    searchPlaceholder: "Rechercher des articles...",
+    noResults: "Aucun résultat trouvé",
+    goToPreviousPage: "Aller à la page précédente",
+    goToNextPage: "Aller à la page suivante",
+    languageSwitcher: "Changer de langue",
+  },
+  languageSwitcher: {
+    label: "Langue",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "Page introuvable",
+    message: "La page que vous cherchez n'existe pas ou a été déplacée.",
+    goHome: "Retour à l'accueil",
+  },
+  comments: {
+    title: "Commentaires",
+  },
+};
+
+export default fr;
