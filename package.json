@@ -22,10 +22,13 @@
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.0",
+    "@waline/client": "^3.15.2",
+    "aplayer": "^1.10.1",
     "astro": "^6.4.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.21",
+    "dplayer": "^1.27.1",
     "rehype-callouts": "^2.1.2",
     "remark-collapse": "^0.1.2",
     "remark-toc": "^9.0.0",
@@ -33,7 +36,8 @@
     "sharp": "^0.34.5",
     "slugify": "^1.6.9",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.0",
+    "twikoo": "^1.7.12"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
