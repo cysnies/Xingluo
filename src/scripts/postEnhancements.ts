@@ -62,10 +62,17 @@ function attachCopyButtons(root: HTMLElement, labels: { copy: string; copied: st
     wrapper.dataset.copyWrap = "true";
 
     // 根据是否存在文件名标签决定按钮垂直位置
+    // --file-name-offset 由 transformerFileName 写到 pre 上，
+    // 但复制按钮会作为 pre 的兄弟节点放进 wrapper，无法继承 pre 上的自定义属性，
+    // 因此把该值镜像到 wrapper.style，使按钮 top-(--file-name-offset) 能正确解析
     const computedStyle = getComputedStyle(codeBlock);
-    const hasFileNameOffset =
-      computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+    const fileNameOffset =
+      computedStyle.getPropertyValue("--file-name-offset").trim();
+    const hasFileNameOffset = fileNameOffset !== "";
     const topClass = hasFileNameOffset ? "top-(--file-name-offset)" : "-top-3";
+    if (hasFileNameOffset) {
+      wrapper.style.setProperty("--file-name-offset", fileNameOffset);
+    }
 
     const copyButton = document.createElement("button");
     copyButton.type = "button";

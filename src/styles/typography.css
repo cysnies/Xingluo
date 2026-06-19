@@ -24,7 +24,7 @@
 
 /* 行号容器样式（配合 Shiki transformers） */
 .app-prose .astro-code {
-  @apply rounded-lg border border-border bg-(--shiki-light-bg) text-(--shiki-light);
+  @apply rounded-lg border border-border bg-(--shiki-light-bg) p-4 text-(--shiki-light) overflow-x-auto;
   [&_span]:text-(--shiki-light);
 }
 
@@ -32,11 +32,6 @@
 .dark .app-prose .astro-code {
   @apply bg-(--shiki-dark-bg) text-(--shiki-dark);
   [&_span]:text-(--shiki-dark);
-}
-
-/* 代码块文件名标签（直接子元素，由 transformerFileName 注入） */
-.app-prose .astro-code > .filename {
-  @apply border-border bg-background;
 }
 
 /* Shiki transformer 样式：差异行、高亮行、高亮词 */
