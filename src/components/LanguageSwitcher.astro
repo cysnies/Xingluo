@@ -25,9 +25,6 @@ const normalizedPath =
 /** 生成切换到指定语言的链接：默认语言无前缀，其他语言带前缀 */
 const hrefFor = (target: string) =>
   getRelativeLocaleUrl(target, normalizedPath);
-
-/** 当前语言在该语言下的自称 */
-const currentName = t.languageSwitcher.names[locale] ?? locale;
 ---
 
 <details
@@ -42,12 +39,6 @@ const currentName = t.languageSwitcher.names[locale] ?? locale;
   >
     <Icon name="fa-solid:language" class="size-4" aria-hidden="true" />
     <span class="sr-only">{t.a11y.languageSwitcher}</span>
-    <span
-      class="hidden text-xs font-medium uppercase sm:inline"
-      aria-hidden="true"
-    >
-      {currentName}
-    </span>
   </summary>
 
   <!-- 语言列表：绝对定位下拉，点击外部由脚本收起 -->
