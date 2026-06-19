@@ -9,6 +9,7 @@ export interface UIStrings {
     about: string;
     archives: string;
     search: string;
+    rss: string;
   };
   /** 文章相关 */
   post: {

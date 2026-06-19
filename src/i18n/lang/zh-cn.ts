@@ -9,6 +9,7 @@ const zhCn: UIStrings = {
     about: "关于",
     archives: "档案",
     search: "搜索",
+    rss: "RSS 订阅",
   },
   post: {
     publishedAt: "发布于 {{date}}",

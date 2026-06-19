@@ -9,6 +9,7 @@ const en: UIStrings = {
     about: "About",
     archives: "Archives",
     search: "Search",
+    rss: "RSS feed",
   },
   post: {
     publishedAt: "Published on {{date}}",

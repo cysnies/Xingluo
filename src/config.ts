@@ -15,6 +15,7 @@ const defaultSite = {
   ogImage: DEFAULT_OG_IMAGE,
   timezone: "Asia/Shanghai",
   dir: "ltr" as const,
+  googleVerification: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION,
 };
 
 /** 文章默认值 */

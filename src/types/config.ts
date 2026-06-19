@@ -23,6 +23,8 @@ export interface SiteConfig {
   timezone?: string;
   /** 文字方向 */
   dir: "ltr" | "rtl";
+  /** Google Search Console 站点验证值 */
+  googleVerification?: string;
 }
 
 /** 文章列表相关配置 */

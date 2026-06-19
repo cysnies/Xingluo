@@ -78,6 +78,12 @@ const rssHref = getRelativeLocaleUrl(
     <!-- 子布局注入的额外 head 内容（如 JSON-LD、文章 meta） -->
     <slot name="head" />
 
+    {
+      site.googleVerification && (
+        <meta name="google-site-verification" content={site.googleVerification} />
+      )
+    }
+
     <!--
       内联 FOUC 防护脚本：在浏览器绘制前设置 <html> 的 data-theme
       同步执行，无 defer/async

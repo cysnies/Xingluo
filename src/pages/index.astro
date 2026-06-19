@@ -11,6 +11,7 @@ import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import ArrowRight from "@/assets/icons/ArrowRight.astro";
+import Rss from "@/assets/icons/Rss.astro";
 
 const { site, posts: postsConfig } = config;
 const locale = Astro.currentLocale ?? site.lang;
@@ -21,6 +22,10 @@ const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const allPostsHref = getRelativeLocaleUrl(locale, "posts");
+const rssHref = new URL(
+  getRelativeLocaleUrl(locale, "rss.xml"),
+  Astro.site ?? Astro.url
+).href;
 ---
 
 <Layout>
@@ -28,9 +33,20 @@ const allPostsHref = getRelativeLocaleUrl(locale, "posts");
   <main id="main-content" class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8">
     <!-- Hero 区域 -->
     <section class="border-b border-border pb-8">
-      <h1 class="my-4 text-4xl font-bold tracking-tight sm:my-6 sm:text-5xl">
-        {site.title}
-      </h1>
+      <div class="flex items-center gap-3">
+        <h1 class="my-4 text-4xl font-bold tracking-tight sm:my-6 sm:text-5xl">
+          {site.title}
+        </h1>
+        <a
+          href={rssHref}
+          class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          aria-label={t.nav.rss}
+          title="RSS"
+        >
+          <Rss class="size-5" />
+          <span class="sr-only">RSS</span>
+        </a>
+      </div>
       <p class="text-muted-foreground">{site.description}</p>
       {
         config.socials.length > 0 && (
