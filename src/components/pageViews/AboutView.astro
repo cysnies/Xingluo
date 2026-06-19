@@ -1,0 +1,45 @@
+---
+import { getEntry, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const aboutPage = await getEntry("pages", "about");
+
+if (!aboutPage) {
+  throw new Error("未找到 about 页面，请在 src/content/pages/ 下创建 about.md");
+}
+
+const { Content } = await render(aboutPage);
+const { title, description, ogImage, canonicalURL } = aboutPage.data;
+const pageTitle = title ?? t.pages.aboutTitle;
+const crumbs = [
+  { href: getRelativeLocaleUrl(locale), label: t.nav.home },
+  { label: pageTitle },
+];
+---
+
+<Layout
+  title={pageTitle}
+  description={description}
+  ogImage={ogImage}
+  canonicalURL={canonicalURL}
+>
+  <Header />
+  <Main>
+    <Breadcrumb items={crumbs} class="mb-6" />
+    <h1 class="mb-8 text-3xl font-bold tracking-tight sm:text-4xl">{pageTitle}</h1>
+    <article class="app-prose max-w-app">
+      <Content />
+    </article>
+  </Main>
+  <Footer />
+</Layout>

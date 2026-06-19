@@ -1,0 +1,109 @@
+---
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
+import Socials from "@/components/Socials.astro";
+import PostCard from "@/components/PostCard.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import ArrowRight from "@/assets/icons/ArrowRight.astro";
+import Rss from "@/assets/icons/Rss.astro";
+
+const { site, posts: postsConfig } = config;
+const locale = Astro.currentLocale ?? site.lang;
+const t = useTranslations(locale);
+
+const posts = await getCollection("posts");
+const sortedPosts = getSortedPosts(posts);
+const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const allPostsHref = getRelativeLocaleUrl(locale, "posts");
+const rssHref = new URL(
+  getRelativeLocaleUrl(locale, "rss.xml"),
+  Astro.site ?? Astro.url
+).href;
+---
+
+<Layout>
+  <Header />
+  <Main>
+    <!-- Hero 区域 -->
+    <section class="border-b border-border pb-8">
+      <div class="flex items-center gap-3">
+        <h1 class="my-4 text-4xl font-bold tracking-tight sm:my-6 sm:text-5xl">
+          {site.title}
+        </h1>
+        <a
+          href={rssHref}
+          class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          aria-label={t.nav.rss}
+          title="RSS"
+        >
+          <Rss class="size-5" />
+          <span class="sr-only">RSS</span>
+        </a>
+      </div>
+      <p class="text-muted-foreground">{site.description}</p>
+      {
+        config.socials.length > 0 && (
+          <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
+            <span class="whitespace-nowrap text-sm text-muted-foreground">
+              {t.home.socialLinks}:
+            </span>
+            <Socials />
+          </div>
+        )
+      }
+    </section>
+
+    <!-- 精选文章 -->
+    {
+      featuredPosts.length > 0 && (
+        <section class="py-8">
+          <h2 class="mb-4 text-2xl font-semibold tracking-tight">
+            {t.home.featured}
+          </h2>
+          <ul class="grid gap-4 sm:grid-cols-2">
+            {featuredPosts.map((post) => (
+              <li>
+                <PostCard post={post} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- 最新文章 -->
+    {
+      recentPosts.length > 0 && (
+        <section class="py-8">
+          <h2 class="mb-4 text-2xl font-semibold tracking-tight">
+            {t.home.recentPosts}
+          </h2>
+          <ul class="grid gap-4 sm:grid-cols-2">
+            {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
+              <li>
+                <PostCard post={post} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- 查看全部文章 -->
+    <div class="py-8 text-center">
+      <LinkButton href={allPostsHref} variant="outline" size="lg">
+        {t.home.allPosts}
+        <ArrowRight class="size-4 rtl:-rotate-180" />
+      </LinkButton>
+    </div>
+  </Main>
+  <Footer />
+</Layout>

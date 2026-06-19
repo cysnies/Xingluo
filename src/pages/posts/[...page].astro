@@ -1,20 +1,8 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import type { Page } from "astro";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import Main from "@/components/Main.astro";
-import PostCard from "@/components/PostCard.astro";
-import Pagination from "@/components/Pagination.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
+import { getCollection } from "astro:content";
+import PostListView from "@/components/pageViews/PostListView.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
-import { useTranslations } from "@/i18n";
 import config from "@/config";
-
-const locale = Astro.currentLocale ?? config.site.lang;
-const t = useTranslations(locale);
 
 export async function getStaticPaths({ paginate }: any) {
   const allPosts = await getCollection("posts");
@@ -22,32 +10,7 @@ export async function getStaticPaths({ paginate }: any) {
   return paginate(sorted, { pageSize: config.posts.perPage });
 }
 
-interface Props {
-  page: Page<CollectionEntry<"posts">>;
-}
-
-const { page } = Astro.props as Props;
-const title = t.pages.postsTitle;
-const description = t.pages.postsDesc;
-const crumbs = [
-  { href: getRelativeLocaleUrl(locale), label: t.nav.home },
-  { label: title },
-];
+const { page } = Astro.props as { page: any };
 ---
 
-<Layout title={title} description={description}>
-  <Header />
-  <Main>
-    <Breadcrumb items={crumbs} class="mb-6" />
-    <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-    <ul class="grid gap-4 sm:grid-cols-2">
-      {page.data.map((post: any) => (
-        <li>
-          <PostCard post={post} />
-        </li>
-      ))}
-    </ul>
-    <Pagination page={page} />
-  </Main>
-  <Footer />
-</Layout>
+<PostListView page={page} />

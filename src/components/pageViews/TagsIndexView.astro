@@ -1,0 +1,53 @@
+---
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import { getUniqueTags } from "@/utils/getUniqueTags";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const posts = await getCollection("posts");
+const tags = getUniqueTags(posts);
+const title = t.pages.tagsTitle;
+const description = t.pages.tagsDesc;
+const crumbs = [
+  { href: getRelativeLocaleUrl(locale), label: t.nav.home },
+  { label: title },
+];
+---
+
+<Layout title={title} description={description}>
+  <Header />
+  <Main>
+    <Breadcrumb items={crumbs} class="mb-6" />
+    <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+    <p class="mb-8 text-muted-foreground">{description}</p>
+    {
+      tags.length > 0 ? (
+        <ul class="flex flex-wrap gap-2">
+          {tags.map(({ tag, tagName }) => (
+            <li>
+              <a
+                href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
+                transition:name={tag}
+                class="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-card-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                #{tagName}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-muted-foreground">{t.a11y.noResults}</p>
+      )
+    }
+  </Main>
+  <Footer />
+</Layout>
