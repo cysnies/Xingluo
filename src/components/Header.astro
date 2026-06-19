@@ -5,6 +5,7 @@ import { useTranslations } from "@/i18n";
 import config from "@/config";
 import ThemeToggle from "./ThemeToggle.astro";
 import SearchTrigger from "./SearchTrigger.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
 import Menu from "@/assets/icons/Menu.astro";
 import Close from "@/assets/icons/Close.astro";
 
@@ -81,6 +82,7 @@ const navItems = [
     <div class="flex items-center gap-1">
       <SearchTrigger />
       <ThemeToggle />
+      <LanguageSwitcher />
       <!-- 移动端菜单按钮 -->
       <button
         id="mobile-menu-btn"

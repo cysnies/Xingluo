@@ -2,7 +2,9 @@
 import { ClientRouter } from "astro:transitions";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
-import { getAssetPath } from "@/utils/withBase";
+import { getAssetPath, stripBase } from "@/utils/withBase";
+import { LOCALES, DEFAULT_LOCALE } from "@/i18n";
+import { parseLocaleFromPath } from "@/i18n/routing";
 import config from "@/config";
 import "@/styles/global.css";
 
@@ -23,10 +25,35 @@ const {
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
-const rssHref = getRelativeLocaleUrl(
-  Astro.currentLocale ?? site.lang,
-  "rss.xml"
+const currentLocale = Astro.currentLocale ?? site.lang;
+const rssHref = getRelativeLocaleUrl(currentLocale, "rss.xml");
+
+/**
+ * 计算当前页面各语言版本的 URL，用于 hreflang alternate 链接。
+ * 默认语言无前缀，其他语言带前缀；路径保持一致。
+ */
+const { path: localeAgnosticPath } = parseLocaleFromPath(
+  stripBase(Astro.url.pathname)
 );
+const normalizedPath =
+  localeAgnosticPath === "/" || localeAgnosticPath === ""
+    ? undefined
+    : localeAgnosticPath.replace(/^\/+|\/+$/g, "") || undefined;
+const alternateLinks = LOCALES.map((target) => ({
+  hreflang: target,
+  href: new URL(
+    getRelativeLocaleUrl(target, normalizedPath),
+    Astro.site
+  ).href,
+}));
+// x-default 指向默认语言版本，供未匹配语言的用户入口
+const defaultAlternate = {
+  hreflang: "x-default",
+  href: new URL(
+    getRelativeLocaleUrl(DEFAULT_LOCALE, normalizedPath),
+    Astro.site
+  ).href,
+};
 ---
 
 <!doctype html>
@@ -71,6 +98,14 @@ const rssHref = getRelativeLocaleUrl(
       title={site.title}
       href={new URL(rssHref, Astro.site)}
     />
+
+    <!-- hreflang 多语言版本声明，供搜索引擎理解各语言对应关系 -->
+    {
+      alternateLinks.map(({ hreflang, href }) => (
+        <link rel="alternate" hreflang={hreflang} href={href} />
+      ))
+    }
+    <link rel="alternate" hreflang={defaultAlternate.hreflang} href={defaultAlternate.href} />
 
     <!-- 运行时由 theme.ts 填充为当前背景色 -->
     <meta name="theme-color" content="" />

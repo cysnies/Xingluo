@@ -1,0 +1,109 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations, LOCALES } from "@/i18n";
+import { parseLocaleFromPath } from "@/i18n/routing";
+import { stripBase } from "@/utils/withBase";
+import config from "@/config";
+import { Icon } from "astro-icon/components";
+
+/** 当前 locale，缺省回退到站点默认语言 */
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+/**
+ * 解析当前路径去除语言前缀后的部分，用于在各语言间切换时保持路径一致。
+ * getRelativeLocaleUrl 期望不带首尾斜杠的路径段，根路径传 undefined
+ */
+const { path: localeAgnosticPath } = parseLocaleFromPath(
+  stripBase(Astro.url.pathname)
+);
+const normalizedPath =
+  localeAgnosticPath === "/" || localeAgnosticPath === ""
+    ? undefined
+    : localeAgnosticPath.replace(/^\/+|\/+$/g, "") || undefined;
+
+/** 生成切换到指定语言的链接：默认语言无前缀，其他语言带前缀 */
+const hrefFor = (target: string) =>
+  getRelativeLocaleUrl(target, normalizedPath);
+
+/** 当前语言在该语言下的自称 */
+const currentName = t.languageSwitcher.names[locale] ?? locale;
+---
+
+<details
+  id="lang-switcher"
+  class="group relative"
+  data-lang-switcher
+>
+  <summary
+    class="inline-flex size-9 items-center justify-center gap-1 rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden"
+    aria-label={t.a11y.languageSwitcher}
+    title={t.a11y.languageSwitcher}
+  >
+    <Icon name="fa-solid:language" class="size-4" aria-hidden="true" />
+    <span class="sr-only">{t.a11y.languageSwitcher}</span>
+    <span
+      class="hidden text-xs font-medium uppercase sm:inline"
+      aria-hidden="true"
+    >
+      {currentName}
+    </span>
+  </summary>
+
+  <!-- 语言列表：绝对定位下拉，点击外部由脚本收起 -->
+  <div
+    class="absolute end-0 top-full z-50 mt-2 min-w-32 overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
+    role="menu"
+  >
+    {
+      LOCALES.map((target) => {
+        const isCurrent = target === locale;
+        return (
+          <a
+            href={hrefFor(target)}
+            hreflang={target}
+            rel="alternate"
+            role="menuitem"
+            aria-current={isCurrent ? "true" : undefined}
+            class:list={[
+              "block rounded-sm px-3 py-1.5 text-sm transition-colors",
+              isCurrent
+                ? "bg-accent font-medium text-accent-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+            ]}
+          >
+            {t.languageSwitcher.names[target] ?? target}
+          </a>
+        );
+      })
+    }
+  </div>
+</details>
+
+<script>
+  // 语言切换下拉：点击外部时收起，View Transitions 后重新绑定
+  // document 跨导航持久存在，需先移除旧监听再绑定，避免累积
+  let outsideHandler: ((event: MouseEvent) => void) | null = null;
+
+  function setupLangSwitcher() {
+    if (outsideHandler) {
+      document.removeEventListener("click", outsideHandler);
+      outsideHandler = null;
+    }
+    const details = document.querySelector<HTMLDetailsElement>(
+      "[data-lang-switcher]"
+    );
+    if (!details) return;
+
+    outsideHandler = (event: MouseEvent) => {
+      // 点击切换器内部时交给浏览器默认行为，仅处理外部点击
+      if (details.contains(event.target as Node)) return;
+      if (details.open) details.open = false;
+    };
+
+    document.addEventListener("click", outsideHandler);
+  }
+
+  setupLangSwitcher();
+  document.addEventListener("astro:after-swap", setupLangSwitcher);
+</script>

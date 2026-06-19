@@ -27,6 +27,14 @@ export default defineConfig({
     sitemap({
       filter: (page) =>
         config.features?.showArchives !== false || !page.endsWith("/archives/"),
+      // 启用 sitemap 内 hreflang 声明，映射 locale 到 hreflang 值
+      i18n: {
+        defaultLocale: "zh-cn",
+        locales: {
+          "zh-cn": "zh-CN",
+          en: "en",
+        },
+      },
     }),
     // 构建期内联 Font Awesome SVG 图标，零运行时 JS
     icon(),
