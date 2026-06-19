@@ -14,12 +14,26 @@
 let aplayerMod: Promise<typeof import("aplayer")> | null = null;
 let dplayerMod: Promise<typeof import("dplayer")> | null = null;
 
+// 以 ?url 形式引入 APlayer 样式：仅取得资源 URL 字符串，不触发 Vite 自动注入 <link>，
+// 改为运行时按需注入，避免功能关闭时页面仍加载无用 CSS
+import aplayerCssUrl from "aplayer/dist/APlayer.min.css?url";
+
+/** 运行时注入 APlayer 样式 <link>，仅首次调用时生效 */
+let aplayerCssLoaded = false;
+function ensureAPlayerCss(): void {
+  if (aplayerCssLoaded) return;
+  aplayerCssLoaded = true;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = aplayerCssUrl;
+  document.head.appendChild(link);
+}
+
 /** 动态加载 APlayer 模块与样式（共享 Promise 避免重复加载） */
 async function loadAPlayer(): Promise<typeof import("aplayer")> {
   if (!aplayerMod) {
     aplayerMod = (async () => {
-      // CSS 与 JS 分开 import，确保样式先于实例化就绪
-      await import("aplayer/dist/APlayer.min.css");
+      ensureAPlayerCss();
       return await import("aplayer");
     })();
   }

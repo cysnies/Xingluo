@@ -37,6 +37,21 @@ function syncGiscusTheme(): void {
 /** 已初始化的 twikoo 实例句柄，用于主题切换时重建 */
 let twikooCleanup: (() => void) | null = null;
 
+// 以 ?url 形式引入 Waline 样式：仅取得资源 URL 字符串，不触发 Vite 自动注入 <link>，
+// 改为运行时按需注入，避免功能关闭时页面仍加载无用 CSS
+import walineCssUrl from "@waline/client/style?url";
+
+/** 运行时注入 Waline 样式 <link>，仅首次调用时生效 */
+let walineCssLoaded = false;
+function ensureWalineCss(): void {
+  if (walineCssLoaded) return;
+  walineCssLoaded = true;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = walineCssUrl;
+  document.head.appendChild(link);
+}
+
 /** 初始化 twikoo：动态 import 后调用 init */
 async function initTwikoo(mount: HTMLElement): Promise<void> {
   if (mount.dataset.xngInit === "1") return;
@@ -66,9 +81,8 @@ async function initWaline(mount: HTMLElement): Promise<void> {
   const pageSize = Number(mount.dataset.pageSize ?? 10);
   if (!serverURL) return;
   try {
+    ensureWalineCss();
     const waline = await import("@waline/client");
-    // waline 样式需显式引入
-    await import("@waline/client/style");
     waline.init({
       el: `#${mount.id}`,
       serverURL,
