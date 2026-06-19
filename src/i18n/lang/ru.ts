@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** Русский */
+const ru: UIStrings = {
+  nav: {
+    home: "Главная",
+    posts: "Статьи",
+    tags: "Теги",
+    about: "О сайте",
+    archives: "Архив",
+    search: "Поиск",
+    rss: "RSS-лента",
+  },
+  post: {
+    publishedAt: "Опубликовано {{date}}",
+    updatedAt: "Обновлено {{date}}",
+    sharePostIntro: "Поделиться статьёй:",
+    sharePostOn: "Поделиться в {{name}}",
+    sharePostViaEmail: "Поделиться по email",
+    tagLabel: "Теги:",
+    backToTop: "Наверх",
+    goBack: "Назад",
+    editPage: "Редактировать на GitHub",
+    previousPost: "Предыдущая статья",
+    nextPost: "Следующая статья",
+    tableOfContents: "Содержание",
+    copyCode: "Копировать",
+    copied: "Скопировано",
+    zoomImage: "Увеличить",
+    imagePreview: "Предпросмотр: ",
+    closeImagePreview: "Закрыть предпросмотр",
+  },
+  pagination: {
+    prev: "Назад",
+    next: "Вперёд",
+    page: "Стр. {{current}} из {{total}}",
+  },
+  home: {
+    socialLinks: "Социальные ссылки",
+    featured: "Избранное",
+    recentPosts: "Последние статьи",
+    allPosts: "Все статьи",
+  },
+  archives: {
+    postCount: "{{count}} статей",
+    monthLabel: "Месяц {{month}}",
+  },
+  footer: {
+    copyright: "Авторские права",
+    allRightsReserved: "Все права защищены.",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "Все статьи с тегом {{tag}}",
+    tagsTitle: "Все теги",
+    tagsDesc: "Просмотр всех тегов",
+    postsTitle: "Все статьи",
+    postsDesc: "Просмотр всех статей",
+    archivesTitle: "Архив",
+    archivesDesc: "Просмотр всех статей по хронологии",
+    searchTitle: "Поиск",
+    searchDesc: "Поиск статей на сайте",
+    aboutTitle: "О сайте",
+    aboutDesc: "Об этом сайте",
+  },
+  a11y: {
+    skipToContent: "Перейти к содержимому",
+    openMenu: "Открыть меню",
+    closeMenu: "Закрыть меню",
+    toggleTheme: "Переключить тему",
+    searchPlaceholder: "Поиск статей...",
+    noResults: "Ничего не найдено",
+    goToPreviousPage: "На предыдущую страницу",
+    goToNextPage: "На следующую страницу",
+    languageSwitcher: "Сменить язык",
+  },
+  languageSwitcher: {
+    label: "Язык",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "Страница не найдена",
+    message: "Запрашиваемая страница не существует или была перемещена.",
+    goHome: "На главную",
+  },
+  comments: {
+    title: "Комментарии",
+  },
+};
+
+export default ru;

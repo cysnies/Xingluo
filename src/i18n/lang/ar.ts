@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** العربية */
+const ar: UIStrings = {
+  nav: {
+    home: "الرئيسية",
+    posts: "المقالات",
+    tags: "الوسوم",
+    about: "حول",
+    archives: "الأرشيف",
+    search: "بحث",
+    rss: "خلاصة RSS",
+  },
+  post: {
+    publishedAt: "نُشر في {{date}}",
+    updatedAt: "حُدث في {{date}}",
+    sharePostIntro: "مشاركة هذا المقال:",
+    sharePostOn: "مشاركة عبر {{name}}",
+    sharePostViaEmail: "مشاركة عبر البريد الإلكتروني",
+    tagLabel: "الوسوم:",
+    backToTop: "العودة للأعلى",
+    goBack: "رجوع",
+    editPage: "تعديل على GitHub",
+    previousPost: "المقال السابق",
+    nextPost: "المقال التالي",
+    tableOfContents: "جدول المحتويات",
+    copyCode: "نسخ",
+    copied: "تم النسخ",
+    zoomImage: "تكبير الصورة",
+    imagePreview: "معاينة الصورة: ",
+    closeImagePreview: "إغلاق المعاينة",
+  },
+  pagination: {
+    prev: "السابق",
+    next: "التالي",
+    page: "صفحة {{current}} من {{total}}",
+  },
+  home: {
+    socialLinks: "روابط اجتماعية",
+    featured: "مميز",
+    recentPosts: "أحدث المقالات",
+    allPosts: "عرض جميع المقالات",
+  },
+  archives: {
+    postCount: "{{count}} مقال",
+    monthLabel: "شهر {{month}}",
+  },
+  footer: {
+    copyright: "حقوق النشر",
+    allRightsReserved: "جميع الحقوق محفوظة.",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "جميع المقالات بوسم {{tag}}",
+    tagsTitle: "جميع الوسوم",
+    tagsDesc: "تصفح جميع وسوم المقالات",
+    postsTitle: "جميع المقالات",
+    postsDesc: "تصفح جميع المقالات",
+    archivesTitle: "الأرشيف",
+    archivesDesc: "تصفح جميع المقالات حسب التسلسل الزمني",
+    searchTitle: "بحث",
+    searchDesc: "بحث في مقالات الموقع",
+    aboutTitle: "حول",
+    aboutDesc: "حول هذا الموقع",
+  },
+  a11y: {
+    skipToContent: "تخط إلى المحتوى",
+    openMenu: "فتح القائمة",
+    closeMenu: "إغلاق القائمة",
+    toggleTheme: "تبديل السمة",
+    searchPlaceholder: "البحث عن مقالات...",
+    noResults: "لم يتم العثور على نتائج",
+    goToPreviousPage: "الذهاب إلى الصفحة السابقة",
+    goToNextPage: "الذهاب إلى الصفحة التالية",
+    languageSwitcher: "تغيير اللغة",
+  },
+  languageSwitcher: {
+    label: "اللغة",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "الصفحة غير موجودة",
+    message: "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    goHome: "الذهاب إلى الرئيسية",
+  },
+  comments: {
+    title: "تعليقات",
+  },
+};
+
+export default ar;
