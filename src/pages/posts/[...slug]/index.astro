@@ -56,7 +56,7 @@ const {
 
 const { Content } = await render(post);
 
-/** 解析 OG 图地址：字符串直接用，image 对象取 src，未配置则用默认 OG 图 */
+/** 解析 OG 图地址：字符串直接用，image 对象取 src，未配置则按功能开关回退 */
 let ogImageUrl: string | undefined;
 if (typeof initOgImage === "string") {
   ogImageUrl = initOgImage;
@@ -64,7 +64,10 @@ if (typeof initOgImage === "string") {
   ogImageUrl = initOgImage.src;
 }
 if (!ogImageUrl) {
-  ogImageUrl = resolveDefaultOgImagePath();
+  // 启用动态 OG 图时使用文章级生成图，否则回退到站点默认静态图
+  ogImageUrl = config.features.dynamicOgImage
+    ? `${getPostUrl(post.id, post.filePath, locale)}/og.png`
+    : resolveDefaultOgImagePath();
 }
 const ogImage = ogImageUrl
   ? new URL(ogImageUrl, Astro.url.origin).href

@@ -1,4 +1,8 @@
-import { defineConfig } from "astro/config";
+import {
+  defineConfig,
+  envField,
+  fontProviders,
+} from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -52,5 +56,26 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+  },
+  // 动态 OG 图使用的字体：仅构建期供 satori 取用，不注入站点 CSS
+  fonts: [
+    {
+      name: "Noto Sans SC",
+      cssVariable: "--font-og",
+      provider: fontProviders.google(),
+      fallbacks: ["sans-serif"],
+      weights: [400, 700],
+      styles: ["normal"],
+      formats: ["woff", "ttf"],
+    },
+  ],
+  env: {
+    schema: {
+      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
+        access: "public",
+        context: "client",
+        optional: true,
+      }),
+    },
   },
 });
