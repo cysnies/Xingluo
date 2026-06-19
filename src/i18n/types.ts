@@ -88,6 +88,13 @@ export interface UIStrings {
     goToNextPage: string;
     languageSwitcher: string;
   };
+  /** 语言切换器 */
+  languageSwitcher: {
+    /** 触发按钮的可视标签 */
+    label: string;
+    /** 各语言在该语言下的自称，键为 locale */
+    names: Record<string, string>;
+  };
   /** 404 页面 */
   notFound: {
     title: string;

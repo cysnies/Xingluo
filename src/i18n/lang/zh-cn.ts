@@ -74,6 +74,13 @@ const zhCn: UIStrings = {
     goToNextPage: "前往下一页",
     languageSwitcher: "切换语言",
   },
+  languageSwitcher: {
+    label: "语言",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+    },
+  },
   notFound: {
     title: "页面未找到",
     message: "你访问的页面不存在或已被移动。",

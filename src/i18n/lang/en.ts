@@ -72,6 +72,13 @@ const en: UIStrings = {
     goToNextPage: "Go to next page",
     languageSwitcher: "Switch language",
   },
+  languageSwitcher: {
+    label: "Language",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+    },
+  },
   notFound: {
     title: "Page not found",
     message: "The page you are looking for does not exist or has been moved.",
