@@ -1,0 +1,42 @@
+# 版本控制
+.git/
+.gitignore
+
+# 依赖与缓存
+node_modules/
+.pnpm-store/
+
+# 构建产物
+dist/
+.output/
+.pagefind/
+public/pagefind/
+
+# Astro 生成
+.astro/
+
+# 参考项目与文档（不参与构建）
+references/
+docs/
+
+# 编辑器与系统文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+*.err
+
+# CI 与 Docker 自身
+.github/
+Dockerfile
+.dockerignore
+compose.yaml
+docker-compose.yml
+
+# 环境变量
+.env
+.env.*
+!.env.example
