@@ -441,6 +441,8 @@ document.addEventListener("astro:before-swap", () => {
   window.__closeLightbox?.();
 });
 
+// 扩展全局 Window 类型声明（声明合并，无直接引用）
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Window {
   __closeLightbox?: (() => void) | null;
 }

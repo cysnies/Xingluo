@@ -1,4 +1,5 @@
-/** rehype 插件类型（避免依赖 @types/hast） */
+/** rehype 插件类型（hast 树节点），暂用宽松类型避免引入 @types/hast */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type HastNode = any;
 
 /**

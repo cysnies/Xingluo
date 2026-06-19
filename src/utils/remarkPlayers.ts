@@ -6,7 +6,8 @@
  * MD 与 MDX 走同一渲染出口，统一由本插件处理。
  */
 
-/** remark 插件上下文与树节点（避免依赖 @types/mdast） */
+/** remark 插件上下文与树节点（mdast），暂用宽松类型避免引入 @types/mdast */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MdastNode = any;
 
 /** 插件选项 */

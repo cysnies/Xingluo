@@ -10,6 +10,7 @@ interface ShikiHastNode {
 interface ShikiTransformer {
   name: string;
   // 使用 any 以兼容 @shikijs/types 的 ShikiTransformer，避免类型耦合
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pre?: (this: any, node: any) => any;
 }
 

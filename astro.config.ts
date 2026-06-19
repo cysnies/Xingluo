@@ -55,6 +55,8 @@ const playersConfig = config.features?.players;
 const playersEnabled = Boolean(
   playersConfig && (playersConfig.aplayer || playersConfig.dplayer),
 );
+// remark 插件类型复杂（unified PluggableList），用 any[] 保持配置可读性
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const remarkPlugins: any[] = [
   remarkToc,
   [remarkCollapse, { test: "Table of contents" }],
