@@ -62,12 +62,16 @@ export interface FeaturesConfig {
 export interface SocialItem {
   name: string;
   url: string;
+  /** 无障碍标题/tooltip，省略时按名称自动生成 */
+  linkTitle?: string;
 }
 
 /** 分享链接项 */
 export interface ShareLinkItem {
   name: string;
   url: string;
+  /** 无障碍标题/tooltip，省略时按名称自动生成 */
+  linkTitle?: string;
 }
 
 /** 完整的星罗配置 */

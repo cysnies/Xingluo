@@ -1,33 +1,25 @@
 ---
 import config from "@/config";
 import LinkButton from "./LinkButton.astro";
-import Github from "@/assets/icons/socials/github.astro";
-import X from "@/assets/icons/socials/x.astro";
-import Mail from "@/assets/icons/socials/mail.astro";
+import { getSocialIcon, capitalizeName } from "@/lib/socialIcons";
 
 const { site, socials } = config;
 
-/** 社交图标映射 */
-const iconMap: Record<string, typeof Github> = {
-  github: Github,
-  x: X,
-  mail: Mail,
-};
-
-/** 计算链接标题 */
-function getTitle(name: string, url: string): string {
+/** 计算社交链接的无障碍标题 */
+function getTitle(name: string, url: string, linkTitle?: string): string {
+  if (linkTitle) return linkTitle;
   if (url.startsWith("mailto:") || name === "mail") {
     return `发送邮件给 ${site.title}`;
   }
-  return `${site.title} 在 ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+  return `${site.title} 在 ${capitalizeName(name)}`;
 }
 ---
 
 <div class="flex flex-wrap items-center gap-1">
   {
-    socials.map(({ name, url }) => {
-      const Icon = iconMap[name];
-      const title = getTitle(name, url);
+    socials.map(({ name, url, linkTitle }) => {
+      const Icon = getSocialIcon(name);
+      const title = getTitle(name, url, linkTitle);
       return Icon ? (
         <LinkButton href={url} class="size-9" title={title} target="_blank" rel="noopener noreferrer">
           <Icon class="size-4" />
