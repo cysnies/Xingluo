@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** 한국어 */
+const ko: UIStrings = {
+  nav: {
+    home: "홈",
+    posts: "글",
+    tags: "태그",
+    about: "소개",
+    archives: "보관함",
+    search: "검색",
+    rss: "RSS 피드",
+  },
+  post: {
+    publishedAt: "{{date}}에 게시",
+    updatedAt: "{{date}}에 업데이트",
+    sharePostIntro: "이 글 공유하기:",
+    sharePostOn: "{{name}}에서 공유",
+    sharePostViaEmail: "이메일로 공유",
+    tagLabel: "태그:",
+    backToTop: "맨 위로",
+    goBack: "뒤로 가기",
+    editPage: "GitHub에서 편집",
+    previousPost: "이전 글",
+    nextPost: "다음 글",
+    tableOfContents: "목차",
+    copyCode: "복사",
+    copied: "복사됨",
+    zoomImage: "이미지 확대",
+    imagePreview: "이미지 미리보기: ",
+    closeImagePreview: "이미지 미리보기 닫기",
+  },
+  pagination: {
+    prev: "이전",
+    next: "다음",
+    page: "{{current}} / {{total}} 페이지",
+  },
+  home: {
+    socialLinks: "소셜 링크",
+    featured: "주요 글",
+    recentPosts: "최근 글",
+    allPosts: "모든 글 보기",
+  },
+  archives: {
+    postCount: "{{count}}개",
+    monthLabel: "{{month}}월",
+  },
+  footer: {
+    copyright: "저작권",
+    allRightsReserved: "모든 권리 보유.",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "{{tag}} 태그가 있는 모든 글",
+    tagsTitle: "모든 태그",
+    tagsDesc: "모든 글 태그 둘러보기",
+    postsTitle: "모든 글",
+    postsDesc: "모든 글 둘러보기",
+    archivesTitle: "보관함",
+    archivesDesc: "타임라인으로 모든 글 둘러보기",
+    searchTitle: "검색",
+    searchDesc: "사이트 내 글 검색",
+    aboutTitle: "소개",
+    aboutDesc: "이 사이트 소개",
+  },
+  a11y: {
+    skipToContent: "콘텐츠로 건너뛰기",
+    openMenu: "메뉴 열기",
+    closeMenu: "메뉴 닫기",
+    toggleTheme: "테마 전환",
+    searchPlaceholder: "글 검색...",
+    noResults: "결과를 찾을 수 없습니다",
+    goToPreviousPage: "이전 페이지로",
+    goToNextPage: "다음 페이지로",
+    languageSwitcher: "언어 전환",
+  },
+  languageSwitcher: {
+    label: "언어",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "페이지를 찾을 수 없습니다",
+    message: "찾고 계신 페이지가 존재하지 않거나 이동되었습니다.",
+    goHome: "홈으로 가기",
+  },
+  comments: {
+    title: "댓글",
+  },
+};
+
+export default ko;

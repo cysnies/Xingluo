@@ -1,0 +1,103 @@
+import type { UIStrings } from "../types";
+
+/** 日本語 */
+const ja: UIStrings = {
+  nav: {
+    home: "ホーム",
+    posts: "記事",
+    tags: "タグ",
+    about: "概要",
+    archives: "アーカイブ",
+    search: "検索",
+    rss: "RSS フィード",
+  },
+  post: {
+    publishedAt: "{{date}} に公開",
+    updatedAt: "{{date}} に更新",
+    sharePostIntro: "この記事を共有：",
+    sharePostOn: "{{name}} で共有",
+    sharePostViaEmail: "メールで共有",
+    tagLabel: "タグ：",
+    backToTop: "トップへ戻る",
+    goBack: "戻る",
+    editPage: "GitHub で編集",
+    previousPost: "前の記事",
+    nextPost: "次の記事",
+    tableOfContents: "目次",
+    copyCode: "コピー",
+    copied: "コピーしました",
+    zoomImage: "画像を拡大",
+    imagePreview: "画像プレビュー：",
+    closeImagePreview: "画像プレビューを閉じる",
+  },
+  pagination: {
+    prev: "前へ",
+    next: "次へ",
+    page: "{{current}} / {{total}} ページ",
+  },
+  home: {
+    socialLinks: "ソーシャルリンク",
+    featured: "注目記事",
+    recentPosts: "最新記事",
+    allPosts: "すべての記事を見る",
+  },
+  archives: {
+    postCount: "{{count}} 件",
+    monthLabel: "{{month}} 月",
+  },
+  footer: {
+    copyright: "著作権",
+    allRightsReserved: "無断転載を禁じます。",
+  },
+  pages: {
+    tagTitle: "#{{tag}}",
+    tagDesc: "タグ「{{tag}}」の全記事",
+    tagsTitle: "すべてのタグ",
+    tagsDesc: "すべての記事タグを閲覧",
+    postsTitle: "すべての記事",
+    postsDesc: "すべての記事を閲覧",
+    archivesTitle: "アーカイブ",
+    archivesDesc: "タイムラインですべての記事を閲覧",
+    searchTitle: "検索",
+    searchDesc: "サイト内の記事を検索",
+    aboutTitle: "概要",
+    aboutDesc: "このサイトについて",
+  },
+  a11y: {
+    skipToContent: "コンテンツにスキップ",
+    openMenu: "メニューを開く",
+    closeMenu: "メニューを閉じる",
+    toggleTheme: "テーマを切り替え",
+    searchPlaceholder: "記事を検索...",
+    noResults: "結果が見つかりません",
+    goToPreviousPage: "前のページへ",
+    goToNextPage: "次のページへ",
+    languageSwitcher: "言語を切り替え",
+  },
+  languageSwitcher: {
+    label: "言語",
+    names: {
+      "zh-cn": "简体中文",
+      en: "English",
+      ja: "日本語",
+      ko: "한국어",
+      fr: "Français",
+      de: "Deutsch",
+      es: "Español",
+      pt: "Português",
+      ru: "Русский",
+      ar: "العربية",
+      eo: "Esperanto",
+    },
+  },
+  notFound: {
+    title: "ページが見つかりません",
+    message: "お探しのページは存在しないか、移動されました。",
+    goHome: "ホームに戻る",
+  },
+  comments: {
+    title: "コメント",
+  },
+};
+
+export default ja;
