@@ -60,8 +60,19 @@ if (playersEnabled) {
   ]);
 }
 
+/**
+ * CI 环境变量覆盖：允许在构建期通过环境变量改写站点 URL 与 base 子路径，
+ * 用于 GitHub Pages 项目页（https://<user>.github.io/<repo>/）等子路径部署场景。
+ * 未设置时回退到 xingluo.config.ts 的用户配置。
+ */
+const ciSiteUrl = process.env.CI_SITE_URL;
+const ciBaseUrl = process.env.CI_BASE_URL;
+const siteUrl = ciSiteUrl || config.site?.url;
+const baseUrl = ciBaseUrl || undefined;
+
 export default defineConfig({
-  site: config.site?.url,
+  site: siteUrl,
+  base: baseUrl,
   integrations,
   i18n: {
     locales: ["zh-cn", "en"],
