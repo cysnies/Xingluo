@@ -2,6 +2,7 @@ import {
   defineConfig,
   envField,
   fontProviders,
+  svgoOptimizer,
 } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
@@ -15,6 +16,7 @@ import {
   transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
+import { rehypeWrapTable } from "./src/utils/rehypeWrapTable";
 import config from "./xingluo.config";
 
 export default defineConfig({
@@ -35,7 +37,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
-    rehypePlugins: [rehypeCallouts],
+    rehypePlugins: [rehypeCallouts, rehypeWrapTable],
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },
       defaultColor: false,
@@ -50,6 +52,10 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+  },
+  experimental: {
+    // 启用 SVG 优化，自动压缩内联与引用的 SVG 图标
+    svgOptimizer: svgoOptimizer(),
   },
   // 动态 OG 图使用的字体：仅构建期供 satori 取用，不注入站点 CSS
   fonts: [
