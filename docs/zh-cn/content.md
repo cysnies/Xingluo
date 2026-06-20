@@ -40,20 +40,32 @@ timezone: "Asia/Shanghai" # 可选，覆盖站点时区
 
 ### 字段说明
 
-| 字段           | 类型            | 默认值          | 说明                                                                  |
-| -------------- | --------------- | --------------- | --------------------------------------------------------------------- |
-| `title`        | string          | 必填            | 文章标题                                                              |
-| `pubDatetime`  | date            | 必填            | 发布时间，ISO 8601 格式                                               |
-| `modDatetime`  | date            | —               | 更新时间，显示"更新于"标签                                            |
-| `description`  | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                        |
-| `tags`         | string[]        | `["others"]`    | 标签数组，自动生成标签页                                              |
-| `featured`     | boolean         | —               | 首页"精选文章"区块展示                                                |
-| `draft`        | boolean         | —               | 草稿，生产构建过滤（开发可见）                                        |
-| `author`       | string          | `site.author`   | 作者名                                                                |
-| `ogImage`      | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链 |
-| `canonicalURL` | string          | —               | 规范链接，覆盖默认（详见 [SEO](./seo.md)）                            |
-| `hideEditPost` | boolean         | —               | 隐藏该文章的编辑链接                                                  |
-| `timezone`     | string          | `site.timezone` | 覆盖该文章的显示时区                                                  |
+| 字段             | 类型            | 默认值          | 说明                                                                  |
+| ---------------- | --------------- | --------------- | --------------------------------------------------------------------- |
+| `title`          | string          | 必填            | 文章标题                                                              |
+| `pubDatetime`    | date            | 必填            | 发布时间，ISO 8601 格式                                               |
+| `modDatetime`    | date            | —               | 更新时间，显示"更新于"标签                                            |
+| `description`    | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                        |
+| `tags`           | string[]        | `["others"]`    | 标签数组，自动生成标签页                                              |
+| `featured`       | boolean         | —               | 首页"精选文章"区块展示                                                |
+| `draft`          | boolean         | —               | 草稿，生产构建过滤（开发可见）                                        |
+| `author`         | string          | `site.author`   | 作者名                                                                |
+| `ogImage`        | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链 |
+| `canonicalURL`   | string          | —               | 规范链接，覆盖默认（详见 [SEO](./seo.md)）                            |
+| `hideEditPost`   | boolean         | —               | 隐藏该文章的编辑链接                                                  |
+| `timezone`       | string          | `site.timezone` | 覆盖该文章的显示时区                                                  |
+| `locale`         | string          | `site.lang`     | 文章写作语言，如 `"en"`、`"ja"`。未设置时视为默认语言                 |
+| `translationKey` | string          | —               | 翻译分组键：相同 key 的文章互为译文。未设置时文章独立，不参与译文分组 |
+
+### 内容级翻译
+
+通过 `locale` 与 `translationKey` 两个 frontmatter 字段实现文章的多语言版本：
+
+1. 默认语言文章放 `src/content/posts/<slug>.md`
+2. 译文放语言子目录 `src/content/posts/<locale>/<slug>.md`（如 `en/welcome.md`）
+3. 译文设置 `locale` 为自己的语言、`translationKey` 与原文一致
+
+路由层会自动解析对应语言的译文并在列表中去重——不同语言的同一篇文章只渲染为对应语言的一张卡片。无译文的文章在非默认语言页会回退显示原文内容。详见 [国际化](./i18n.md)。
 
 ### 定时发布
 
@@ -159,3 +171,36 @@ import { APlayer, DPlayer } from "@/components/mdx";
 ## 评论
 
 文章详情页底部自动渲染评论系统（需在 `features.comments` 配置 provider）。详见 [评论系统](./comments.md)。
+
+## 阅读时长
+
+文章详情页与列表卡片自动显示估算阅读时长：
+
+- **CJK 语言**（zh-cn、ja、ko）：按中日韩字符数计算，约每分钟 400 字
+- **其他语言**：按空白分词后的单词数计算，约每分钟 200 词
+- 结果向上取整，最小 1 分钟
+
+计算前会剥离代码块、HTML 标签、Markdown 链接等非正文内容，确保估算贴近实际阅读量。无需额外配置，自动生效。
+
+## 相关文章
+
+文章详情页底部（上一篇/下一篇之后）展示最多 2 篇相关文章：
+
+- 按共享标签数量降序排列
+- 同分数按发布时间降序（优先推荐较新的文章）
+- 无共享标签时不显示该区块
+- 自动被 pagefind 搜索索引忽略
+
+无需额外配置，自动生效。
+
+## 粘性目录侧栏
+
+文章详情页在大屏（≥1024px）右侧显示粘性目录侧栏：
+
+- 基于文章内 h2~h6 标题自动生成，扁平缩进列表
+- 缩进层级反映标题深度（h3 比 h2 多一级缩进）
+- 滚动时自动高亮当前可视章节（IntersectionObserver）
+- 点击目录项平滑滚动到对应标题
+- 小屏（移动端）隐藏侧栏，可用文内折叠目录
+
+基于 Astro `render()` 返回的 `headings` 生成，无需作者手动维护。文内亦可通过 `remark-toc` 生成折叠目录（在文中写 `## Table of contents`），与侧栏并存互补。

@@ -28,12 +28,15 @@
 - ⚡ **极致性能** — Astro 静态生成、零运行时 JS、评论与播放器按需懒加载
 - 🎨 **现代视觉** — shadcn/ui new-york 风格、OKLCH 色彩空间、平滑暗黑模式
 - 🌗 **暗黑模式** — 无闪烁切换，跟随系统偏好，评论与播放器主题自动同步
-- 🔍 **全文搜索** — 基于 Pagefind 实现构建时索引
-- 🌐 **多语言** — 多语言 UI 实现，并支持 hreflang 与 x-default SEO 声明
+- 🔍 **全文搜索** — 基于 Pagefind 实现构建时索引，按语言分索引
+- 🌐 **多语言** — 多语言 UI 与内容级翻译，hreflang 与 x-default SEO 声明
 - 📝 **内容增强** — 支持 Markdown 与 MDX，Shiki 双主题代码高亮、标注框、目录折叠、表格滚动
+- 📖 **阅读时长** — CJK 按字符数、拉丁文按单词数智能估算，卡片与详情页均显示
+- 🔗 **相关文章** — 按标签相似度推荐，自动排序
+- 📑 **粘性目录侧栏** — 大屏文章页右侧粘性目录，IntersectionObserver 滚动高亮当前章节
 - 💬 **评论系统** — 支持使用 Giscus / Twikoo / Waline 评论系统，主题自动跟随，懒加载
-- 🎵 **媒体播放器** — 集成 APlayer 音乐播放器与 DPlayer 视频播放器，并支持在 Markdown 和 MDX 中调用。
-- 📡 **SEO** — 实现动态 OG 图、RSS、Sitemap、JSON-LD 结构化数据、Canonical 规范化
+- 🎵 **媒体播放器** — 集成 APlayer 音乐播放器与 DPlayer 视频播放器，并支持在 Markdown 和 MDX 中调用
+- 📡 **SEO** — 实现动态 OG 图、RSS、Sitemap、JSON-LD 结构化数据（BlogPosting + BreadcrumbList）、Canonical 规范化
 
 ## 🚀 快速开始
 
@@ -118,19 +121,19 @@ import { APlayer, DPlayer } from "@/components/mdx";
 
 完整项目文档位于 [`docs/`](./docs/) 目录：
 
-| 文档                                        | 说明                     |
-| ------------------------------------------- | ------------------------ |
-| [快速开始](./docs/zh-cn/getting-started.md) | 安装、开发与构建         |
-| [配置指南](./docs/zh-cn/configuration.md)   | 站点信息与功能开关       |
-| [内容创作](./docs/zh-cn/content.md)         | frontmatter 与写作规范   |
-| [架构总览](./docs/zh-cn/architecture.md)    | 项目结构与设计决策       |
-| [国际化](./docs/zh-cn/i18n.md)              | 多语言适配               |
-| [主题与样式](./docs/zh-cn/theming.md)       | shadcn 视觉与 OKLCH      |
-| [评论系统](./docs/zh-cn/comments.md)        | giscus / twikoo / waline |
-| [媒体播放器](./docs/zh-cn/media-players.md) | APlayer / DPlayer        |
-| [SEO](./docs/zh-cn/seo.md)                  | OG 图、RSS、sitemap      |
-| [搜索](./docs/zh-cn/search.md)              | Pagefind 索引            |
-| [部署](./docs/zh-cn/deployment.md)          | 静态托管与 Docker        |
+| 文档                                        | 说明                             |
+| ------------------------------------------- | -------------------------------- |
+| [快速开始](./docs/zh-cn/getting-started.md) | 安装、开发与构建                 |
+| [配置指南](./docs/zh-cn/configuration.md)   | 站点信息与功能开关               |
+| [内容创作](./docs/zh-cn/content.md)         | frontmatter、写作规范与内容增强  |
+| [国际化](./docs/zh-cn/i18n.md)              | UI 与内容级多语言翻译            |
+| [架构总览](./docs/zh-cn/architecture.md)    | 项目结构与设计决策               |
+| [主题与样式](./docs/zh-cn/theming.md)       | shadcn 视觉与 OKLCH              |
+| [评论系统](./docs/zh-cn/comments.md)        | giscus / twikoo / waline         |
+| [媒体播放器](./docs/zh-cn/media-players.md) | APlayer / DPlayer                |
+| [SEO](./docs/zh-cn/seo.md)                  | OG 图、RSS、sitemap、结构化数据  |
+| [搜索](./docs/zh-cn/search.md)              | Pagefind 全文搜索索引            |
+| [部署](./docs/zh-cn/deployment.md)          | 静态托管、GitHub Pages 与 Docker |
 
 ## 🛠️ 技术栈
 
@@ -156,16 +159,6 @@ docker build -t xingluo .
 
 # 运行容器
 docker run -d -p 8080:80 --name xingluo xingluo
-```
-
-或使用预构建镜像：
-
-```bash
-# 拉取镜像
-docker pull ghcr.io/cysnies/xingluo:latest
-
-# 运行容器
-docker run -d -p 8080:80 --name xingluo ghcr.io/cysnies/xingluo:latest
 ```
 
 ## 📜 License

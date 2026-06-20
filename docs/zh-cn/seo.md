@@ -50,10 +50,37 @@
 文章详情页（`PostDetailView.astro`）的 canonical 策略：
 
 1. 文章 frontmatter 自定义 `canonicalURL` → 优先使用
-2. 默认语言（`zh-cn`）→ 指向文章自身 URL
-3. 非默认语言（`en`）→ 指向默认语言原文 URL
+2. 当前文章为该语言的**真实译文**（`locale` 与页面语言一致）→ 指向自身 URL
+3. 当前文章为**回退内容**（无该语言译文，沿用原文）→ 指向默认语言原文 URL
 
-策略 3 的目的：星罗当前为 UI 翻译 + 内容原文 fallback，非默认语言页面与默认语言页面内容相同。指向默认语言原文可避免搜索引擎判定为重复内容。
+策略 3 确保搜索引擎不会将无独立译文的内容重复页面判定为重复内容。有独立译文的文章 canonical 指向自身，可被独立索引。
+
+## BreadcrumbList 结构化数据
+
+所有含面包屑的页面（文章列表、标签索引、标签文章列表、归档、关于、搜索）自动输出 `BreadcrumbList` JSON-LD 结构化数据：
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "首页",
+      "item": "https://..."
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "文章",
+      "item": "https://.../posts/"
+    }
+  ]
+}
+```
+
+面包屑末项无链接时（当前页），自动使用当前页面 URL 作为 `item`。文章详情页不使用面包屑组件，故不输出此结构化数据。
 
 ## Open Graph 图
 

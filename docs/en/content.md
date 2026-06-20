@@ -40,20 +40,32 @@ timezone: "Asia/Shanghai" # optional, override the site timezone
 
 ### Field Reference
 
-| Field          | Type            | Default         | Notes                                                                                                 |
-| -------------- | --------------- | --------------- | ----------------------------------------------------------------------------------------------------- |
-| `title`        | string          | required        | Post title                                                                                            |
-| `pubDatetime`  | date            | required        | Publish time, ISO 8601                                                                                |
-| `modDatetime`  | date            | —               | Update time; shows an "updated" label                                                                 |
-| `description`  | string          | required        | Summary, used in meta, RSS, and list cards                                                            |
-| `tags`         | string[]        | `["others"]`    | Tag array; tag pages are generated automatically                                                      |
-| `featured`     | boolean         | —               | Shown in the homepage "Featured" section                                                              |
-| `draft`        | boolean         | —               | Draft; filtered out in production builds (visible in dev)                                             |
-| `author`       | string          | `site.author`   | Author name                                                                                           |
-| `ogImage`      | image \| string | —               | OG image; `image()` goes through Astro's asset pipeline, a string is a `public/` path or external URL |
-| `canonicalURL` | string          | —               | Canonical link, overrides the default (see [SEO](./seo.md))                                           |
-| `hideEditPost` | boolean         | —               | Hide the edit link for this post                                                                      |
-| `timezone`     | string          | `site.timezone` | Override the display timezone for this post                                                           |
+| Field            | Type            | Default         | Notes                                                                                                                 |
+| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string          | required        | Post title                                                                                                            |
+| `pubDatetime`    | date            | required        | Publish time, ISO 8601                                                                                                |
+| `modDatetime`    | date            | —               | Update time; shows an "updated" label                                                                                 |
+| `description`    | string          | required        | Summary, used in meta, RSS, and list cards                                                                            |
+| `tags`           | string[]        | `["others"]`    | Tag array; tag pages are generated automatically                                                                      |
+| `featured`       | boolean         | —               | Shown in the homepage "Featured" section                                                                              |
+| `draft`          | boolean         | —               | Draft; filtered out in production builds (visible in dev)                                                             |
+| `author`         | string          | `site.author`   | Author name                                                                                                           |
+| `ogImage`        | image \| string | —               | OG image; `image()` goes through Astro's asset pipeline, a string is a `public/` path or external URL                 |
+| `canonicalURL`   | string          | —               | Canonical link, overrides the default (see [SEO](./seo.md))                                                           |
+| `hideEditPost`   | boolean         | —               | Hide the edit link for this post                                                                                      |
+| `timezone`       | string          | `site.timezone` | Override the display timezone for this post                                                                           |
+| `locale`         | string          | `site.lang`     | Language the post is written in, e.g. `"en"`, `"ja"`. Defaults to the site language when unset                        |
+| `translationKey` | string          | —               | Translation group key: posts sharing the same key are translations of each other. Posts without a key are independent |
+
+### Content-Level Translation
+
+Use the `locale` and `translationKey` frontmatter fields to create multilingual versions of your posts:
+
+1. Place the default-language post at `src/content/posts/<slug>.md`
+2. Place translations in language subdirectories: `src/content/posts/<locale>/<slug>.md` (e.g. `en/welcome.md`)
+3. Set `locale` to the translation's language and `translationKey` to the same value as the original
+
+The routing layer automatically resolves the correct translation per language and deduplicates in listings — the same post in different languages only shows one card per language. Posts without a translation fall back to the original content. See [Internationalization](./i18n.md).
 
 ### Scheduled Publishing
 
@@ -159,3 +171,36 @@ With `features.mdx: false`:
 ## Comments
 
 The comment system is rendered automatically at the bottom of post detail pages (configure the provider in `features.comments`). See [Comment System](./comments.md).
+
+## Reading Time
+
+Estimated reading time is shown automatically on post detail pages and list cards:
+
+- **CJK languages** (zh-cn, ja, ko): calculated by CJK character count, ~400 characters per minute
+- **Other languages**: calculated by word count (whitespace-delimited), ~200 words per minute
+- Result rounded up, minimum 1 minute
+
+Before counting, code blocks, HTML tags, Markdown link URLs, and other non-body content are stripped to keep the estimate close to actual reading volume. No configuration needed.
+
+## Related Posts
+
+Up to 2 related posts are shown at the bottom of post detail pages (after previous/next navigation):
+
+- Sorted by number of shared tags, descending
+- Same score sorted by publish date, descending (preferring newer posts)
+- Section is not rendered when no posts share tags
+- Automatically ignored by the pagefind search index
+
+No configuration needed.
+
+## Sticky TOC Sidebar
+
+A sticky table of contents sidebar appears on the right side of post detail pages on large screens (≥1024px):
+
+- Auto-generated from h2–h6 headings in the article, presented as a flat indented list
+- Indentation reflects heading depth (h3 has one more level of indent than h2)
+- Current section is highlighted as you scroll (IntersectionObserver)
+- Clicking a TOC entry smoothly scrolls to the corresponding heading
+- Hidden on small screens (mobile), where the inline collapsible TOC is available
+
+Generated from the `headings` returned by Astro's `render()` — no manual TOC maintenance by the author. The inline `remark-toc` collapsible TOC (write `## Table of contents` in your post) coexists with the sidebar for small-screen use.

@@ -29,15 +29,18 @@ A modern blog CMS built with Astro and the shadcn visual system
 
 ## ✨ Features
 
-- ⚡ **Top-tier performance** — Astro static generation, zero runtime JS, lazy-loaded comments and players
+- ⚡ **Top-tier performance** — Astro static generation, zero runtime JS, lazy-loaded comments and players, orphan asset cleanup
 - 🎨 **Modern visuals** — shadcn/ui new-york style, OKLCH color space, smooth dark mode
 - 🌗 **Dark mode** — flicker-free toggle, follows system preference, comment and player themes sync automatically
-- 🔍 **Full-text search** — build-time indexing powered by Pagefind
-- 🌐 **Multilingual** — multilingual UI with hreflang and x-default SEO declarations
+- 🔍 **Full-text search** — build-time indexing powered by Pagefind, per-language indexes
+- 🌐 **Multilingual** — multilingual UI and content-level translation, hreflang and x-default SEO declarations
 - 📝 **Content enhancement** — Markdown and MDX support, Shiki dual-theme code highlighting, callouts, collapsible TOC, scrollable tables
+- 📖 **Reading time** — smart estimation (CJK by character count, Latin by word count), shown on cards and detail pages
+- 🔗 **Related posts** — recommended by shared tags, automatically sorted
+- 📑 **Sticky TOC sidebar** — right-side sticky table of contents on large screens, IntersectionObserver scroll spying
 - 💬 **Comment system** — Giscus / Twikoo / Waline, theme-aware, lazy-loaded
 - 🎵 **Media players** — APlayer (audio) and DPlayer (video), usable from both Markdown and MDX
-- 📡 **SEO** — dynamic OG images, RSS, sitemap, JSON-LD structured data, canonical normalization
+- 📡 **SEO** — dynamic OG images, RSS, sitemap, JSON-LD structured data (BlogPosting + BreadcrumbList), canonical normalization
 
 ## 🚀 Quick Start
 
@@ -122,19 +125,19 @@ import { APlayer, DPlayer } from "@/components/mdx";
 
 The full project documentation lives in the [`docs/`](./docs/) directory:
 
-| Document                                           | Description                            |
-| -------------------------------------------------- | -------------------------------------- |
-| [Getting Started](./docs/en/getting-started.md)    | Install, develop, and build            |
-| [Configuration Guide](./docs/en/configuration.md)  | Site info and feature toggles          |
-| [Content Authoring](./docs/en/content.md)          | Frontmatter and writing conventions    |
-| [Architecture Overview](./docs/en/architecture.md) | Project structure and design decisions |
-| [Internationalization](./docs/en/i18n.md)          | Multilingual adaptation                |
-| [Theme & Styles](./docs/en/theming.md)             | shadcn visuals and OKLCH               |
-| [Comment System](./docs/en/comments.md)            | giscus / twikoo / waline               |
-| [Media Players](./docs/en/media-players.md)        | APlayer / DPlayer                      |
-| [SEO](./docs/en/seo.md)                            | OG images, RSS, sitemap                |
-| [Search](./docs/en/search.md)                      | Pagefind indexing                      |
-| [Deployment](./docs/en/deployment.md)              | Static hosting and Docker              |
+| Document                                           | Description                                        |
+| -------------------------------------------------- | -------------------------------------------------- |
+| [Getting Started](./docs/en/getting-started.md)    | Install, develop, and build                        |
+| [Configuration Guide](./docs/en/configuration.md)  | Site info and feature toggles                      |
+| [Content Authoring](./docs/en/content.md)          | Frontmatter, writing conventions, and enhancements |
+| [Internationalization](./docs/en/i18n.md)          | UI and content-level multilingual translation      |
+| [Architecture Overview](./docs/en/architecture.md) | Project structure and design decisions             |
+| [Theme & Styles](./docs/en/theming.md)             | shadcn visuals and OKLCH                           |
+| [Comment System](./docs/en/comments.md)            | giscus / twikoo / waline                           |
+| [Media Players](./docs/en/media-players.md)        | APlayer / DPlayer                                  |
+| [SEO](./docs/en/seo.md)                            | OG images, RSS, sitemap, structured data           |
+| [Search](./docs/en/search.md)                      | Pagefind full-text search indexing                 |
+| [Deployment](./docs/en/deployment.md)              | Static hosting, GitHub Pages, and Docker           |
 
 ## 🛠️ Tech Stack
 
@@ -160,16 +163,6 @@ docker build -t xingluo .
 
 # Run the container
 docker run -d -p 8080:80 --name xingluo xingluo
-```
-
-Or use the prebuilt image:
-
-```bash
-# Pull the image
-docker pull ghcr.io/cysnies/xingluo:latest
-
-# Run the container
-docker run -d -p 8080:80 --name xingluo ghcr.io/cysnies/xingluo:latest
 ```
 
 ## 📜 License

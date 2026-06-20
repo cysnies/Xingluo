@@ -50,10 +50,37 @@ The `<head>` in [`src/layouts/Layout.astro`](../src/layouts/Layout.astro) output
 The canonical strategy on post detail pages (`PostDetailView.astro`):
 
 1. Custom `canonicalURL` in frontmatter → used first
-2. Default language (`zh-cn`) → points to the post's own URL
-3. Non-default language (`en`) → points to the default-language original URL
+2. The current post is a **real translation** for this language (`locale` matches the page language) → points to its own URL
+3. The current post is **fallback content** (no translation available, using the original) → points to the default-language original URL
 
-Strategy 3 exists because Xingluo currently does UI translation + content original fallback, so non-default-locale pages have identical content to the default. Pointing to the default-language original avoids search engines flagging duplicate content.
+Strategy 3 ensures search engines don't treat pages without independent translations as duplicate content. Posts with independent translations have canonical pointing to themselves and can be indexed separately.
+
+## BreadcrumbList Structured Data
+
+All pages with breadcrumbs (post list, tag index, tag post list, archives, about, search) automatically output `BreadcrumbList` JSON-LD structured data:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://..."
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Posts",
+      "item": "https://.../posts/"
+    }
+  ]
+}
+```
+
+When the last breadcrumb item has no link (current page), the current page URL is used as `item`. Post detail pages do not use the breadcrumb component and therefore do not output this structured data.
 
 ## Open Graph Images
 
