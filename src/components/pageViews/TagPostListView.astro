@@ -9,6 +9,8 @@ import Main from "@/components/Main.astro";
 import PostCard from "@/components/PostCard.astro";
 import Pagination from "@/components/Pagination.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
+import { slugifyStr } from "@/utils/slugify";
+import { toTransitionName } from "@/utils/toTransitionName";
 import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
 
@@ -20,6 +22,9 @@ interface Props {
 const { page, tagName } = Astro.props;
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
+
+/** 与标签索引页保持一致的 transition 名称（基于 slug） */
+const tagTransition = toTransitionName(slugifyStr(tagName));
 
 const title = tplStr(t.pages.tagTitle, { tag: tagName });
 const description = tplStr(t.pages.tagDesc, { tag: tagName });
@@ -34,7 +39,12 @@ const crumbs = [
   <Header />
   <Main>
     <Breadcrumb items={crumbs} class="mb-6" />
-    <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">#{tagName}</h1>
+    <h1
+      transition:name={tagTransition}
+      class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl"
+    >
+      #{tagName}
+    </h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
     <ul class="grid gap-4 sm:grid-cols-2">
       {page.data.map((post) => (

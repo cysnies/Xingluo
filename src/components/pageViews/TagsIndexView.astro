@@ -8,6 +8,7 @@ import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import { getUniqueTags } from "@/utils/getUniqueTags";
 import { getPostsForLocale } from "@/utils/i18nPosts";
+import { toTransitionName } from "@/utils/toTransitionName";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -38,7 +39,7 @@ const crumbs = [
             <li>
               <a
                 href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
-                transition:name={tag}
+                transition:name={toTransitionName(tag)}
                 class="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-card-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
               >
                 #{tagName}
