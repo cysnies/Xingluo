@@ -37,6 +37,8 @@ export interface UIStrings {
     closeImagePreview: string;
     /** 阅读时长，如 "{{minutes}} 分钟阅读" */
     readingTime: string;
+    /** 相关文章区块标题 */
+    relatedPosts: string;
   };
   /** 分页相关 */
   pagination: {

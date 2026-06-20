@@ -30,6 +30,7 @@ const ja: UIStrings = {
     imagePreview: "画像プレビュー：",
     closeImagePreview: "画像プレビューを閉じる",
     readingTime: "{{minutes}} 分で読了",
+    relatedPosts: "関連記事",
   },
   pagination: {
     prev: "前へ",

@@ -30,6 +30,7 @@ const eo: UIStrings = {
     imagePreview: "Antaŭrigardo: ",
     closeImagePreview: "Fermi antaŭrigardon",
     readingTime: "{{minutes}} min legado",
+    relatedPosts: "Rilataj artikoloj",
   },
   pagination: {
     prev: "Antaŭa",

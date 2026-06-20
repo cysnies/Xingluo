@@ -30,6 +30,7 @@ const ko: UIStrings = {
     imagePreview: "이미지 미리보기: ",
     closeImagePreview: "이미지 미리보기 닫기",
     readingTime: "{{minutes}}분 분량",
+    relatedPosts: "관련 글",
   },
   pagination: {
     prev: "이전",

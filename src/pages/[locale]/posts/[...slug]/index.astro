@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import PostDetailView from "@/components/pageViews/PostDetailView.astro";
 import { getPostSlug } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getRelatedPosts } from "@/utils/getRelatedPosts";
 import { getLocaleParams } from "@/i18n/staticPaths";
 
 export async function getStaticPaths() {
@@ -17,12 +18,18 @@ export async function getStaticPaths() {
         post,
         prevPost: index > 0 ? sortedPosts[index - 1] : null,
         nextPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
+        relatedPosts: getRelatedPosts(post, sortedPosts),
       },
     }))
   );
 }
 
-const { post, prevPost, nextPost } = Astro.props;
+const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 ---
 
-<PostDetailView post={post} prevPost={prevPost} nextPost={nextPost} />
+<PostDetailView
+  post={post}
+  prevPost={prevPost}
+  nextPost={nextPost}
+  relatedPosts={relatedPosts}
+/>

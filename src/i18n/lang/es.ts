@@ -30,6 +30,7 @@ const es: UIStrings = {
     imagePreview: "Vista previa: ",
     closeImagePreview: "Cerrar vista previa",
     readingTime: "{{minutes}} min de lectura",
+    relatedPosts: "Artículos relacionados",
   },
   pagination: {
     prev: "Anterior",

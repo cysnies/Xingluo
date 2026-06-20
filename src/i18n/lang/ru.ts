@@ -30,6 +30,7 @@ const ru: UIStrings = {
     imagePreview: "Предпросмотр: ",
     closeImagePreview: "Закрыть предпросмотр",
     readingTime: "{{minutes}} мин чтения",
+    relatedPosts: "Похожие статьи",
   },
   pagination: {
     prev: "Назад",

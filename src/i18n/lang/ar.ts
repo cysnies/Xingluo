@@ -30,6 +30,7 @@ const ar: UIStrings = {
     imagePreview: "معاينة الصورة: ",
     closeImagePreview: "إغلاق المعاينة",
     readingTime: "{{minutes}} دقيقة قراءة",
+    relatedPosts: "مقالات ذات صلة",
   },
   pagination: {
     prev: "السابق",

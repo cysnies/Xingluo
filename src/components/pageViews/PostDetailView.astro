@@ -18,6 +18,7 @@ import ShareLinks from "@/components/post/ShareLinks.astro";
 import BackButton from "@/components/post/BackButton.astro";
 import BackToTopButton from "@/components/post/BackToTopButton.astro";
 import AdjacentPostNav from "@/components/post/AdjacentPostNav.astro";
+import RelatedPosts from "@/components/post/RelatedPosts.astro";
 import Comments from "@/components/comments/Comments.astro";
 import Clock from "@/assets/icons/Clock.astro";
 import config from "@/config";
@@ -26,9 +27,10 @@ interface Props {
   post: CollectionEntry<"posts">;
   prevPost: CollectionEntry<"posts"> | null;
   nextPost: CollectionEntry<"posts"> | null;
+  relatedPosts?: CollectionEntry<"posts">[];
 }
 
-const { post, prevPost, nextPost } = Astro.props;
+const { post, prevPost, nextPost, relatedPosts = [] } = Astro.props;
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
@@ -147,6 +149,8 @@ const resolvedCanonical =
       <ShareLinks url={articleUrl} title={title} />
 
       <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
+
+      <RelatedPosts posts={relatedPosts} />
 
       {/* 评论区：provider 为 false 时 Comments 组件内部不输出 */}
       <Comments locale={locale} />
