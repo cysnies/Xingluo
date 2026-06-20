@@ -31,4 +31,14 @@ category: announcement
 ```ts filename="src/lib/utils.ts"
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 ```
+
+## Get Started Writing
+
+Create a Markdown file in the `src/content/posts/` directory, add frontmatter, and publish your article. Detailed field descriptions can be found in the project documentation.
+
+Start your writing journey!
