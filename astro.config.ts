@@ -27,7 +27,10 @@ const integrations = [
   ...(mdxEnabled ? [mdx()] : []),
   sitemap({
     filter: (page) =>
-      config.features?.showArchives !== false || !page.endsWith("/archives/"),
+      (config.features?.showArchives !== false ||
+        !page.endsWith("/archives/")) &&
+      (config.features?.showCategories !== false ||
+        !page.includes("/categories/")),
     // 启用 sitemap 内 hreflang 声明，映射 locale 到 hreflang 值
     i18n: {
       defaultLocale: "zh-cn",

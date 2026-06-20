@@ -37,7 +37,8 @@ A modern blog CMS built with Astro and the shadcn visual system
 - 📝 **Content enhancement** — Markdown and MDX support, Shiki dual-theme code highlighting, callouts, collapsible TOC, scrollable tables
 - 📖 **Reading time** — smart estimation (CJK by character count, Latin by word count), shown on cards and detail pages
 - 🔗 **Related posts** — recommended by shared tags, automatically sorted
-- 📑 **Sticky TOC sidebar** — right-side sticky table of contents on large screens, IntersectionObserver scroll spying
+- �️ **Post categories** — assign via frontmatter, with dedicated category pages and a nav entry
+- �📑 **Sticky TOC sidebar** — right-side sticky table of contents on large screens, IntersectionObserver scroll spying
 - 💬 **Comment system** — Giscus / Twikoo / Waline, theme-aware, lazy-loaded
 - 🎵 **Media players** — APlayer (audio) and DPlayer (video), usable from both Markdown and MDX
 - 📡 **SEO** — dynamic OG images, RSS, sitemap, JSON-LD structured data (BlogPosting + BreadcrumbList), canonical normalization

@@ -40,22 +40,23 @@ timezone: "Asia/Shanghai" # 可选，覆盖站点时区
 
 ### 字段说明
 
-| 字段             | 类型            | 默认值          | 说明                                                                  |
-| ---------------- | --------------- | --------------- | --------------------------------------------------------------------- |
-| `title`          | string          | 必填            | 文章标题                                                              |
-| `pubDatetime`    | date            | 必填            | 发布时间，ISO 8601 格式                                               |
-| `modDatetime`    | date            | —               | 更新时间，显示"更新于"标签                                            |
-| `description`    | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                        |
-| `tags`           | string[]        | `["others"]`    | 标签数组，自动生成标签页                                              |
-| `featured`       | boolean         | —               | 首页"精选文章"区块展示                                                |
-| `draft`          | boolean         | —               | 草稿，生产构建过滤（开发可见）                                        |
-| `author`         | string          | `site.author`   | 作者名                                                                |
-| `ogImage`        | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链 |
-| `canonicalURL`   | string          | —               | 规范链接，覆盖默认（详见 [SEO](./seo.md)）                            |
-| `hideEditPost`   | boolean         | —               | 隐藏该文章的编辑链接                                                  |
-| `timezone`       | string          | `site.timezone` | 覆盖该文章的显示时区                                                  |
-| `locale`         | string          | `site.lang`     | 文章写作语言，如 `"en"`、`"ja"`。未设置时视为默认语言                 |
-| `translationKey` | string          | —               | 翻译分组键：相同 key 的文章互为译文。未设置时文章独立，不参与译文分组 |
+| 字段             | 类型            | 默认值          | 说明                                                                        |
+| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------- |
+| `title`          | string          | 必填            | 文章标题                                                                    |
+| `pubDatetime`    | date            | 必填            | 发布时间，ISO 8601 格式                                                     |
+| `modDatetime`    | date            | —               | 更新时间，显示"更新于"标签                                                  |
+| `description`    | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                              |
+| `tags`           | string[]        | `["others"]`    | 标签数组，自动生成标签页                                                    |
+| `featured`       | boolean         | —               | 首页"精选文章"区块展示                                                      |
+| `draft`          | boolean         | —               | 草稿，生产构建过滤（开发可见）                                              |
+| `author`         | string          | `site.author`   | 作者名                                                                      |
+| `ogImage`        | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链       |
+| `canonicalURL`   | string          | —               | 规范链接，覆盖默认（详见 [SEO](./seo.md)）                                  |
+| `hideEditPost`   | boolean         | —               | 隐藏该文章的编辑链接                                                        |
+| `timezone`       | string          | `site.timezone` | 覆盖该文章的显示时区                                                        |
+| `locale`         | string          | `site.lang`     | 文章写作语言，如 `"en"`、`"ja"`。未设置时视为默认语言                       |
+| `translationKey` | string          | —               | 翻译分组键：相同 key 的文章互为译文。未设置时文章独立，不参与译文分组       |
+| `category`       | string          | —               | 文章分类（单值），生成 `/categories/<slug>/` 分类页；未设置时不属于任何分类 |
 
 ### 内容级翻译
 
@@ -204,3 +205,21 @@ import { APlayer, DPlayer } from "@/components/mdx";
 - 小屏（移动端）隐藏侧栏，可用文内折叠目录
 
 基于 Astro `render()` 返回的 `headings` 生成，无需作者手动维护。文内亦可通过 `remark-toc` 生成折叠目录（在文中写 `## Table of contents`），与侧栏并存互补。
+
+## 分类
+
+通过 frontmatter 的 `category` 字段（单值字符串）为文章指定分类：
+
+```yaml
+---
+title: "我的文章"
+category: "教程"
+---
+```
+
+- 分类页地址为 `/categories/<slug>/`，slug 经 `slugifyStr` 归一（中文保留、拉丁文小写连字符）
+- 分类索引页 `/categories/` 列出全部分类
+- 文章卡片与详情页自动显示分类链接（点击跳转到对应分类页）
+- 一篇文章仅属于一个分类（区别于多标签 `tags`）；未设置 `category` 的文章不进入任何分类
+- 分类页复用 `posts.perPage` 分页，支持多语言镜像路由（`/en/categories/...`）
+- 可通过 `features.showCategories: false` 关闭分类功能（导航入口与页面同步移除，sitemap 过滤）

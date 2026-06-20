@@ -32,6 +32,9 @@ const isActive = (path: string) => {
 const navItems = [
   { href: getRelativeLocaleUrl(locale, "posts"), label: t.nav.posts, path: "/posts" },
   { href: getRelativeLocaleUrl(locale, "tags"), label: t.nav.tags, path: "/tags" },
+  ...(features.showCategories
+    ? [{ href: getRelativeLocaleUrl(locale, "categories"), label: t.nav.categories, path: "/categories" }]
+    : []),
   ...(features.showArchives
     ? [{ href: getRelativeLocaleUrl(locale, "archives"), label: t.nav.archives, path: "/archives" }]
     : []),

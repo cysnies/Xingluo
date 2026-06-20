@@ -25,6 +25,8 @@ export default defineXingluoConfig({
     lightAndDarkMode: true,
     dynamicOgImage: true,
     showArchives: true,
+    // 是否显示分类页与导航入口（文章通过 frontmatter 的 category 字段归类）
+    showCategories: true,
     showBackButton: true,
     editPost: {
       enabled: true,

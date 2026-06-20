@@ -9,6 +9,7 @@ tags:
 featured: true
 locale: en
 translationKey: welcome-to-xingluo
+category: announcement
 ---
 
 ## About Xingluo

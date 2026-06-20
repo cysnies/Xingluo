@@ -33,7 +33,8 @@
 - 📝 **内容增强** — 支持 Markdown 与 MDX，Shiki 双主题代码高亮、标注框、目录折叠、表格滚动
 - 📖 **阅读时长** — CJK 按字符数、拉丁文按单词数智能估算，卡片与详情页均显示
 - 🔗 **相关文章** — 按标签相似度推荐，自动排序
-- 📑 **粘性目录侧栏** — 大屏文章页右侧粘性目录，IntersectionObserver 滚动高亮当前章节
+- �️ **文章分类** — Frontmatter 指定分类，独立分类页与导航入口
+- �📑 **粘性目录侧栏** — 大屏文章页右侧粘性目录，IntersectionObserver 滚动高亮当前章节
 - 💬 **评论系统** — 支持使用 Giscus / Twikoo / Waline 评论系统，主题自动跟随，懒加载
 - 🎵 **媒体播放器** — 集成 APlayer 音乐播放器与 DPlayer 视频播放器，并支持在 Markdown 和 MDX 中调用
 - 📡 **SEO** — 实现动态 OG 图、RSS、Sitemap、JSON-LD 结构化数据（BlogPosting + BreadcrumbList）、Canonical 规范化

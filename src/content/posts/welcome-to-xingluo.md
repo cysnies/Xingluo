@@ -9,6 +9,7 @@ tags:
 featured: true
 locale: zh-cn
 translationKey: welcome-to-xingluo
+category: 公告
 ---
 
 ## 关于星罗

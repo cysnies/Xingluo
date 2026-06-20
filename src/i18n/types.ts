@@ -8,6 +8,7 @@ export interface UIStrings {
     tags: string;
     about: string;
     archives: string;
+    categories: string;
     search: string;
     rss: string;
   };
@@ -39,6 +40,8 @@ export interface UIStrings {
     readingTime: string;
     /** 相关文章区块标题 */
     relatedPosts: string;
+    /** 文章分类标签文案，如 "分类：{{category}}" */
+    categoryLabel: string;
   };
   /** 分页相关 */
   pagination: {
@@ -71,6 +74,10 @@ export interface UIStrings {
     tagDesc: string;
     tagsTitle: string;
     tagsDesc: string;
+    categoryTitle: string;
+    categoryDesc: string;
+    categoriesTitle: string;
+    categoriesDesc: string;
     postsTitle: string;
     postsDesc: string;
     archivesTitle: string;

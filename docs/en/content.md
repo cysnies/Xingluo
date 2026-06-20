@@ -56,6 +56,7 @@ timezone: "Asia/Shanghai" # optional, override the site timezone
 | `timezone`       | string          | `site.timezone` | Override the display timezone for this post                                                                           |
 | `locale`         | string          | `site.lang`     | Language the post is written in, e.g. `"en"`, `"ja"`. Defaults to the site language when unset                        |
 | `translationKey` | string          | —               | Translation group key: posts sharing the same key are translations of each other. Posts without a key are independent |
+| `category`       | string          | —               | Post category (single value), generates a `/categories/<slug>/` page; unset means no category                         |
 
 ### Content-Level Translation
 
@@ -204,3 +205,21 @@ A sticky table of contents sidebar appears on the right side of post detail page
 - Hidden on small screens (mobile), where the inline collapsible TOC is available
 
 Generated from the `headings` returned by Astro's `render()` — no manual TOC maintenance by the author. The inline `remark-toc` collapsible TOC (write `## Table of contents` in your post) coexists with the sidebar for small-screen use.
+
+## Categories
+
+Assign a category to a post via the `category` frontmatter field (a single string):
+
+```yaml
+---
+title: "My Post"
+category: "tutorial"
+---
+```
+
+- The category page lives at `/categories/<slug>/`; the slug is normalized via `slugifyStr` (CJK preserved, Latin lowercased with hyphens)
+- The category index at `/categories/` lists all categories
+- Post cards and detail pages automatically show a category link (click to jump to the category page)
+- A post belongs to at most one category (unlike multiple `tags`); posts without `category` appear in no category
+- Category pages reuse `posts.perPage` for pagination and support multilingual mirror routes (`/en/categories/...`)
+- Disable categories via `features.showCategories: false` (nav entry and pages removed, sitemap filtered)

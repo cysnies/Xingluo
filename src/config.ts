@@ -38,6 +38,7 @@ const defaultFeatures = {
   lightAndDarkMode: true,
   dynamicOgImage: true,
   showArchives: true,
+  showCategories: true,
   showBackButton: true,
   editPost: {
     enabled: false,

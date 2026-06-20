@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { getPostUrl } from "@/utils/getPostPaths";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
@@ -35,6 +36,11 @@ const tags = data.tags.map((tag) => ({
 const transitionName = toTransitionName(data.title);
 /** 阅读时长（分钟）：按当前语言的字符/单词速率估算 */
 const readingMinutes = getReadingTime(post.body ?? "", locale);
+/** 分类链接：设置 category 时生成对应分类页地址 */
+const categorySlug = data.category ? slugifyStr(data.category) : undefined;
+const categoryHref = categorySlug
+  ? getRelativeLocaleUrl(locale, `categories/${categorySlug}/`)
+  : undefined;
 ---
 
 <Card class={cn("group overflow-hidden transition-colors hover:bg-accent/30", className)}>
@@ -67,13 +73,21 @@ const readingMinutes = getReadingTime(post.body ?? "", locale);
     }
   </a>
   {
-    showTags && tags.length > 0 && (
+    showTags && (tags.length > 0 || categoryHref) && (
       <CardContent>
-        <ul class="flex flex-wrap gap-1">
+        <div class="flex flex-wrap items-center gap-1.5">
+          {categoryHref && (
+            <a
+              href={categoryHref}
+              class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+            >
+              {data.category}
+            </a>
+          )}
           {tags.map((t) => (
             <Tag tag={t.tag} tagName={t.tagName} size="sm" />
           ))}
-        </ul>
+        </div>
       </CardContent>
     )
   }

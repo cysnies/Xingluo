@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry } from "astro:content";
 import { render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
@@ -46,9 +47,15 @@ const {
   timezone,
   tags,
   hideEditPost,
+  category,
 } = post.data;
 
 const { Content, headings } = await render(post);
+
+/** 分类链接：设置 category 时生成对应分类页地址 */
+const categoryHref = category
+  ? getRelativeLocaleUrl(locale, `categories/${slugifyStr(category)}/`)
+  : undefined;
 
 /** 解析 OG 图地址：字符串直接用，image 对象取 src，未配置则按功能开关回退 */
 let ogImageUrl: string | undefined;
@@ -146,11 +153,19 @@ const resolvedCanonical =
 
           <hr class="my-8 border-dashed border-border" />
 
-          <ul class="mb-8 flex flex-wrap gap-2">
+          <div class="mb-8 flex flex-wrap gap-2">
+            {categoryHref && (
+              <a
+                href={categoryHref}
+                class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+              >
+                {category}
+              </a>
+            )}
             {tags.map((tag) => (
               <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />
             ))}
-          </ul>
+          </div>
 
           <ShareLinks url={articleUrl} title={title} />
 

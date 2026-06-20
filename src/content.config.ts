@@ -37,6 +37,8 @@ const posts = defineCollection({
        * 未设置时该文章独立，不参与译文分组。
        */
       translationKey: z.string().optional(),
+      /** 文章分类（单值），未设置时文章不属于任何分类 */
+      category: z.string().optional(),
     }),
 });
 

@@ -117,6 +117,8 @@ export interface FeaturesConfig {
   dynamicOgImage: boolean;
   /** 是否显示归档页 */
   showArchives: boolean;
+  /** 是否显示分类页与导航入口 */
+  showCategories: boolean;
   /** 是否显示返回按钮 */
   showBackButton: boolean;
   /** 编辑文章链接配置 */

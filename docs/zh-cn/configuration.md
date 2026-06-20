@@ -67,6 +67,7 @@ features: {
 | `lightAndDarkMode` | `true`             | 是否启用亮/暗模式切换                                                |
 | `dynamicOgImage`   | `true`             | 是否动态生成 OG 图（satori + sharp）                                 |
 | `showArchives`     | `true`             | 是否显示归档页（关闭时 sitemap 同步过滤）                            |
+| `showCategories`   | `true`             | 是否显示分类页与导航入口（关闭时 sitemap 同步过滤）                  |
 | `showBackButton`   | `true`             | 文章页是否显示返回按钮                                               |
 | `editPost.enabled` | `false`            | 是否显示"编辑此页"链接                                               |
 | `editPost.url`     | `""`               | 编辑链接前缀，会拼接文章相对源文件路径                               |

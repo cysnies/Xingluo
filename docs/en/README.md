@@ -26,6 +26,7 @@ Xingluo is a modern blog CMS built on [Astro](https://astro.build/) and the [sha
 - **Content enhancement**: optional MDX, Shiki dual-theme code highlighting, callouts, collapsible TOC, scrollable tables
 - **Reading time**: smart estimation (CJK by character count, Latin by word count), shown on cards and detail pages
 - **Related posts**: automatically recommended by shared tags
+- **Post categories**: assign via frontmatter, with dedicated category pages and a nav entry
 - **Sticky TOC sidebar**: right-side sticky table of contents on large screens, IntersectionObserver scroll spying
 - **Comment system**: giscus / twikoo / waline, theme-aware, lazy-loaded
 - **Media players**: APlayer audio and DPlayer video, with both MD fence and MDX component entry points

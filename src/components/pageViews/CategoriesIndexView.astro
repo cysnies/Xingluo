@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import { getUniqueCategories } from "@/utils/getUniqueCategories";
+import { getPostsForLocale } from "@/utils/i18nPosts";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+
+// 关闭分类页时重写到 404
+if (!config.features.showCategories) {
+  return Astro.rewrite(getRelativeLocaleUrl(locale, "404"));
+}
+
+const t = useTranslations(locale);
+
+const posts = await getCollection("posts");
+const localePosts = getPostsForLocale(posts, locale);
+const categories = getUniqueCategories(localePosts);
+const title = t.pages.categoriesTitle;
+const description = t.pages.categoriesDesc;
+const crumbs = [
+  { href: getRelativeLocaleUrl(locale), label: t.nav.home },
+  { label: title },
+];
+---
+
+<Layout title={title} description={description}>
+  <Header />
+  <Main>
+    <Breadcrumb items={crumbs} class="mb-6" />
+    <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+    <p class="mb-8 text-muted-foreground">{description}</p>
+    {
+      categories.length > 0 ? (
+        <ul class="flex flex-wrap gap-2">
+          {categories.map(({ category, categoryName }) => (
+            <li>
+              <a
+                href={getRelativeLocaleUrl(locale, `categories/${category}/`)}
+                transition:name={category}
+                class="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-card-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                {categoryName}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-muted-foreground">{t.a11y.noResults}</p>
+      )
+    }
+  </Main>
+  <Footer />
+</Layout>
