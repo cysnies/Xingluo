@@ -29,6 +29,7 @@ const ar: UIStrings = {
     zoomImage: "تكبير الصورة",
     imagePreview: "معاينة الصورة: ",
     closeImagePreview: "إغلاق المعاينة",
+    readingTime: "{{minutes}} دقيقة قراءة",
   },
   pagination: {
     prev: "السابق",

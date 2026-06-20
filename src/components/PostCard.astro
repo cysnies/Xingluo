@@ -3,9 +3,12 @@ import type { CollectionEntry } from "astro:content";
 import { getPostUrl } from "@/utils/getPostPaths";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
+import { useTranslations, tplStr } from "@/i18n";
+import { getReadingTime } from "@/utils/readingTime";
 import config from "@/config";
 import Datetime from "./Datetime.astro";
 import Tag from "./Tag.astro";
+import Clock from "@/assets/icons/Clock.astro";
 import Card from "@/components/ui/Card.astro";
 import CardHeader from "@/components/ui/CardHeader.astro";
 import CardTitle from "@/components/ui/CardTitle.astro";
@@ -23,12 +26,15 @@ interface Props {
 const { post, showTags = true, class: className } = Astro.props;
 const { data, id, filePath } = post;
 const locale = Astro.currentLocale ?? config.site.lang;
+const tr = useTranslations(locale);
 const href = getPostUrl(id, filePath, locale);
 const tags = data.tags.map((tag) => ({
   tag: slugifyStr(tag),
   tagName: tag,
 }));
 const transitionName = toTransitionName(data.title);
+/** 阅读时长（分钟）：按当前语言的字符/单词速率估算 */
+const readingMinutes = getReadingTime(post.body ?? "", locale);
 ---
 
 <Card class={cn("group overflow-hidden transition-colors hover:bg-accent/30", className)}>
@@ -37,12 +43,20 @@ const transitionName = toTransitionName(data.title);
       <CardTitle transition:name={transitionName} class="transition-colors group-hover:text-primary">
         {data.title}
       </CardTitle>
-      <Datetime
-        pubDatetime={data.pubDatetime}
-        modDatetime={data.modDatetime}
-        timezone={data.timezone}
-        size="sm"
-      />
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <Datetime
+          pubDatetime={data.pubDatetime}
+          modDatetime={data.modDatetime}
+          timezone={data.timezone}
+          size="sm"
+        />
+        <span class="flex items-center gap-x-1 text-muted-foreground">
+          <Clock class="size-3.5 shrink-0" />
+          <span class="text-sm">
+            {tplStr(tr.post.readingTime, { minutes: readingMinutes })}
+          </span>
+        </span>
+      </div>
     </CardHeader>
     {
       data.description && (

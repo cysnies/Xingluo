@@ -29,6 +29,7 @@ const ja: UIStrings = {
     zoomImage: "画像を拡大",
     imagePreview: "画像プレビュー：",
     closeImagePreview: "画像プレビューを閉じる",
+    readingTime: "{{minutes}} 分で読了",
   },
   pagination: {
     prev: "前へ",

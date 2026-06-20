@@ -29,6 +29,7 @@ const eo: UIStrings = {
     zoomImage: "Pligrandigi bildon",
     imagePreview: "Antaŭrigardo: ",
     closeImagePreview: "Fermi antaŭrigardon",
+    readingTime: "{{minutes}} min legado",
   },
   pagination: {
     prev: "Antaŭa",

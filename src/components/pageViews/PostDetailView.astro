@@ -10,14 +10,16 @@ import { getPostUrl } from "@/utils/getPostPaths";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
-import { useTranslations } from "@/i18n";
+import { useTranslations, tplStr } from "@/i18n";
 import { DEFAULT_LOCALE } from "@/i18n";
+import { getReadingTime } from "@/utils/readingTime";
 import EditPost from "@/components/post/EditPost.astro";
 import ShareLinks from "@/components/post/ShareLinks.astro";
 import BackButton from "@/components/post/BackButton.astro";
 import BackToTopButton from "@/components/post/BackToTopButton.astro";
 import AdjacentPostNav from "@/components/post/AdjacentPostNav.astro";
 import Comments from "@/components/comments/Comments.astro";
+import Clock from "@/assets/icons/Clock.astro";
 import config from "@/config";
 
 interface Props {
@@ -65,6 +67,9 @@ const ogImage = ogImageUrl
 const editPath = post.filePath?.replace(/^src\//, "") ?? "";
 const articleUrl = new URL(getPostUrl(post.id, post.filePath, locale), Astro.site).href;
 
+/** 阅读时长（分钟）：按当前语言的字符/单词速率估算 */
+const readingMinutes = getReadingTime(post.body ?? "", locale);
+
 /**
  * canonical 规范化：
  * - 文章自定义了 canonicalURL 时优先使用
@@ -110,6 +115,12 @@ const resolvedCanonical =
           timezone={timezone}
           size="lg"
         />
+        <span class="flex items-center gap-x-1.5 text-muted-foreground">
+          <Clock class="size-4 shrink-0 scale-90" />
+          <span class="text-sm sm:text-base">
+            {tplStr(t.post.readingTime, { minutes: readingMinutes })}
+          </span>
+        </span>
         <EditPost editPath={editPath} hide={hideEditPost} />
       </div>
 

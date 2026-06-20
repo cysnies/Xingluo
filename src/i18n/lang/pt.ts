@@ -29,6 +29,7 @@ const pt: UIStrings = {
     zoomImage: "Ampliar imagem",
     imagePreview: "Pré-visualização: ",
     closeImagePreview: "Fechar pré-visualização",
+    readingTime: "{{minutes}} min de leitura",
   },
   pagination: {
     prev: "Anterior",

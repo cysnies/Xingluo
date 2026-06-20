@@ -29,6 +29,7 @@ const zhCn: UIStrings = {
     zoomImage: "放大图片",
     imagePreview: "图片预览：",
     closeImagePreview: "关闭图片预览",
+    readingTime: "{{minutes}} 分钟阅读",
   },
   pagination: {
     prev: "上一页",

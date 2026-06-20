@@ -29,6 +29,7 @@ const ko: UIStrings = {
     zoomImage: "이미지 확대",
     imagePreview: "이미지 미리보기: ",
     closeImagePreview: "이미지 미리보기 닫기",
+    readingTime: "{{minutes}}분 분량",
   },
   pagination: {
     prev: "이전",

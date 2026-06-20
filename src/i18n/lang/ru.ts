@@ -29,6 +29,7 @@ const ru: UIStrings = {
     zoomImage: "Увеличить",
     imagePreview: "Предпросмотр: ",
     closeImagePreview: "Закрыть предпросмотр",
+    readingTime: "{{minutes}} мин чтения",
   },
   pagination: {
     prev: "Назад",

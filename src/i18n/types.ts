@@ -35,6 +35,8 @@ export interface UIStrings {
     imagePreview: string;
     /** 关闭图片预览按钮标签 */
     closeImagePreview: string;
+    /** 阅读时长，如 "{{minutes}} 分钟阅读" */
+    readingTime: string;
   };
   /** 分页相关 */
   pagination: {

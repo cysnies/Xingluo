@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
+
+interface Props extends Omit<HTMLAttributes<"svg">, "width" | "height"> {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props as Props;
+---
+
+<Icon name="fa-solid:clock" class={className} aria-hidden="true" {...rest} />
