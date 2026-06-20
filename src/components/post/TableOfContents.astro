@@ -1,0 +1,39 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  /** 目录标题文案 */
+  label: string;
+}
+
+const { headings, label } = Astro.props;
+
+// 仅取 h2~h6 作为目录项
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
+// 以最浅标题深度为基准，计算每项的缩进层级
+const minDepth = tocHeadings.length > 0 ? tocHeadings[0].depth : 2;
+const hasToc = tocHeadings.length >= 2;
+---
+
+{
+  hasToc && (
+    <nav aria-label={label} class="text-sm">
+      <p class="mb-3 font-medium text-foreground">{label}</p>
+      <ul class="space-y-1.5 border-l border-border">
+        {tocHeadings.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              data-toc-link={heading.slug}
+              style={`padding-left:${(heading.depth - minDepth) * 0.75 + 0.75}rem`}
+              class="-ml-px block border-l-2 border-transparent text-muted-foreground transition-colors hover:text-foreground data-[active=true]:border-primary data-[active=true]:text-foreground"
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

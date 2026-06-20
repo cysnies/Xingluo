@@ -20,6 +20,7 @@ import BackButton from "@/components/post/BackButton.astro";
 import BackToTopButton from "@/components/post/BackToTopButton.astro";
 import AdjacentPostNav from "@/components/post/AdjacentPostNav.astro";
 import RelatedPosts from "@/components/post/RelatedPosts.astro";
+import TableOfContents from "@/components/post/TableOfContents.astro";
 import Comments from "@/components/comments/Comments.astro";
 import Clock from "@/assets/icons/Clock.astro";
 import config from "@/config";
@@ -47,7 +48,7 @@ const {
   hideEditPost,
 } = post.data;
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 /** 解析 OG 图地址：字符串直接用，image 对象取 src，未配置则按功能开关回退 */
 let ogImageUrl: string | undefined;
@@ -99,7 +100,7 @@ const resolvedCanonical =
 
   <main
     id="main-content"
-    class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:px-8"
+    class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:max-w-[90rem] lg:px-8"
     data-pagefind-body
   >
     {config.features.showBackButton && <BackButton />}
@@ -128,34 +129,45 @@ const resolvedCanonical =
         <EditPost editPath={editPath} hide={hideEditPost} />
       </div>
 
-      <article
-        id="article"
-        data-copy={t.post.copyCode}
-        data-copied={t.post.copied}
-        data-zoom={t.post.zoomImage}
-        data-preview={t.post.imagePreview}
-        data-close={t.post.closeImagePreview}
-        class="app-prose mt-8 max-w-app"
-      >
-        <Content />
-      </article>
+      {/* 大屏双列：主文章 + 粘性目录侧栏；小屏仅单列（目录隐藏） */}
+      <div class="mt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10">
+        <div class="min-w-0">
+          <article
+            id="article"
+            data-copy={t.post.copyCode}
+            data-copied={t.post.copied}
+            data-zoom={t.post.zoomImage}
+            data-preview={t.post.imagePreview}
+            data-close={t.post.closeImagePreview}
+            class="app-prose max-w-app"
+          >
+            <Content />
+          </article>
 
-      <hr class="my-8 border-dashed border-border" />
+          <hr class="my-8 border-dashed border-border" />
 
-      <ul class="mb-8 flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />
-        ))}
-      </ul>
+          <ul class="mb-8 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />
+            ))}
+          </ul>
 
-      <ShareLinks url={articleUrl} title={title} />
+          <ShareLinks url={articleUrl} title={title} />
 
-      <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
+          <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
 
-      <RelatedPosts posts={relatedPosts} />
+          <RelatedPosts posts={relatedPosts} />
 
-      {/* 评论区：provider 为 false 时 Comments 组件内部不输出 */}
-      <Comments locale={locale} />
+          {/* 评论区：provider 为 false 时 Comments 组件内部不输出 */}
+          <Comments locale={locale} />
+        </div>
+
+        <aside class="hidden lg:block" aria-label={t.post.tableOfContents}>
+          <div class="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pe-1">
+            <TableOfContents headings={headings} label={t.post.tableOfContents} />
+          </div>
+        </aside>
+      </div>
     </article>
   </main>
 
@@ -165,6 +177,7 @@ const resolvedCanonical =
 
 <script>
   import "@/scripts/postEnhancements";
+  import "@/scripts/toc";
 </script>
 
 {
