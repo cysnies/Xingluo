@@ -2,26 +2,30 @@
 import { getCollection } from "astro:content";
 import PostDetailView from "@/components/pageViews/PostDetailView.astro";
 import { getPostSlug } from "@/utils/getPostPaths";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostsForLocale, findTranslation } from "@/utils/i18nPosts";
 import { getRelatedPosts } from "@/utils/getRelatedPosts";
-import { getLocaleParams } from "@/i18n/staticPaths";
+import { NON_DEFAULT_LOCALES } from "@/i18n/staticPaths";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
-  const sortedPosts = getSortedPosts(posts);
 
-  // 为每个非默认语言生成文章详情页，slug 不变、locale 段绑定语言前缀
-  return getLocaleParams().flatMap(({ params: { locale } }) =>
-    sortedPosts.map((post, index) => ({
-      params: { locale, slug: getPostSlug(post.id, post.filePath) },
-      props: {
-        post,
-        prevPost: index > 0 ? sortedPosts[index - 1] : null,
-        nextPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
-        relatedPosts: getRelatedPosts(post, sortedPosts),
-      },
-    }))
-  );
+  // 为每个非默认语言生成文章详情页：按 slug+locale 解析译文，无译文时回退默认语言文章
+  return NON_DEFAULT_LOCALES.flatMap((locale) => {
+    const localePosts = getPostsForLocale(posts, locale);
+    return localePosts.map((post, index) => {
+      // 若该语言无独立译文，则渲染的是回退的默认语言文章
+      const translated = findTranslation(posts, post, locale) ?? post;
+      return {
+        params: { locale, slug: getPostSlug(post.id, post.filePath) },
+        props: {
+          post: translated,
+          prevPost: index > 0 ? localePosts[index - 1] : null,
+          nextPost: index < localePosts.length - 1 ? localePosts[index + 1] : null,
+          relatedPosts: getRelatedPosts(translated, localePosts),
+        },
+      };
+    });
+  });
 }
 
 const { post, prevPost, nextPost, relatedPosts } = Astro.props;

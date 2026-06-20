@@ -30,6 +30,13 @@ const posts = defineCollection({
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
       timezone: z.string().optional(),
+      /** 文章写作语言；未设置时视为默认语言 */
+      locale: z.string().optional(),
+      /**
+       * 翻译分组键：相同 translationKey 的文章互为译文。
+       * 未设置时该文章独立，不参与译文分组。
+       */
+      translationKey: z.string().optional(),
     }),
 });
 

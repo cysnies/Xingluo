@@ -7,6 +7,8 @@ tags:
   - 公告
   - Astro
 featured: true
+locale: zh-cn
+translationKey: welcome-to-xingluo
 ---
 
 ## 关于星罗

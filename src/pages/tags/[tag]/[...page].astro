@@ -2,14 +2,15 @@
 import { getCollection } from "astro:content";
 import type { GetStaticPathsOptions } from "astro";
 import TagPostListView from "@/components/pageViews/TagPostListView.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostsForLocale } from "@/utils/i18nPosts";
 import { getUniqueTags } from "@/utils/getUniqueTags";
 import { slugifyAll } from "@/utils/slugify";
+import { DEFAULT_LOCALE } from "@/i18n";
 import config from "@/config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("posts");
-  const sortedPosts = getSortedPosts(posts);
+  const sortedPosts = getPostsForLocale(posts, DEFAULT_LOCALE);
   const tags = getUniqueTags(sortedPosts);
 
   return tags.flatMap(({ tag, tagName }) => {

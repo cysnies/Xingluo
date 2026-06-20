@@ -3,8 +3,8 @@ import { getCollection } from "astro:content";
 import { loadOgFonts } from "@/utils/ogFonts";
 import { renderOgImage, getPlaceholderPng } from "@/utils/renderOgImage";
 import { getPostSlug } from "@/utils/getPostPaths";
-import { getSortedPosts } from "@/utils/getSortedPosts";
-import { getLocaleParams } from "@/i18n/staticPaths";
+import { getPostsForLocale, findTranslation } from "@/utils/i18nPosts";
+import { NON_DEFAULT_LOCALES } from "@/i18n/staticPaths";
 import config from "@/config";
 
 /** 文章级动态 OG 图：仅在启用动态 OG 且文章未自定义 ogImage 时生成 */
@@ -14,17 +14,20 @@ export async function getStaticPaths() {
   }
 
   const posts = await getCollection("posts");
-  const sortedPosts = getSortedPosts(posts);
 
-  // 为每个非默认语言的文章生成 OG 图，slug 不变、locale 段绑定语言前缀
-  return getLocaleParams().flatMap(({ params: { locale } }) =>
-    sortedPosts
+  // 为每个非默认语言生成 OG 图，按 slug+locale 解析译文标题/描述
+  return NON_DEFAULT_LOCALES.flatMap((locale) => {
+    const localePosts = getPostsForLocale(posts, locale);
+    return localePosts
       .filter(({ data }) => !data.ogImage)
-      .map((post) => ({
-        params: { locale, slug: getPostSlug(post.id, post.filePath) },
-        props: { post },
-      })),
-  );
+      .map((post) => {
+        const translated = findTranslation(posts, post, locale) ?? post;
+        return {
+          params: { locale, slug: getPostSlug(post.id, post.filePath) },
+          props: { post: translated },
+        };
+      });
+  });
 }
 
 export const GET: APIRoute = async ({ props, url }) => {

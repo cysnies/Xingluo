@@ -1,12 +1,13 @@
 ---
 import { getCollection } from "astro:content";
 import PostListView from "@/components/pageViews/PostListView.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostsForLocale } from "@/utils/i18nPosts";
+import { DEFAULT_LOCALE } from "@/i18n";
 import config from "@/config";
 
 export async function getStaticPaths({ paginate }: any) {
   const allPosts = await getCollection("posts");
-  const sorted = getSortedPosts(allPosts);
+  const sorted = getPostsForLocale(allPosts, DEFAULT_LOCALE);
   return paginate(sorted, { pageSize: config.posts.perPage });
 }
 

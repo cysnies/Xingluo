@@ -13,6 +13,7 @@ import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { useTranslations, tplStr } from "@/i18n";
 import { DEFAULT_LOCALE } from "@/i18n";
 import { getReadingTime } from "@/utils/readingTime";
+import { getPostLocale } from "@/utils/i18nPosts";
 import EditPost from "@/components/post/EditPost.astro";
 import ShareLinks from "@/components/post/ShareLinks.astro";
 import BackButton from "@/components/post/BackButton.astro";
@@ -75,12 +76,13 @@ const readingMinutes = getReadingTime(post.body ?? "", locale);
 /**
  * canonical 规范化：
  * - 文章自定义了 canonicalURL 时优先使用
- * - 非默认语言且内容沿用原文（无独立翻译）时，指向默认语言原文，
- *   避免搜索引擎判定为重复内容；默认语言指向自身
+ * - 当前文章为该语言的真实译文（locale 与路由语言一致）时指向自身
+ * - 否则为回退内容（无独立译文），指向默认语言原文，避免重复内容判定
  */
+const isTranslated = getPostLocale(post) === locale;
 const resolvedCanonical =
   canonicalURL ??
-  (locale === DEFAULT_LOCALE
+  (isTranslated
     ? articleUrl
     : new URL(getPostUrl(post.id, post.filePath, DEFAULT_LOCALE), Astro.site).href);
 ---

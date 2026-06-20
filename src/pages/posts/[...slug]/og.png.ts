@@ -3,7 +3,8 @@ import { getCollection } from "astro:content";
 import { loadOgFonts } from "@/utils/ogFonts";
 import { renderOgImage, getPlaceholderPng } from "@/utils/renderOgImage";
 import { getPostSlug } from "@/utils/getPostPaths";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostsForLocale } from "@/utils/i18nPosts";
+import { DEFAULT_LOCALE } from "@/i18n";
 import config from "@/config";
 
 /** 文章级动态 OG 图：仅在启用动态 OG 且文章未自定义 ogImage 时生成 */
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
   }
 
   const posts = await getCollection("posts");
-  const sortedPosts = getSortedPosts(posts);
+  const sortedPosts = getPostsForLocale(posts, DEFAULT_LOCALE);
 
   return sortedPosts
     .filter(({ data }) => !data.ogImage)

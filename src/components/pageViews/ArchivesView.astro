@@ -7,7 +7,7 @@ import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import PostCard from "@/components/PostCard.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostsForLocale } from "@/utils/i18nPosts";
 import { groupPostsByYearMonth } from "@/utils/getPostsByGroupCondition";
 import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
@@ -24,7 +24,7 @@ if (!config.features.showArchives && notFoundUrl) {
 }
 
 const posts = await getCollection("posts");
-const sortedPosts = getSortedPosts(posts);
+const sortedPosts = getPostsForLocale(posts, locale);
 
 // 按年→月两级分组，年月均降序
 const yearGroups = groupPostsByYearMonth(sortedPosts, (post) =>

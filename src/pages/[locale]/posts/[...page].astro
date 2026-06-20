@@ -1,16 +1,15 @@
 ---
 import { getCollection } from "astro:content";
 import PostListView from "@/components/pageViews/PostListView.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
-import { getLocaleParams } from "@/i18n/staticPaths";
+import { getPostsForLocale } from "@/utils/i18nPosts";
+import { NON_DEFAULT_LOCALES } from "@/i18n/staticPaths";
 import config from "@/config";
 
 export async function getStaticPaths({ paginate }: any) {
   const allPosts = await getCollection("posts");
-  const sorted = getSortedPosts(allPosts);
-  // 为每个非默认语言生成分页，locale 段绑定语言前缀
-  return getLocaleParams().flatMap(({ params: { locale } }) =>
-    paginate(sorted, {
+  // 为每个非默认语言生成分页，按该语言代表文章列表
+  return NON_DEFAULT_LOCALES.flatMap((locale) =>
+    paginate(getPostsForLocale(allPosts, locale), {
       params: { locale },
       pageSize: config.posts.perPage,
     })

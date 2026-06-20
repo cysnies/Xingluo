@@ -1,9 +1,13 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { BLOG_PATH } from "@/content.config";
+import { LOCALES } from "@/i18n";
 import { slugifyStr } from "./slugify";
 import config from "@/config";
 
-/** 从文章文件路径中提取目录段（不含文件名，过滤下划线前缀目录） */
+/** 已知语言代码集合，用于从文章路径中过滤语言子目录 */
+const LOCALE_DIR_SET = new Set(LOCALES);
+
+/** 从文章文件路径中提取目录段（不含文件名，过滤下划线前缀与语言子目录） */
 function getPostPathSegments(filePath: string | undefined): string[] {
   return (
     filePath
@@ -11,6 +15,8 @@ function getPostPathSegments(filePath: string | undefined): string[] {
       .split("/")
       .filter((path) => path !== "")
       .filter((path) => !path.startsWith("_"))
+      // 过滤语言子目录：译文文件放在语言子目录下（如 en/），但不应进入 slug
+      .filter((path) => !LOCALE_DIR_SET.has(path))
       .slice(0, -1)
       .map((segment) => slugifyStr(segment)) ?? []
   );
