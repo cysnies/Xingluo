@@ -86,6 +86,7 @@ const ar: UIStrings = {
     label: "اللغة",
     names: {
       "zh-cn": "简体中文",
+      "zh-tw": "繁體中文",
       en: "English",
       ja: "日本語",
       ko: "한국어",

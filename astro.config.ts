@@ -36,6 +36,7 @@ const integrations = [
       defaultLocale: "zh-cn",
       locales: {
         "zh-cn": "zh-CN",
+        "zh-tw": "zh-TW",
         en: "en",
         ja: "ja",
         ko: "ko",
@@ -91,6 +92,7 @@ export default defineConfig({
   i18n: {
     locales: [
       "zh-cn",
+      "zh-tw",
       "en",
       "ja",
       "ko",
