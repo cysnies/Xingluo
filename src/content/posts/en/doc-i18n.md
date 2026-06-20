@@ -1,0 +1,175 @@
+---
+title: "Internationalization"
+pubDatetime: 2026-06-20T06:00:00+08:00
+description: "Xingluo i18n system details covering multilingual routing, UI string localization, content-level translation, and adding new languages."
+tags:
+  - documentation
+  - i18n
+category: "Documentation"
+translationKey: doc-i18n
+locale: en
+---
+
+Xingluo ships with bilingual UI support (zh-CN / en), using the `prefixDefaultLocale: false` routing strategy so the default language has no URL prefix.
+
+## Routing Strategy
+
+Astro's `i18n` config (see `astro.config.ts`):
+
+```ts
+i18n: {
+  locales: ["zh-cn", "en"],
+  defaultLocale: "zh-cn",
+  routing: { prefixDefaultLocale: false },
+}
+```
+
+**Important: `prefixDefaultLocale: false` does not auto-generate localized page copies** — you must maintain `[locale]/` mirror routes manually.
+
+Xingluo's approach:
+
+- **Root pages** = default language (`zh-cn`), no URL prefix, e.g. `/posts/welcome/`
+- **`src/pages/[locale]/`** mirrors all pages; `getStaticPaths` uses `getLocaleParams()` to generate only non-default locales, e.g. `/en/posts/welcome/`
+- Mirror pages are also thin wrappers, reusing the same View component for render logic
+
+```
+/                      → home (zh-cn)
+/en/                   → home (en)
+/posts/welcome/        → post (zh-cn)
+/en/posts/welcome/     → post (en)
+```
+
+## Locale Resolution
+
+View components use `Astro.currentLocale` for automatic resolution:
+
+- Root pages → `zh-cn`
+- `[locale]` segment pages → `en` (or other non-default locales)
+
+No path checks are needed at the component layer; `useTranslations(locale)` fetches the corresponding strings directly.
+
+## i18n Module Structure
+
+[`src/i18n/`](../src/i18n/):
+
+| File             | Responsibility                                                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.ts`       | `import.meta.glob("./lang/*.ts", {eager:true})` loads languages; exports `DEFAULT_LOCALE`, `LOCALES`, `useTranslations(locale)`, `tplStr` |
+| `types.ts`       | Full `UIStrings` interface (all strings to localize)                                                                                      |
+| `routing.ts`     | `getLocalePrefix`, `withLocale(path, locale)`, `parseLocaleFromPath(pathname)`                                                            |
+| `staticPaths.ts` | `NON_DEFAULT_LOCALES`, `getLocaleParams()`                                                                                                |
+| `format.ts`      | `tplStr(template, vars)` — `{{key}}` placeholder replacement                                                                              |
+| `lang/zh-cn.ts`  | Simplified Chinese (default)                                                                                                              |
+| `lang/en.ts`     | English                                                                                                                                   |
+
+## UIStrings Structure
+
+The `UIStrings` interface defines all UI strings to localize, organized in groups:
+
+- `nav`: navigation (home/posts/tags/about/archives/search/rss)
+- `post`: post (date, share, tags, back, edit, TOC, code copy, image lightbox, etc.)
+- `pagination`: pagination
+- `home`: homepage (social links, featured, latest)
+- `archives`: archives (counts, months)
+- `footer`: footer (copyright)
+- `pages`: page titles and descriptions
+- `a11y`: accessibility labels
+- `languageSwitcher`: language switcher
+- `notFound`: 404
+- `comments`: comment section
+
+## Template Strings
+
+Strings with placeholders use `{{key}}`, replaced via `tplStr`:
+
+```ts
+import { tplStr } from "@/i18n";
+
+// archives.postCount = "{{count}} posts"
+tplStr(t.archives.postCount, { count: 5 }); // "5 posts"
+```
+
+## SEO Multilingual Declarations
+
+`Layout.astro`'s head outputs:
+
+- `<link rel="alternate" hreflang="..." href="...">` for each language
+- `x-default` points to the default language
+- The sitemap integration enables i18n config to auto-generate hreflang
+- Non-default-locale posts have canonical pointing to the default-locale original (to avoid duplicate content penalties; see [SEO](./doc-seo.md))
+
+## Adding a Language
+
+Example: adding Japanese `ja`:
+
+1. **`astro.config.ts`**: add `"ja"` to `i18n.locales` and the `"ja": "ja-JP"` mapping to the sitemap `i18n.locales`
+2. **`src/i18n/lang/`**: create `ja.ts` exporting a complete `UIStrings` (copy `en.ts` and translate)
+3. **`src/i18n/staticPaths.ts`**: `NON_DEFAULT_LOCALES` automatically includes `ja` (computed from `LOCALES`)
+4. **`src/pages/[locale]/`**: mirror pages automatically generate the `ja` version (`getLocaleParams` covers it)
+5. **Language switcher**: add `"ja": "日本語"` to `languageSwitcher.names` in `zh-cn.ts` and `en.ts`
+
+## Content-Level Translation
+
+Xingluo supports multilingual post content via the `locale` and `translationKey` frontmatter fields.
+
+### Basic Usage
+
+1. **Default-language post**: place at `src/content/posts/<slug>.md`, set `translationKey` as the group identifier:
+
+```yaml
+# src/content/posts/welcome.md
+---
+title: "欢迎来到星罗"
+locale: zh-cn
+translationKey: welcome-to-xingluo
+tags: [公告, Astro]
+---
+```
+
+2. **Translation**: place in a language subdirectory `src/content/posts/<locale>/<slug>.md`, using the same `translationKey`:
+
+```yaml
+# src/content/posts/en/welcome.md
+---
+title: "Welcome to Xingluo"
+locale: en
+translationKey: welcome-to-xingluo
+tags: [announcement, Astro]
+---
+```
+
+### Directory Structure
+
+```
+src/content/posts/
+├── welcome.md              # Default language (zh-cn)
+├── en/
+│   └── welcome.md          # English translation
+├── ja/
+│   └── welcome.md          # Japanese translation
+└── another-post.md         # Independent post (no translationKey)
+```
+
+- Language subdirectory names must match the language codes in `astro.config.ts`'s `i18n.locales`
+- Language subdirectories are filtered from the URL slug (e.g. `/posts/welcome/`, not `/posts/en/welcome/`)
+- Posts without a `translationKey` are independent and not linked across languages
+
+### Routing Behavior
+
+| Scenario                                     | Behavior                                                                                |
+| -------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Default-locale access to a `zh-cn` post      | Renders the default-language original                                                   |
+| Non-default locale with a **translation**    | Renders the corresponding translation                                                   |
+| Non-default locale **without** a translation | Falls back to the default-language original (identical content, canonical protects SEO) |
+
+### List Deduplication
+
+List pages (home, post list, tags, archives, RSS) use `getPostsForLocale` to select representative posts per language: each translation group shows only one card in the target language, preventing duplicate entries for the same topic.
+
+### canonical & SEO
+
+- **Has an independent translation**: canonical points to the translation's own URL, indexable separately by search engines
+- **No translation (fallback)**: canonical points to the default-language original, avoiding duplicate content penalties
+- hreflang declarations cover all languages, telling search engines about the relationships between language versions
+
+See [SEO](./doc-seo.md).

@@ -1,0 +1,175 @@
+---
+title: "Internaciigo"
+pubDatetime: 2026-06-20T06:00:00+08:00
+description: "Detaloj de la i18n-sistemo de Xingluo kovranta plurlingvan vojigon, UI-ĉenan lokalizon, tradukon je enhava nivelo kaj aldonon de novaj lingvoj."
+tags:
+  - documentation
+  - i18n
+category: "Documentation"
+translationKey: doc-i18n
+locale: eo
+---
+
+Xingluo venas kun dulingva UI-subteno (zh-CN / en), uzante la vojigan strategion `prefixDefaultLocale: false` por ke la defaŭlta lingvo havu neniun URL-prefikson.
+
+## Vojiga strategio
+
+Agordo `i18n` de Astro (vidu `astro.config.ts`):
+
+```ts
+i18n: {
+  locales: ["zh-cn", "en"],
+  defaultLocale: "zh-cn",
+  routing: { prefixDefaultLocale: false },
+}
+```
+
+**Grava: `prefixDefaultLocale: false` ne aŭtomate generas lokalizitajn paĝkopiojn** — vi devas permane konservi spegulajn itinerojn `[locale]/`.
+
+Alproksimiĝo de Xingluo:
+
+- **Radikaj paĝoj** = defaŭlta lingvo (`zh-cn`), sen URL-prefikso, ekz. `/posts/welcome/`
+- **`src/pages/[locale]/`** spegulas ĉiujn paĝojn; `getStaticPaths` uzas `getLocaleParams()` por generi nur ne-defaŭltajn lokojn, ekz. `/en/posts/welcome/`
+- Spegulaj paĝoj ankaŭ estas maldikaj envolvaĵoj, reuzantaj la saman View-komponanton por bildiga logiko
+
+```
+/                      → ĉefpaĝo (zh-cn)
+/en/                   → ĉefpaĝo (en)
+/posts/welcome/        → afiŝo (zh-cn)
+/en/posts/welcome/     → afiŝo (en)
+```
+
+## Loka rezolucio
+
+View-komponantoj uzas `Astro.currentLocale` por aŭtomata rezolucio:
+
+- Radikaj paĝoj → `zh-cn`
+- Paĝoj kun segmento `[locale]` → `en` (aŭ aliaj ne-defaŭltaj lokoj)
+
+Neniuj vojaj kontroloj necesas ĉe la komponanta tavolo; `useTranslations(locale)` rekte prenas la respondajn ĉenojn.
+
+## Strukturo de i18n-modulo
+
+[`src/i18n/`](../src/i18n/):
+
+| Dosiero          | Respondeco                                                                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.ts`       | `import.meta.glob("./lang/*.ts", {eager:true})` ŝargas lingvojn; eksportas `DEFAULT_LOCALE`, `LOCALES`, `useTranslations(locale)`, `tplStr` |
+| `types.ts`       | Plena `UIStrings`-interfaco (ĉiuj ĉenoj por lokalizi)                                                                                       |
+| `routing.ts`     | `getLocalePrefix`, `withLocale(path, locale)`, `parseLocaleFromPath(pathname)`                                                              |
+| `staticPaths.ts` | `NON_DEFAULT_LOCALES`, `getLocaleParams()`                                                                                                  |
+| `format.ts`      | `tplStr(template, vars)` — anstataŭigo de `{{key}}`-lokteniloj                                                                              |
+| `lang/zh-cn.ts`  | Simpligita ĉina (defaŭlta)                                                                                                                  |
+| `lang/en.ts`     | Angla                                                                                                                                       |
+
+## Strukturo de UIStrings
+
+La interfaco `UIStrings` difinas ĉiujn UI-ĉenojn por lokalizi, organizitaj en grupoj:
+
+- `nav`: navigado (ĉefpaĝo/afiŝoj/etikedoj/pri/arkivoj/serĉo/rss)
+- `post`: afiŝo (dato, kunhavigi, etikedoj, reen, redakti, TOC, kopii kodon, bildan lumkeston, ktp.)
+- `pagination`: paĝigo
+- `home`: ĉefpaĝo (sociaj ligiloj, elstaraj, lastatempaj)
+- `archives`: arkivoj (kalkuloj, monatoj)
+- `footer`: piedlinio (kopirajto)
+- `pages`: paĝaj titoloj kaj priskriboj
+- `a11y`: alireblecaj etikedoj
+- `languageSwitcher`: lingvoŝaltilo
+- `notFound`: 404
+- `comments`: komenta sekcio
+
+## Ŝablonaj ĉenoj
+
+Ĉenoj kun lokteniloj uzas `{{key}}`, anstataŭigitaj per `tplStr`:
+
+```ts
+import { tplStr } from "@/i18n";
+
+// archives.postCount = "{{count}} afiŝoj"
+tplStr(t.archives.postCount, { count: 5 }); // "5 afiŝoj"
+```
+
+## SEO-plurlingvaj deklaroj
+
+La kapo de `Layout.astro` eligas:
+
+- `<link rel="alternate" hreflang="..." href="...">` por ĉiu lingvo
+- `x-default` indikas al la defaŭlta lingvo
+- La integriĝo de sitemap ebligas ke agordo i18n aŭtomate generu hreflang
+- Afiŝoj de ne-defaŭltaj lokoj havas canonical indikantan al la defaŭlt-loka originalo (por eviti punojn pri duobla enhavo; vidu [SEO](./doc-seo.md))
+
+## Aldoni lingvon
+
+Ekzemplo: aldoni japanan `ja`:
+
+1. **`astro.config.ts`**: aldonu `"ja"` al `i18n.locales` kaj la mapadon `"ja": "ja-JP"` al la sitemap `i18n.locales`
+2. **`src/i18n/lang/`**: kreu `ja.ts` eksportantan kompletan `UIStrings` (kopiu `en.ts` kaj traduku)
+3. **`src/i18n/staticPaths.ts`**: `NON_DEFAULT_LOCALES` aŭtomate inkluzivas `ja` (komputita el `LOCALES`)
+4. **`src/pages/[locale]/`**: spegulaj paĝoj aŭtomate generas la `ja` version (`getLocaleParams` kovras ĝin)
+5. **Lingvoŝaltilo**: aldonu `"ja": "日本語"` al `languageSwitcher.names` en `zh-cn.ts` kaj `en.ts`
+
+## Traduko je enhava nivelo
+
+Xingluo subtenas plurlingvan afiŝan enhavon per la frontmatter-kampoj `locale` kaj `translationKey`.
+
+### Baza uzo
+
+1. **Afiŝo en defaŭlta lingvo**: metu ĉe `src/content/posts/<slug>.md`, agordu `translationKey` kiel grupidentigilon:
+
+```yaml
+# src/content/posts/welcome.md
+---
+title: "欢迎来到星罗"
+locale: zh-cn
+translationKey: welcome-to-xingluo
+tags: [公告, Astro]
+---
+```
+
+2. **Traduko**: metu en lingvan subdosierujon `src/content/posts/<locale>/<slug>.md`, uzante la saman `translationKey`:
+
+```yaml
+# src/content/posts/en/welcome.md
+---
+title: "Welcome to Xingluo"
+locale: en
+translationKey: welcome-to-xingluo
+tags: [announcement, Astro]
+---
+```
+
+### Dosieruja strukturo
+
+```
+src/content/posts/
+├── welcome.md              # Defaŭlta lingvo (zh-cn)
+├── en/
+│   └── welcome.md          # Angla traduko
+├── ja/
+│   └── welcome.md          # Japana traduko
+└── another-post.md         # Sendependa afiŝo (sen translationKey)
+```
+
+- Lingvaj subdosierujnomoj devas kongrui kun la lingvokodoj en `i18n.locales` de `astro.config.ts`
+- Lingvaj subdosierujoj estas filtritaj el la URL-slugo (ekz. `/posts/welcome/`, ne `/posts/en/welcome/`)
+- Afiŝoj sen `translationKey` estas sendependaj kaj ne ligitaj trans lingvoj
+
+### Vojiga konduto
+
+| Scenaro                                 | Konduto                                                                        |
+| --------------------------------------- | ------------------------------------------------------------------------------ |
+| Aliro de defaŭlta loko al `zh-cn` afiŝo | Montras la defaŭlt-lingvan originalon                                          |
+| Ne-defaŭlta loko kun **traduko**        | Montras la respondan tradukon                                                  |
+| Ne-defaŭlta loko **sen** traduko        | Rezervas al la defaŭlt-lingva originalo (sama enhavo, canonical protektas SEO) |
+
+### Lista dedupliko
+
+Listaj paĝoj (ĉefpaĝo, afiŝolisto, etikedoj, arkivoj, RSS) uzas `getPostsForLocale` por elekti reprezentajn afiŝojn po lingvo: ĉiu tradukgrupo montras nur unu karton en la cela lingvo, malhelpante duoblajn enskribojn por la sama temo.
+
+### canonical kaj SEO
+
+- **Havas sendependan tradukon**: canonical indikas al la propra URL de la traduko, indeksebla aparte de serĉiloj
+- **Neniu traduko (rezervo)**: canonical indikas al la defaŭlt-lingva originalo, evitante punojn pri duobla enhavo
+- Deklaroj hreflang kovras ĉiujn lingvojn, informante serĉilojn pri la rilatoj inter lingvaj versioj
+
+Vidu [SEO](./doc-seo.md).

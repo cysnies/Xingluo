@@ -1,0 +1,177 @@
+---
+title: "國際化"
+pubDatetime: 2026-06-20T06:00:00+08:00
+description: "星羅國際化體系詳解，包括多語言路由策略、UI 文案本地化、內容級翻譯與新增語言方法。"
+tags:
+  - documentation
+  - i18n
+category: "Documentation"
+translationKey: doc-i18n
+locale: zh-tw
+---
+
+# 國際化（i18n）
+
+星羅內建中英雙語 UI 支援，採用 `prefixDefaultLocale: false` 路由策略，預設語言無 URL 前綴。
+
+## 路由策略
+
+Astro 的 `i18n` 設定（見 `astro.config.ts`）：
+
+```ts
+i18n: {
+  locales: ["zh-cn", "en"],
+  defaultLocale: "zh-cn",
+  routing: { prefixDefaultLocale: false },
+}
+```
+
+**關鍵：`prefixDefaultLocale: false` 不會自動生成在地化頁面副本**，需手動維護 `[locale]/` 鏡像路由。
+
+星羅的落地方式：
+
+- **根目錄頁面** = 預設語言（`zh-cn`），URL 無前綴，如 `/posts/welcome/`
+- **`src/pages/[locale]/`** 下鏡像全部頁面，`getStaticPaths` 用 `getLocaleParams()` 僅生成非預設語言，如 `/en/posts/welcome/`
+- 鏡像頁面同樣是薄包裝，渲染邏輯複用同一 View 元件
+
+```
+/                      → 首頁（zh-cn）
+/en/                   → 首頁（en）
+/posts/welcome/        → 文章（zh-cn）
+/en/posts/welcome/     → 文章（en）
+```
+
+## locale 解析
+
+View 元件內部使用 `Astro.currentLocale` 自動解析：
+
+- 根目錄頁 → `zh-cn`
+- `[locale]` 段頁 → `en`（或其他非預設語言）
+
+無需在元件層判斷路徑，`useTranslations(locale)` 直接取得對應語言文案。
+
+## i18n 模組結構
+
+[`src/i18n/`](../src/i18n/)：
+
+| 檔案             | 職責                                                                                                                            |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `index.ts`       | `import.meta.glob("./lang/*.ts", {eager:true})` 載入語言；匯出 `DEFAULT_LOCALE`、`LOCALES`、`useTranslations(locale)`、`tplStr` |
+| `types.ts`       | `UIStrings` 完整介面（所有需在地化的字串）                                                                                      |
+| `routing.ts`     | `getLocalePrefix`、`withLocale(path, locale)`、`parseLocaleFromPath(pathname)`                                                  |
+| `staticPaths.ts` | `NON_DEFAULT_LOCALES`、`getLocaleParams()`                                                                                      |
+| `format.ts`      | `tplStr(template, vars)` — `{{key}}` 佔位符替換                                                                                 |
+| `lang/zh-cn.ts`  | 簡體中文（預設語言）                                                                                                            |
+| `lang/en.ts`     | 英文                                                                                                                            |
+
+## UIStrings 結構
+
+`UIStrings` 介面定義所有需在地化的介面字串，分組組織：
+
+- `nav`：導航（home/posts/tags/about/archives/search/rss）
+- `post`：文章（日期、分享、標籤、返回、編輯、目錄、程式碼複製、圖片燈箱等）
+- `pagination`：分頁
+- `home`：首頁（社交連結、精選、最新）
+- `archives`：歸檔（計數、月份）
+- `footer`：頁尾（版權）
+- `pages`：各頁面標題與描述
+- `a11y`：無障礙標籤
+- `languageSwitcher`：語言切換器
+- `notFound`：404
+- `comments`：評論區
+
+## 模板字串
+
+帶佔位符的文案用 `{{key}}`，配合 `tplStr` 替換：
+
+```ts
+import { tplStr } from "@/i18n";
+
+// archives.postCount = "{{count}} 篇"
+tplStr(t.archives.postCount, { count: 5 }); // "5 篇"
+```
+
+## SEO 多語言宣告
+
+`Layout.astro` 的 head 輸出：
+
+- 各語言 `<link rel="alternate" hreflang="..." href="...">`
+- `x-default` 指向預設語言
+- sitemap 整合啟用 i18n 設定，自動生成 hreflang
+- 非預設語言文章的 canonical 指向預設語言原文（避免重複內容判定，詳見 [SEO](./doc-seo.md)）
+
+## 新增語言
+
+以新增日語 `ja` 為例：
+
+1. **`astro.config.ts`** 的 `i18n.locales` 與 sitemap `i18n.locales` 新增 `"ja"` 與 `"ja-JP"` 對應
+2. **`src/i18n/lang/`** 建立 `ja.ts`，匯出完整的 `UIStrings`（可複製 `en.ts` 翻譯）
+3. **`src/i18n/staticPaths.ts`** 的 `NON_DEFAULT_LOCALES` 自動包含 `ja`（基於 `LOCALES` 計算）
+4. **`src/pages/[locale]/`** 鏡像頁面自動生成 `ja` 版本（`getLocaleParams` 已覆蓋）
+5. **語言切換器**：在 `zh-cn.ts` 與 `en.ts` 的 `languageSwitcher.names` 新增 `"ja": "日本語"`
+
+## 內容級翻譯
+
+星羅支援文章內容的多語言翻譯，透過 `locale` 與 `translationKey` 兩個 frontmatter 欄位實作。
+
+### 基本用法
+
+1. **預設語言文章**放在 `src/content/posts/<slug>.md`，設定 `translationKey` 作為分組標識：
+
+```yaml
+# src/content/posts/welcome.md
+---
+title: "歡迎來到星羅"
+locale: zh-cn
+translationKey: welcome-to-xingluo
+tags: [公告, Astro]
+---
+```
+
+2. **譯文**放在語言子目錄 `src/content/posts/en/<slug>.md`，使用相同的 `translationKey`：
+
+```yaml
+# src/content/posts/en/welcome.md
+---
+title: "Welcome to Xingluo"
+locale: en
+translationKey: welcome-to-xingluo
+tags: [announcement, Astro]
+---
+```
+
+### 目錄結構
+
+```
+src/content/posts/
+├── welcome.md              # 預設語言（zh-cn）
+├── en/
+│   └── welcome.md          # 英文譯文
+├── ja/
+│   └── welcome.md          # 日文譯文
+└── another-post.md         # 獨立文章（未設定 translationKey）
+```
+
+- 語言子目錄名需與 `astro.config.ts` 的 `i18n.locales` 中的語言代碼一致
+- 語言子目錄會被路由層過濾，不進入 URL slug（如 `/posts/welcome/` 而非 `/posts/en/welcome/`）
+- 無 `translationKey` 的文章各自獨立，不在任何語言間關聯
+
+### 路由行為
+
+| 場景                           | 行為                                                               |
+| ------------------------------ | ------------------------------------------------------------------ |
+| 預設語言存取 `zh-cn` 文章      | 渲染預設語言原文                                                   |
+| 非預設語言存取**有譯文的**文章 | 渲染對應語言的譯文                                                 |
+| 非預設語言存取**無譯文的**文章 | 回退渲染預設語言原文（內容一致，non-duplicate canonical 保障 SEO） |
+
+### 列表去重
+
+列表頁（首頁、文章列表、標籤、歸檔、RSS）使用 `getPostsForLocale` 按語言選取代表文章：每組譯文只顯示一條對應語言的卡片，避免同主題譯文重複出現。
+
+### canonical 與 SEO
+
+- **有獨立譯文**：canonical 指向譯文自身 URL，搜尋引擎可獨立索引
+- **無譯文（回退）**：canonical 指向預設語言原文，避免重複內容懲罰
+- hreflang 宣告覆蓋全部語言，搜尋引擎理解各語言版本關係
+
+詳見 [SEO](./doc-seo.md)。
