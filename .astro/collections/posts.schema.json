@@ -61,6 +61,12 @@
     "timezone": {
       "type": "string"
     },
+    "locale": {
+      "type": "string"
+    },
+    "translationKey": {
+      "type": "string"
+    },
     "$schema": {
       "type": "string"
     }
