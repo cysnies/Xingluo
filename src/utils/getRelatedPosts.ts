@@ -29,7 +29,7 @@ function countSharedTags(a: string[], b: string[]): number {
 export function getRelatedPosts(
   current: CollectionEntry<"posts">,
   all: CollectionEntry<"posts">[],
-  limit = 2
+  limit = 2,
 ): CollectionEntry<"posts">[] {
   const currentTags = current.data.tags;
 

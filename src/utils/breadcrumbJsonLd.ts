@@ -27,7 +27,7 @@ interface ListItem {
 export function buildBreadcrumbJsonLd(
   items: Crumb[],
   site: URL,
-  currentUrl: URL
+  currentUrl: URL,
 ): {
   "@context": string;
   "@type": "BreadcrumbList";

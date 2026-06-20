@@ -5,7 +5,8 @@ const CJK_LOCALES = new Set(["zh-cn", "ja", "ko"]);
 /** 中日韩字符范围：CJK 统一表意文字、平假名/片假名、谚文 */
 const CJK_CHAR_REGEX = /[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g;
 /** 围栏代码块（``` 或 ~~~ 起始的多行块） */
-const FENCED_CODE_BLOCK_REGEX = /(^|\n)(\s*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?\n\2\3[^\n]*/g;
+const FENCED_CODE_BLOCK_REGEX =
+  /(^|\n)(\s*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?\n\2\3[^\n]*/g;
 /** 行内代码 `code` */
 const INLINE_CODE_REGEX = /`[^`\n]*`/g;
 /** HTML 标签 */
@@ -66,7 +67,7 @@ function countWords(text: string): number {
  */
 export function getReadingTime(
   body: string,
-  locale: string = DEFAULT_LOCALE
+  locale: string = DEFAULT_LOCALE,
 ): number {
   const sanitized = sanitizeBody(body ?? "");
 

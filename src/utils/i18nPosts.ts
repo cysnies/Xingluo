@@ -3,7 +3,10 @@ import { DEFAULT_LOCALE } from "@/i18n";
 import { getSortedPosts } from "./getSortedPosts";
 
 /** 翻译分组：translationKey（或独立 id）到该组各语言文章的映射 */
-export type TranslationGroups = Map<string, Map<string, CollectionEntry<"posts">>>;
+export type TranslationGroups = Map<
+  string,
+  Map<string, CollectionEntry<"posts">>
+>;
 
 /**
  * 获取文章的写作语言。
@@ -25,7 +28,7 @@ export function getPostLocale(post: CollectionEntry<"posts">): string {
  * @param posts 全部文章（通常为 getCollection 原始结果）
  */
 export function groupTranslations(
-  posts: CollectionEntry<"posts">[]
+  posts: CollectionEntry<"posts">[],
 ): TranslationGroups {
   const groups: TranslationGroups = new Map();
   for (const post of posts) {
@@ -56,7 +59,7 @@ export function groupTranslations(
  */
 export function getPostsForLocale(
   posts: CollectionEntry<"posts">[],
-  locale: string
+  locale: string,
 ): CollectionEntry<"posts">[] {
   const groups = groupTranslations(posts);
   const representatives: CollectionEntry<"posts">[] = [];
@@ -79,7 +82,7 @@ export function getPostsForLocale(
 export function findTranslation(
   posts: CollectionEntry<"posts">[],
   basePost: CollectionEntry<"posts">,
-  locale: string
+  locale: string,
 ): CollectionEntry<"posts"> | undefined {
   const groups = groupTranslations(posts);
   const key = basePost.data.translationKey ?? `__single__${basePost.id}`;
