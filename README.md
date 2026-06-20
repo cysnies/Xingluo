@@ -18,7 +18,13 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/cysnies/Xingluo/compare)
 
 <p>
-  <a href="./README.md">简体中文</a> · <a href="./README-en.md">English</a>
+  <a href="./README.md">简体中文</a> · <a href="./README-en.md">English</a> ·
+  <a href="./docs/de/README.md">Deutsch</a> · <a href="./docs/es/README.md">Español</a> ·
+  <a href="./docs/fr/README.md">Français</a> · <a href="./docs/ja/README.md">日本語</a> ·
+  <a href="./docs/ko/README.md">한국어</a> · <a href="./docs/pt/README.md">Português</a> ·
+  <a href="./docs/ru/README.md">Русский</a> · <a href="./docs/ar/README.md">العربية</a> ·
+  <a href="./docs/eo/README.md">Esperanto</a> ·
+  <a href="./docs/zh-tw/README.md">繁體中文</a>
 </p>
 
 </div>
@@ -120,21 +126,38 @@ import { APlayer, DPlayer } from "@/components/mdx";
 
 ## 📚 文档
 
-完整项目文档位于 [`docs/`](./docs/) 目录：
+完整项目文档位于 [`docs/`](./docs/) 目录，支持多语言版本：
 
-| 文档                                        | 说明                             |
-| ------------------------------------------- | -------------------------------- |
-| [快速开始](./docs/zh-cn/getting-started.md) | 安装、开发与构建                 |
-| [配置指南](./docs/zh-cn/configuration.md)   | 站点信息与功能开关               |
-| [内容创作](./docs/zh-cn/content.md)         | frontmatter、写作规范与内容增强  |
-| [国际化](./docs/zh-cn/i18n.md)              | UI 与内容级多语言翻译            |
-| [架构总览](./docs/zh-cn/architecture.md)    | 项目结构与设计决策               |
-| [主题与样式](./docs/zh-cn/theming.md)       | shadcn 视觉与 OKLCH              |
-| [评论系统](./docs/zh-cn/comments.md)        | giscus / twikoo / waline         |
-| [媒体播放器](./docs/zh-cn/media-players.md) | APlayer / DPlayer                |
-| [SEO](./docs/zh-cn/seo.md)                  | OG 图、RSS、sitemap、结构化数据  |
-| [搜索](./docs/zh-cn/search.md)              | Pagefind 全文搜索索引            |
-| [部署](./docs/zh-cn/deployment.md)          | 静态托管、GitHub Pages 与 Docker |
+| 语言      | 文档入口                              |
+| --------- | ------------------------------------- |
+| 简体中文  | [docs/zh-cn/](./docs/zh-cn/README.md) |
+| English   | [docs/en/](./docs/en/README.md)       |
+| Deutsch   | [docs/de/](./docs/de/README.md)       |
+| Español   | [docs/es/](./docs/es/README.md)       |
+| Français  | [docs/fr/](./docs/fr/README.md)       |
+| 日本語    | [docs/ja/](./docs/ja/README.md)       |
+| 한국어    | [docs/ko/](./docs/ko/README.md)       |
+| Português | [docs/pt/](./docs/pt/README.md)       |
+| Русский   | [docs/ru/](./docs/ru/README.md)       |
+| العربية   | [docs/ar/](./docs/ar/README.md)       |
+| Esperanto | [docs/eo/](./docs/eo/README.md)       |
+| 繁體中文  | [docs/zh-tw/](./docs/zh-tw/README.md) |
+
+各语言文档均包含以下内容：
+
+| 文档       | 内容                             |
+| ---------- | -------------------------------- |
+| 快速开始   | 安装、开发与构建                 |
+| 配置指南   | 站点信息与功能开关               |
+| 内容创作   | frontmatter、写作规范与内容增强  |
+| 国际化     | UI 与内容级多语言翻译            |
+| 架构总览   | 项目结构与设计决策               |
+| 主题与样式 | shadcn 视觉与 OKLCH              |
+| 评论系统   | giscus / twikoo / waline         |
+| 媒体播放器 | APlayer / DPlayer                |
+| SEO        | OG 图、RSS、sitemap、结构化数据  |
+| 搜索       | Pagefind 全文搜索索引            |
+| 部署       | 静态托管、GitHub Pages 与 Docker |
 
 ## 🛠️ 技术栈
 

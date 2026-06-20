@@ -18,7 +18,13 @@ A modern blog CMS built with Astro and the shadcn visual system
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/cysnies/Xingluo/compare)
 
 <p>
-  <a href="./README.md">简体中文</a> · <a href="./README-en.md">English</a>
+  <a href="./README.md">简体中文</a> · <a href="./README-en.md">English</a> ·
+  <a href="./docs/de/README.md">Deutsch</a> · <a href="./docs/es/README.md">Español</a> ·
+  <a href="./docs/fr/README.md">Français</a> · <a href="./docs/ja/README.md">日本語</a> ·
+  <a href="./docs/ko/README.md">한국어</a> · <a href="./docs/pt/README.md">Português</a> ·
+  <a href="./docs/ru/README.md">Русский</a> · <a href="./docs/ar/README.md">العربية</a> ·
+  <a href="./docs/eo/README.md">Esperanto</a> ·
+  <a href="./docs/zh-tw/README.md">繁體中文</a>
 </p>
 
 </div>
@@ -124,21 +130,38 @@ import { APlayer, DPlayer } from "@/components/mdx";
 
 ## 📚 Documentation
 
-The full project documentation lives in the [`docs/`](./docs/) directory:
+The full project documentation lives in the [`docs/`](./docs/) directory, available in multiple languages:
 
-| Document                                           | Description                                        |
-| -------------------------------------------------- | -------------------------------------------------- |
-| [Getting Started](./docs/en/getting-started.md)    | Install, develop, and build                        |
-| [Configuration Guide](./docs/en/configuration.md)  | Site info and feature toggles                      |
-| [Content Authoring](./docs/en/content.md)          | Frontmatter, writing conventions, and enhancements |
-| [Internationalization](./docs/en/i18n.md)          | UI and content-level multilingual translation      |
-| [Architecture Overview](./docs/en/architecture.md) | Project structure and design decisions             |
-| [Theme & Styles](./docs/en/theming.md)             | shadcn visuals and OKLCH                           |
-| [Comment System](./docs/en/comments.md)            | giscus / twikoo / waline                           |
-| [Media Players](./docs/en/media-players.md)        | APlayer / DPlayer                                  |
-| [SEO](./docs/en/seo.md)                            | OG images, RSS, sitemap, structured data           |
-| [Search](./docs/en/search.md)                      | Pagefind full-text search indexing                 |
-| [Deployment](./docs/en/deployment.md)              | Static hosting, GitHub Pages, and Docker           |
+| Language  | Documentation Entry                   |
+| --------- | ------------------------------------- |
+| 简体中文  | [docs/zh-cn/](./docs/zh-cn/README.md) |
+| English   | [docs/en/](./docs/en/README.md)       |
+| Deutsch   | [docs/de/](./docs/de/README.md)       |
+| Español   | [docs/es/](./docs/es/README.md)       |
+| Français  | [docs/fr/](./docs/fr/README.md)       |
+| 日本語    | [docs/ja/](./docs/ja/README.md)       |
+| 한국어    | [docs/ko/](./docs/ko/README.md)       |
+| Português | [docs/pt/](./docs/pt/README.md)       |
+| Русский   | [docs/ru/](./docs/ru/README.md)       |
+| العربية   | [docs/ar/](./docs/ar/README.md)       |
+| Esperanto | [docs/eo/](./docs/eo/README.md)       |
+| 繁體中文  | [docs/zh-tw/](./docs/zh-tw/README.md) |
+
+Each language edition includes the following documents:
+
+| Document              | Description                                        |
+| --------------------- | -------------------------------------------------- |
+| Getting Started       | Install, develop, and build                        |
+| Configuration Guide   | Site info and feature toggles                      |
+| Content Authoring     | Frontmatter, writing conventions, and enhancements |
+| Internationalization  | UI and content-level multilingual translation      |
+| Architecture Overview | Project structure and design decisions             |
+| Theme & Styles        | shadcn visuals and OKLCH                           |
+| Comment System        | giscus / twikoo / waline                           |
+| Media Players         | APlayer / DPlayer                                  |
+| SEO                   | OG images, RSS, sitemap, structured data           |
+| Search                | Pagefind full-text search indexing                 |
+| Deployment            | Static hosting, GitHub Pages, and Docker           |
 
 ## 🛠️ Tech Stack
 
