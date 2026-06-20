@@ -1,5 +1,6 @@
 ---
 import { cn } from "@/lib/utils";
+import { buildBreadcrumbJsonLd } from "@/utils/breadcrumbJsonLd";
 
 interface Crumb {
   href?: string;
@@ -12,6 +13,13 @@ interface Props {
 }
 
 const { items, class: className } = Astro.props;
+
+/** 面包屑结构化数据，供搜索引擎理解站点层级 */
+const breadcrumbJsonLd = buildBreadcrumbJsonLd(
+  items,
+  Astro.site ?? Astro.url,
+  Astro.url
+);
 ---
 
 <nav aria-label="面包屑" class={cn("text-sm text-muted-foreground", className)}>
@@ -35,3 +43,10 @@ const { items, class: className } = Astro.props;
     }
   </ol>
 </nav>
+
+<!-- 面包屑结构化数据（JSON-LD） -->
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify(breadcrumbJsonLd)}
+ />
