@@ -33,11 +33,11 @@ const crumbs = [
   <Main>
     <Breadcrumb items={crumbs} class="mb-6" />
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-    <ul class="grid grid-cols-2 items-start gap-4">
+    <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
       {page.data.map((post) => {
         const width = getCardWidth(post, config.features.showPostCardHero);
         return (
-          <li class={width === "full" ? "col-span-2" : "col-span-1"}>
+          <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
             <PostCard post={post} />
           </li>
         );

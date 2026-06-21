@@ -47,11 +47,11 @@ const crumbs = [
       #{tagName}
     </h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
-    <ul class="grid grid-cols-2 items-start gap-4">
+    <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
       {page.data.map((post) => {
         const width = getCardWidth(post, config.features.showPostCardHero);
         return (
-          <li class={width === "full" ? "col-span-2" : "col-span-1"}>
+          <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
             <PostCard post={post} />
           </li>
         );

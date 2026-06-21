@@ -69,11 +69,11 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.featured}
           </h2>
-          <ul class="grid grid-cols-2 items-start gap-4">
+          <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
             {featuredPosts.map((post) => {
               const width = getCardWidth(post, config.features.showPostCardHero);
               return (
-                <li class={width === "full" ? "col-span-2" : "col-span-1"}>
+                <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
                   <PostCard post={post} />
                 </li>
               );
@@ -90,11 +90,11 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.recentPosts}
           </h2>
-          <ul class="grid grid-cols-2 items-start gap-4">
+          <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
             {recentPosts.slice(0, postsConfig.perIndex).map((post) => {
               const width = getCardWidth(post, config.features.showPostCardHero);
               return (
-                <li class={width === "full" ? "col-span-2" : "col-span-1"}>
+                <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
                   <PostCard post={post} />
                 </li>
               );
