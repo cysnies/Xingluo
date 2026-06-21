@@ -51,7 +51,7 @@ El script de compilación analiza el contenido `<main>` en las páginas de detal
 
 1. El usuario escribe en el cuadro de búsqueda
 2. Flexsearch busca en el índice del idioma actual
-3. La lista de resultados muestra los artículos coincidentes (título, resaltado de resumen)
+3. La lista de resultados muestra los artículos coincidentes (título, fechas de publicación/actualización, insignia de categoría, etiquetas, fragmento de contenido coincidente)
 4. `processTerm` escribe la URL de la página de búsqueda con parámetros de consulta en sessionStorage, para que el botón de retroceso pueda restaurarla
 
 ## Navegación de retroceso de origen

@@ -51,7 +51,7 @@ O script de build analisa o conteúdo `<main>` nas páginas de detalhes dos post
 
 1. O usuário digita na caixa de pesquisa
 2. Flexsearch corresponde ao índice do idioma atual
-3. A lista de resultados mostra posts correspondentes (título, destaque do resumo)
+3. A lista de resultados mostra posts correspondentes (título, datas de publicação/atualização, selo de categoria, tags, trecho de conteúdo correspondente)
 4. `processTerm` escreve a URL da página de pesquisa com parâmetros de consulta no sessionStorage, para o botão voltar restaurar
 
 ## Navegação de Volta

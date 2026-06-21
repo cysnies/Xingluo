@@ -54,7 +54,7 @@ timezone: "Asia/Shanghai" # optional, override the site timezone
 | ---------------- | --------------- | --------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `title`          | string          | required        | Post title                                                                                                            |
 | `pubDatetime`    | date            | required        | Publish time, ISO 8601                                                                                                |
-| `modDatetime`    | date            | —               | Update time; shows an "updated" label                                                                                 |
+| `modDatetime`    | date            | —               | Modified date, shown alongside the published date, e.g. "Published 2026-06-19 · Updated 2026-06-20"                   |
 | `description`    | string          | required        | Summary, used in meta, RSS, and list cards                                                                            |
 | `tags`           | string[]        | `["others"]`    | Tag array; tag pages are generated automatically                                                                      |
 | `featured`       | boolean         | —               | Shown in the homepage "Featured" section                                                                              |

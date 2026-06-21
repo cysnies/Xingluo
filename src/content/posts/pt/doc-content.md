@@ -54,7 +54,7 @@ timezone: "Asia/Shanghai" # opcional, substituir o fuso horário do site
 | ---------------- | --------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `title`          | string          | obrigatório     | Título do post                                                                                                   |
 | `pubDatetime`    | date            | obrigatório     | Data de publicação, ISO 8601                                                                                     |
-| `modDatetime`    | date            | —               | Data de atualização; mostra um rótulo "atualizado"                                                               |
+| `modDatetime`    | date            | —               | Data de atualização; exibida junto com a data de publicação                                                      |
 | `description`    | string          | obrigatório     | Resumo, usado em meta, RSS e cartões de lista                                                                    |
 | `tags`           | string[]        | `["others"]`    | Array de tags; páginas de tags são geradas automaticamente                                                       |
 | `featured`       | boolean         | —               | Mostrado na seção "Destacados" da página inicial                                                                 |

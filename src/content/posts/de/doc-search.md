@@ -51,7 +51,7 @@ Das Build-Skript analysiert den `<main>`-Inhalt auf Beitragsdetailseiten, sodass
 
 1. Der Benutzer gibt Text in das Suchfeld ein
 2. Flexsearch sucht im Index der aktuellen Sprache
-3. Die Ergebnisliste zeigt passende Beiträge (Titel, Zusammenfassungs-Hervorhebung)
+3. Die Ergebnisliste zeigt passende Beiträge (Titel, Veröffentlichungs-/Aktualisierungsdatum, Kategorie-Badge, Tags, passender Textausschnitt)
 4. `processTerm` schreibt die Suchseiten-URL mit Abfrageparametern in sessionStorage, damit der Zurück-Button sie wiederherstellen kann
 
 ## Quell-Rücknavigation

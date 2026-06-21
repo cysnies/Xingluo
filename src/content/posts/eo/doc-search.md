@@ -51,7 +51,7 @@ La konstrua skripto analizas la `<main>` enhavon sur afiŝaj detalpaĝoj, do nur
 
 1. La uzanto tajpas en la serĉokesto
 2. Flexsearch kongruas kontraŭ la nuna lingva indekso
-3. La rezultolisto montras kongruajn afiŝojn (titolon, resuman reliefigon)
+3. La rezultolisto montras kongruajn afiŝojn (titolon, publikigajn/ĝisdatigajn datojn, kategorio-emblemon, etikedojn, kongruan teksteron)
 4. `processTerm` skribas la serĉpaĝan URL-on kun demando-parametroj al sessionStorage, por ke la reen-butono restarigu
 
 ## Fonta reen-navigado

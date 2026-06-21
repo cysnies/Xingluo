@@ -54,7 +54,7 @@ timezone: "Asia/Shanghai" # opcional, anular la zona horaria del sitio
 | ---------------- | --------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `title`          | string          | requerido       | Título del artículo                                                                                              |
 | `pubDatetime`    | date            | requerido       | Fecha de publicación, ISO 8601                                                                                   |
-| `modDatetime`    | date            | —               | Fecha de actualización; muestra una etiqueta "actualizado"                                                       |
+| `modDatetime`    | date            | —               | Fecha de actualización; se muestra junto con la fecha de publicación                                             |
 | `description`    | string          | requerido       | Resumen, usado en meta, RSS y tarjetas de lista                                                                  |
 | `tags`           | string[]        | `["others"]`    | Array de etiquetas; las páginas de etiquetas se generan automáticamente                                          |
 | `featured`       | boolean         | —               | Se muestra en la sección "Destacados" de la página de inicio                                                     |

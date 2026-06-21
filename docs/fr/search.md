@@ -41,7 +41,7 @@ Le script de build analyse le contenu `<main>` des pages de détail d'article, d
 
 1. L'utilisateur tape dans la boîte de recherche
 2. Flexsearch recherche dans l'index de la langue actuelle
-3. La liste de résultats affiche les articles correspondants (titre, surlignage du résumé)
+3. La liste de résultats affiche les articles correspondants (titre, dates de publication/mise à jour, badge de catégorie, tags, extrait de contenu correspondant)
 4. `processTerm` écrit l'URL de la page de recherche avec les paramètres de requête dans sessionStorage, pour que le bouton retour puisse restaurer l'état
 
 ## Navigation retour

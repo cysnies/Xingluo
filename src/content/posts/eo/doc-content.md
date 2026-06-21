@@ -54,7 +54,7 @@ timezone: "Asia/Shanghai" # optional, override the site timezone
 | ---------------- | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `title`          | string          | deviga          | Titolo de afiŝo                                                                                                    |
 | `pubDatetime`    | date            | deviga          | Publikiga tempo, ISO 8601                                                                                          |
-| `modDatetime`    | date            | —               | Ĝisdatiga tempo; montras etikedon "ĝisdatigita"                                                                    |
+| `modDatetime`    | date            | —               | Ĝisdatiga tempo; montrata kune kun la publikiga tempo                                                              |
 | `description`    | string          | deviga          | Resumo, uzata en meta, RSS kaj listkartoj                                                                          |
 | `tags`           | string[]        | `["others"]`    | Tabelo de etikedoj; etikedaj paĝoj estas aŭtomate generitaj                                                        |
 | `featured`       | boolean         | —               | Montrata en la "Elstaraj" sekcio de la hejmpaĝo                                                                    |

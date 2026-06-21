@@ -54,7 +54,7 @@ timezone: "Asia/Shanghai" # optional, Zeitzone der Site überschreiben
 | ---------------- | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------ |
 | `title`          | string          | erforderlich    | Beitragstitel                                                                                                |
 | `pubDatetime`    | date            | erforderlich    | Veröffentlichungszeit, ISO 8601                                                                              |
-| `modDatetime`    | date            | —               | Aktualisierungszeit; zeigt ein "aktualisiert"-Label an                                                       |
+| `modDatetime`    | date            | —               | Aktualisierungszeit; wird zusammen mit der Veröffentlichungszeit angezeigt                                   |
 | `description`    | string          | erforderlich    | Zusammenfassung, verwendet in Meta, RSS und Listenkarten                                                     |
 | `tags`           | string[]        | `["others"]`    | Tag-Array; Tag-Seiten werden automatisch generiert                                                           |
 | `featured`       | boolean         | —               | Auf der Startseite im Bereich "Hervorgehoben" angezeigt                                                      |

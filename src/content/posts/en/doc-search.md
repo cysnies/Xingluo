@@ -51,7 +51,7 @@ The build script parses the `<main>` content on post detail pages, so only post 
 
 1. The user types in the search box
 2. Flexsearch matches against the current language index
-3. The result list shows matching posts (title, summary highlight)
+3. The result list shows matching posts (title, published/updated dates, category badge, tags, matched content snippet)
 4. `processTerm` writes the search page URL with query params to sessionStorage, for the back button to restore
 
 ## Source Back-Navigation
