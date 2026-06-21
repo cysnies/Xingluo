@@ -1,9 +1,19 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import SearchView from "@/components/pageViews/SearchView.astro";
 import { getLocaleParams } from "@/i18n/staticPaths";
+import config from "@/config";
 
 export function getStaticPaths() {
   return getLocaleParams();
+}
+
+const locale = Astro.currentLocale ?? config.site.lang;
+
+// 搜索未启用时重定向到 404
+const notFoundUrl = getRelativeLocaleUrl(locale, "404");
+if (config.features.search !== "flexsearch" && notFoundUrl) {
+  return Astro.rewrite(notFoundUrl);
 }
 ---
 
