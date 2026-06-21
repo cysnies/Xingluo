@@ -100,10 +100,10 @@ const navItems = [
     </div>
   </div>
 
-  <!-- 移动端菜单（默认隐藏，JS 控制） -->
+  <!-- 移动端菜单（默认隐藏，JS 控制展开收起动画） -->
   <nav
     id="mobile-menu"
-    class="hidden border-t border-border bg-background md:hidden"
+    class="hidden border-t border-border bg-background md:hidden motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out"
     aria-label="移动端导航"
   >
     <div class="mx-auto flex max-w-app flex-col gap-1 px-4 py-3 sm:px-6">
@@ -127,7 +127,7 @@ const navItems = [
 </header>
 
 <script>
-  // 移动端菜单展开/收起逻辑
+  // 移动端菜单展开/收起逻辑（带过渡动画）
   function setupMobileMenu() {
     const btn = document.getElementById("mobile-menu-btn");
     const menu = document.getElementById("mobile-menu");
@@ -135,13 +135,54 @@ const navItems = [
     const iconClose = document.getElementById("menu-icon-close");
     if (!btn || !menu) return;
 
+    // 优先使用 CSS transition，不支持时回退到 hidden
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const open = () => {
+      menu.classList.remove("hidden");
+      btn.setAttribute("aria-expanded", "true");
+      iconOpen?.classList.add("hidden");
+      iconClose?.classList.remove("hidden");
+      // 触发重排后添加 visible 类启动过渡
+      if (!prefersReduced) {
+        menu.style.opacity = "0";
+        menu.style.maxHeight = "0";
+        requestAnimationFrame(() => {
+          menu.style.opacity = "1";
+          menu.style.maxHeight = menu.scrollHeight + "px";
+        });
+      }
+    };
+
+    const close = () => {
+      btn.setAttribute("aria-expanded", "false");
+      iconOpen?.classList.remove("hidden");
+      iconOpen?.classList.add("md:hidden");
+      iconClose?.classList.add("hidden");
+      if (!prefersReduced) {
+        menu.style.opacity = "0";
+        menu.style.maxHeight = "0";
+        menu.addEventListener(
+          "transitionend",
+          () => {
+            if (menu.style.opacity === "0") menu.classList.add("hidden");
+          },
+          { once: true }
+        );
+      } else {
+        menu.classList.add("hidden");
+      }
+    };
+
     const toggle = () => {
-      const isOpen = !menu.classList.contains("hidden");
-      menu.classList.toggle("hidden");
-      btn.setAttribute("aria-expanded", String(!isOpen));
-      iconOpen?.classList.toggle("hidden", !isOpen);
-      iconOpen?.classList.toggle("md:hidden", false);
-      iconClose?.classList.toggle("hidden", isOpen);
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        close();
+      } else {
+        open();
+      }
     };
 
     btn.addEventListener("click", toggle);
