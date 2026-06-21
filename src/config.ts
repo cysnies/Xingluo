@@ -29,6 +29,7 @@ const defaultSite = {
   ogImage: DEFAULT_OG_IMAGE,
   timezone: "Asia/Shanghai",
   dir: "ltr" as const,
+  copyright: "© {{year}} {{author}}",
   googleVerification: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION,
   favicon: {
     svg: DEFAULT_FAVICON_SVG,

@@ -21,6 +21,8 @@ export interface SiteConfig {
   lang: string;
   /** 时区（用于文章时间显示） */
   timezone?: string;
+  /** 页脚版权文案，支持 {{year}} 和 {{author}} 占位符 */
+  copyright?: string;
   /** 文字方向 */
   dir: "ltr" | "rtl";
   /** Google Search Console 站点验证值 */

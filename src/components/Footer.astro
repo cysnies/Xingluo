@@ -1,9 +1,14 @@
 ---
+import { tplStr } from "@/i18n";
 import config from "@/config";
 import Socials from "./Socials.astro";
 
 const { site } = config;
-const year = new Date().getFullYear();
+const year = String(new Date().getFullYear());
+const copyright = tplStr(site.copyright ?? "© {{year}} {{author}}", {
+  year,
+  author: site.author,
+});
 ---
 
 <footer class="mt-auto border-t border-border bg-background">
@@ -11,7 +16,7 @@ const year = new Date().getFullYear();
     class="mx-auto flex max-w-app flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row sm:px-6 lg:px-8"
   >
     <p class="text-sm text-muted-foreground">
-      © {year} {site.author}
+      {copyright}
     </p>
     <Socials />
   </div>
