@@ -117,6 +117,7 @@ const crumbs = [
     title: string;
     description: string;
     pubDatetime: string;
+    modDatetime: string;
     tags: string[];
     category: string;
     url: string;
@@ -283,15 +284,37 @@ const crumbs = [
       dateEl.className = "inline-flex items-center gap-1";
       try {
         const d = new Date(doc.pubDatetime);
-        dateEl.textContent = d.toLocaleDateString("zh-CN", {
+        dateEl.textContent = "发布于 " + d.toLocaleDateString("zh-CN", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
         });
       } catch {
-        dateEl.textContent = doc.pubDatetime.slice(0, 10);
+        dateEl.textContent = "发布于 " + doc.pubDatetime.slice(0, 10);
       }
       metaEl.appendChild(dateEl);
+
+      // 更新时间
+      if (doc.modDatetime) {
+        try {
+          const modD = new Date(doc.modDatetime);
+          const pubD = new Date(doc.pubDatetime);
+          if (modD > pubD) {
+            const sep = document.createTextNode(" · ");
+            metaEl.appendChild(sep);
+            const modEl = document.createElement("span");
+            modEl.className = "inline-flex items-center gap-1";
+            modEl.textContent = "更新于 " + modD.toLocaleDateString("zh-CN", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            });
+            metaEl.appendChild(modEl);
+          }
+        } catch {
+          // ignore modDatetime parse errors
+        }
+      }
     }
     if (doc.category) {
       const catEl = document.createElement("span");
@@ -466,7 +489,7 @@ const crumbs = [
             { field: "content", tokenize: "forward", resolution: 3 },
             { field: "tags", tokenize: "forward", resolution: 5 },
           ],
-          store: ["title", "description", "pubDatetime", "tags", "category", "url", "content"],
+          store: ["title", "description", "pubDatetime", "modDatetime", "tags", "category", "url", "content"],
         },
         tokenize: "forward",
         cache: true,

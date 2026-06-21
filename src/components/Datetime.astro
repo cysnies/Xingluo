@@ -24,22 +24,42 @@ const {
 
 const t = useTranslations(Astro.currentLocale);
 
-const isModified = modDatetime && modDatetime > pubDatetime;
-const datetime = dayjs(isModified ? modDatetime : pubDatetime).tz(
-  postTimezone ?? config.site.timezone
-);
-const date = datetime.format("YYYY-MM-DD");
-const label = isModified
-  ? tplStr(t.post.updatedAt, { date })
-  : tplStr(t.post.publishedAt, { date });
+const pubDate = dayjs(pubDatetime).tz(postTimezone ?? config.site.timezone);
+const pubDateStr = pubDate.format("YYYY-MM-DD");
+
+const isModified = modDatetime && dayjs(modDatetime).valueOf() > dayjs(pubDatetime).valueOf();
+let modDateStr = "";
+let modifiedTime = "";
+if (isModified) {
+  const modDate = dayjs(modDatetime).tz(postTimezone ?? config.site.timezone);
+  modDateStr = modDate.format("YYYY-MM-DD");
+  modifiedTime = modDate.toISOString();
+}
 ---
 
-<div class={cn("flex items-center gap-x-1.5 text-muted-foreground", className)}>
+<div
+  class={cn(
+    "flex items-center gap-x-1.5 text-muted-foreground",
+    isModified && "flex-wrap",
+    className,
+  )}
+>
   <Calendar class={cn("size-4 shrink-0", size === "sm" && "scale-90")} />
   <time
     class={cn("text-sm", size === "lg" && "sm:text-base")}
-    datetime={datetime.toISOString()}
+    datetime={pubDate.toISOString()}
   >
-    {label}
+    {tplStr(t.post.publishedAt, { date: pubDateStr })}
   </time>
+  {isModified && (
+    <>
+      <span class="text-sm text-muted-foreground/50" aria-hidden="true">·</span>
+      <time
+        class={cn("text-sm", size === "lg" && "sm:text-base")}
+        datetime={modifiedTime}
+      >
+        {tplStr(t.post.updatedAt, { date: modDateStr })}
+      </time>
+    </>
+  )}
 </div>
