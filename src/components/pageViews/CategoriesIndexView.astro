@@ -6,11 +6,16 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
+import PostCard from "@/components/PostCard.astro";
+import LinkButton from "@/components/LinkButton.astro";
 import { getUniqueCategories } from "@/utils/getUniqueCategories";
 import { getPostsForLocale } from "@/utils/i18nPosts";
+import { getCardWidth } from "@/utils/getCardWidth";
 import { toTransitionName } from "@/utils/toTransitionName";
-import { useTranslations } from "@/i18n";
+import { slugifyStr } from "@/utils/slugify";
+import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
+import ArrowRight from "@/assets/icons/ArrowRight.astro";
 
 const locale = Astro.currentLocale ?? config.site.lang;
 
@@ -30,6 +35,23 @@ const crumbs = [
   { href: getRelativeLocaleUrl(locale), label: t.nav.home },
   { label: title },
 ];
+
+/**
+ * 将文章按分类 slug 分组，每个分类最多保留 postsPerCategory 篇
+ */
+const postsByCategory = new Map<
+  string,
+  { categoryName: string; posts: typeof localePosts }
+>();
+for (const { category, categoryName } of categories) {
+  const categoryPosts = localePosts.filter(
+    (p) => p.data.category && slugifyStr(p.data.category) === category,
+  );
+  postsByCategory.set(category, {
+    categoryName,
+    posts: categoryPosts.slice(0, config.posts.postsPerCategory),
+  });
+}
 ---
 
 <Layout title={title} description={description}>
@@ -38,21 +60,60 @@ const crumbs = [
     <Breadcrumb items={crumbs} class="mb-6" />
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
+
     {
-      categories.length > 0 ? (
-        <ul class="flex flex-wrap gap-2">
-          {categories.map(({ category, categoryName }) => (
-            <li>
-              <a
-                href={getRelativeLocaleUrl(locale, `categories/${category}/`)}
-                transition:name={toTransitionName(category)}
-                class="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-card-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-              >
-                {categoryName}
-              </a>
-            </li>
-          ))}
-        </ul>
+      postsByCategory.size > 0 ? (
+        [...postsByCategory.entries()].map(
+          ([category, { categoryName, posts: categoryPosts }]) => (
+            <section class="mb-10">
+              <!-- 分类标题行：左侧分类名 + 右侧"查看全部"链接 -->
+              <div class="mb-4 flex items-center justify-between">
+                <h2
+                  class="text-2xl font-semibold tracking-tight"
+                  id={toTransitionName(category)}
+                >
+                  {categoryName}
+                </h2>
+                <LinkButton
+                  href={getRelativeLocaleUrl(
+                    locale,
+                    `categories/${category}/`,
+                  )}
+                  variant="ghost"
+                  size="sm"
+                >
+                  {tplStr(t.categories.viewAll, { category: categoryName })}
+                  <ArrowRight class="size-4 rtl:-rotate-180" />
+                </LinkButton>
+              </div>
+
+              <!-- 文章卡片网格，布局方式与首页一致 -->
+              {categoryPosts.length > 0 ? (
+                <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+                  {categoryPosts.map((post) => {
+                    const width = getCardWidth(
+                      post,
+                      config.features.showPostCardHero,
+                    );
+                    return (
+                      <li
+                        class={
+                          width === "full"
+                            ? "col-span-1 md:col-span-2"
+                            : "col-span-1"
+                        }
+                      >
+                        <PostCard post={post} />
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p class="text-muted-foreground">{t.a11y.noResults}</p>
+              )}
+            </section>
+          ),
+        )
       ) : (
         <p class="text-muted-foreground">{t.a11y.noResults}</p>
       )
