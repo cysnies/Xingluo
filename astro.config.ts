@@ -6,6 +6,7 @@ import {
 } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
+import { unified } from "@astrojs/markdown-remark";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import remarkToc from "remark-toc";
@@ -110,8 +111,11 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins,
-    rehypePlugins: [rehypeCallouts, rehypeWrapTable],
+    // 将 remark/rehype 插件传入 unified 处理器，避免使用已弃用的顶级字段
+    processor: unified({
+      remarkPlugins,
+      rehypePlugins: [rehypeCallouts, rehypeWrapTable],
+    }),
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },
       defaultColor: false,
