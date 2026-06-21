@@ -27,7 +27,7 @@ const hasToc = tocHeadings.length >= 2;
               href={`#${heading.slug}`}
               data-toc-link={heading.slug}
               style={`padding-left:${(heading.depth - minDepth) * 0.75 + 0.75}rem`}
-              class="-ml-px block border-l-2 border-transparent text-muted-foreground transition-colors hover:text-foreground data-[active=true]:border-primary data-[active=true]:text-foreground"
+              class="-ml-px block border-l-2 border-transparent text-muted-foreground motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out hover:text-foreground data-[active=true]:border-primary data-[active=true]:text-foreground data-[active=true]:border-l-[3px]"
             >
               {heading.text}
             </a>

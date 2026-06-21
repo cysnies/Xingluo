@@ -10,7 +10,7 @@ const t = useTranslations(Astro.currentLocale);
   type="button"
   aria-label={t.post.backToTop}
   title={t.post.backToTop}
-  class="fixed bottom-6 right-6 z-40 inline-flex size-10 items-center justify-center rounded-full border border-border bg-background shadow-md transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 opacity-0 pointer-events-none translate-y-2"
+  class="fixed bottom-6 right-6 z-40 inline-flex size-10 items-center justify-center rounded-full border border-border bg-background shadow-md transition-all hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 opacity-0 pointer-events-none translate-y-2 motion-safe:transition-[opacity,transform] motion-safe:duration-300 motion-safe:ease-out motion-safe:active:scale-90"
 >
   <ArrowUp class="size-5" />
   <span class="sr-only">{t.post.backToTop}</span>
