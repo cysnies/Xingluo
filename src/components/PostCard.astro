@@ -97,12 +97,14 @@ const showHero = !!heroImageSrc;
         timezone={data.timezone}
         size="sm"
       />
-      <span class="flex items-center gap-x-1 text-muted-foreground">
-        <Clock class="size-3.5 shrink-0" />
-        <span class="text-sm">
-          {tplStr(tr.post.readingTime, { minutes: readingMinutes })}
+      {config.features.showReadingTime && (
+        <span class="flex items-center gap-x-1 text-muted-foreground">
+          <Clock class="size-3.5 shrink-0" />
+          <span class="text-sm">
+            {tplStr(tr.post.readingTime, { minutes: readingMinutes })}
+          </span>
         </span>
-      </span>
+      )}
     </div>
 
     {/* 描述行：固定三行高度，正边距补偿负边距偏移，保证位置不变，保证跨卡片对齐 */}

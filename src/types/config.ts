@@ -185,6 +185,8 @@ export interface FeaturesConfig {
   showPostCardHeroMobile: boolean;
   /** 是否在文章详情页中展示文章头图 */
   showPostDetailHero: boolean;
+  /** 是否在文章卡片中展示估算的阅读时间 */
+  showReadingTime: boolean;
   /** 编辑文章链接配置 */
   editPost: EditPostConfig;
   /** 搜索方案 */

@@ -59,6 +59,8 @@ const defaultFeatures = {
   showPostCardHeroMobile: false,
   /** 默认在文章详情页中展示文章头图 */
   showPostDetailHero: true,
+  /** 默认在文章卡片中展示估算的阅读时间 */
+  showReadingTime: true,
   editPost: {
     enabled: false,
     url: "",

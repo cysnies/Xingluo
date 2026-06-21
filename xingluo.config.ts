@@ -41,6 +41,8 @@ export default defineXingluoConfig({
     showPostCardHeroMobile: false,
     // 是否在文章详情页中展示文章头图（文章未配置头图时不显示）
     showPostDetailHero: true,
+    // 是否在文章卡片中展示估算的阅读时间
+    // showReadingTime: true,
     editPost: {
       enabled: true,
       url: "https://github.com/cysnies/Xingluo/edit/main/",
