@@ -1,6 +1,6 @@
 /**
  * 导航栏激活指示条动画
- * 为桌面端导航链接添加滑动指示条，跟随当前激活项位置
+ * 为桌面端导航链接添加滑动指示条，仅在点击或聚焦时移动
  */
 
 /** 导航容器选择器（桌面端 nav 元素） */
@@ -29,22 +29,15 @@ export function initNavIndicator(): void {
   nav.style.position = "relative";
   nav.appendChild(indicator);
 
+  // 初始定位到当前激活项
   updateIndicator(activeLink);
 
-  // 鼠标悬停到链接上时指示条跟随
+  // 仅点击时移动指示条（hover 不触发）
   const links = nav.querySelectorAll<HTMLElement>("a");
   for (const link of links) {
-    link.addEventListener("mouseenter", () => updateIndicator(link));
+    link.addEventListener("click", () => updateIndicator(link));
     link.addEventListener("focus", () => updateIndicator(link));
   }
-
-  // 鼠标离开导航时回到激活项
-  nav.addEventListener("mouseleave", () => {
-    const currentActive = nav.querySelector<HTMLElement>(
-      'a[aria-current="page"], a.bg-accent',
-    );
-    if (currentActive) updateIndicator(currentActive);
-  });
 }
 
 /** 更新指示条位置与宽度 */
