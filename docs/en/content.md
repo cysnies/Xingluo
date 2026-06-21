@@ -32,6 +32,7 @@ featured: true # optional, featured (shown on homepage)
 draft: false # optional, drafts are not published
 author: "Xingluo" # optional, defaults to site.author
 ogImage: "./cover.png" # optional, OG image (image import or string path)
+heroImage: "./hero.png" # optional, hero image (shown between the back button and title)
 canonicalURL: "https://..." # optional, canonical link
 hideEditPost: false # optional, hide the edit link
 timezone: "Asia/Shanghai" # optional, override the site timezone
@@ -41,24 +42,25 @@ comments: true # optional, override global comments (true on / false off)
 
 ### Field Reference
 
-| Field            | Type            | Default         | Notes                                                                                                                           |
-| ---------------- | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `title`          | string          | required        | Post title                                                                                                                      |
-| `pubDatetime`    | date            | required        | Publish time, ISO 8601                                                                                                          |
-| `modDatetime`    | date            | —               | Update time; shows an "updated" label                                                                                           |
-| `description`    | string          | required        | Summary, used in meta, RSS, and list cards                                                                                      |
-| `tags`           | string[]        | `["others"]`    | Tag array; tag pages are generated automatically                                                                                |
-| `featured`       | boolean         | —               | Shown in the homepage "Featured" section                                                                                        |
-| `draft`          | boolean         | —               | Draft; filtered out in production builds (visible in dev)                                                                       |
-| `author`         | string          | `site.author`   | Author name                                                                                                                     |
-| `ogImage`        | image \| string | —               | OG image; `image()` goes through Astro's asset pipeline, a string is a `public/` path or external URL                           |
-| `canonicalURL`   | string          | —               | Canonical link, overrides the default (see [SEO](./seo.md))                                                                     |
-| `hideEditPost`   | boolean         | —               | Hide the edit link for this post                                                                                                |
-| `timezone`       | string          | `site.timezone` | Override the display timezone for this post                                                                                     |
-| `locale`         | string          | `site.lang`     | Language the post is written in, e.g. `"en"`, `"ja"`. Defaults to the site language when unset                                  |
-| `translationKey` | string          | —               | Translation group key: posts sharing the same key are translations of each other. Posts without a key are independent           |
-| `category`       | string          | —               | Post category (single value), generates a `/categories/<slug>/` page; unset means no category                                   |
-| `comments`       | boolean         | —               | Override the global comments toggle: `true` enables, `false` disables comments for this post; unset follows `features.comments` |
+| Field            | Type            | Default         | Notes                                                                                                                                                           |
+| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string          | required        | Post title                                                                                                                                                      |
+| `pubDatetime`    | date            | required        | Publish time, ISO 8601                                                                                                                                          |
+| `modDatetime`    | date            | —               | Update time; shows an "updated" label                                                                                                                           |
+| `description`    | string          | required        | Summary, used in meta, RSS, and list cards                                                                                                                      |
+| `tags`           | string[]        | `["others"]`    | Tag array; tag pages are generated automatically                                                                                                                |
+| `featured`       | boolean         | —               | Shown in the homepage "Featured" section                                                                                                                        |
+| `draft`          | boolean         | —               | Draft; filtered out in production builds (visible in dev)                                                                                                       |
+| `author`         | string          | `site.author`   | Author name                                                                                                                                                     |
+| `ogImage`        | image \| string | —               | OG image; `image()` goes through Astro's asset pipeline, a string is a `public/` path or external URL                                                           |
+| `heroImage`      | image \| string | —               | Hero image shown on the post detail page between the back button and the title; `image()` goes through the pipeline, string is a `public/` path or external URL |
+| `canonicalURL`   | string          | —               | Canonical link, overrides the default (see [SEO](./seo.md))                                                                                                     |
+| `hideEditPost`   | boolean         | —               | Hide the edit link for this post                                                                                                                                |
+| `timezone`       | string          | `site.timezone` | Override the display timezone for this post                                                                                                                     |
+| `locale`         | string          | `site.lang`     | Language the post is written in, e.g. `"en"`, `"ja"`. Defaults to the site language when unset                                                                  |
+| `translationKey` | string          | —               | Translation group key: posts sharing the same key are translations of each other. Posts without a key are independent                                           |
+| `category`       | string          | —               | Post category (single value), generates a `/categories/<slug>/` page; unset means no category                                                                   |
+| `comments`       | boolean         | —               | Override the global comments toggle: `true` enables, `false` disables comments for this post; unset follows `features.comments`                                 |
 
 ### Content-Level Translation
 
