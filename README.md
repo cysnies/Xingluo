@@ -4,7 +4,7 @@
 
 # 星罗 · Xingluo
 
-基于 Astro 与 shadcn 视觉体系的现代化博客 CMS
+基于 Astro 与 shadcn 视觉风格的现代化博客主题
 
 [![CI](https://github.com/cysnies/Xingluo/actions/workflows/ci.yml/badge.svg)](https://github.com/cysnies/Xingluo/actions/workflows/ci.yml)
 [![Deploy Pages](https://github.com/cysnies/Xingluo/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/cysnies/Xingluo/actions/workflows/deploy-pages.yml)
