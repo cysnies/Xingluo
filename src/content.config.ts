@@ -51,6 +51,13 @@ const posts = defineCollection({
       /** 文章分类（单值），未设置时文章不属于任何分类 */
       category: z.string().optional(),
       /**
+       * 文章卡片宽度：手动指定卡片占位宽度。
+       * - "full"：独占一行（卡片全宽）
+       * - "half"：半宽，与其他半宽卡片同行排列
+       * 未设置时根据全局 showPostCardHero 和 heroImage 自动决定。
+       */
+      cardWidth: z.enum(["full", "half"]).optional(),
+      /**
        * 该文章是否启用评论，覆盖全局 features.comments 设置。
        * 未设置时跟随全局配置；true 强制启用、false 强制关闭。
        */
