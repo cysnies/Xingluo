@@ -127,3 +127,123 @@
   flex-direction: column;
   min-height: 100dvh;
 }
+
+/**
+ * 动效动画相关
+ */
+
+/* 滚入渐现动画：初始隐藏，标记后可见 */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 卡片错开出现：后续卡片依次递增延迟 */
+[data-reveal]:nth-child(2) {
+  transition-delay: 0.05s;
+}
+[data-reveal]:nth-child(3) {
+  transition-delay: 0.1s;
+}
+[data-reveal]:nth-child(4) {
+  transition-delay: 0.15s;
+}
+[data-reveal]:nth-child(5) {
+  transition-delay: 0.2s;
+}
+[data-reveal]:nth-child(6) {
+  transition-delay: 0.25s;
+}
+
+/* 涟漪动画关键帧 */
+@keyframes ripple-animation {
+  from {
+    transform: scale(0);
+    opacity: 0.15;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* 噪点纹理 Canvas 样式 */
+#noise-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  opacity: 0.025;
+}
+
+/* 主题切换平滑过渡 */
+.theme-transitioning,
+.theme-transitioning * {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    fill 0.3s ease !important;
+}
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease !important;
+}
+
+/* 文本渐入动画 */
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@utility animate-fade-in-down {
+  animation: fade-in-down 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* 搜索页面结果渐入 */
+.search-result-enter {
+  animation: fade-in-up 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 磁吸效果内层过渡 */
+.magnet-inner {
+  transition: transform 0.4s ease-out;
+}
+
+/* 减小动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .search-result-enter {
+    animation: none !important;
+  }
+  .animate-fade-in-down {
+    animation: none !important;
+  }
+}
