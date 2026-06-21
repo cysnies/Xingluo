@@ -38,7 +38,7 @@ A modern blog CMS built with Astro and the shadcn visual system
 - ⚡ **Top-tier performance** — Astro static generation, zero runtime JS, lazy-loaded comments and players, orphan asset cleanup
 - 🎨 **Modern visuals** — shadcn/ui new-york style, OKLCH color space, smooth dark mode
 - 🌗 **Dark mode** — flicker-free toggle, follows system preference, comment and player themes sync automatically
-- 🔍 **Full-text search** — build-time indexing powered by Pagefind, per-language indexes
+- 🔍 **Full-text search** — build-time indexing powered by Flexsearch, per-language indexes
 - 🌐 **Multilingual** — multilingual UI and content-level translation, hreflang and x-default SEO declarations
 - 📝 **Content enhancement** — Markdown and MDX support, Shiki dual-theme code highlighting, callouts, collapsible TOC, scrollable tables
 - 📖 **Reading time** — smart estimation (CJK by character count, Latin by word count), shown on cards and detail pages
@@ -160,7 +160,7 @@ Each language edition includes the following documents:
 | Comment System        | giscus / twikoo / waline                           |
 | Media Players         | APlayer / DPlayer                                  |
 | SEO                   | OG images, RSS, sitemap, structured data           |
-| Search                | Pagefind full-text search indexing                 |
+| Search                | Flexsearch full-text search indexing               |
 | Deployment            | Static hosting, GitHub Pages, and Docker           |
 
 ## 🛠️ Tech Stack
@@ -171,7 +171,7 @@ Each language edition includes the following documents:
 | Styling           | [Tailwind CSS](https://tailwindcss.com) v4, [shadcn/ui](https://ui.shadcn.com) |
 | Icons             | astro-icon + Font Awesome                                                      |
 | Code highlighting | Shiki                                                                          |
-| Search            | [Pagefind](https://pagefind.app)                                               |
+| Search            | [Flexsearch](https://github.com/nextapps-de/flexsearch)                        |
 | OG images         | satori + sharp                                                                 |
 | Comments          | giscus / twikoo / waline                                                       |
 | Players           | APlayer / DPlayer                                                              |
