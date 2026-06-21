@@ -65,7 +65,7 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -81,7 +81,7 @@ features: {
 | `showBackButton`   | `true`             | 게시물 페이지에 뒤로 가기 버튼 표시                                            |
 | `editPost.enabled` | `false`            | "이 페이지 편집" 링크 표시                                                     |
 | `editPost.url`     | `""`               | 편집 링크 접두사. 게시물의 상대 소스 경로가 추가됨                             |
-| `search`           | `"pagefind"`       | 검색 솔루션: `"pagefind"` 또는 `false`                                         |
+| `search`           | `"flexsearch"`     | 검색 솔루션: `"flexsearch"` 또는 `false`                                       |
 | `mdx`              | `true`             | MDX 파싱 및 렌더링 활성화([콘텐츠 작성](./doc-content.md) 참조)                |
 | `comments`         | `{provider:false}` | 댓글 시스템 설정([댓글 시스템](./doc-comments.md) 참조)                        |
 | `players.aplayer`  | `false`            | APlayer 오디오 플레이어 활성화([미디어 플레이어](./doc-media-players.md) 참조) |

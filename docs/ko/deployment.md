@@ -14,7 +14,7 @@ pnpm build
 
 - 모든 정적 HTML 페이지 (`[locale]/` 미러 포함)
 - `_astro/` 아래의 JS / CSS / 글꼴 자산
-- `pagefind/` 검색 색인
+- `search/` Flexsearch 검색 인덱스
 - 사이트 수준 `og.png` 및 게시물별 `og.png`
 - `rss.xml`, `sitemap-index.xml`, `robots.txt`
 - `public/` 아래의 정적 자산 (파비콘, 기본 OG 이미지 등)
@@ -127,7 +127,7 @@ server {
 
 - `_astro/` 아래의 자산은 해시된 파일 이름을 가지며 장기 캐싱(`immutable`)이 가능합니다
 - HTML 파일은 시기적절한 콘텐츠 업데이트를 보장하기 위해 캐싱하지 않거나(또는 짧게만) 캐싱해야 합니다
-- Pagefind 색인은 필요 시 로드되므로 특별한 캐싱 전략이 필요하지 않습니다
+- Flexsearch 인덱스는 필요 시 로드되므로 특별한 캐싱 전략이 필요하지 않습니다
 - 배포 후 OG 이미지, RSS, 사이트맵에 접근 가능한지 확인하세요
 
 ## 댓글 시스템 백엔드

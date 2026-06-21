@@ -1,6 +1,6 @@
 # 搜尋
 
-星羅整合 [Pagefind](https://pagefind.app/) 提供靜態全文搜尋，按語言分索引，支援 View Transitions 狀態保持。
+星羅整合 [Flexsearch](https://github.com/nextapps-de/flexsearch) 提供客戶端全文搜尋，按語言分索引，支援 View Transitions 狀態保持。
 
 ## 啟用
 
@@ -8,7 +8,7 @@
 
 ```ts
 features: {
-  search: "pagefind", // "pagefind" | false
+  search: "flexsearch", // "flexsearch" | false
 }
 ```
 
@@ -18,29 +18,29 @@ features: {
 
 ### 索引生成
 
-構建流程的第三步 `pagefind --site dist` 掃描 `dist/` 目錄：
+構建流程的第三步 `node scripts/generateSearchIndex.mjs` 掃描 `dist/` 目錄中的 HTML 檔案：
 
-- 僅索引帶 `data-pagefind-body` 屬性的頁面
+- 解析頁面內容，提取文章正文
 - 按語言自動分索引（`zh-cn` 與 `en` 各自獨立）
-- 索引輸出到 `dist/pagefind/`
+- 索引輸出到 `dist/search/`
 
 ### 索引範圍
 
-文章詳情頁的 `<main>` 標記 `data-pagefind-body`，故僅文章正文被索引。其他頁面（首頁、列表、歸檔等）不進入搜尋索引。
+構建腳本會解析文章詳情頁的 `<main>` 內容，僅提取文章正文構建索引。其他頁面（首頁、列表、歸檔等）不進入搜尋索引。
 
 ## 搜尋 UI
 
 [`src/components/pageViews/SearchView.astro`](../src/components/pageViews/SearchView.astro) 實作搜尋頁：
 
-- 載入 `@pagefind/default-ui` 提供搜尋框與結果列表
-- 透過 `getAssetPath("pagefind/")` 定位索引資源
-- 全域樣式覆蓋 pagefind CSS 變數，對應到星羅主題（`--background`、`--foreground`、`--primary` 等）
+- 使用 Flexsearch 客戶端索引，在瀏覽器中完成搜尋匹配
+- 透過 `getAssetPath("search/")` 定位索引資源
+- 使用 shadcn 主題變數（`--background`、`--foreground`、`--primary` 等）設定搜尋框與結果列表樣式
 - `transition:persist` 保持搜尋狀態跨導航
 
 ### 搜尋流程
 
 1. 使用者在搜尋框輸入
-2. Pagefind 在對應語言索引中匹配
+2. Flexsearch 在對應語言索引中匹配
 3. 結果列表展示匹配文章（標題、摘要高亮）
 4. `processTerm` 將帶查詢參數的搜尋頁位址寫入 sessionStorage，供返回按鈕回跳
 
@@ -54,7 +54,7 @@ features: {
 
 ## 多語言搜尋
 
-Pagefind 按 `data-pagefind-body` 元素的語言屬性分索引：
+Flexsearch 按頁面語言分索引：
 
 - `zh-cn` 頁面（根目錄）→ 中文索引
 - `en` 頁面（`/en/` 前綴）→ 英文索引
@@ -63,13 +63,13 @@ Pagefind 按 `data-pagefind-body` 元素的語言屬性分索引：
 
 ## 主題適配
 
-Pagefind 預設 UI 有自己的 CSS 變數，星羅在 `SearchView.astro` 中用全域樣式覆蓋，對應到 shadcn 主題變數：
+Flexsearch 搜尋 UI 使用 shadcn 主題變數，在 `SearchView.astro` 中定義搜尋框與結果列表的樣式：
 
 ```css
 :root {
-  --pagefind-ui-primary: var(--primary);
-  --pagefind-ui-text: var(--foreground);
-  --pagefind-ui-background: var(--background);
+  --search-primary: var(--primary);
+  --search-text: var(--foreground);
+  --search-background: var(--background);
   /* ... */
 }
 ```
@@ -78,6 +78,6 @@ Pagefind 預設 UI 有自己的 CSS 變數，星羅在 `SearchView.astro` 中用
 
 ## 效能
 
-- Pagefind 索引為靜態檔案，搜尋在客戶端完成，無服務端請求
+- Flexsearch 索引為靜態檔案，搜尋在客戶端完成，無服務端請求
 - 索引按需載入（僅搜尋時下載索引片段）
 - `transition:persist` 避免導航時重複初始化搜尋 UI

@@ -12,7 +12,7 @@ pnpm build
 
 - 全部靜態 HTML 頁面（含 `[locale]/` 鏡像）
 - `_astro/` 下的 JS / CSS / 字型資源
-- `pagefind/` 搜尋索引
+- `search/` Flexsearch 搜索索引
 - `og.png` 站點級 OG 圖、各文章級 `og.png`
 - `rss.xml`、`sitemap-index.xml`、`robots.txt`
 - `public/` 下的靜態資源（favicon、預設 OG 圖等）
@@ -125,7 +125,7 @@ server {
 
 - `_astro/` 下的資源檔名含雜湊，可設定長期快取（`immutable`）
 - HTML 檔案不快取或短快取，確保內容更新及時
-- pagefind 索引按需載入，無需特殊快取策略
+- Flexsearch 索引按需載入，無需特殊快取策略
 - 部署後檢查 OG 圖、RSS、sitemap 是否可存取
 
 ## 評論系統後端

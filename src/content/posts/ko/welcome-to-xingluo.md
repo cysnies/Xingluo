@@ -21,7 +21,7 @@ category: announcement
 - ⚡ **극한의 성능**: Astro 정적 생성, 제로 런타임 JavaScript 오버헤드
 - 🎨 **현대적인 비주얼**: shadcn/ui new-york 스타일, OKLCH 색 공간
 - 🌗 **다크 모드**: 깜빡임 없는 전환, 시스템 설정 따름
-- 🔍 **전체 텍스트 검색**: Pagefind 기반 빌드 타임 인덱싱
+- 🔍 **전체 텍스트 검색**: Flexsearch 기반 빌드 타임 인덱싱
 - 🌐 **다국어**: 한국어, 영어, 중국어 지원
 - 📝 **Markdown**: MDX, 구문 강조, 목차, 콜아웃
 - 📡 **RSS 및 SEO**: RSS 피드 및 구조화된 데이터 즉시 사용 가능

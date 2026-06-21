@@ -55,7 +55,7 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -71,7 +71,7 @@ features: {
 | `showBackButton`   | `true`             | 文章頁是否顯示返回按鈕                                               |
 | `editPost.enabled` | `false`            | 是否顯示"編輯此頁"連結                                               |
 | `editPost.url`     | `""`               | 編輯連結字首，會拼接文章相對原始檔路徑                               |
-| `search`           | `"pagefind"`       | 搜尋方案：`"pagefind"` 或 `false`                                    |
+| `search`           | `"flexsearch"`     | 搜尋方案：`"flexsearch"` 或 `false`                                  |
 | `mdx`              | `true`             | 是否啟用 MDX 解析與渲染（詳見 [內容創作](./content.md)）             |
 | `comments`         | `{provider:false}` | 評論系統設定（詳見 [評論系統](./comments.md)）                       |
 | `players.aplayer`  | `false`            | 是否啟用 APlayer 音樂播放器（詳見 [媒體播放器](./media-players.md)） |

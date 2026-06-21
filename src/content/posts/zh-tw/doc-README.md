@@ -27,7 +27,7 @@ locale: zh-tw
 | [評論系統](./doc-comments.md)        | giscus / twikoo / waline 三選一設定與接入                         |
 | [媒體播放器](./doc-media-players.md) | APlayer / DPlayer 在 MD 與 MDX 中的使用                           |
 | [SEO](./doc-seo.md)                  | OG 圖、RSS、sitemap、hreflang、canonical、結構化資料              |
-| [搜尋](./doc-search.md)              | Pagefind 全文搜尋整合                                             |
+| [搜尋](./doc-search.md)              | Flexsearch 全文檢索整合                                           |
 | [部署](./doc-deployment.md)          | 靜態託管、GitHub Pages、環境變數、Docker                          |
 
 ## 核心特性
@@ -42,7 +42,7 @@ locale: zh-tw
 - **黏性目錄側欄**：大螢幕文章頁右側黏性目錄，IntersectionObserver 捲動凸顯當前章節
 - **評論系統**：giscus / twikoo / waline 三選一，主題自動跟隨，懶載入
 - **媒體播放器**：APlayer 音樂播放器與 DPlayer 影片播放器，MD 圍欄與 MDX 元件雙入口
-- **搜尋**：Pagefind 全文搜尋，按語言分索引，View Transitions 狀態保持
+- **搜尋**：Flexsearch 全文檢索，按語言分索引，View Transitions 狀態保持
 - **SEO**：動態 OG 圖（satori + sharp）、RSS、sitemap、JSON-LD 結構化資料（BlogPosting + BreadcrumbList）、canonical 規範化
 
 ## 技術棧
@@ -54,7 +54,7 @@ locale: zh-tw
 | 圖示       | astro-icon + Font Awesome（構建期內聯）                      |
 | 內容       | Astro Content Collections、MDX、remark/rehype 外掛鏈         |
 | 程式碼凸顯 | Shiki（雙主題 + 標註轉換器）                                 |
-| 搜尋       | Pagefind                                                     |
+| 搜尋       | Flexsearch                                                   |
 | OG 圖      | satori + sharp                                               |
 | 評論       | giscus / twikoo / waline                                     |
 | 播放器     | APlayer / DPlayer                                            |

@@ -52,10 +52,10 @@ pnpm build
 ```
 
 1. **`astro check`**：TypeScript および Astro テンプレートの型チェック。エラーがあるとビルドは中断されます
-2. **`astro build`**：サイト全体を `dist/` に静的に生成します（動的 OG 画像、RSS、サイトマップ、robots.txt、pagefind UI アセットを含む）
-3. **`pagefind --site dist`**：`dist/` をスキャンして全文検索インデックスを `dist/pagefind/` に生成します
+2. **`astro build`**：サイト全体を `dist/` に静的に生成します（動的 OG 画像、RSS、サイトマップ、robots.txt を含む）
+3. **`node scripts/generateSearchIndex.mjs`**：`dist/` をスキャンして全文検索インデックスを `dist/search/` に生成します
 
-> 注：`pagefind` は devDependency としてインストールされたバイナリツールです。追加の設定は不要です。
+> 注：検索インデックスはビルド後に Node スクリプトによって生成されます。
 
 ## ビルドのプレビュー
 

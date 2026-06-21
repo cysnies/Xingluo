@@ -202,7 +202,7 @@ import { APlayer, DPlayer } from "@/components/mdx";
 - 按共享標籤數量降序排列
 - 同分數按發佈時間降序（優先推薦較新的文章）
 - 無共享標籤時不顯示該區塊
-- 自動被 pagefind 搜尋索引忽略
+- 自動被 Flexsearch 搜尋索引忽略
 
 無需額外設定，自動生效。
 

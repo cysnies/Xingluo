@@ -25,7 +25,7 @@ Xingluo は [Astro](https://astro.build/) と [shadcn/ui](https://ui.shadcn.com/
 | [コメントシステム](./doc-comments.md)        | giscus / twikoo / waline の選択と接続                                           |
 | [メディアプレーヤー](./doc-media-players.md) | Markdown および MDX での APlayer / DPlayer の使用                               |
 | [SEO](./doc-seo.md)                          | OG 画像、RSS、サイトマップ、hreflang、カノニカル、構造化データ                  |
-| [検索](./doc-search.md)                      | Pagefind 全文検索の統合                                                         |
+| [検索](./doc-search.md)                      | Flexsearch 全文検索の統合                                                       |
 | [デプロイ](./doc-deployment.md)              | 静的ホスティング、GitHub Pages、環境変数、Docker                                |
 
 ## 主な機能
@@ -40,7 +40,7 @@ Xingluo は [Astro](https://astro.build/) と [shadcn/ui](https://ui.shadcn.com/
 - **固定目次サイドバー**：大画面で右側に固定目次、IntersectionObserver によるスクロール追跡
 - **コメントシステム**：giscus / twikoo / waline、テーマ対応、遅延読み込み
 - **メディアプレーヤー**：APlayer オーディオと DPlayer ビデオ、MD フェンスと MDX コンポーネントの両方のエントリポイント
-- **検索**：Pagefind 全文検索、言語別インデックス、View Transitions 状態保持
+- **検索**：Flexsearch 全文検索、言語別インデックス、View Transitions 状態保持
 - **完全なSEO**：動的 OG 画像（satori + sharp）、RSS、サイトマップ、JSON-LD 構造化データ（BlogPosting + BreadcrumbList）、カノニカル正規化
 
 ## 技術スタック
@@ -52,7 +52,7 @@ Xingluo は [Astro](https://astro.build/) と [shadcn/ui](https://ui.shadcn.com/
 | アイコン             | astro-icon + Font Awesome                                                  |
 | コンテンツ           | Astro Content Collections、MDX、remark/rehype プラグインチェーン           |
 | コードハイライト     | Shiki                                                                      |
-| 検索                 | Pagefind                                                                   |
+| 検索                 | Flexsearch                                                                 |
 | OG 画像              | satori + sharp                                                             |
 | コメント             | giscus / twikoo / waline                                                   |
 | プレーヤー           | APlayer / DPlayer                                                          |

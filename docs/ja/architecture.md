@@ -161,7 +161,7 @@ Xingluo のクライアントサイドインタラクションは、ページ下
 
 ## ビルドパイプライン
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`**：TypeScript + Astro テンプレートの型チェック
 2. **`astro build`**：
@@ -171,7 +171,7 @@ Xingluo のクライアントサイドインタラクションは、ページ下
    - `mdx()` 統合を条件付きで読み込み、`remarkPlayers` を条件付きで注入
    - ビルド時に SVG アイコンをインライン化（astro-icon、ランタイム JS ゼロ）
    - 動的にインポートされるコメントとプレーヤーモジュールは、スタンドアロンチャンクに分割（遅延読み込み）
-3. **`pagefind --site dist`**：`data-pagefind-body` でマークされた `dist/` のコンテンツをスキャンし、言語別の検索インデックスを `dist/pagefind/` に生成
+3. **`node scripts/generateSearchIndex.mjs`**：`dist/` の HTML ファイルをスキャンし、ページコンテンツを解析して言語別の検索インデックスを `dist/search/` に生成
 
 ## パフォーマンス戦略
 

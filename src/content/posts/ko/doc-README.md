@@ -25,7 +25,7 @@ Xingluo는 [Astro](https://astro.build/)와 [shadcn/ui](https://ui.shadcn.com/) 
 | [댓글 시스템](./doc-comments.md)          | giscus / twikoo / waline 선택 및 연결                              |
 | [미디어 플레이어](./doc-media-players.md) | Markdown 및 MDX에서 APlayer / DPlayer 사용                         |
 | [SEO](./doc-seo.md)                       | OG 이미지, RSS, 사이트맵, hreflang, canonical, 구조화된 데이터     |
-| [검색](./doc-search.md)                   | Pagefind 전체 텍스트 검색 통합                                     |
+| [검색](./doc-search.md)                   | Flexsearch 전체 텍스트 검색 통합                                   |
 | [배포](./doc-deployment.md)               | 정적 호스팅, GitHub Pages, 환경 변수, Docker                       |
 
 ## 핵심 기능
@@ -40,7 +40,7 @@ Xingluo는 [Astro](https://astro.build/)와 [shadcn/ui](https://ui.shadcn.com/) 
 - **고정 목차 사이드바**: 대형 화면에서 오른쪽 고정 목차, IntersectionObserver 스크롤 감지
 - **댓글 시스템**: giscus / twikoo / waline, 테마 인식, 지연 로드
 - **미디어 플레이어**: APlayer 오디오 및 DPlayer 비디오, MD 펜스 및 MDX 컴포넌트 진입점 모두 지원
-- **검색**: Pagefind 전체 텍스트 검색, 언어별 인덱스, View Transitions 상태 유지
+- **검색**: Flexsearch 전체 텍스트 검색, 언어별 인덱스, View Transitions 상태 유지
 - **완전한 SEO**: 동적 OG 이미지(satori + sharp), RSS, 사이트맵, JSON-LD 구조화된 데이터(BlogPosting + BreadcrumbList), canonical 정규화
 
 ## 기술 스택
@@ -52,7 +52,7 @@ Xingluo는 [Astro](https://astro.build/)와 [shadcn/ui](https://ui.shadcn.com/) 
 | 아이콘          | astro-icon + Font Awesome                                           |
 | 콘텐츠          | Astro Content Collections, MDX, remark/rehype 플러그인 체인         |
 | 코드 하이라이팅 | Shiki                                                               |
-| 검색            | Pagefind                                                            |
+| 검색            | Flexsearch                                                          |
 | OG 이미지       | satori + sharp                                                      |
 | 댓글            | giscus / twikoo / waline                                            |
 | 플레이어        | APlayer / DPlayer                                                   |

@@ -171,7 +171,7 @@ Xingluo의 클라이언트 사이드 상호작용은 페이지 하단의 `<scrip
 
 ## 빌드 파이프라인
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`**: TypeScript + Astro 템플릿 타입 검사
 2. **`astro build`**:
@@ -181,7 +181,7 @@ Xingluo의 클라이언트 사이드 상호작용은 페이지 하단의 `<scrip
    - 조건부로 `mdx()` 통합 로드; 조건부로 `remarkPlayers` 주입
    - 빌드 시 SVG 아이콘 인라인(astro-icon, 런타임 JS 제로)
    - 동적으로 가져온 댓글 및 플레이어 모듈은 독립 청크로 분할(지연 로드)
-3. **`pagefind --site dist`**: `data-pagefind-body`로 표시된 `dist/` 콘텐츠 스캔, 언어별 검색 인덱스를 `dist/pagefind/`에 생성
+3. **`node scripts/generateSearchIndex.mjs`**: `dist/`의 HTML 파일 스캔, 페이지 콘텐츠를 파싱하여 언어별 검색 인덱스를 `dist/search/`에 생성
 
 ## 성능 전략
 

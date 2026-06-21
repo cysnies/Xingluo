@@ -55,7 +55,7 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -71,7 +71,7 @@ features: {
 | `showBackButton`   | `true`             | 投稿ページに戻るボタンを表示                                                             |
 | `editPost.enabled` | `false`            | 「このページを編集」リンクを表示                                                         |
 | `editPost.url`     | `""`               | 編集リンクのプレフィックス。投稿の相対ソースパスが末尾に追加されます                     |
-| `search`           | `"pagefind"`       | 検索ソリューション: `"pagefind"` または `false`                                          |
+| `search`           | `"flexsearch"`     | 検索ソリューション: `"flexsearch"` または `false`                                        |
 | `mdx`              | `true`             | MDX の解析とレンダリングを有効化（[コンテンツ作成](./content.md) を参照）                |
 | `comments`         | `{provider:false}` | コメントシステムの設定（[コメントシステム](./comments.md) を参照）                       |
 | `players.aplayer`  | `false`            | APlayer オーディオプレーヤーを有効化（[メディアプレーヤー](./media-players.md) を参照）  |

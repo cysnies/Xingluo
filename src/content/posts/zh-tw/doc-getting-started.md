@@ -64,10 +64,10 @@ pnpm build
 ```
 
 1. **`astro check`**：TypeScript 與 Astro 模板型別檢查，任何錯誤都會中斷構建
-2. **`astro build`**：靜態生成全站到 `dist/`（含動態 OG 圖、RSS、sitemap、robots.txt、pagefind UI 資源）
-3. **`pagefind --site dist`**：掃描 `dist/` 生成全文搜尋索引到 `dist/pagefind/`
+2. **`astro build`**：靜態生成全站到 `dist/`（含動態 OG 圖、RSS、sitemap、robots.txt）
+3. **`node scripts/generateSearchIndex.mjs`**：掃描 `dist/` 生成全文搜尋索引到 `dist/search/`
 
-> 註：`pagefind` 為二進位工具，已作為 devDependency 安裝，無需額外設定。
+> 註：搜尋索引由構建後的 Node 腳本生成。
 
 ## 預覽構建產物
 

@@ -21,7 +21,7 @@ category: announcement
 - ⚡ **極致效能**：基於 Astro 靜態生成，零執行階段 JavaScript 開銷
 - 🎨 **現代視覺**：shadcn/ui 的 new-york 風格，OKLCH 色彩空間
 - 🌗 **暗黑模式**：無閃爍切換，跟隨系統偏好
-- 🔍 **全文搜尋**：基於 Pagefind 的構建時索引
+- 🔍 **全文搜尋**：基於 Flexsearch 的構建時索引
 - 🌐 **多語言**：繁體中文、英文雙語支援
 - 📝 **Markdown**：支援 MDX、程式碼凸顯、目錄、標註框
 - 📡 **RSS 與 SEO**：開箱即用的 RSS 源與結構化資料
