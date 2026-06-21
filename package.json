@@ -1,9 +1,9 @@
 {
   "name": "xingluo",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "星罗 - 基于 Astro 与 shadcn 的博客 CMS",
+  "description": "星罗 - 基于 Astro 与 shadcn 视觉风格的现代化博客主题",
   "packageManager": "pnpm@10.21.0",
   "engines": {
     "node": ">=22.12.0"
