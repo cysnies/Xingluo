@@ -12,7 +12,7 @@ Le `dist/` généré contient :
 
 - Toutes les pages HTML statiques (y compris les miroirs `[locale]/`)
 - Les assets JS / CSS / polices sous `_astro/`
-- L'index de recherche `pagefind/`
+- L'index de recherche `search/`
 - L'`og.png` au niveau du site et par article
 - `rss.xml`, `sitemap-index.xml`, `robots.txt`
 - Les assets statiques sous `public/` (favicon, image OG par défaut, etc.)
@@ -125,7 +125,7 @@ server {
 
 - Les assets sous `_astro/` ont des noms de fichiers hashés et peuvent être mis en cache à long terme (`immutable`)
 - Les fichiers HTML ne doivent pas être mis en cache (ou seulement brièvement) pour garantir des mises à jour de contenu en temps opportun
-- Les index Pagefind se chargent à la demande ; aucune stratégie de cache spéciale n'est nécessaire
+- Les index Flexsearch se chargent à la demande ; aucune stratégie de cache spéciale n'est nécessaire
 - Après le déploiement, vérifiez que les images OG, le RSS et le sitemap sont accessibles
 
 ## Backends des systèmes de commentaires

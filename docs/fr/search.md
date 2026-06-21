@@ -1,6 +1,6 @@
 # Recherche
 
-Xingluo intègre [Pagefind](https://pagefind.app/) pour la recherche plein texte statique, avec des index par langue et la persistance d'état View Transitions.
+Xingluo intègre [Flexsearch](https://github.com/nextapps-de/flexsearch) pour la recherche plein texte côté client, avec des index par langue et la persistance d'état View Transitions.
 
 ## Activation
 
@@ -8,7 +8,7 @@ Configurez via `features.search` :
 
 ```ts
 features: {
-  search: "pagefind", // "pagefind" | false
+  search: "flexsearch", // "flexsearch" | false
 }
 ```
 
@@ -18,29 +18,29 @@ Lorsqu'elle est définie sur `false`, la page de recherche fait un `Astro.rewrit
 
 ### Génération d'index
 
-La troisième étape de build, `pagefind --site dist`, scanne le répertoire `dist/` :
+La troisième étape de build, `node scripts/generateSearchIndex.mjs`, scanne les fichiers HTML dans le répertoire `dist/` :
 
-- Seules les pages avec l'attribut `data-pagefind-body` sont indexées
+- Analyse le contenu des pages et extrait le texte des articles
 - Les index sont automatiquement divisés par langue (`zh-cn` et `en` ont chacun le leur)
-- Les index sont générés dans `dist/pagefind/`
+- Les index sont générés dans `dist/search/`
 
 ### Périmètre d'indexation
 
-Le `<main>` des pages de détail d'article est marqué `data-pagefind-body`, donc seuls les corps d'articles sont indexés. Les autres pages (accueil, listes, archives, etc.) n'entrent pas dans l'index de recherche.
+Le script de build analyse le contenu `<main>` des pages de détail d'article, donc seuls les corps d'articles sont indexés. Les autres pages (accueil, listes, archives, etc.) n'entrent pas dans l'index de recherche.
 
 ## UI de recherche
 
 [`src/components/pageViews/SearchView.astro`](../src/components/pageViews/SearchView.astro) implémente la page de recherche :
 
-- Charge `@pagefind/default-ui` pour la boîte de recherche et la liste de résultats
-- Localise les assets d'index via `getAssetPath("pagefind/")`
-- Les styles globaux remplacent les variables CSS de Pagefind, les mappant au thème de Xingluo (`--background`, `--foreground`, `--primary`, etc.)
+- Utilise l'index côté client Flexsearch pour la correspondance de recherche dans le navigateur
+- Localise les assets d'index via `getAssetPath("search/")`
+- Utilise les variables de thème shadcn (`--background`, `--foreground`, `--primary`, etc.) pour le style de la boîte de recherche et de la liste de résultats
 - `transition:persist` préserve l'état de recherche lors de la navigation
 
 ### Flux de recherche
 
 1. L'utilisateur tape dans la boîte de recherche
-2. Pagefind recherche dans l'index de la langue actuelle
+2. Flexsearch recherche dans l'index de la langue actuelle
 3. La liste de résultats affiche les articles correspondants (titre, surlignage du résumé)
 4. `processTerm` écrit l'URL de la page de recherche avec les paramètres de requête dans sessionStorage, pour que le bouton retour puisse restaurer l'état
 
@@ -54,7 +54,7 @@ Le mécanisme de navigation retour entre la page de recherche et les pages d'art
 
 ## Recherche multilingue
 
-Pagefind divise les index par l'attribut de langue des éléments `data-pagefind-body` :
+Flexsearch divise les index par langue de page :
 
 - Pages `zh-cn` (racine) → index chinois
 - Pages `en` (préfixe `/en/`) → index anglais
@@ -63,13 +63,13 @@ La recherche utilise automatiquement l'index correspondant à la langue de la pa
 
 ## Adaptation du thème
 
-L'UI par défaut de Pagefind a ses propres variables CSS ; Xingluo les remplace avec des styles globaux dans `SearchView.astro`, les mappant aux variables du thème shadcn :
+L'UI de recherche Flexsearch utilise les variables de thème shadcn, définies dans `SearchView.astro` pour le style de la boîte de recherche et de la liste de résultats :
 
 ```css
 :root {
-  --pagefind-ui-primary: var(--primary);
-  --pagefind-ui-text: var(--foreground);
-  --pagefind-ui-background: var(--background);
+  --search-primary: var(--primary);
+  --search-text: var(--foreground);
+  --search-background: var(--background);
   /* ... */
 }
 ```
@@ -78,6 +78,6 @@ Le mode sombre bascule automatiquement via le sélecteur `.dark`, cohérent avec
 
 ## Performances
 
-- Les index Pagefind sont des fichiers statiques ; la recherche se fait côté client sans requêtes serveur
+- Les index Flexsearch sont des fichiers statiques ; la recherche se fait côté client sans requêtes serveur
 - Les index sont chargés à la demande (les fragments d'index se téléchargent uniquement lors de la recherche)
 - `transition:persist` évite de réinitialiser l'UI de recherche lors de la navigation

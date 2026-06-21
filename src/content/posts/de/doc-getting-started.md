@@ -62,10 +62,10 @@ pnpm build
 ```
 
 1. **`astro check`**: TypeScript- und Astro-Vorlagen-Typüberprüfung; jeder Fehler bricht den Build ab
-2. **`astro build`**: generiert die gesamte Website statisch in `dist/` (einschließlich dynamischer OG-Bilder, RSS, Sitemap, robots.txt, pagefind UI-Assets)
-3. **`pagefind --site dist`**: durchsucht `dist/` und generiert den Volltextsuchindex in `dist/pagefind/`
+2. **`astro build`**: generiert die gesamte Website statisch in `dist/` (einschließlich dynamischer OG-Bilder, RSS, Sitemap, robots.txt)
+3. **`node scripts/generateSearchIndex.mjs`**: durchsucht `dist/` und generiert den Volltextsuchindex in `dist/search/`
 
-> Hinweis: `pagefind` ist ein binäres Tool, das als devDependency installiert wurde; keine zusätzliche Konfiguration erforderlich.
+> Hinweis: Der Suchindex wird nach dem Build von einem Node-Skript generiert.
 
 ## Build-Vorschau
 

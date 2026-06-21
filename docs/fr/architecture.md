@@ -161,7 +161,7 @@ Les interactions côté client de Xingluo sont chargées via des balises `<scrip
 
 ## Pipeline de build
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`** : Vérification des types TypeScript + templates Astro
 2. **`astro build`** :
@@ -171,7 +171,7 @@ Les interactions côté client de Xingluo sont chargées via des balises `<scrip
    - Chargement conditionnel de l'intégration `mdx()` ; injection conditionnelle de `remarkPlayers`
    - SVG icônes inline au moment de la build (astro-icon, zéro JS runtime)
    - Les modules de commentaires et lecteurs importés dynamiquement sont divisés en chunks autonomes (chargés paresseusement)
-3. **`pagefind --site dist`** : scanne le contenu `dist/` marqué avec `data-pagefind-body`, générant des index de recherche par langue dans `dist/pagefind/`
+3. **`node scripts/generateSearchIndex.mjs`** : scanne les fichiers HTML dans `dist/`, analyse le contenu des pages, générant des index de recherche par langue dans `dist/search/`
 
 ## Stratégies de performance
 

@@ -21,7 +21,7 @@ category: announcement
 - ⚡ **Performances extrêmes** : génération statique avec Astro, zéro surcharge JavaScript
 - 🎨 **Visuels modernes** : style shadcn/ui new-york, espace colorimétrique OKLCH
 - 🌗 **Mode sombre** : commutation sans scintillement, suit les préférences système
-- 🔍 **Recherche plein texte** : indexation au moment de la construction avec Pagefind
+- 🔍 **Recherche plein texte** : indexation au moment de la construction avec Flexsearch
 - 🌐 **Multilingue** : support français, anglais et chinois
 - 📝 **Markdown** : MDX, coloration syntaxique, table des matières, callouts
 - 📡 **RSS et SEO** : flux RSS et données structurées prêts à l'emploi

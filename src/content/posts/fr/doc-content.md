@@ -205,7 +205,7 @@ Jusqu'à 2 articles connexes sont affichés en bas des pages de détail des arti
 - Triés par nombre de tags partagés, décroissant
 - À score égal, triés par date de publication décroissante (favorisant les articles plus récents)
 - La section n'est pas rendue quand aucun article ne partage de tags
-- Ignorés automatiquement par l'index de recherche pagefind
+- Ignorés automatiquement par l'index de recherche Flexsearch
 
 Aucune configuration nécessaire.
 

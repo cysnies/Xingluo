@@ -193,7 +193,7 @@ Se muestran hasta 2 artículos relacionados al final de las páginas de detalle 
 - Ordenados por número de etiquetas compartidas, descendente
 - Misma puntuación ordenada por fecha de publicación, descendente (prefiriendo artículos más recientes)
 - La sección no se renderiza cuando ningún artículo comparte etiquetas
-- Ignorado automáticamente por el índice de búsqueda de pagefind
+- Ignorado automáticamente por el índice de búsqueda de Flexsearch
 
 No se necesita configuración.
 

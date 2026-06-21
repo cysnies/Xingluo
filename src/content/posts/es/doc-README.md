@@ -25,7 +25,7 @@ Xingluo es un CMS de blog moderno construido con [Astro](https://astro.build/) y
 | [Sistema de comentarios](./doc-comments.md)                | Elegir y configurar giscus / twikoo / waline                                                     |
 | [Reproductores multimedia](./doc-media-players.md)         | Uso de APlayer / DPlayer en Markdown y MDX                                                       |
 | [SEO](./doc-seo.md)                                        | Imágenes OG, RSS, mapa del sitio, hreflang, canonical, datos estructurados                       |
-| [Búsqueda](./doc-search.md)                                | Integración de búsqueda de texto completo Pagefind                                               |
+| [Búsqueda](./doc-search.md)                                | Integración de búsqueda de texto completo Flexsearch                                             |
 | [Despliegue](./doc-deployment.md)                          | Alojamiento estático, GitHub Pages, variables de entorno, Docker                                 |
 
 ## Características principales
@@ -40,7 +40,7 @@ Xingluo es un CMS de blog moderno construido con [Astro](https://astro.build/) y
 - **Barra lateral TOC fija**: tabla de contenidos fija a la derecha en pantallas grandes, seguimiento de desplazamiento IntersectionObserver
 - **Sistema de comentarios**: giscus / twikoo / waline, consciente del tema, carga diferida
 - **Reproductores multimedia**: audio APlayer y video DPlayer, con puntos de entrada MD fence y componente MDX
-- **Búsqueda**: búsqueda de texto completo Pagefind, índices por idioma, persistencia de estado View Transitions
+- **Búsqueda**: búsqueda de texto completo Flexsearch, índices por idioma, persistencia de estado View Transitions
 - **SEO completo**: imágenes OG dinámicas (satori + sharp), RSS, mapa del sitio, datos estructurados JSON-LD (BlogPosting + BreadcrumbList), normalización canonical
 
 ## Stack tecnológico
@@ -52,7 +52,7 @@ Xingluo es un CMS de blog moderno construido con [Astro](https://astro.build/) y
 | Iconos              | astro-icon + Font Awesome                                              |
 | Contenido           | Astro Content Collections, MDX, cadena de plugins remark/rehype        |
 | Resaltado de código | Shiki                                                                  |
-| Búsqueda            | Pagefind                                                               |
+| Búsqueda            | Flexsearch                                                             |
 | Imágenes OG         | satori + sharp                                                         |
 | Comentarios         | giscus / twikoo / waline                                               |
 | Reproductores       | APlayer / DPlayer                                                      |

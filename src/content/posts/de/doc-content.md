@@ -205,7 +205,7 @@ Bis zu 2 verwandte Beiträge werden am unteren Rand der Beitragsdetailseiten (na
 - Sortiert nach Anzahl gemeinsamer Tags, absteigend
 - Gleiche Punktzahl sortiert nach Veröffentlichungsdatum, absteigend (neuere Beiträge bevorzugt)
 - Abschnitt wird nicht gerendert, wenn keine Beiträge Tags teilen
-- Automatisch vom pagefind-Suchindex ignoriert
+- Automatisch vom Flexsearch-Suchindex ignoriert
 
 Keine Konfiguration erforderlich.
 

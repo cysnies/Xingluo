@@ -25,7 +25,7 @@ Xingluo est un CMS de blog moderne construit avec [Astro](https://astro.build/) 
 | [Système de commentaires](./doc-comments.md)      | Choix et configuration de giscus / twikoo / waline                                     |
 | [Lecteurs multimédia](./doc-media-players.md)     | Utilisation d'APlayer / DPlayer en Markdown et MDX                                     |
 | [SEO](./doc-seo.md)                               | Images OG, RSS, sitemap, hreflang, canonical, données structurées                      |
-| [Recherche](./doc-search.md)                      | Intégration de la recherche plein texte Pagefind                                       |
+| [Recherche](./doc-search.md)                      | Intégration de la recherche plein texte Flexsearch                                     |
 | [Déploiement](./doc-deployment.md)                | Hébergement statique, GitHub Pages, variables d'environnement, Docker                  |
 
 ## Fonctionnalités principales
@@ -40,7 +40,7 @@ Xingluo est un CMS de blog moderne construit avec [Astro](https://astro.build/) 
 - **Barre latérale TOC fixe** : table des matières fixe à droite sur les grands écrans, suivi du défilement IntersectionObserver
 - **Système de commentaires** : giscus / twikoo / waline, sensible au thème, chargé à la demande
 - **Lecteurs multimédia** : audio APlayer et vidéo DPlayer, avec points d'entrée MD fence et composant MDX
-- **Recherche** : recherche plein texte Pagefind, index par langue, persistance d'état View Transitions
+- **Recherche** : recherche plein texte Flexsearch, index par langue, persistance d'état View Transitions
 - **SEO complet** : images OG dynamiques (satori + sharp), RSS, sitemap, données structurées JSON-LD (BlogPosting + BreadcrumbList), normalisation canonical
 
 ## Stack technique
@@ -52,7 +52,7 @@ Xingluo est un CMS de blog moderne construit avec [Astro](https://astro.build/) 
 | Icônes                  | astro-icon + Font Awesome                                       |
 | Contenu                 | Astro Content Collections, MDX, chaîne de plugins remark/rehype |
 | Coloration syntaxique   | Shiki                                                           |
-| Recherche               | Pagefind                                                        |
+| Recherche               | Flexsearch                                                      |
 | Images OG               | satori + sharp                                                  |
 | Commentaires            | giscus / twikoo / waline                                        |
 | Lecteurs                | APlayer / DPlayer                                               |

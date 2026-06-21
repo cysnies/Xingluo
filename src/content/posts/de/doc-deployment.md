@@ -22,7 +22,7 @@ Das generierte `dist/` enthält:
 
 - Alle statischen HTML-Seiten (inkl. `[locale]/`-Spiegel)
 - JS-/CSS-/Schriftart-Assets unter `_astro/`
-- Den `pagefind/`-Suchindex
+- Den `search/`-Suchindex
 - Das site-weite `og.png` und beitragsbezogene `og.png`
 - `rss.xml`, `sitemap-index.xml`, `robots.txt`
 - Statische Assets unter `public/` (favicon, Standard-OG-Bild, usw.)
@@ -135,7 +135,7 @@ server {
 
 - Assets unter `_astro/` haben gehashte Dateinamen und können langfristig gecacht werden (`immutable`)
 - HTML-Dateien sollten nicht (oder nur kurz) gecacht werden, um zeitnahe Inhaltsaktualisierungen zu gewährleisten
-- Pagefind-Indizes werden bei Bedarf geladen; keine spezielle Caching-Strategie erforderlich
+- Flexsearch-Indizes werden bei Bedarf geladen; keine spezielle Caching-Strategie erforderlich
 - Überprüfen Sie nach der Bereitstellung, ob OG-Bilder, RSS und die Sitemap erreichbar sind
 
 ## Kommentarsystem-Backends

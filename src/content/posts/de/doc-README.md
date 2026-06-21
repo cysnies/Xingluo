@@ -25,7 +25,7 @@ Xingluo ist ein modernes Blog-CMS, das mit [Astro](https://astro.build/) und dem
 | [Kommentarsystem](./doc-comments.md)              | Auswahl und Einrichtung von giscus / twikoo / waline                                 |
 | [Medienplayer](./doc-media-players.md)            | Verwendung von APlayer / DPlayer in Markdown und MDX                                 |
 | [SEO](./doc-seo.md)                               | OG-Bilder, RSS, Sitemap, hreflang, canonical, strukturierte Daten                    |
-| [Suche](./doc-search.md)                          | Pagefind-Volltextsuche-Integration                                                   |
+| [Suche](./doc-search.md)                          | Flexsearch-Volltextsuche-Integration                                                 |
 | [Bereitstellung](./doc-deployment.md)             | Statisches Hosting, GitHub Pages, Umgebungsvariablen, Docker                         |
 
 ## Kernfunktionen
@@ -40,7 +40,7 @@ Xingluo ist ein modernes Blog-CMS, das mit [Astro](https://astro.build/) und dem
 - **Sticky-TOC-Seitenleiste**: rechts fixiertes Inhaltsverzeichnis auf großen Bildschirmen, IntersectionObserver-Scroll-Überwachung
 - **Kommentarsystem**: giscus / twikoo / waline, themenbewusst, verzögert geladen
 - **Medienplayer**: APlayer-Audio und DPlayer-Video, mit MD-Fence- und MDX-Komponenten-Einstiegspunkten
-- **Suche**: Pagefind-Volltextsuche, sprachspezifische Indizes, View Transitions-Zustandsspeicherung
+- **Suche**: Flexsearch-Volltextsuche, sprachspezifische Indizes, View Transitions-Zustandsspeicherung
 - **Vollständiges SEO**: dynamische OG-Bilder (satori + sharp), RSS, Sitemap, JSON-LD-Strukturdaten (BlogPosting + BreadcrumbList), canonical-Normalisierung
 
 ## Technologie-Stack
@@ -52,7 +52,7 @@ Xingluo ist ein modernes Blog-CMS, das mit [Astro](https://astro.build/) und dem
 | Symbole           | astro-icon + Font Awesome                                       |
 | Inhalt            | Astro Content Collections, MDX, remark/rehype-Plugin-Kette      |
 | Code-Hervorhebung | Shiki                                                           |
-| Suche             | Pagefind                                                        |
+| Suche             | Flexsearch                                                      |
 | OG-Bilder         | satori + sharp                                                  |
 | Kommentare        | giscus / twikoo / waline                                        |
 | Player            | APlayer / DPlayer                                               |

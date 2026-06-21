@@ -21,7 +21,7 @@ category: announcement
 - ⚡ **Extreme Leistung**: statische Generierung mit Astro, keine JavaScript-Laufzeit
 - 🎨 **Moderne Optik**: shadcn/ui new-york Stil, OKLCH-Farbraum
 - 🌗 **Dunkelmodus**: flackerfreies Umschalten, folgt Systemeinstellung
-- 🔍 **Volltextsuche**: Build-Zeit-Indizierung mit Pagefind
+- 🔍 **Volltextsuche**: Build-Zeit-Indizierung mit Flexsearch
 - 🌐 **Mehrsprachig**: Deutsch, Englisch und Chinesisch
 - 📝 **Markdown**: MDX, Syntax-Highlighting, Inhaltsverzeichnis, Callouts
 - 📡 **RSS & SEO**: RSS-Feed und strukturierte Daten sofort einsatzbereit

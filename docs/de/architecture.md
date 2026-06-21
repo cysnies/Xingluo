@@ -161,7 +161,7 @@ Die clientseitigen Interaktionen von Xingluo werden über `<script>`-Tags am End
 
 ## Build-Pipeline
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`**: TypeScript + Astro-Vorlagen-Typüberprüfung
 2. **`astro build`**:
@@ -171,7 +171,7 @@ Die clientseitigen Interaktionen von Xingluo werden über `<script>`-Tags am End
    - Bedingtes Laden der `mdx()`-Integration; bedingtes Injizieren von `remarkPlayers`
    - SVG-Symbole zur Build-Zeit inline (astro-icon, null Runtime-JS)
    - Dynamisch importierte Kommentar- und Player-Module werden in eigenständige Chunks aufgeteilt (Lazy-Loading)
-3. **`pagefind --site dist`**: scannt `dist/`-Inhalt, der mit `data-pagefind-body` markiert ist, und generiert sprachspezifische Suchindizes in `dist/pagefind/`
+3. **`node scripts/generateSearchIndex.mjs`**: scannt HTML-Dateien in `dist/`, analysiert Seiteninhalte und generiert sprachspezifische Suchindizes in `dist/search/`
 
 ## Leistungsstrategien
 
