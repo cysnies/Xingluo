@@ -49,6 +49,8 @@ export interface PostsConfig {
   perIndex: number;
   /** 定时发布容差（毫秒），在此时间内的未来文章视为已发布 */
   scheduledPostMargin: number;
+  /** 分类页中每个分类展示的文章数 */
+  postsPerCategory: number;
 }
 
 /** 编辑文章链接配置 */

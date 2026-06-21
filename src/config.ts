@@ -16,6 +16,8 @@ const DEFAULT_OG_IMAGE = "default-og.jpg";
 const DEFAULT_PER_PAGE = 8;
 /** 默认首页文章数 */
 const DEFAULT_PER_INDEX = 5;
+/** 默认分类页中每个分类展示的文章数 */
+const DEFAULT_PER_CATEGORY = 4;
 /** 定时发布容差（15 分钟） */
 const DEFAULT_SCHEDULED_MARGIN = 15 * 60 * 1000;
 
@@ -38,6 +40,7 @@ const defaultPosts = {
   perPage: DEFAULT_PER_PAGE,
   perIndex: DEFAULT_PER_INDEX,
   scheduledPostMargin: DEFAULT_SCHEDULED_MARGIN,
+  postsPerCategory: DEFAULT_PER_CATEGORY,
 };
 
 /** 功能开关默认值 */
