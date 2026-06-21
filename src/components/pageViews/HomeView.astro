@@ -34,9 +34,9 @@ const rssHref = new URL(
   <Header />
   <Main>
     <!-- Hero 区域 -->
-    <section class="border-b border-border pb-6">
+    <section class="border-b border-border pb-6" data-reveal>
       <div class="flex items-center gap-3">
-        <h1 class="my-4 text-4xl font-bold tracking-tight sm:my-6 sm:text-5xl">
+        <h1 class="my-4 text-4xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
           {site.title}
         </h1>
         <a
@@ -65,7 +65,7 @@ const rssHref = new URL(
     <!-- 精选文章 -->
     {
       featuredPosts.length > 0 && (
-        <section class="py-8">
+        <section class="py-8" data-reveal>
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.featured}
           </h2>

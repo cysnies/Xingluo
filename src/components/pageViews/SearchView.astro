@@ -46,6 +46,24 @@ const crumbs = [
 </Layout>
 
 <script>
+  /** 为搜索结果添加入场动画 */
+  function observeSearchResults(searchEl: HTMLElement) {
+    const addAnimToResult = (result: Element) => {
+      if (!result.classList.contains("search-result-enter")) {
+        result.classList.add("search-result-enter");
+      }
+    };
+
+    // 处理已有结果
+    searchEl.querySelectorAll(".pagefind-ui__result").forEach(addAnimToResult);
+
+    // 监听后续新增的结果
+    const obs = new MutationObserver(() => {
+      searchEl.querySelectorAll(".pagefind-ui__result").forEach(addAnimToResult);
+    });
+    obs.observe(searchEl, { childList: true, subtree: true });
+  }
+
   function initSearch() {
     const pageFindSearch = document.querySelector<HTMLElement>(
       "#pagefind-search"
@@ -86,6 +104,9 @@ const crumbs = [
           return term;
         },
       });
+
+      // 为搜索结果添加入场动画
+      observeSearchResults(pageFindSearch);
 
       // 触发 URL 中的初始查询
       const query = params.get("q");
