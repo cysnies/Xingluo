@@ -37,12 +37,25 @@ function reflect(): void {
     ?.setAttribute("content", bg);
 }
 
+/** 主题切换时添加过渡 class，让切换更平滑 */
+function withTransition(fn: () => void): void {
+  const root = document.firstElementChild;
+  root?.classList.add("theme-transitioning");
+  fn();
+  // 过渡完成后移除 class，避免影响后续操作
+  setTimeout(() => {
+    root?.classList.remove("theme-transitioning");
+  }, 350);
+}
+
 /** 初始化主题切换 */
 function setup(): void {
   reflect();
   document.querySelector("#theme-btn")?.addEventListener("click", () => {
-    themeValue = themeValue === LIGHT ? DARK : LIGHT;
-    persist();
+    withTransition(() => {
+      themeValue = themeValue === LIGHT ? DARK : LIGHT;
+      persist();
+    });
   });
 }
 
