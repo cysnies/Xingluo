@@ -1,10 +1,8 @@
 ---
-import { useTranslations } from "@/i18n";
 import config from "@/config";
 import Socials from "./Socials.astro";
 
 const { site } = config;
-const t = useTranslations(Astro.currentLocale);
 const year = new Date().getFullYear();
 ---
 
@@ -13,7 +11,7 @@ const year = new Date().getFullYear();
     class="mx-auto flex max-w-app flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row sm:px-6 lg:px-8"
   >
     <p class="text-sm text-muted-foreground">
-      © {year} {site.author}. {t.footer.allRightsReserved}
+      © {year} {site.author}
     </p>
     <Socials />
   </div>

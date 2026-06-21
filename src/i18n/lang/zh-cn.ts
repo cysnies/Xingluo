@@ -54,7 +54,6 @@ const zhCn: UIStrings = {
   },
   footer: {
     copyright: "版权所有",
-    allRightsReserved: "保留所有权利。",
   },
   pages: {
     tagTitle: "#{{tag}}",

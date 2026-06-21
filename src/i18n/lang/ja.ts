@@ -54,7 +54,6 @@ const ja: UIStrings = {
   },
   footer: {
     copyright: "著作権",
-    allRightsReserved: "無断転載を禁じます。",
   },
   pages: {
     tagTitle: "#{{tag}}",

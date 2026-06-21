@@ -54,7 +54,6 @@ const ko: UIStrings = {
   },
   footer: {
     copyright: "저작권",
-    allRightsReserved: "모든 권리 보유.",
   },
   pages: {
     tagTitle: "#{{tag}}",

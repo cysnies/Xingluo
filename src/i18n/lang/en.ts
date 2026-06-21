@@ -54,7 +54,6 @@ const en: UIStrings = {
   },
   footer: {
     copyright: "Copyright",
-    allRightsReserved: "All rights reserved.",
   },
   pages: {
     tagTitle: "#{{tag}}",

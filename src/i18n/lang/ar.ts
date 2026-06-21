@@ -54,7 +54,6 @@ const ar: UIStrings = {
   },
   footer: {
     copyright: "حقوق النشر",
-    allRightsReserved: "جميع الحقوق محفوظة.",
   },
   pages: {
     tagTitle: "#{{tag}}",

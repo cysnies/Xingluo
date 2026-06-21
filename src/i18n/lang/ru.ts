@@ -54,7 +54,6 @@ const ru: UIStrings = {
   },
   footer: {
     copyright: "Авторские права",
-    allRightsReserved: "Все права защищены.",
   },
   pages: {
     tagTitle: "#{{tag}}",

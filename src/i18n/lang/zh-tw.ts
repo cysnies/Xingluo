@@ -54,7 +54,6 @@ const zhTw: UIStrings = {
   },
   footer: {
     copyright: "版權所有",
-    allRightsReserved: "保留所有權利。",
   },
   pages: {
     tagTitle: "#{{tag}}",

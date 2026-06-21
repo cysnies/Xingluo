@@ -71,7 +71,6 @@ export interface UIStrings {
   /** 页脚相关 */
   footer: {
     copyright: string;
-    allRightsReserved: string;
   };
   /** 各页面标题与描述 */
   pages: {

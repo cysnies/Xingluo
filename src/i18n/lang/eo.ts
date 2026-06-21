@@ -54,7 +54,6 @@ const eo: UIStrings = {
   },
   footer: {
     copyright: "Kopirajto",
-    allRightsReserved: "Ĉiuj rajtoj rezervitaj.",
   },
   pages: {
     tagTitle: "#{{tag}}",
