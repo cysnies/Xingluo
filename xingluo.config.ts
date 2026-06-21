@@ -79,6 +79,24 @@ export default defineXingluoConfig({
     //   enabled: true,
     //   url: "https://fonts.googleapis.cn",
     // },
+    // 动效与动画配置（默认全部开启，关闭对应项可禁用）
+    // animations: {
+    //   spotlightCard: true,      // PostCard 悬停光晕
+    //   cardTilt: true,           // PostCard 悬停倾斜视差
+    //   scrollReveal: true,       // 列表滚入渐现
+    //   navIndicator: true,       // 导航指示条滑动
+    //   mobileMenuTransition: true, // 移动端菜单动画
+    //   buttonRipple: true,       // 按钮点击涟漪
+    //   buttonPress: true,        // 按钮按压反馈
+    //   themeTransition: true,    // 主题切换过渡
+    //   textReveal: true,         // 标题渐入动效
+    //   tocSmooth: true,          // TOC 平滑过渡
+    //   backToTopEnhanced: true,  // 返回顶部增强
+    //   adjacentPostGlow: true,   // 文章导航发光
+    //   noiseTexture: true,       // 噪点纹理
+    //   tagMagnet: true,          // 标签磁吸
+    //   searchResultAnim: true,   // 搜索页结果动画
+    // },
   },
   socials: [
     { name: "github", url: "https://github.com/cysnies/Xingluo" },

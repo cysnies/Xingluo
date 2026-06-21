@@ -133,6 +133,40 @@ export interface GoogleFontsMirrorConfig {
   url: string;
 }
 
+/** 动效与动画配置 */
+export interface AnimationsConfig {
+  /** PostCard 悬停光晕跟随效果 */
+  spotlightCard: boolean;
+  /** PostCard 悬停轻微倾斜视差 */
+  cardTilt: boolean;
+  /** 卡片列表进入视口时渐现动画 */
+  scrollReveal: boolean;
+  /** 导航栏激活指示条滑动动画 */
+  navIndicator: boolean;
+  /** 移动端菜单展开收起过渡动画 */
+  mobileMenuTransition: boolean;
+  /** 按钮点击涟漪效果 */
+  buttonRipple: boolean;
+  /** 按钮按压缩放反馈 */
+  buttonPress: boolean;
+  /** 主题切换时平滑过渡 */
+  themeTransition: boolean;
+  /** 首页站点标题渐入动效 */
+  textReveal: boolean;
+  /** TOC 目录高亮项平滑过渡 */
+  tocSmooth: boolean;
+  /** 返回顶部按钮弹出动画 */
+  backToTopEnhanced: boolean;
+  /** 相邻文章导航悬停发光效果 */
+  adjacentPostGlow: boolean;
+  /** 全局噪点纹理叠加 */
+  noiseTexture: boolean;
+  /** 标签悬停磁吸效果 */
+  tagMagnet: boolean;
+  /** 搜索页面结果渐入动画 */
+  searchResultAnim: boolean;
+}
+
 /** 功能开关配置 */
 export interface FeaturesConfig {
   /** 是否启用亮/暗模式切换 */
@@ -163,6 +197,8 @@ export interface FeaturesConfig {
   players: PlayersConfig;
   /** Google Fonts 镜像源配置（构建时下载字体使用） */
   googleFontsMirror: GoogleFontsMirrorConfig;
+  /** 动效与动画配置 */
+  animations: AnimationsConfig;
 }
 
 /** 社交链接项 */

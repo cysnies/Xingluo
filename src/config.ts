@@ -77,6 +77,24 @@ const defaultFeatures = {
     enabled: false,
     url: "https://fonts.googleapis.cn",
   },
+  /** 动效动画默认全部开启 */
+  animations: {
+    spotlightCard: true,
+    cardTilt: true,
+    scrollReveal: true,
+    navIndicator: true,
+    mobileMenuTransition: true,
+    buttonRipple: true,
+    buttonPress: true,
+    themeTransition: true,
+    textReveal: true,
+    tocSmooth: true,
+    backToTopEnhanced: true,
+    adjacentPostGlow: true,
+    noiseTexture: true,
+    tagMagnet: true,
+    searchResultAnim: true,
+  },
 };
 
 /** 合并评论系统配置，保留用户提供的各 provider 子配置 */
