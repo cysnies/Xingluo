@@ -51,7 +51,7 @@ const rssHref = new URL(
       </div>
       <p class="text-muted-foreground">{site.description}</p>
       {
-        config.socials.length > 0 && (
+        config.features.showHomeSocials && config.socials.length > 0 && (
           <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
             <span class="whitespace-nowrap text-sm text-muted-foreground">
               {t.home.socialLinks}:

@@ -175,6 +175,10 @@ export interface FeaturesConfig {
   showCategories: boolean;
   /** 是否显示返回按钮 */
   showBackButton: boolean;
+  /** 是否在首页展示社交链接 */
+  showHomeSocials: boolean;
+  /** 是否在页脚展示社交按钮 */
+  showFooterSocials: boolean;
   /** 是否在文章卡片中展示文章头图 */
   showPostCardHero: boolean;
   /** 移动端是否在文章卡片中展示文章头图，关闭可防止头图与文字挤在一起阻碍阅读 */

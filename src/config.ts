@@ -51,6 +51,8 @@ const defaultFeatures = {
   showArchives: true,
   showCategories: true,
   showBackButton: true,
+  showHomeSocials: true,
+  showFooterSocials: true,
   /** 默认在文章卡片中展示文章头图 */
   showPostCardHero: true,
   /** 移动端默认关闭文章卡片中的头图展示，防止头图与文字挤在一起阻碍阅读 */

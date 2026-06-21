@@ -3,7 +3,7 @@ import { tplStr } from "@/i18n";
 import config from "@/config";
 import Socials from "./Socials.astro";
 
-const { site } = config;
+const { site, features } = config;
 const year = String(new Date().getFullYear());
 const copyright = tplStr(site.copyright ?? "© {{year}} {{author}}", {
   year,
@@ -18,6 +18,6 @@ const copyright = tplStr(site.copyright ?? "© {{year}} {{author}}", {
     <p class="text-sm text-muted-foreground">
       {copyright}
     </p>
-    <Socials />
+    {features.showFooterSocials && <Socials />}
   </div>
 </footer>
