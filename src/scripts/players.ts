@@ -61,12 +61,46 @@ async function loadAPlayer(): Promise<typeof import("aplayer")> {
   return aplayerMod;
 }
 
-/** 动态加载 DPlayer 模块（样式已内联于 JS） */
+/** 缓存的 DPlayer CSS 文本内容（首次加载时从 style-loader 注入的 <style> 中捕获） */
+let dplayerCssContent: string | null = null;
+
+/** 动态加载 DPlayer 模块，并捕获 style-loader 注入的 CSS 内容 */
 async function loadDPlayer(): Promise<typeof import("dplayer")> {
   if (!dplayerMod) {
-    dplayerMod = import("dplayer");
+    dplayerMod = (async () => {
+      const mod = await import("dplayer");
+      // DPlayer 的 webpack 构建使用 style-loader，在模块首次执行时同步
+      // 向 <head> 注入 <style> 元素。捕获其文本内容以便后续恢复。
+      for (const style of document.head.querySelectorAll("style")) {
+        if (style.textContent?.includes(".dplayer")) {
+          dplayerCssContent = style.textContent;
+          break;
+        }
+      }
+      return mod;
+    })();
   }
   return dplayerMod;
+}
+
+/**
+ * 确保 DPlayer 的 <style> 仍在 <head> 中。
+ *
+ * View Transitions 的 swapHeadElements() 会移除仅存在于当前 head 但不在
+ * 新文档 head 中的元素。由于 DPlayer 的 CSS 由 style-loader 在 JS 首次
+ * 执行时动态注入，模块缓存后不会重新注入，故需手动恢复。
+ */
+function ensureDPlayerCss(): void {
+  if (!dplayerCssContent) return;
+
+  const styleExists = Array.from(document.head.querySelectorAll("style")).some(
+    (s) => s.textContent === dplayerCssContent,
+  );
+  if (!styleExists) {
+    const style = document.createElement("style");
+    style.textContent = dplayerCssContent;
+    document.head.appendChild(style);
+  }
 }
 
 /** 等待下一帧以确保 DOM 布局已稳定（View Transitions 动画可能影响容器尺寸） */
@@ -105,6 +139,8 @@ async function mountDPlayer(el: HTMLElement): Promise<void> {
     const raw = decodeURIComponent(el.dataset.config ?? "{}");
     const config = JSON.parse(raw) as Record<string, unknown>;
     const DPlayer = (await loadDPlayer()).default;
+    // 确保 DPlayer 的 CSS <style> 仍在 <head> 中（View Transitions 可能已移除）
+    ensureDPlayerCss();
     // 等待一帧确保浏览器已完成布局计算
     await waitForNextFrame();
     new DPlayer({ container: el, ...config });
