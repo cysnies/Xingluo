@@ -25,6 +25,20 @@ export interface SiteConfig {
   dir: "ltr" | "rtl";
   /** Google Search Console 站点验证值 */
   googleVerification?: string;
+  /** 站点图标配置，省略时回退到 public/favicon.svg */
+  favicon?: FaviconConfig;
+}
+
+/** 站点图标配置 */
+export interface FaviconConfig {
+  /** 主图标文件名（位于 public 目录），默认 favicon.svg */
+  svg?: string;
+  /** 传统 ICO 格式图标文件名（位于 public 目录），兼容旧浏览器 */
+  ico?: string;
+  /** Apple Touch Icon 文件名（位于 public 目录），推荐 180x180 PNG */
+  appleTouchIcon?: string;
+  /** Web App Manifest 文件名（位于 public 目录），如 site.webmanifest */
+  manifest?: string;
 }
 
 /** 文章列表相关配置 */

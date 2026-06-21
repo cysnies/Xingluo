@@ -1,0 +1,41 @@
+---
+import type { FaviconConfig } from "@/types/config";
+import { getAssetPath } from "@/utils/withBase";
+
+interface Props {
+  favicon: FaviconConfig;
+}
+
+const { favicon } = Astro.props;
+---
+
+{/* 主图标：SVG 优先，现代浏览器首选 */}
+{
+  favicon.svg && (
+    <link rel="icon" type="image/svg+xml" href={getAssetPath(favicon.svg)} />
+  )
+}
+
+{/* 传统 ICO 格式，兼容旧浏览器与 Windows 桌面快捷方式 */}
+{
+  favicon.ico && (
+    <link rel="icon" type="image/x-icon" href={getAssetPath(favicon.ico)} />
+  )
+}
+
+{/* Apple Touch Icon，iOS 主屏图标，推荐 180x180 PNG */}
+{
+  favicon.appleTouchIcon && (
+    <link
+      rel="apple-touch-icon"
+      href={getAssetPath(favicon.appleTouchIcon)}
+    />
+  )
+}
+
+{/* Web App Manifest，Android 主屏/PWA 元数据 */}
+{
+  favicon.manifest && (
+    <link rel="manifest" href={getAssetPath(favicon.manifest)} />
+  )
+}

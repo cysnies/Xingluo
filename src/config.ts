@@ -18,12 +18,18 @@ const DEFAULT_PER_INDEX = 5;
 /** 定时发布容差（15 分钟） */
 const DEFAULT_SCHEDULED_MARGIN = 15 * 60 * 1000;
 
+/** 默认站点 SVG 图标文件名 */
+const DEFAULT_FAVICON_SVG = "favicon.svg";
+
 /** 站点默认值 */
 const defaultSite = {
   ogImage: DEFAULT_OG_IMAGE,
   timezone: "Asia/Shanghai",
   dir: "ltr" as const,
   googleVerification: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION,
+  favicon: {
+    svg: DEFAULT_FAVICON_SVG,
+  } as XingluoConfig["site"]["favicon"],
 };
 
 /** 文章默认值 */
@@ -84,10 +90,27 @@ function resolvePlayers(partial?: Partial<PlayersConfig>): PlayersConfig {
   };
 }
 
+/** 合并站点图标配置，保留用户提供的各格式子项 */
+function resolveFavicon(
+  partial?: XingluoConfig["site"]["favicon"],
+): XingluoConfig["site"]["favicon"] {
+  const userFavicon = partial ?? {};
+  return {
+    svg: userFavicon.svg ?? DEFAULT_FAVICON_SVG,
+    ico: userFavicon.ico,
+    appleTouchIcon: userFavicon.appleTouchIcon,
+    manifest: userFavicon.manifest,
+  };
+}
+
 /** 深度合并用户配置与默认值，得到完整配置对象 */
 function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
   return {
-    site: { ...defaultSite, ...partial.site } as XingluoConfig["site"],
+    site: {
+      ...defaultSite,
+      ...partial.site,
+      favicon: resolveFavicon(partial.site?.favicon),
+    } as XingluoConfig["site"],
     posts: { ...defaultPosts, ...partial.posts },
     features: {
       ...defaultFeatures,
