@@ -6,11 +6,11 @@ import { defineXingluoConfig } from "./src/types/config";
  */
 export default defineXingluoConfig({
   site: {
-    url: "https://xingluo.example.com/",
+    url: "https://xingluo.tcea.top/",
     title: "星罗",
     description: "基于 Astro 与 shadcn 的现代化博客 CMS",
-    author: "星罗",
-    profile: "https://xingluo.example.com",
+    author: "白鼠 Cysnies",
+    profile: "https://xingluo.tcea.top/",
     ogImage: "default-og.jpg",
     lang: "zh-cn",
     timezone: "Asia/Shanghai",
