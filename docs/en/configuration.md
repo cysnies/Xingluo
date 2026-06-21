@@ -16,21 +16,31 @@ site: {
   timezone: "Asia/Shanghai",              // Timezone (post date display)
   dir: "ltr",                             // Text direction: ltr | rtl
   googleVerification: "",                 // Google Search Console verification value (or via env var)
+  favicon: {                              // Site icons, files live in the public directory
+    svg: "favicon.svg",                   // Primary icon (modern browsers)
+    // ico: "favicon.ico",               // Legacy browsers
+    // appleTouchIcon: "apple-touch-icon.png", // iOS home-screen icon
+    // manifest: "site.webmanifest",     // PWA manifest
+  },
 }
 ```
 
-| Field                | Default          | Notes                                                                                             |
-| -------------------- | ---------------- | ------------------------------------------------------------------------------------------------- |
-| `url`                | required         | Site root URL; must end with `/`                                                                  |
-| `title`              | required         | Site title, used in `<title>` and OG                                                              |
-| `description`        | required         | Site description, used in meta and RSS                                                            |
-| `author`             | required         | Default author; post frontmatter falls back to this                                               |
-| `profile`            | —                | Author homepage, injected into JSON-LD `author.url`                                               |
-| `ogImage`            | `default-og.jpg` | Default OG image filename, located in `public/`                                                   |
-| `lang`               | required         | Default language code; must match `i18n.defaultLocale` in `astro.config.ts`                       |
-| `timezone`           | `Asia/Shanghai`  | dayjs timezone, affects post date display                                                         |
-| `dir`                | `ltr`            | Text direction                                                                                    |
-| `googleVerification` | —                | Google verification value; can also be injected via the `PUBLIC_GOOGLE_SITE_VERIFICATION` env var |
+| Field                    | Default          | Notes                                                                                             |
+| ------------------------ | ---------------- | ------------------------------------------------------------------------------------------------- |
+| `url`                    | required         | Site root URL; must end with `/`                                                                  |
+| `title`                  | required         | Site title, used in `<title>` and OG                                                              |
+| `description`            | required         | Site description, used in meta and RSS                                                            |
+| `author`                 | required         | Default author; post frontmatter falls back to this                                               |
+| `profile`                | —                | Author homepage, injected into JSON-LD `author.url`                                               |
+| `ogImage`                | `default-og.jpg` | Default OG image filename, located in `public/`                                                   |
+| `lang`                   | required         | Default language code; must match `i18n.defaultLocale` in `astro.config.ts`                       |
+| `timezone`               | `Asia/Shanghai`  | dayjs timezone, affects post date display                                                         |
+| `dir`                    | `ltr`            | Text direction                                                                                    |
+| `googleVerification`     | —                | Google verification value; can also be injected via the `PUBLIC_GOOGLE_SITE_VERIFICATION` env var |
+| `favicon.svg`            | `favicon.svg`    | Primary SVG icon, preferred by modern browsers                                                    |
+| `favicon.ico`            | —                | ICO-format icon for legacy browsers                                                               |
+| `favicon.appleTouchIcon` | —                | Apple Touch Icon for iOS home screen (180×180 PNG recommended)                                    |
+| `favicon.manifest`       | —                | Web App Manifest filename, Android/PWA metadata                                                   |
 
 ## posts
 

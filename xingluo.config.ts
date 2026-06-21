@@ -15,6 +15,13 @@ export default defineXingluoConfig({
     lang: "zh-cn",
     timezone: "Asia/Shanghai",
     dir: "ltr",
+    // 站点图标配置，文件位于 public 目录，省略时回退到 favicon.svg
+    favicon: {
+      svg: "favicon.svg",
+      // ico: "favicon.ico",
+      // appleTouchIcon: "apple-touch-icon.png",
+      // manifest: "site.webmanifest",
+    },
   },
   posts: {
     perPage: 8,

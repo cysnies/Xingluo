@@ -16,21 +16,31 @@ site: {
   timezone: "Asia/Shanghai",              // 时区（文章时间显示）
   dir: "ltr",                             // 文字方向：ltr | rtl
   googleVerification: "",                 // Google Search Console 验证值（也可用环境变量）
+  favicon: {                              // 站点图标，文件位于 public 目录
+    svg: "favicon.svg",                   // 主图标（现代浏览器）
+    // ico: "favicon.ico",               // 兼容旧浏览器
+    // appleTouchIcon: "apple-touch-icon.png", // iOS 主屏图标
+    // manifest: "site.webmanifest",     // PWA 清单
+  },
 }
 ```
 
-| 字段                 | 默认值           | 说明                                                                   |
-| -------------------- | ---------------- | ---------------------------------------------------------------------- |
-| `url`                | 必填             | 站点根 URL，必须以 `/` 结尾                                            |
-| `title`              | 必填             | 站点标题，用于 `<title>` 与 OG                                         |
-| `description`        | 必填             | 站点描述，用于 meta 与 RSS                                             |
-| `author`             | 必填             | 默认作者，文章 frontmatter 未指定时回退此值                            |
-| `profile`            | —                | 作者主页，注入 JSON-LD `author.url`                                    |
-| `ogImage`            | `default-og.jpg` | 默认 OG 图文件名，位于 `public/`                                       |
-| `lang`               | 必填             | 默认语言代码，需与 `astro.config.ts` 的 `i18n.defaultLocale` 一致      |
-| `timezone`           | `Asia/Shanghai`  | dayjs 时区，影响文章日期显示                                           |
-| `dir`                | `ltr`            | 文字方向                                                               |
-| `googleVerification` | —                | Google 验证值；也可通过环境变量 `PUBLIC_GOOGLE_SITE_VERIFICATION` 注入 |
+| 字段                     | 默认值           | 说明                                                                   |
+| ------------------------ | ---------------- | ---------------------------------------------------------------------- |
+| `url`                    | 必填             | 站点根 URL，必须以 `/` 结尾                                            |
+| `title`                  | 必填             | 站点标题，用于 `<title>` 与 OG                                         |
+| `description`            | 必填             | 站点描述，用于 meta 与 RSS                                             |
+| `author`                 | 必填             | 默认作者，文章 frontmatter 未指定时回退此值                            |
+| `profile`                | —                | 作者主页，注入 JSON-LD `author.url`                                    |
+| `ogImage`                | `default-og.jpg` | 默认 OG 图文件名，位于 `public/`                                       |
+| `lang`                   | 必填             | 默认语言代码，需与 `astro.config.ts` 的 `i18n.defaultLocale` 一致      |
+| `timezone`               | `Asia/Shanghai`  | dayjs 时区，影响文章日期显示                                           |
+| `dir`                    | `ltr`            | 文字方向                                                               |
+| `googleVerification`     | —                | Google 验证值；也可通过环境变量 `PUBLIC_GOOGLE_SITE_VERIFICATION` 注入 |
+| `favicon.svg`            | `favicon.svg`    | 主图标（SVG），现代浏览器首选                                          |
+| `favicon.ico`            | —                | ICO 格式图标，兼容旧浏览器                                             |
+| `favicon.appleTouchIcon` | —                | Apple Touch Icon，iOS 主屏图标（推荐 180×180 PNG）                     |
+| `favicon.manifest`       | —                | Web App Manifest 文件名，Android/PWA 元数据                            |
 
 ## posts 文章配置
 
