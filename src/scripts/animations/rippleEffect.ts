@@ -10,7 +10,7 @@ const RIPPLE_SELECTOR = "[data-ripple]";
 const RIPPLE_CLASS = "ripple-effect";
 
 /** 涟漪动画持续时间（ms），与 CSS 中的 animation-duration 一致 */
-const DURATION = 600;
+const DURATION = 350;
 
 /** 初始化涟漪效果 */
 export function initRipple(): void {
