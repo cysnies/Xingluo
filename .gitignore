@@ -1,8 +1,6 @@
 ﻿# 构建产物
 dist/
 .output/
-.pagefind/
-public/pagefind/
 
 # 依赖
 node_modules/

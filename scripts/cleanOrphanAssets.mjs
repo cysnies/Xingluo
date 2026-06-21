@@ -10,7 +10,7 @@
  * （HTML 引用 → JS/CSS → 进一步的 import/url 引用），
  * 删除 _astro 目录下不可达的文件。
  *
- * 仅清理 dist/_astro/，不触及 pagefind、og.png 等其他产物。
+ * 仅清理 dist/_astro/，不触及 search、og.png 等其他产物。
  */
 import { readdir, readFile, unlink, stat } from "node:fs/promises";
 import { resolve, dirname, join, relative, sep } from "node:path";

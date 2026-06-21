@@ -13,7 +13,7 @@ RUN corepack enable
 # 仅复制清单文件与 pnpm 配置，最大化利用层缓存
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
-# 以生产意向安装（保留 devDependencies，构建期需要 astro/check/pagefind 等）
+# 以生产意向安装（保留 devDependencies，构建期需要 astro/check 等）
 # PNPM_VERIFY_DEPS_BEFORE_RUN=false 禁用供应链时效检查（minimumReleaseAge），
 # 避免最近发布的传递依赖阻断 Docker 构建
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
@@ -39,7 +39,7 @@ ENV CI_SITE_URL=${CI_SITE_URL}
 ENV CI_BASE_URL=${CI_BASE_URL}
 ENV PUBLIC_GOOGLE_SITE_VERIFICATION=${PUBLIC_GOOGLE_SITE_VERIFICATION}
 
-# 执行完整构建：astro check + astro build + pagefind 索引 + 孤儿资源清理
+# 执行完整构建：astro check + astro build + 搜索索引生成 + 孤儿资源清理
 RUN pnpm run build
 
 # ===== 阶段 3：运行时 nginx =====

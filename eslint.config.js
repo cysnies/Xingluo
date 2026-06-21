@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 export default [
   // 构建产物、生成目录与参考项目不参与检查
   {
-    ignores: ["dist/**", ".astro/**", "public/pagefind/**", "references/**"],
+    ignores: ["dist/**", ".astro/**", "references/**"],
   },
   // Astro 推荐规则集
   ...eslintPluginAstro.configs.recommended,
