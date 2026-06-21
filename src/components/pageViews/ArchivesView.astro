@@ -9,6 +9,7 @@ import Breadcrumb from "@/components/Breadcrumb.astro";
 import PostCard from "@/components/PostCard.astro";
 import { getPostsForLocale } from "@/utils/i18nPosts";
 import { groupPostsByYearMonth } from "@/utils/getPostsByGroupCondition";
+import { getCardWidth } from "@/utils/getCardWidth";
 import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
 import dayjs from "@/lib/dayjs";
@@ -66,11 +67,14 @@ const crumbs = [
                     </sup>
                   </h3>
                   <ul class="grid items-start gap-4 sm:grid-cols-2">
-                    {monthGroup.posts.map((post) => (
-                      <li>
-                        <PostCard post={post} />
-                      </li>
-                    ))}
+                    {monthGroup.posts.map((post) => {
+                      const width = getCardWidth(post, config.features.showPostCardHero);
+                      return (
+                        <li class={width === "full" ? "col-span-1 sm:col-span-2" : "col-span-1"}>
+                          <PostCard post={post} />
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ))}
