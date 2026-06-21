@@ -43,20 +43,20 @@ const categoryHref = categorySlug
 
 <Card
   class={cn(
-    "group relative flex h-80 flex-col justify-evenly gap-0 overflow-hidden transition-colors hover:bg-accent/30",
+    "group relative flex h-[200px] flex-col justify-evenly gap-0 overflow-hidden py-3 transition-colors hover:bg-accent/30",
     className
   )}
 >
-  {/* 标题行：最多两行截断，保证高度稳定 */}
+  {/* 标题行：固定高度，保证跨卡片对齐 */}
   <CardTitle
     transition:name={transitionName}
-    class="mx-4 line-clamp-2 leading-snug transition-colors group-hover:text-primary"
+    class="mx-4 min-h-7 line-clamp-1 leading-snug transition-colors group-hover:text-primary"
   >
     <a href={href} class="after:absolute after:inset-0">{data.title}</a>
   </CardTitle>
 
-  {/* 文章信息行：发布时间与阅读时长 */}
-  <div class="mx-4 flex flex-wrap items-center gap-x-3 gap-y-1">
+  {/* 文章信息行：固定高度，保证跨卡片对齐 */}
+  <div class="mx-4 flex min-h-6 flex-wrap items-center gap-x-3 gap-y-1">
     <Datetime
       pubDatetime={data.pubDatetime}
       modDatetime={data.modDatetime}
@@ -71,15 +71,15 @@ const categoryHref = categorySlug
     </span>
   </div>
 
-  {/* 描述行：默认三行空间，超出自动截断 */}
+  {/* 描述行：固定三行高度，保证跨卡片对齐 */}
   {data.description && (
-    <CardDescription class="mx-4 line-clamp-3">{data.description}</CardDescription>
+    <CardDescription class="mx-4 min-h-[3.75rem] line-clamp-3">{data.description}</CardDescription>
   )}
 
   {/* 分类与标签行：相对定位提升层级，保持独立可点击 */}
   {
     showTags && (tags.length > 0 || categoryHref) && (
-      <div class="relative z-10 mx-4 flex flex-wrap items-center gap-2">
+      <div class="relative z-10 mx-4 flex min-h-6 flex-wrap items-center gap-2">
         {categoryHref && (
           <a
             href={categoryHref}
