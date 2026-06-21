@@ -15,7 +15,7 @@ Xingluo é um CMS de blog moderno construído com [Astro](https://astro.build/) 
 | [Sistema de comentários](./comments.md)         | Escolha e configuração de giscus / twikoo / waline                                       |
 | [Reprodutores de mídia](./media-players.md)     | Uso de APlayer / DPlayer em Markdown e MDX                                               |
 | [SEO](./seo.md)                                 | Imagens OG, RSS, sitemap, hreflang, canonical, dados estruturados                        |
-| [Pesquisa](./search.md)                         | Integração de busca de texto completo Pagefind                                           |
+| [Pesquisa](./search.md)                         | Integração de busca de texto completo Flexsearch                                         |
 | [Implantação](./deployment.md)                  | Hospedagem estática, GitHub Pages, variáveis de ambiente, Docker                         |
 
 ## Funcionalidades principais
@@ -30,7 +30,7 @@ Xingluo é um CMS de blog moderno construído com [Astro](https://astro.build/) 
 - **Barra lateral TOC fixa**: tabela de conteúdos fixa à direita em telas grandes, rastreamento de rolagem IntersectionObserver
 - **Sistema de comentários**: giscus / twikoo / waline, consciente do tema, carregamento lento
 - **Players de mídia**: áudio APlayer e vídeo DPlayer, com pontos de entrada MD fence e componente MDX
-- **Busca**: busca de texto completo Pagefind, índices por idioma, persistência de estado View Transitions
+- **Busca**: busca de texto completo Flexsearch, índices por idioma, persistência de estado View Transitions
 - **SEO completo**: imagens OG dinâmicas (satori + sharp), RSS, sitemap, dados estruturados JSON-LD (BlogPosting + BreadcrumbList), normalização canonical
 
 ## Stack tecnológico
@@ -42,7 +42,7 @@ Xingluo é um CMS de blog moderno construído com [Astro](https://astro.build/) 
 | Ícones                 | astro-icon + Font Awesome                                              |
 | Conteúdo               | Astro Content Collections, MDX, cadeia de plugins remark/rehype        |
 | Realce de código       | Shiki                                                                  |
-| Busca                  | Pagefind                                                               |
+| Busca                  | Flexsearch                                                             |
 | Imagens OG             | satori + sharp                                                         |
 | Comentários            | giscus / twikoo / waline                                               |
 | Players                | APlayer / DPlayer                                                      |

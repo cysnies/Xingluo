@@ -21,7 +21,7 @@ category: announcement
 - ⚡ **Ekstrema rendimento**: statika generado per Astro, nula JavaScript-temporuna ŝarĝo
 - 🎨 **Modernaj vidajxoj**: shadcn/ui novjorka stilo, OKLCH-kolorspaco
 - 🌗 **Malhela reĝimo**: senbrila ŝaltado, sekvas sisteman preferon
-- 🔍 **Plenteksta serĉo**: konstru-tempa indeksado per Pagefind
+- 🔍 **Plenteksta serĉo**: konstru-tempa indeksado per Flexsearch
 - 🌐 **Plurlingva**: subteno por Esperanto, angla kaj ĉina
 - 📝 **Markdown**: MDX, sintaksa reliefigo, enhavtabelo, callouts
 - 📡 **RSS kaj SEO**: RSS-fluo kaj strukturitaj datumoj pretaj por uzo

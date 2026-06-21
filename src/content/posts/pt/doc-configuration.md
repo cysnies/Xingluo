@@ -65,7 +65,7 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -81,7 +81,7 @@ features: {
 | `showBackButton`   | `true`             | Mostrar botão voltar nas páginas de posts                                                |
 | `editPost.enabled` | `false`            | Mostrar link "Editar esta página"                                                        |
 | `editPost.url`     | `""`               | Prefixo do link de edição; o caminho relativo do post é anexado                          |
-| `search`           | `"pagefind"`       | Solução de busca: `"pagefind"` ou `false`                                                |
+| `search`           | `"flexsearch"`     | Solução de busca: `"flexsearch"` ou `false`                                              |
 | `mdx`              | `true`             | Ativar análise e renderização MDX (ver [Criação de conteúdo](./doc-content.md))          |
 | `comments`         | `{provider:false}` | Configuração do sistema de comentários (ver [Sistema de comentários](./doc-comments.md)) |
 | `players.aplayer`  | `false`            | Ativar player de áudio APlayer (ver [Reprodutores de mídia](./doc-media-players.md))     |

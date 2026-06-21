@@ -161,7 +161,7 @@ src/pages/
 
 ## Конвейер сборки
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`**: Проверка типов TypeScript + шаблонов Astro
 2. **`astro build`**:
@@ -171,7 +171,7 @@ src/pages/
    - Условная загрузка интеграции `mdx()`; условное внедрение `remarkPlayers`
    - Встраивание SVG-иконок во время сборки (astro-icon, нулевой JS во время выполнения)
    - Динамически импортируемые модули комментариев и плееров разделяются на независимые чанки (ленивая загрузка)
-3. **`pagefind --site dist`**: сканирует содержимое `dist/`, помеченное `data-pagefind-body`, создавая поисковые индексы по языкам в `dist/pagefind/`
+3. **`node scripts/generateSearchIndex.mjs`**: сканирует HTML-файлы в `dist/`, анализирует содержимое страниц, создавая поисковые индексы по языкам в `dist/search/`
 
 ## Стратегии производительности
 

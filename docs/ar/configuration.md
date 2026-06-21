@@ -55,7 +55,7 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -71,7 +71,7 @@ features: {
 | `showBackButton`   | `true`             | إظهار زر الرجوع في صفحات المقالات                                        |
 | `editPost.enabled` | `false`            | إظهار رابط "تعديل هذه الصفحة"                                            |
 | `editPost.url`     | `""`               | بادئة رابط التعديل؛ يُلحق مسار المصدر النسبي للمقال                      |
-| `search`           | `"pagefind"`       | حل البحث: `"pagefind"` أو `false`                                        |
+| `search`           | `"flexsearch"`     | حل البحث: `"flexsearch"` أو `false`                                      |
 | `mdx`              | `true`             | تمكين تحليل وعرض MDX (انظر [إنشاء المحتوى](./content.md))                |
 | `comments`         | `{provider:false}` | تكوين نظام التعليقات (انظر [نظام التعليقات](./comments.md))              |
 | `players.aplayer`  | `false`            | تمكين مشغل APlayer الصوتي (انظر [مشغلات الوسائط](./media-players.md))    |

@@ -171,7 +171,7 @@ src/pages/
 
 ## خط أنابيب البناء
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`**: فحص أنواع TypeScript + قوالب Astro
 2. **`astro build`**:
@@ -181,7 +181,7 @@ src/pages/
    - تحميل تكامل `mdx()` بشكل شرطي؛ حقن `remarkPlayers` بشكل شرطي
    - تضمين أيقونات SVG في وقت البناء (astro-icon، بدون JS في وقت التشغيل)
    - وحدات التعليقات والمشغلات المستوردة ديناميكيًا تُقسَّم إلى أجزاء مستقلة (تحميل بطيء)
-3. **`pagefind --site dist`**: يمسح محتوى `dist/` المعلّم بـ `data-pagefind-body`، لإنشاء فهارس بحث لكل لغة في `dist/pagefind/`
+3. **`node scripts/generateSearchIndex.mjs`**: يمسح ملفات HTML في `dist/`، ويحلل محتوى الصفحات، لإنشاء فهارس بحث لكل لغة في `dist/search/`
 
 ## استراتيجيات الأداء
 

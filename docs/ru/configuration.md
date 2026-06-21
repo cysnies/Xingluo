@@ -55,7 +55,7 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -71,7 +71,7 @@ features: {
 | `showBackButton`   | `true`             | Показывать кнопку «Назад» на страницах постов                                  |
 | `editPost.enabled` | `false`            | Показывать ссылку «Редактировать эту страницу»                                 |
 | `editPost.url`     | `""`               | Префикс ссылки редактирования; добавляется относительный путь поста            |
-| `search`           | `"pagefind"`       | Решение для поиска: `"pagefind"` или `false`                                   |
+| `search`           | `"flexsearch"`     | Решение для поиска: `"flexsearch"` или `false`                                 |
 | `mdx`              | `true`             | Включить разбор и рендеринг MDX (см. [Создание контента](./content.md))        |
 | `comments`         | `{provider:false}` | Конфигурация системы комментариев (см. [Система комментариев](./comments.md))  |
 | `players.aplayer`  | `false`            | Включить аудиоплеер APlayer (см. [Медиаплееры](./media-players.md))            |

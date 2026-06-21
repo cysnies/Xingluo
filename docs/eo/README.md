@@ -15,7 +15,7 @@ Xingluo estas moderna bloga CMS konstruita kun [Astro](https://astro.build/) kaj
 | [Komenta sistemo](./comments.md)              | Elektado kaj agordado de giscus / twikoo / waline                         |
 | [Aŭdvidaĵaj ludiloj](./media-players.md)      | Uzo de APlayer / DPlayer en Markdown kaj MDX                              |
 | [SEO](./seo.md)                               | OG-bildoj, RSS, retejmapo, hreflang, canonical, strukturitaj datumoj      |
-| [Serĉo](./search.md)                          | Integrado de plenteksta serĉo Pagefind                                    |
+| [Serĉo](./search.md)                          | Integrado de plenteksta serĉo Flexsearch                                  |
 | [Deplojo](./deployment.md)                    | Statika gastigado, GitHub Pages, mediaj variabloj, Docker                 |
 
 ## Ĉefaj trajtoj
@@ -30,7 +30,7 @@ Xingluo estas moderna bloga CMS konstruita kun [Astro](https://astro.build/) kaj
 - **Fiksita TOC-flankbreto**: fiksita tabelo de enhavo dekstre sur grandaj ekranoj, IntersectionObserver ruluma sekvado
 - **Komenta sistemo**: giscus / twikoo / waline, tema-konscia, malrapide ŝargita
 - **Aŭdvidaĵaj ludiloj**: APlayer-aŭdio kaj DPlayer-video, kun ambaŭ MD barilo kaj MDX-komponanta enirpunktoj
-- **Serĉo**: Pagefind plenteksta serĉo, po-lingvaj indeksoj, View Transitions stata persistado
+- **Serĉo**: Flexsearch plenteksta serĉo, po-lingvaj indeksoj, View Transitions stata persistado
 - **Plena SEO**: dinamikaj OG-bildoj (satori + sharp), RSS, retejmapo, JSON-LD strukturitaj datumoj (BlogPosting + BreadcrumbList), canonical normaligo
 
 ## Teknologia stako
@@ -42,7 +42,7 @@ Xingluo estas moderna bloga CMS konstruita kun [Astro](https://astro.build/) kaj
 | Ikonoj            | astro-icon + Font Awesome                                              |
 | Enhavo            | Astro Content Collections, MDX, remark/rehye kroma ĉeno                |
 | Kod reliefigo     | Shiki                                                                  |
-| Serĉo             | Pagefind                                                               |
+| Serĉo             | Flexsearch                                                             |
 | OG-bildoj         | satori + sharp                                                         |
 | Komentoj          | giscus / twikoo / waline                                               |
 | Ludiloj           | APlayer / DPlayer                                                      |

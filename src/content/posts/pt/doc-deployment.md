@@ -22,7 +22,7 @@ O `dist/` gerado contém:
 
 - Todas as páginas HTML estáticas (incluindo espelhos `[locale]/`)
 - Ativos JS / CSS / fontes em `_astro/`
-- O índice de busca `pagefind/`
+- O índice de busca `search/`
 - O `og.png` de nível de site e `og.png` por post
 - `rss.xml`, `sitemap-index.xml`, `robots.txt`
 - Ativos estáticos em `public/` (favicon, imagem OG padrão, etc.)
@@ -135,7 +135,7 @@ server {
 
 - Ativos em `_astro/` têm nomes de arquivo com hash e podem ser armazenados em cache por longo prazo (`immutable`)
 - Arquivos HTML não devem ser armazenados em cache (ou apenas brevemente) para garantir atualizações oportunas de conteúdo
-- Índices Pagefind carregam sob demanda; nenhuma estratégia especial de cache necessária
+- Índices Flexsearch carregam sob demanda; nenhuma estratégia especial de cache necessária
 - Após a implantação, verifique se as imagens OG, RSS e o sitemap estão acessíveis
 
 ## Backends do Sistema de Comentários

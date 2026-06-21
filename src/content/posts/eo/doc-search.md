@@ -1,7 +1,7 @@
 ---
 title: "Serĉo"
 pubDatetime: 2026-06-20T12:00:00+08:00
-description: "Gvidilo pri serĉo de Xingluo kovranta Pagefind-plentekstan serĉintegriĝon, indeksgeneradon, UI, plurlingvan serĉon kaj rendimenton."
+description: "Gvidilo pri serĉo de Xingluo kovranta Flexsearch-plentekstan serĉintegriĝon, indeksgeneradon, UI, plurlingvan serĉon kaj rendimenton."
 tags:
   - documentation
   - search
@@ -10,7 +10,7 @@ translationKey: doc-search
 locale: eo
 ---
 
-Xingluo integras [Pagefind](https://pagefind.app/) por statika plenteksta serĉo, kun po-lingvaj indeksoj kaj View Transitions stato-persistado.
+Xingluo integras [Flexsearch](https://github.com/nextapps-de/flexsearch) por klientflanka plenteksta serĉo, kun po-lingvaj indeksoj kaj View Transitions stato-persistado.
 
 ## Aktivigo
 
@@ -18,7 +18,7 @@ Agordu per `features.search`:
 
 ```ts
 features: {
-  search: "pagefind", // "pagefind" | false
+  search: "flexsearch", // "flexsearch" | false
 }
 ```
 
@@ -28,29 +28,29 @@ Kiam agordita al `false`, la serĉpaĝo faras `Astro.rewrite` al 404 kaj neniu s
 
 ### Generado de indekso
 
-La tria konstrutpaŝo, `pagefind --site dist`, skanas la `dist/` dosierujon:
+La tria konstrutpaŝo, `node scripts/generateSearchIndex.mjs`, skanas HTML-dosierojn en la `dist/` dosierujo:
 
-- Nur paĝoj kun la atributo `data-pagefind-body` estas indeksitaj
+- Analizas paĝan enhavon kaj ĉerpas afiŝan tekston
 - Indeksoj estas aŭtomate dividitaj per lingvo (`zh-cn` kaj `en` ĉiu ricevas sian propran)
-- Indeksoj estas eligitaj al `dist/pagefind/`
+- Indeksoj estas eligitaj al `dist/search/`
 
 ### Amplekso de indekso
 
-La `<main>` sur afiŝaj detalpaĝoj estas markita `data-pagefind-body`, do nur afiŝaj korpoj estas indeksitaj. Aliaj paĝoj (ĉefpaĝo, listoj, arkivoj, ktp.) ne eniras la serĉindekson.
+La konstrua skripto analizas la `<main>` enhavon sur afiŝaj detalpaĝoj, do nur afiŝaj korpoj estas indeksitaj. Aliaj paĝoj (ĉefpaĝo, listoj, arkivoj, ktp.) ne eniras la serĉindekson.
 
 ## Serĉa UI
 
 [`src/components/pageViews/SearchView.astro`](../src/components/pageViews/SearchView.astro) implementas la serĉpaĝon:
 
-- Ŝarĝas `@pagefind/default-ui` por la serĉokesto kaj rezultolisto
-- Lokas indeksajn aktivaĵojn per `getAssetPath("pagefind/")`
-- Tutmondaj stiloj anstataŭas Pagefind-CSS-variablojn, mapante ilin al la temo de Xingluo (`--background`, `--foreground`, `--primary`, ktp.)
+- Uzas Flexsearch-klientflankan indekson por serĉa kongruo en la retumilo
+- Lokas indeksajn aktivaĵojn per `getAssetPath("search/")`
+- Uzas shadcn-temajn variablojn (`--background`, `--foreground`, `--primary`, ktp.) por serĉokesto kaj rezultolista stilo
 - `transition:persist` konservas serĉostaton trans navigado
 
 ### Serĉa fluo
 
 1. La uzanto tajpas en la serĉokesto
-2. Pagefind kongruas kontraŭ la nuna lingva indekso
+2. Flexsearch kongruas kontraŭ la nuna lingva indekso
 3. La rezultolisto montras kongruajn afiŝojn (titolon, resuman reliefigon)
 4. `processTerm` skribas la serĉpaĝan URL-on kun demando-parametroj al sessionStorage, por ke la reen-butono restarigu
 
@@ -64,7 +64,7 @@ La reen-navigada mekanismo inter la serĉpaĝo kaj afiŝaj paĝoj:
 
 ## Plurlingva serĉo
 
-Pagefind dividas indeksojn per la lingva atributo de `data-pagefind-body` elementoj:
+Flexsearch dividas indeksojn per paĝa lingvo:
 
 - `zh-cn` paĝoj (radiko) → Ĉina indekso
 - `en` paĝoj (`/en/` prefikso) → Angla indekso
@@ -73,13 +73,13 @@ Serĉo aŭtomate kongruas la indekson por la nuna paĝa lingvo: Ĉina sur ĉinaj
 
 ## Tema adaptiĝo
 
-La defaŭlta UI de Pagefind havas siajn proprajn CSS-variablojn; Xingluo anstataŭas ilin per tutmondaj stiloj en `SearchView.astro`, mapante al shadcn-temaj variabloj:
+Flexsearch-serĉa UI uzas shadcn-temajn variablojn, difinitajn en `SearchView.astro` por serĉokesto kaj rezultolista stilo:
 
 ```css
 :root {
-  --pagefind-ui-primary: var(--primary);
-  --pagefind-ui-text: var(--foreground);
-  --pagefind-ui-background: var(--background);
+  --search-primary: var(--primary);
+  --search-text: var(--foreground);
+  --search-background: var(--background);
   /* ... */
 }
 ```
@@ -88,6 +88,6 @@ Malhela reĝimo ŝaltas aŭtomate per la selektilo `.dark`, konsista kun la rete
 
 ## Rendimento
 
-- Pagefind-indeksoj estas statikaj dosieroj; serĉo okazas klientflanke sen servilaj petoj
+- Flexsearch-indeksoj estas statikaj dosieroj; serĉo okazas klientflanke sen servilaj petoj
 - Indeksoj estas ŝarĝitaj laŭbezone (indeksaj fragmentoj elŝutiĝas nur dum serĉado)
 - `transition:persist` evitas re-inicializi la serĉan UI-on sur navigado

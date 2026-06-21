@@ -52,10 +52,10 @@ pnpm build
 ```
 
 1. **`astro check`**: TypeScript- kaj Astro-ŝablona tiposekurigado; iu ajn eraro abortas la konstruon
-2. **`astro build`**: statike generas la tutan retejon al `dist/` (inkluzive dinamikajn OG-bildojn, RSS, retejmapon, robots.txt, pagefind UI-aktivaĵojn)
-3. **`pagefind --site dist`**: skanas `dist/` por generi la plentekstan serĉindekson en `dist/pagefind/`
+2. **`astro build`**: statike generas la tutan retejon al `dist/` (inkluzive dinamikajn OG-bildojn, RSS, retejmapon, robots.txt)
+3. **`node scripts/generateSearchIndex.mjs`**: skanas `dist/` por generi la plentekstan serĉindekson en `dist/search/`
 
-> Noto: `pagefind` estas binara ilo instalita kiel devDependency; neniu ekstra agordo necesas.
+> Noto: La serĉindekso estas generita de Node-skripto post la konstruo.
 
 ## Antaŭrigardo de la konstruo
 

@@ -199,7 +199,7 @@ Antaŭ kalkulado, kodblokoj, HTML-etikedoj, Markdown-ligilaj URL-oj kaj aliaj ne
 - Ordigitaj laŭ nombro de komunaj etikedoj, malkreske
 - Samaj poentoj ordigitaj laŭ publikiga dato, malkreske (preferante pli novajn afiŝojn)
 - Sekcio ne estas bildigita kiam neniuj afiŝoj kunhavas etikedojn
-- Aŭtomate ignorita de la pagefind-serĉa indekso
+- Aŭtomate ignorita de la Flexsearch-serĉa indekso
 
 Neniu agordo necesas.
 

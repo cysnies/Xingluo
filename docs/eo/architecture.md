@@ -161,7 +161,7 @@ La klientflankaj interagoj de Xingluo estas ŝarĝitaj per `<script>`-etikedoj �
 
 ## Konstrua dukto
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`**: Tipo-kontrolado de TypeScript + Astro-ŝablonoj
 2. **`astro build`**:
@@ -171,7 +171,7 @@ La klientflankaj interagoj de Xingluo estas ŝarĝitaj per `<script>`-etikedoj �
    - Kondiĉe ŝarĝi la `mdx()` integrigon; kondiĉe injekti `remarkPlayers`
    - Enkonstrui SVG-ikonojn dum konstruo (astro-icon, nula rula JS)
    - Dinamike importitaj komentaj kaj ludilaj moduloj estas dividitaj en memstarajn blokojn (pigre ŝarĝitaj)
-3. **`pagefind --site dist`**: skanas `dist/` enhavon markitan per `data-pagefind-body`, generante po-lingvajn serĉindeksojn en `dist/pagefind/`
+3. **`node scripts/generateSearchIndex.mjs`**: skanas HTML-dosierojn en `dist/`, analizas paĝan enhavon, generante po-lingvajn serĉindeksojn en `dist/search/`
 
 ## Rendimentaj strategioj
 

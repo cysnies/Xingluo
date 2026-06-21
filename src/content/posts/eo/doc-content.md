@@ -205,7 +205,7 @@ Antaŭ kalkulado, kodblokoj, HTML-etikedoj, Markdown-ligilaj URL-oj kaj alia ne-
 - Ordigitaj laŭ nombro de komunaj etikedoj, descenda
 - Sama poentaro ordigita laŭ publikiga dato, descenda (preferante pli novajn afiŝojn)
 - Sekcio ne estas renderita kiam neniuj afiŝoj kunhavas etikedojn
-- Aŭtomate ignorita de la pagefind serĉa indekso
+- Aŭtomate ignorita de la Flexsearch serĉa indekso
 
 Neniu agordo necesas.
 

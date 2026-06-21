@@ -52,10 +52,10 @@ pnpm build
 ```
 
 1. **`astro check`**: فحص أنواع TypeScript وقوالب Astro؛ أي خطأ يوقف البناء
-2. **`astro build`**: يُنشئ الموقع بأكمله بشكل ثابت في `dist/` (بما في ذلك صور OG الديناميكية، RSS، خريطة الموقع، robots.txt، أصول Pagefind UI)
-3. **`pagefind --site dist`**: يمسح `dist/` لإنشاء فهرس البحث للنص الكامل في `dist/pagefind/`
+2. **`astro build`**: يُنشئ الموقع بأكمله بشكل ثابت في `dist/` (بما في ذلك صور OG الديناميكية، RSS، خريطة الموقع، robots.txt)
+3. **`node scripts/generateSearchIndex.mjs`**: يمسح `dist/` لإنشاء فهرس البحث للنص الكامل في `dist/search/`
 
-> ملاحظة: `pagefind` هي أداة ثنائية مثبتة كـ devDependency؛ لا حاجة لتكوين إضافي.
+> ملاحظة: يتم إنشاء فهرس البحث بواسطة سكريبت Node بعد البناء.
 
 ## معاينة البناء
 

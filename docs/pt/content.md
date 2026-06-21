@@ -199,7 +199,7 @@ Até 2 posts relacionados são mostrados na parte inferior das páginas de detal
 - Ordenados por número de tags compartilhadas, decrescente
 - Mesma pontuação ordenada por data de publicação, decrescente (preferindo posts mais recentes)
 - A seção não é renderizada quando nenhum post compartilha tags
-- Ignorado automaticamente pelo índice de busca pagefind
+- Ignorado automaticamente pelo índice de busca Flexsearch
 
 Nenhuma configuração necessária.
 

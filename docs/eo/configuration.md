@@ -55,7 +55,7 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -71,7 +71,7 @@ features: {
 | `showBackButton`   | `true`             | Montri reen-butonon sur afiŝaj paĝoj                                       |
 | `editPost.enabled` | `false`            | Montri "Redakti ĉi tiun paĝon" ligilon                                     |
 | `editPost.url`     | `""`               | Redakta ligila prefikso; la relativa fonta vojo de la afiŝo estas aldonita |
-| `search`           | `"pagefind"`       | Serĉa solvo: `"pagefind"` aŭ `false`                                       |
+| `search`           | `"flexsearch"`     | Serĉa solvo: `"flexsearch"` aŭ `false`                                     |
 | `mdx`              | `true`             | Ebligi MDX-analizon kaj bildigon (vidu [Enhava kreado](./content.md))      |
 | `comments`         | `{provider:false}` | Kommenta sistemo-agordo (vidu [Komenta sistemo](./comments.md))            |
 | `players.aplayer`  | `false`            | Ebligi APlayer-aŭdiludilon (vidu [Aŭdvidaĵaj ludiloj](./media-players.md)) |

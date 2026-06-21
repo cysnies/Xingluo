@@ -1,7 +1,7 @@
 ---
 title: "البحث"
 pubDatetime: 2026-06-20T12:00:00+08:00
-description: "دليل البحث في Xingluo ويغطي دمج البحث النصي الكامل Pagefind وتوليد الفهرس وواجهة المستخدم والبحث متعدد اللغات والأداء."
+description: "دليل البحث في Xingluo ويغطي دمج البحث النصي الكامل Flexsearch وتوليد الفهرس وواجهة المستخدم والبحث متعدد اللغات والأداء."
 tags:
   - documentation
   - search
@@ -10,7 +10,7 @@ translationKey: doc-search
 locale: ar
 ---
 
-يدمج Xingluo [Pagefind](https://pagefind.app/) للبحث النصي الكامل الثابت، مع فهارس حسب اللغة واستمرارية حالة View Transitions.
+يدمج Xingluo [Flexsearch](https://github.com/nextapps-de/flexsearch) للبحث النصي الكامل من جانب العميل، مع فهارس حسب اللغة واستمرارية حالة View Transitions.
 
 ## التفعيل
 
@@ -18,7 +18,7 @@ locale: ar
 
 ```ts
 features: {
-  search: "pagefind", // "pagefind" | false
+  search: "flexsearch", // "flexsearch" | false
 }
 ```
 
@@ -28,29 +28,29 @@ features: {
 
 ### إنشاء الفهرس
 
-خطوة البناء الثالثة، `pagefind --site dist`، تمسح دليل `dist/`:
+خطوة البناء الثالثة، `node scripts/generateSearchIndex.mjs`، تمسح ملفات HTML في دليل `dist/`:
 
-- فقط الصفحات التي تحتوي على السمة `data-pagefind-body` تُفهرس
+- تحلل محتوى الصفحات وتستخرج نصوص المقالات
 - الفهارس تُقسّم تلقائيًا حسب اللغة (`zh-cn` و `en` لكل منهما فهرسه الخاص)
-- الفهارس تُخرج إلى `dist/pagefind/`
+- الفهارس تُخرج إلى `dist/search/`
 
 ### نطاق الفهرس
 
-عنصر `<main>` في صفحات تفاصيل المقالات مُعلّم بـ `data-pagefind-body`، لذلك فقط نصوص المقالات تُفهرس. الصفحات الأخرى (الرئيسية، القوائم، الأرشيف، إلخ.) لا تدخل فهرس البحث.
+يقوم سكريبت البناء بتحليل محتوى `<main>` في صفحات تفاصيل المقالات، لذلك فقط نصوص المقالات تُفهرس. الصفحات الأخرى (الرئيسية، القوائم، الأرشيف، إلخ.) لا تدخل فهرس البحث.
 
 ## واجهة البحث
 
 [`src/components/pageViews/SearchView.astro`](../src/components/pageViews/SearchView.astro) تنفذ صفحة البحث:
 
-- تحميل `@pagefind/default-ui` لمربع البحث وقائمة النتائج
-- تحديد موقع أصول الفهرس عبر `getAssetPath("pagefind/")`
-- الأنماط العامة تتجاوز متغيرات Pagefind CSS، وتربطها بسمة Xingluo (`--background`، `--foreground`، `--primary`، إلخ.)
+- استخدام فهرس Flexsearch من جانب العميل لمطابقة البحث في المتصفح
+- تحديد موقع أصول الفهرس عبر `getAssetPath("search/")`
+- استخدام متغيرات سمة shadcn (`--background`، `--foreground`، `--primary`، إلخ.) لتصميم مربع البحث وقائمة النتائج
 - `transition:persist` يحافظ على حالة البحث عبر التنقل
 
 ### تدفق البحث
 
 1. يكتب المستخدم في مربع البحث
-2. يطابق Pagefind مع فهرس اللغة الحالية
+2. يطابق Flexsearch مع فهرس اللغة الحالية
 3. تُظهر قائمة النتائج المقالات المطابقة (العنوان، تمييز الملخص)
 4. يكتب `processTerm` عنوان URL لصفحة البحث مع معاملات الاستعلام في sessionStorage، ليتمكن زر الرجوع من الاستعادة
 
@@ -64,7 +64,7 @@ features: {
 
 ## البحث متعدد اللغات
 
-يقسم Pagefind الفهارس حسب سمة اللغة لعناصر `data-pagefind-body`:
+يقسم Flexsearch الفهارس حسب لغة الصفحة:
 
 - صفحات `zh-cn` (الجذر) → فهرس صيني
 - صفحات `en` (بادئة `/en/`) → فهرس إنجليزي
@@ -73,13 +73,13 @@ features: {
 
 ## تكيف السمة
 
-واجهة المستخدم الافتراضية لـ Pagefind لها متغيرات CSS خاصة بها؛ يتجاوزها Xingluo بأنماط عامة في `SearchView.astro`، ويربطها بمتغيرات سمة shadcn:
+واجهة بحث Flexsearch تستخدم متغيرات سمة shadcn، محددة في `SearchView.astro` لتصميم مربع البحث وقائمة النتائج:
 
 ```css
 :root {
-  --pagefind-ui-primary: var(--primary);
-  --pagefind-ui-text: var(--foreground);
-  --pagefind-ui-background: var(--background);
+  --search-primary: var(--primary);
+  --search-text: var(--foreground);
+  --search-background: var(--background);
   /* ... */
 }
 ```
@@ -88,6 +88,6 @@ features: {
 
 ## الأداء
 
-- فهارس Pagefind هي ملفات ثابتة؛ يتم البحث من جانب العميل دون طلبات خادم
+- فهارس Flexsearch هي ملفات ثابتة؛ يتم البحث من جانب العميل دون طلبات خادم
 - يتم تحميل الفهارس حسب الطلب (تُنزّل أجزاء الفهرس فقط عند البحث)
 - `transition:persist` يتجنب إعادة تهيئة واجهة البحث عند التنقل

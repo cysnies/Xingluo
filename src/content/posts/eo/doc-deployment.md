@@ -22,7 +22,7 @@ La generita `dist/` enhavas:
 
 - Ĉiujn statikajn HTML-paĝojn (inkluzive de `[locale]/` speguloj)
 - JS / CSS / tiparaj aktivaĵoj sub `_astro/`
-- La `pagefind/` serĉindekson
+- La `search/` serĉindekson
 - La retej-nivelan `og.png` kaj po-afiŝan `og.png`
 - `rss.xml`, `sitemap-index.xml`, `robots.txt`
 - Statikajn aktivaĵojn sub `public/` (favicon, defaŭlta OG-bildo, ktp.)
@@ -135,7 +135,7 @@ server {
 
 - Aktivaĵoj sub `_astro/` havas haketitajn dosiernomojn kaj povas esti kaŝitaj longtempe (`immutable`)
 - HTML-dosieroj ne devus esti kaŝitaj (aŭ nur mallonge) por certigi ĝustatempan enhavan ĝisdatigon
-- Pagefind-indeksoj ŝarĝiĝas laŭbezone; neniu speciala kaŝstrategio bezonata
+- Flexsearch-indeksoj ŝarĝiĝas laŭbezone; neniu speciala kaŝstrategio bezonata
 - Post deplojo, kontrolu ke OG-bildoj, RSS kaj la retmapo estas atingeblaj
 
 ## Komentaj sistemaj backendoj
