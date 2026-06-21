@@ -34,7 +34,7 @@ function getShareLabel(name: string, linkTitle?: string): string {
 ---
 
 <div class="flex flex-wrap items-center gap-2">
-  <span class="text-sm text-muted-foreground">{t.post.sharePostIntro}</span>
+  <span class="text-sm text-muted-foreground leading-9">{t.post.sharePostIntro}</span>
   {
     shareLinks.map(({ name, url: baseUrl, linkTitle }) => {
       const Icon = getSocialIcon(name);
