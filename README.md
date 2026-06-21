@@ -18,7 +18,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/cysnies/Xingluo/compare)
 
 <p>
-  <a href="./README.md">简体中文</a> · <a href="./README-en.md">English</a> ·
+  <a href="./docs/zh-cn/README.md">简体中文</a> · <a href="./docs/en/README.md">English</a> ·
   <a href="./docs/de/README.md">Deutsch</a> · <a href="./docs/es/README.md">Español</a> ·
   <a href="./docs/fr/README.md">Français</a> · <a href="./docs/ja/README.md">日本語</a> ·
   <a href="./docs/ko/README.md">한국어</a> · <a href="./docs/pt/README.md">Português</a> ·
