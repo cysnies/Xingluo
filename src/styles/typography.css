@@ -100,9 +100,9 @@
   }
 }
 
-/* 标题锚点链接：跟随标题颜色，悬停时显现 */
+/* 标题锚点链接：跟随标题颜色，悬停时显现；不显示下划线 */
 .app-prose .heading-link {
-  @apply text-muted-foreground;
+  @apply text-muted-foreground no-underline hover:no-underline;
 }
 .app-prose .heading-anchor {
   scroll-margin-top: 5rem;
