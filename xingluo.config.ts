@@ -30,7 +30,7 @@ export default defineXingluoConfig({
     showBackButton: true,
     editPost: {
       enabled: true,
-      url: "https://github.com/xingluo/blog/edit/main/",
+      url: "https://github.com/cysnies/Xingluo/edit/main/",
     },
     search: "pagefind",
     // 是否启用 MDX 解析与渲染（关闭后仅收集 .md，不加载 mdx 集成）
@@ -62,7 +62,7 @@ export default defineXingluoConfig({
     },
   },
   socials: [
-    { name: "github", url: "https://github.com/xingluo/blog" },
+    { name: "github", url: "https://github.com/cysnies/Xingluo" },
     { name: "x", url: "https://x.com/xingluo" },
     { name: "mail", url: "mailto:hello@xingluo.example.com" },
   ],
