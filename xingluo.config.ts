@@ -86,7 +86,6 @@ export default defineXingluoConfig({
     //   scrollReveal: true,       // 列表滚入渐现
     //   navIndicator: true,       // 导航指示条滑动
     //   mobileMenuTransition: true, // 移动端菜单动画
-    //   buttonRipple: true,       // 按钮点击涟漪
     //   buttonPress: true,        // 按钮按压反馈
     //   themeTransition: true,    // 主题切换过渡
     //   textReveal: true,         // 标题渐入动效

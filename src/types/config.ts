@@ -145,8 +145,6 @@ export interface AnimationsConfig {
   navIndicator: boolean;
   /** 移动端菜单展开收起过渡动画 */
   mobileMenuTransition: boolean;
-  /** 按钮点击涟漪效果 */
-  buttonRipple: boolean;
   /** 按钮按压缩放反馈 */
   buttonPress: boolean;
   /** 主题切换时平滑过渡 */

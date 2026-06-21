@@ -6,7 +6,6 @@
 
 import { initScrollReveal } from "@/scripts/animations/scrollReveal";
 import { initSpotlight } from "@/scripts/animations/spotlightEffect";
-import { initRipple } from "@/scripts/animations/rippleEffect";
 import { initNavIndicator } from "@/scripts/animations/navIndicator";
 
 /** 从 <html> 读取动画配置 */
@@ -32,9 +31,6 @@ export function initAnimations(): void {
   }
   if (cfg.navIndicator !== false) {
     initNavIndicator();
-  }
-  if (cfg.buttonRipple !== false) {
-    initRipple();
   }
 }
 

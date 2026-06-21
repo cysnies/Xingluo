@@ -84,7 +84,6 @@ const defaultFeatures = {
     scrollReveal: true,
     navIndicator: true,
     mobileMenuTransition: true,
-    buttonRipple: true,
     buttonPress: true,
     themeTransition: true,
     textReveal: true,
