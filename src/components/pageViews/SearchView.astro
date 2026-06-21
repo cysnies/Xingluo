@@ -1,12 +1,10 @@
 ---
-import "@pagefind/default-ui/css/ui.css";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import { getAssetPath } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -15,11 +13,10 @@ const t = useTranslations(locale);
 
 // 搜索未启用时重定向到 404
 const notFoundUrl = getRelativeLocaleUrl(locale, "404");
-if (config.features.search !== "pagefind" && notFoundUrl) {
+if (config.features.search !== "flexsearch" && notFoundUrl) {
   return Astro.rewrite(notFoundUrl);
 }
 
-const pagefindBundlePath = getAssetPath("pagefind/");
 const title = t.pages.searchTitle;
 const description = t.pages.searchDesc;
 const crumbs = [
@@ -35,157 +32,553 @@ const crumbs = [
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
 
-    <div
-      id="pagefind-search"
-      transition:persist
-      data-bundle-path={pagefindBundlePath}
-    >
+    <div id="flexsearch-ui" transition:persist class="space-y-6">
+      <!-- 搜索输入框 -->
+      <div class="relative">
+        <svg
+          class="search-icon absolute left-3 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input
+          id="search-input"
+          type="search"
+          placeholder={t.a11y.searchPlaceholder}
+          class="search-input w-full rounded-md border border-input bg-background py-3 pl-10 pr-10 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="search"
+        />
+        <button
+          id="search-clear"
+          class="search-clear absolute right-3 top-1/2 hidden -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+          aria-label={t.post.copyCode}
+          type="button"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 搜索统计 -->
+      <div id="search-stats" class="hidden text-sm text-muted-foreground"></div>
+
+      <!-- 搜索结果列表 -->
+      <div id="search-results" class="space-y-4" role="list" aria-label={t.pages.searchTitle}>
+        <!-- 初始提示 -->
+        <div id="search-hint" class="py-12 text-center text-muted-foreground">
+          <svg
+            class="mx-auto mb-4 size-12 opacity-40"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <p>{t.a11y.searchPlaceholder}</p>
+        </div>
+        <!-- 无结果提示（由 JS 控制显示） -->
+        <div id="search-no-results" class="hidden py-12 text-center text-muted-foreground">
+          <p>{t.a11y.noResults}</p>
+        </div>
+      </div>
     </div>
   </Main>
   <Footer />
 </Layout>
 
 <script>
-  /** 为搜索结果添加入场动画 */
-  function observeSearchResults(searchEl: HTMLElement) {
-    const addAnimToResult = (result: Element) => {
-      if (!result.classList.contains("search-result-enter")) {
-        result.classList.add("search-result-enter");
+  import FlexSearch from "flexsearch";
+  import { getAssetPath } from "@/utils/withBase";
+
+  /** 搜索文档结构（兼容 Flexsearch DocumentData） */
+  interface SearchDoc {
+    [key: string]: unknown;
+    id: string;
+    title: string;
+    description: string;
+    tags: string[];
+    url: string;
+    content: string;
+  }
+
+  /** Flexsearch 文档搜索结果项 */
+  interface FieldResult {
+    field: string;
+    result: Array<{ doc: SearchDoc }>;
+  }
+
+  /** 搜索结果入场动画 */
+  function observeSearchResults(container: HTMLElement) {
+    const addAnim = (el: Element) => {
+      if (!el.classList.contains("search-result-enter")) {
+        el.classList.add("search-result-enter");
       }
     };
 
-    // 处理已有结果
-    searchEl.querySelectorAll(".pagefind-ui__result").forEach(addAnimToResult);
+    container.querySelectorAll(".search-result-card").forEach(addAnim);
 
-    // 监听后续新增的结果
     const obs = new MutationObserver(() => {
-      searchEl.querySelectorAll(".pagefind-ui__result").forEach(addAnimToResult);
+      container.querySelectorAll(".search-result-card").forEach(addAnim);
     });
-    obs.observe(searchEl, { childList: true, subtree: true });
+    obs.observe(container, { childList: true, subtree: true });
+  }
+
+  /**
+   * 高亮搜索关键词
+   */
+  function highlightText(text: string, query: string): string {
+    if (!query || !text) return escapeHtml(text);
+    const terms = query
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    if (terms.length === 0) return escapeHtml(text);
+    const escapedTerms = terms.map((t) => escapeHtml(t));
+    return escapeHtml(text).replace(
+      new RegExp(`(${escapedTerms.join("|")})`, "gi"),
+      '<mark class="search-highlight">$1</mark>',
+    );
+  }
+
+  /** HTML 转义 */
+  function escapeHtml(str: string): string {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /**
+   * 截取文本片段用于上下文展示
+   */
+  function getContextSnippet(
+    text: string,
+    query: string,
+    contextLen = 80,
+  ): string {
+    if (!query || !text) {
+      return text ? text.slice(0, 200) : "";
+    }
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const idx = lowerText.indexOf(lowerQuery);
+    if (idx === -1) return text.slice(0, 200);
+
+    const start = Math.max(0, idx - contextLen);
+    const end = Math.min(text.length, idx + query.length + contextLen);
+    let snippet = text.slice(start, end);
+    if (start > 0) snippet = "..." + snippet;
+    if (end < text.length) snippet = snippet + "...";
+    return snippet;
+  }
+
+  /** 创建搜索结果卡片 */
+  function createResultCard(
+    doc: { title: string; description: string; tags: string[]; url: string; content: string },
+    query: string,
+  ): HTMLAnchorElement {
+    const card = document.createElement("a");
+    card.href = doc.url;
+    card.className =
+      "search-result-card block rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent hover:shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
+    card.setAttribute("role", "listitem");
+
+    const titleEl = document.createElement("h3");
+    titleEl.className = "mb-1 text-lg font-semibold text-primary";
+    titleEl.innerHTML = highlightText(doc.title, query);
+
+    const descEl = document.createElement("p");
+    descEl.className = "mb-2 text-sm text-muted-foreground line-clamp-2";
+    const snippet = getContextSnippet(doc.description || doc.content, query);
+    descEl.innerHTML = highlightText(snippet, query);
+
+    if (doc.tags && doc.tags.length > 0) {
+      const tagsEl = document.createElement("div");
+      tagsEl.className = "flex flex-wrap gap-1.5";
+      doc.tags.slice(0, 4).forEach((tag: string) => {
+        const tagEl = document.createElement("span");
+        tagEl.className =
+          "inline-block rounded-sm bg-muted px-1.5 py-0.5 text-xs text-muted-foreground";
+        tagEl.textContent = tag;
+        tagsEl.appendChild(tagEl);
+      });
+      card.appendChild(titleEl);
+      card.appendChild(descEl);
+      card.appendChild(tagsEl);
+    } else {
+      card.appendChild(titleEl);
+      card.appendChild(descEl);
+    }
+
+    return card;
   }
 
   function initSearch() {
-    const pageFindSearch = document.querySelector<HTMLElement>(
-      "#pagefind-search"
-    );
-    if (!pageFindSearch) return;
+    const container = document.querySelector<HTMLElement>("#flexsearch-ui");
+    if (!container) return;
 
-    const bundlePath = pageFindSearch.dataset.bundlePath;
-    if (!bundlePath) return;
+    const input = container.querySelector<HTMLInputElement>("#search-input");
+    const clearBtn = container.querySelector<HTMLElement>("#search-clear");
+    const resultsEl = container.querySelector<HTMLElement>("#search-results");
+    const hintEl = container.querySelector<HTMLElement>("#search-hint");
+    const noResultsEl = container.querySelector<HTMLElement>("#search-no-results");
+    const statsEl = container.querySelector<HTMLElement>("#search-stats");
+
+    if (!input || !resultsEl) return;
 
     const params = new URLSearchParams(window.location.search);
-    const onIdle =
-      window.requestIdleCallback || ((cb: () => void) => setTimeout(cb, 1));
 
-    onIdle(async () => {
-      // @ts-expect-error - @pagefind/default-ui 缺少类型声明
-      const { PagefindUI } = await import("@pagefind/default-ui");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let index: any = null;
+    let documents: SearchDoc[] = [];
 
-      // 开发模式提示需先构建
-      if (import.meta.env.DEV) {
-        pageFindSearch.innerHTML = `
-          <div class="mb-4 rounded-md bg-muted p-4 text-sm">
-            <p><strong>开发模式提示：</strong>需至少构建一次项目才能看到搜索结果。</p>
-            <code class="mt-2 block rounded bg-background px-2 py-1">pnpm run build</code>
-          </div>
-        `;
+    // 获取当前语言代码（从 URL 路径中提取）
+    const pathLocale = (() => {
+      const path = window.location.pathname.replace(/\/+$/, "");
+      const segments = path.split("/");
+      const locales = [
+        "zh-cn", "zh-tw", "en", "ja", "ko", "fr",
+        "de", "es", "pt", "ru", "ar", "eo",
+      ];
+      for (let i = 1; i < segments.length; i++) {
+        if (locales.includes(segments[i])) return segments[i];
       }
+      return "zh-cn";
+    })();
 
-      const search = new PagefindUI({
-        element: "#pagefind-search",
-        bundlePath,
-        showImages: false,
-        showSubResults: true,
-        processTerm: function (term: string) {
-          params.set("q", term);
-          history.replaceState(history.state, "", "?" + params.toString());
-          // 记录带查询参数的搜索页地址，供文章页返回按钮回跳到搜索结果
-          sessionStorage.setItem("backUrl", `${window.location.pathname}?${params.toString()}`);
-          return term;
-        },
-      });
+    /** 加载并初始化搜索索引 */
+    async function loadIndex() {
+      try {
+        // 先尝试加载当前语言索引，失败则加载清单中的第一个
+        let dataUrl = getAssetPath(`search/${pathLocale}.json`);
+        let resp = await fetch(dataUrl);
 
-      // 为搜索结果添加入场动画
-      observeSearchResults(pageFindSearch);
-
-      // 触发 URL 中的初始查询
-      const query = params.get("q");
-      if (query) {
-        search.triggerSearch(query);
-      }
-
-      // 清空搜索时重置 URL 参数
-      const searchInput = document.querySelector(".pagefind-ui__search-input");
-      const clearButton = document.querySelector(".pagefind-ui__search-clear");
-      const resetSearchParam = (e: Event) => {
-        if ((e.target as HTMLInputElement)?.value.trim() === "") {
-          history.replaceState(history.state, "", window.location.pathname);
+        if (!resp.ok) {
+          // 回退：加载清单
+          const manifestUrl = getAssetPath("search/manifest.json");
+          const manifestResp = await fetch(manifestUrl);
+          if (!manifestResp.ok) {
+            console.warn("[search] 搜索索引清单不存在");
+            return;
+          }
+          const manifest = await manifestResp.json();
+          if (manifest.length === 0) return;
+          const lang = manifest.includes(pathLocale)
+            ? pathLocale
+            : manifest[0];
+          dataUrl = getAssetPath(`search/${lang}.json`);
+          resp = await fetch(dataUrl);
+          if (!resp.ok) return;
         }
-      };
-      searchInput?.addEventListener("input", resetSearchParam);
-      clearButton?.addEventListener("click", resetSearchParam);
+
+        documents = await resp.json();
+        if (!documents || documents.length === 0) return;
+
+        // 初始化 Flexsearch Document 索引
+        index = new FlexSearch.Document({
+          document: {
+            id: "id",
+            index: [
+              { field: "title", tokenize: "forward", resolution: 9 },
+              { field: "description", tokenize: "forward", resolution: 5 },
+              { field: "content", tokenize: "forward", resolution: 3 },
+              { field: "tags", tokenize: "forward", resolution: 5 },
+            ],
+            store: ["title", "description", "tags", "url", "content"],
+          },
+          tokenize: "forward",
+          cache: true,
+        });
+
+        // 批量添加文档到索引
+        for (const doc of documents) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (index as any).add(doc);
+        }
+
+        // 触发 URL 中的初始查询
+        const query = params.get("q");
+        if (query) {
+          input!.value = query;
+          performSearch(query);
+        }
+      } catch (err) {
+        console.warn("[search] 索引加载失败：", err);
+      }
+    }
+
+    /** 执行搜索 */
+    function performSearch(query: string) {
+      if (!query.trim()) {
+        showHint();
+        return;
+      }
+
+      if (!index) {
+        textSearch(query);
+        return;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rawResults = (index as any).search(query, {
+        limit: 50,
+        enrich: true,
+      }) as FieldResult[];
+
+      // 合并多字段搜索结果，去重
+      const resultMap = new Map<string, { doc: SearchDoc; fields: Set<string> }>();
+
+      if (rawResults && rawResults.length > 0) {
+        for (const fieldResult of rawResults) {
+          if (fieldResult.result && fieldResult.result.length > 0) {
+            for (const item of fieldResult.result) {
+              const doc = item.doc;
+              if (doc && doc.id) {
+                if (!resultMap.has(doc.id)) {
+                  resultMap.set(doc.id, { doc, fields: new Set() });
+                }
+                resultMap.get(doc.id)!.fields.add(fieldResult.field);
+              }
+            }
+          }
+        }
+      }
+
+      const results = Array.from(resultMap.values());
+
+      if (results.length === 0) {
+        textSearch(query);
+        return;
+      }
+
+      renderResults(results, query);
+    }
+
+    /** 纯文本搜索（索引未加载时的降级方案） */
+    function textSearch(query: string) {
+      const lowerQuery = query.toLowerCase();
+      const results = documents
+        .filter((doc: SearchDoc) => {
+          const searchText =
+            `${doc.title} ${doc.description} ${doc.content} ${(doc.tags || []).join(" ")}`.toLowerCase();
+          return searchText.includes(lowerQuery);
+        })
+        .map((doc: SearchDoc) => ({ doc, fields: new Set(["content"]) }));
+
+      if (results.length === 0) {
+        showNoResults();
+        return;
+      }
+
+      renderResults(results, query);
+    }
+
+    /** 渲染搜索结果 */
+    function renderResults(
+      results: Array<{ doc: SearchDoc; fields: Set<string> }>,
+      query: string,
+    ) {
+      hintEl?.classList.add("hidden");
+      noResultsEl?.classList.add("hidden");
+      resultsEl!.innerHTML = "";
+
+      // 更新统计
+      if (statsEl) {
+        statsEl.textContent = `${results.length} 条结果`;
+        statsEl.classList.remove("hidden");
+      }
+
+      for (const { doc } of results) {
+        const card = createResultCard(doc, query);
+        resultsEl!.appendChild(card);
+      }
+
+      // 更新 URL query param
+      params.set("q", query);
+      history.replaceState(history.state, "", "?" + params.toString());
+      sessionStorage.setItem(
+        "backUrl",
+        `${window.location.pathname}?${params.toString()}`,
+      );
+
+      observeSearchResults(resultsEl!);
+    }
+
+    /** 显示初始提示 */
+    function showHint() {
+      hintEl?.classList.remove("hidden");
+      noResultsEl?.classList.add("hidden");
+      resultsEl!.innerHTML = "";
+      statsEl?.classList.add("hidden");
+    }
+
+    /** 显示无结果提示 */
+    function showNoResults() {
+      hintEl?.classList.add("hidden");
+      noResultsEl?.classList.remove("hidden");
+      resultsEl!.innerHTML = "";
+      statsEl?.classList.add("hidden");
+    }
+
+    // 防抖
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    function debouncedSearch(query: string) {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        performSearch(query);
+      }, 200);
+    }
+
+    // 输入事件
+    input.addEventListener("input", (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const query = target.value.trim();
+      if (query) {
+        clearBtn?.classList.remove("hidden");
+        debouncedSearch(query);
+      } else {
+        clearBtn?.classList.add("hidden");
+        if (debounceTimer) clearTimeout(debounceTimer);
+        showHint();
+        history.replaceState(history.state, "", window.location.pathname);
+      }
     });
+
+    // 清除按钮
+    clearBtn?.addEventListener("click", () => {
+      input.value = "";
+      clearBtn.classList.add("hidden");
+      if (debounceTimer) clearTimeout(debounceTimer);
+      showHint();
+      history.replaceState(history.state, "", window.location.pathname);
+      input.focus();
+    });
+
+    // 加载索引
+    loadIndex();
+
+    // 开发模式提示
+    if (import.meta.env.DEV) {
+      const devNotice = document.createElement("div");
+      devNotice.className = "mb-4 rounded-md bg-muted p-4 text-sm";
+      devNotice.innerHTML = `
+        <p><strong>开发模式提示：</strong>需至少构建一次项目才能看到搜索结果。</p>
+        <code class="mt-2 block rounded bg-background px-2 py-1">pnpm run build</code>
+      `;
+      container.prepend(devNotice);
+    }
   }
 
   document.addEventListener("astro:after-swap", () => {
-    const pagefindSearch = document.querySelector("#pagefind-search");
-    // 已存在搜索表单则不重复初始化
-    if (pagefindSearch && pagefindSearch.querySelector("form")) return;
+    const searchUI = document.querySelector("#flexsearch-ui");
+    if (searchUI && searchUI.querySelector("input")) return;
     initSearch();
   });
   initSearch();
 </script>
 
 <style is:global>
-  #pagefind-search {
-    --pagefind-ui-font: var(--font-sans);
-    --pagefind-ui-text: var(--foreground);
-    --pagefind-ui-background: var(--background);
-    --pagefind-ui-border: var(--border);
-    --pagefind-ui-primary: var(--primary);
-    --pagefind-ui-tag: var(--background);
-    --pagefind-ui-border-radius: 0.375rem;
-    --pagefind-ui-border-width: 1px;
-    --pagefind-ui-image-border-radius: 8px;
-    --pagefind-ui-image-box-ratio: 3 / 2;
+  /* 搜索图标颜色 */
+  #flexsearch-ui .search-icon {
+    pointer-events: none;
   }
 
-  /* 搜索框前缀图标配色 */
-  #pagefind-search form::before {
-    background-color: var(--foreground);
+  /* 清除按钮在输入框有内容时显示 */
+  #flexsearch-ui .search-clear {
+    display: none;
   }
 
-  /* 输入框聚焦态使用主色描边 */
-  #pagefind-search input {
-    font-weight: 400;
-    border: 1px solid var(--border);
-  }
-  #pagefind-search input:focus-visible {
-    outline: 1px solid var(--primary);
+  /* 搜索结果卡片入场动画 */
+  #flexsearch-ui .search-result-card.search-result-enter {
+    animation: searchResultFadeIn 0.3s ease-out both;
   }
 
-  /* 结果标题链接：主色 + 虚线下划线 */
-  #pagefind-search .pagefind-ui__result-title a {
-    color: var(--primary);
-    outline-offset: 1px;
-    outline-color: var(--primary);
-    text-decoration-style: dashed;
-    text-underline-offset: 4px;
-  }
-  #pagefind-search .pagefind-ui__result-title a:focus-visible,
-  #pagefind-search .pagefind-ui__search-clear:focus-visible {
-    text-decoration-line: none;
-    outline-width: 2px;
-    outline-style: dashed;
+  @keyframes searchResultFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  /* 最后一条结果去除底边 */
-  #pagefind-search .pagefind-ui__result:last-of-type {
-    border-bottom: 0;
+  /* 搜索结果入场动画交错延迟 */
+  #flexsearch-ui .search-result-card:nth-child(1).search-result-enter {
+    animation-delay: 0ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(2).search-result-enter {
+    animation-delay: 40ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(3).search-result-enter {
+    animation-delay: 80ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(4).search-result-enter {
+    animation-delay: 120ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(5).search-result-enter {
+    animation-delay: 160ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(6).search-result-enter {
+    animation-delay: 200ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(7).search-result-enter {
+    animation-delay: 240ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(8).search-result-enter {
+    animation-delay: 280ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(9).search-result-enter {
+    animation-delay: 320ms;
+  }
+  #flexsearch-ui .search-result-card:nth-child(10).search-result-enter {
+    animation-delay: 360ms;
   }
 
-  /* 子结果前缀图标使用系统字体 */
-  #pagefind-search .pagefind-ui__result-nested .pagefind-ui__result-link:before {
-    font-family: system-ui;
+  /* 高亮关键词 */
+  #flexsearch-ui .search-highlight {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
+  /* 结果卡片字号 */
+  #flexsearch-ui .search-result-card h3 {
+    line-height: 1.4;
+  }
+
+  /* 行缩略 */
+  #flexsearch-ui .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style>
