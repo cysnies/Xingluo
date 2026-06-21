@@ -63,7 +63,7 @@ const defaultFeatures = {
     enabled: false,
     url: "",
   },
-  search: "pagefind" as const,
+  search: "flexsearch" as const,
   /** 默认启用 MDX 解析与渲染 */
   mdx: true,
   /** 默认关闭评论系统 */

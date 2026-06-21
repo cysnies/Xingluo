@@ -188,7 +188,7 @@ export interface FeaturesConfig {
   /** 编辑文章链接配置 */
   editPost: EditPostConfig;
   /** 搜索方案 */
-  search: "pagefind" | false;
+  search: "flexsearch" | false;
   /** 是否启用 MDX 解析与渲染（关闭时仅收集 .md 且不加载 mdx 集成） */
   mdx: boolean;
   /** 评论系统配置 */

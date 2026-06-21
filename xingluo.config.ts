@@ -45,7 +45,7 @@ export default defineXingluoConfig({
       enabled: true,
       url: "https://github.com/cysnies/Xingluo/edit/main/",
     },
-    search: "pagefind",
+    search: "flexsearch",
     // 是否启用 MDX 解析与渲染（关闭后仅收集 .md，不加载 mdx 集成）
     mdx: true,
     // 评论系统配置：三选一或关闭。provider 为某值时需提供对应子配置。
