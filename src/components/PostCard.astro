@@ -150,3 +150,42 @@ const showHero = !!heroImageSrc;
     />
   )}
 </Card>
+
+<script>
+  // PostCard 点击涟漪效果：点击卡片时在点击位置生成波纹
+  function setupCardRipple() {
+    const cards = document.querySelectorAll<HTMLElement>('[data-spotlight]');
+    for (const card of cards) {
+      if (card.dataset.rippleReady === "true") continue;
+      card.dataset.rippleReady = "true";
+
+      card.addEventListener("click", (e: MouseEvent) => {
+        // 如果点击的是链接或按钮内部，不触发涟漪
+        const target = e.target as HTMLElement;
+        if (target.closest("a, button, [role='button']")) return;
+
+        const rect = card.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        const ripple = document.createElement("span");
+        ripple.className =
+          "pointer-events-none absolute rounded-full bg-primary/10";
+        ripple.style.cssText = `
+          width: ${size}px;
+          height: ${size}px;
+          left: ${x}px;
+          top: ${y}px;
+          transform: scale(0);
+          animation: card-ripple 0.5s ease-out forwards;
+        `;
+        card.appendChild(ripple);
+        ripple.addEventListener("animationend", () => ripple.remove());
+      });
+    }
+  }
+
+  document.addEventListener("astro:page-load", setupCardRipple);
+  setupCardRipple();
+</script>
