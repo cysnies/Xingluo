@@ -48,6 +48,7 @@ const {
   tags,
   hideEditPost,
   category,
+  comments,
 } = post.data;
 
 const { Content, headings } = await render(post);
@@ -173,8 +174,8 @@ const resolvedCanonical =
 
           <RelatedPosts posts={relatedPosts} />
 
-          {/* 评论区：provider 为 false 时 Comments 组件内部不输出 */}
-          <Comments locale={locale} />
+          {/* 评论区：受文章 frontmatter comments 字段覆盖，未设置时跟随全局配置 */}
+          <Comments locale={locale} enabled={comments} />
         </div>
 
         <aside class="hidden lg:block" aria-label={t.post.tableOfContents}>

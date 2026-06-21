@@ -39,6 +39,11 @@ const posts = defineCollection({
       translationKey: z.string().optional(),
       /** 文章分类（单值），未设置时文章不属于任何分类 */
       category: z.string().optional(),
+      /**
+       * 该文章是否启用评论，覆盖全局 features.comments 设置。
+       * 未设置时跟随全局配置；true 强制启用、false 强制关闭。
+       */
+      comments: z.boolean().optional(),
     }),
 });
 
@@ -50,6 +55,11 @@ const pages = defineCollection({
     description: z.string().optional(),
     ogImage: z.string().optional(),
     canonicalURL: z.string().optional(),
+    /**
+     * 该页面是否启用评论，覆盖全局 features.comments 设置。
+     * 未设置时跟随全局配置；true 强制启用、false 强制关闭。
+     */
+    comments: z.boolean().optional(),
   }),
 });
 

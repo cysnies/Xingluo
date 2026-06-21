@@ -13,9 +13,16 @@ import Waline from "./Waline.astro";
 interface Props {
   /** 当前语言，决定评论系统 UI 语言 */
   locale?: string;
+  /**
+   * 文章/页面级评论开关，覆盖全局 features.comments 配置。
+   * - 未设置：跟随全局配置
+   * - true：强制启用（仍受全局 provider 限制，provider 为 false 时不输出）
+   * - false：强制关闭
+   */
+  enabled?: boolean;
 }
 
-const { locale = DEFAULT_LOCALE } = Astro.props;
+const { locale = DEFAULT_LOCALE, enabled } = Astro.props;
 const t = useTranslations(locale);
 const commentsConfig = config.features.comments;
 
@@ -28,7 +35,10 @@ const initialTheme = "light";
 const lang = mapLang(locale);
 
 const provider = commentsConfig.provider;
-const showComments = provider !== false;
+// 全局开关：provider 非 false 即启用
+const globalEnabled = provider !== false;
+// 文章/页面级开关覆盖全局：未设置时跟随全局，否则以显式值为准
+const showComments = enabled === undefined ? globalEnabled : enabled && globalEnabled;
 const giscusConfig = provider === "giscus" ? commentsConfig.giscus : null;
 const twikooConfig = provider === "twikoo" ? commentsConfig.twikoo : null;
 const walineConfig = provider === "waline" ? commentsConfig.waline : null;

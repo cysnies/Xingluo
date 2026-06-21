@@ -6,6 +6,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
+import Comments from "@/components/comments/Comments.astro";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -19,7 +20,7 @@ if (!aboutPage) {
 }
 
 const { Content } = await render(aboutPage);
-const { title, description, ogImage, canonicalURL } = aboutPage.data;
+const { title, description, ogImage, canonicalURL, comments } = aboutPage.data;
 const pageTitle = title ?? t.pages.aboutTitle;
 const crumbs = [
   { href: getRelativeLocaleUrl(locale), label: t.nav.home },
@@ -40,6 +41,9 @@ const crumbs = [
     <article class="app-prose max-w-app">
       <Content />
     </article>
+
+    {/* 评论区：受 about 页 frontmatter comments 字段覆盖，未设置时跟随全局配置 */}
+    <Comments locale={locale} enabled={comments} />
   </Main>
   <Footer />
 </Layout>
