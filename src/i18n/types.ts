@@ -63,6 +63,11 @@ export interface UIStrings {
     /** 月份标签，如 "{{month}} 月" */
     monthLabel: string;
   };
+  /** 分类页相关 */
+  categories: {
+    /** 查看全部按钮文案，如 "查看全部 {{category}}" */
+    viewAll: string;
+  };
   /** 页脚相关 */
   footer: {
     copyright: string;

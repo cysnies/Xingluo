@@ -49,6 +49,9 @@ const ko: UIStrings = {
     postCount: "{{count}}개",
     monthLabel: "{{month}}월",
   },
+  categories: {
+    viewAll: "모두 보기 {{category}}",
+  },
   footer: {
     copyright: "저작권",
     allRightsReserved: "모든 권리 보유.",

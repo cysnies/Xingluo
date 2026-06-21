@@ -49,6 +49,9 @@ const ar: UIStrings = {
     postCount: "{{count}} مقال",
     monthLabel: "شهر {{month}}",
   },
+  categories: {
+    viewAll: "عرض الكل {{category}}",
+  },
   footer: {
     copyright: "حقوق النشر",
     allRightsReserved: "جميع الحقوق محفوظة.",

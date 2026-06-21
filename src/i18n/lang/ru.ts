@@ -49,6 +49,9 @@ const ru: UIStrings = {
     postCount: "{{count}} статей",
     monthLabel: "Месяц {{month}}",
   },
+  categories: {
+    viewAll: "Все {{category}}",
+  },
   footer: {
     copyright: "Авторские права",
     allRightsReserved: "Все права защищены.",

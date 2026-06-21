@@ -49,6 +49,9 @@ const ja: UIStrings = {
     postCount: "{{count}} 件",
     monthLabel: "{{month}} 月",
   },
+  categories: {
+    viewAll: "すべて表示 {{category}}",
+  },
   footer: {
     copyright: "著作権",
     allRightsReserved: "無断転載を禁じます。",

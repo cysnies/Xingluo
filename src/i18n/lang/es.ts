@@ -49,6 +49,9 @@ const es: UIStrings = {
     postCount: "{{count}} artículos",
     monthLabel: "Mes {{month}}",
   },
+  categories: {
+    viewAll: "Ver todo {{category}}",
+  },
   footer: {
     copyright: "Derechos de autor",
     allRightsReserved: "Todos los derechos reservados.",

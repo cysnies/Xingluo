@@ -49,6 +49,9 @@ const zhCn: UIStrings = {
     postCount: "{{count}} 篇",
     monthLabel: "{{month}} 月",
   },
+  categories: {
+    viewAll: "查看全部 {{category}}",
+  },
   footer: {
     copyright: "版权所有",
     allRightsReserved: "保留所有权利。",

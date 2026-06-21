@@ -49,6 +49,9 @@ const en: UIStrings = {
     postCount: "{{count}} posts",
     monthLabel: "Month {{month}}",
   },
+  categories: {
+    viewAll: "View all {{category}}",
+  },
   footer: {
     copyright: "Copyright",
     allRightsReserved: "All rights reserved.",

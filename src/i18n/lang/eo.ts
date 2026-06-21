@@ -49,6 +49,9 @@ const eo: UIStrings = {
     postCount: "{{count}} artikoloj",
     monthLabel: "Monato {{month}}",
   },
+  categories: {
+    viewAll: "Vidi ĉiujn {{category}}",
+  },
   footer: {
     copyright: "Kopirajto",
     allRightsReserved: "Ĉiuj rajtoj rezervitaj.",
