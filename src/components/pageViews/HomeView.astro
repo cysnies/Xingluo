@@ -24,8 +24,11 @@ const sortedPosts = getPostsForLocale(posts, locale);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const allPostsHref = getRelativeLocaleUrl(locale, "posts");
+// 直接构建 RSS URL，不通过 getRelativeLocaleUrl（该函数会附加尾部斜杠且为非默认语言添加前缀），
+// 因为 RSS 端点仅存在于根级别 src/pages/rss.xml.ts，不受语言路由影响。
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
 const rssHref = new URL(
-  getRelativeLocaleUrl(locale, "rss.xml"),
+  `${base}/rss.xml`,
   Astro.site ?? Astro.url
 ).href;
 ---
