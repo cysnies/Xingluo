@@ -6,8 +6,8 @@
 /* prose 容器：在 .app-prose 上应用文章排版 */
 .app-prose {
   @apply prose prose-neutral dark:prose-invert max-w-none;
-  /* 标题更紧凑 */
-  @apply prose-headings:scroll-mt-20 prose-headings:font-semibold;
+  /* 标题使用前景色（黑色），更醒目 */
+  @apply prose-headings:text-foreground prose-headings:scroll-mt-20 prose-headings:font-semibold;
   /* 链接使用主色 */
   @apply prose-a:font-medium prose-a:text-primary prose-a:underline-offset-4 hover:prose-a:text-primary/80;
   /* 代码块使用 code 表面色 */
@@ -100,9 +100,13 @@
   }
 }
 
-/* 标题锚点链接：跟随标题颜色，悬停时显现；不显示下划线 */
+/* 标题锚点链接：使用前景色（黑色），悬停时不加下划线 */
 .app-prose .heading-link {
-  @apply text-muted-foreground no-underline hover:no-underline;
+  @apply text-foreground no-underline hover:no-underline;
+}
+/* 标题后的井号保持灰色 */
+.app-prose .heading-link span[aria-hidden="true"] {
+  @apply text-muted-foreground;
 }
 .app-prose .heading-anchor {
   scroll-margin-top: 5rem;
