@@ -31,9 +31,11 @@ let aplayerCssPromise: Promise<void> | null = null;
  */
 function ensureAPlayerCss(): Promise<void> {
   // 检查 CSS <link> 是否仍存在于 <head> 中（View Transitions 可能已将其移除）
-  const linkExists = document.head.querySelector<HTMLLinkElement>(
-    `link[rel=stylesheet][href="${aplayerCssUrl}"]`,
-  );
+  // 注意：link.href 存储的是解析后的绝对 URL，需与绝对 URL 比较
+  const resolvedUrl = new URL(aplayerCssUrl, document.baseURI).href;
+  const linkExists = Array.from(
+    document.head.querySelectorAll<HTMLLinkElement>("link[rel=stylesheet]"),
+  ).some((link) => link.href === resolvedUrl);
   if (!linkExists) {
     // link 被移除，重置 Promise 以便重新注入
     aplayerCssPromise = null;
