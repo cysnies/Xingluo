@@ -127,6 +127,61 @@ const crumbs = [
     result: Array<{ doc: SearchDoc }>;
   }
 
+  /** 搜索状态（挂载到 container 上，跨 View Transitions 持久化） */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type FlexIndex = any;
+  interface SearchState {
+    index: FlexIndex | null;
+    documents: SearchDoc[];
+    locale: string;
+    params: URLSearchParams;
+    debounceTimer: ReturnType<typeof setTimeout> | null;
+    input: HTMLInputElement | null;
+    clearBtn: HTMLElement | null;
+    resultsEl: HTMLElement | null;
+    hintEl: HTMLElement | null;
+    noResultsEl: HTMLElement | null;
+    statsEl: HTMLElement | null;
+  }
+
+  /** 从 container 获取或创建搜索状态 */
+  function getSearchState(container: HTMLElement): SearchState {
+    const key = "_searchState";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((container as any)[key]) // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (container as any)[key];
+    const state: SearchState = {
+      index: null,
+      documents: [],
+      locale: "",
+      params: new URLSearchParams(window.location.search),
+      debounceTimer: null,
+      input: null,
+      clearBtn: null,
+      resultsEl: null,
+      hintEl: null,
+      noResultsEl: null,
+      statsEl: null,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (container as any)[key] = state;
+    return state;
+  }
+
+  /** 获取当前语言代码 */
+  function detectLocale(): string {
+    const path = window.location.pathname.replace(/\/+$/, "");
+    const segments = path.split("/");
+    const locales = [
+      "zh-cn", "zh-tw", "en", "ja", "ko", "fr",
+      "de", "es", "pt", "ru", "ar", "eo",
+    ];
+    for (let i = 1; i < segments.length; i++) {
+      if (locales.includes(segments[i])) return segments[i];
+    }
+    return "zh-cn";
+  }
+
   /** 搜索结果入场动画 */
   function observeSearchResults(container: HTMLElement) {
     const addAnim = (el: Element) => {
@@ -134,18 +189,14 @@ const crumbs = [
         el.classList.add("search-result-enter");
       }
     };
-
     container.querySelectorAll(".search-result-card").forEach(addAnim);
-
     const obs = new MutationObserver(() => {
       container.querySelectorAll(".search-result-card").forEach(addAnim);
     });
     obs.observe(container, { childList: true, subtree: true });
   }
 
-  /**
-   * 高亮搜索关键词
-   */
+  /** 高亮搜索关键词 */
   function highlightText(text: string, query: string): string {
     if (!query || !text) return escapeHtml(text);
     const terms = query
@@ -167,22 +218,13 @@ const crumbs = [
     return div.innerHTML;
   }
 
-  /**
-   * 截取文本片段用于上下文展示
-   */
-  function getContextSnippet(
-    text: string,
-    query: string,
-    contextLen = 80,
-  ): string {
-    if (!query || !text) {
-      return text ? text.slice(0, 200) : "";
-    }
+  /** 截取文本片段用于上下文展示 */
+  function getContextSnippet(text: string, query: string, contextLen = 80): string {
+    if (!query || !text) return text ? text.slice(0, 200) : "";
     const lowerText = text.toLowerCase();
     const lowerQuery = query.toLowerCase();
     const idx = lowerText.indexOf(lowerQuery);
     if (idx === -1) return text.slice(0, 200);
-
     const start = Math.max(0, idx - contextLen);
     const end = Math.min(text.length, idx + query.length + contextLen);
     let snippet = text.slice(start, end);
@@ -193,7 +235,7 @@ const crumbs = [
 
   /** 创建搜索结果卡片 */
   function createResultCard(
-    doc: { title: string; description: string; tags: string[]; url: string; content: string },
+    doc: SearchDoc,
     query: string,
   ): HTMLAnchorElement {
     const card = document.createElement("a");
@@ -201,16 +243,13 @@ const crumbs = [
     card.className =
       "search-result-card block rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent hover:shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
     card.setAttribute("role", "listitem");
-
     const titleEl = document.createElement("h3");
     titleEl.className = "mb-1 text-lg font-semibold text-primary";
     titleEl.innerHTML = highlightText(doc.title, query);
-
     const descEl = document.createElement("p");
     descEl.className = "mb-2 text-sm text-muted-foreground line-clamp-2";
     const snippet = getContextSnippet(doc.description || doc.content, query);
     descEl.innerHTML = highlightText(snippet, query);
-
     if (doc.tags && doc.tags.length > 0) {
       const tagsEl = document.createElement("div");
       tagsEl.className = "flex flex-wrap gap-1.5";
@@ -228,272 +267,271 @@ const crumbs = [
       card.appendChild(titleEl);
       card.appendChild(descEl);
     }
-
     return card;
   }
 
-  function initSearch() {
-    const container = document.querySelector<HTMLElement>("#flexsearch-ui");
-    if (!container) return;
-
-    const input = container.querySelector<HTMLInputElement>("#search-input");
-    const clearBtn = container.querySelector<HTMLElement>("#search-clear");
-    const resultsEl = container.querySelector<HTMLElement>("#search-results");
-    const hintEl = container.querySelector<HTMLElement>("#search-hint");
-    const noResultsEl = container.querySelector<HTMLElement>("#search-no-results");
-    const statsEl = container.querySelector<HTMLElement>("#search-stats");
-
-    if (!input || !resultsEl) return;
-
-    const params = new URLSearchParams(window.location.search);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let index: any = null;
-    let documents: SearchDoc[] = [];
-
-    // 获取当前语言代码（从 URL 路径中提取）
-    const pathLocale = (() => {
-      const path = window.location.pathname.replace(/\/+$/, "");
-      const segments = path.split("/");
-      const locales = [
-        "zh-cn", "zh-tw", "en", "ja", "ko", "fr",
-        "de", "es", "pt", "ru", "ar", "eo",
-      ];
-      for (let i = 1; i < segments.length; i++) {
-        if (locales.includes(segments[i])) return segments[i];
-      }
-      return "zh-cn";
-    })();
-
-    /** 加载并初始化搜索索引 */
-    async function loadIndex() {
-      try {
-        // 先尝试加载当前语言索引，失败则加载清单中的第一个
-        let dataUrl = getAssetPath(`search/${pathLocale}.json`);
-        let resp = await fetch(dataUrl);
-
-        if (!resp.ok) {
-          // 回退：加载清单
-          const manifestUrl = getAssetPath("search/manifest.json");
-          const manifestResp = await fetch(manifestUrl);
-          if (!manifestResp.ok) {
-            console.warn("[search] 搜索索引清单不存在");
-            return;
-          }
-          const manifest = await manifestResp.json();
-          if (manifest.length === 0) return;
-          const lang = manifest.includes(pathLocale)
-            ? pathLocale
-            : manifest[0];
-          dataUrl = getAssetPath(`search/${lang}.json`);
-          resp = await fetch(dataUrl);
-          if (!resp.ok) return;
-        }
-
-        documents = await resp.json();
-        if (!documents || documents.length === 0) return;
-
-        // 初始化 Flexsearch Document 索引
-        index = new FlexSearch.Document({
-          document: {
-            id: "id",
-            index: [
-              { field: "title", tokenize: "forward", resolution: 9 },
-              { field: "description", tokenize: "forward", resolution: 5 },
-              { field: "content", tokenize: "forward", resolution: 3 },
-              { field: "tags", tokenize: "forward", resolution: 5 },
-            ],
-            store: ["title", "description", "tags", "url", "content"],
-          },
-          tokenize: "forward",
-          cache: true,
-        });
-
-        // 批量添加文档到索引
-        for (const doc of documents) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (index as any).add(doc);
-        }
-
-        // 触发 URL 中的初始查询
-        const query = params.get("q");
-        if (query) {
-          input!.value = query;
-          performSearch(query);
-        }
-      } catch (err) {
-        console.warn("[search] 索引加载失败：", err);
-      }
+  /** 执行搜索 */
+  function performSearch(state: SearchState, query: string) {
+    if (!query.trim()) {
+      showHint(state);
+      return;
     }
-
-    /** 执行搜索 */
-    function performSearch(query: string) {
-      if (!query.trim()) {
-        showHint();
-        return;
-      }
-
-      if (!index) {
-        textSearch(query);
-        return;
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rawResults = (index as any).search(query, {
-        limit: 50,
-        enrich: true,
-      }) as FieldResult[];
-
-      // 合并多字段搜索结果，去重
-      const resultMap = new Map<string, { doc: SearchDoc; fields: Set<string> }>();
-
-      if (rawResults && rawResults.length > 0) {
-        for (const fieldResult of rawResults) {
-          if (fieldResult.result && fieldResult.result.length > 0) {
-            for (const item of fieldResult.result) {
-              const doc = item.doc;
-              if (doc && doc.id) {
-                if (!resultMap.has(doc.id)) {
-                  resultMap.set(doc.id, { doc, fields: new Set() });
-                }
-                resultMap.get(doc.id)!.fields.add(fieldResult.field);
+    if (!state.index) {
+      textSearch(state, query);
+      return;
+    }
+    const rawResults = (state.index as FlexIndex).search(query, {
+      limit: 50,
+      enrich: true,
+    }) as FieldResult[];
+    const resultMap = new Map<string, { doc: SearchDoc; fields: Set<string> }>();
+    if (rawResults && rawResults.length > 0) {
+      for (const fieldResult of rawResults) {
+        if (fieldResult.result && fieldResult.result.length > 0) {
+          for (const item of fieldResult.result) {
+            const doc = item.doc;
+            if (doc && doc.id) {
+              if (!resultMap.has(doc.id)) {
+                resultMap.set(doc.id, { doc, fields: new Set() });
               }
+              resultMap.get(doc.id)!.fields.add(fieldResult.field);
             }
           }
         }
       }
+    }
+    const results = Array.from(resultMap.values());
+    if (results.length === 0) {
+      textSearch(state, query);
+      return;
+    }
+    renderResults(state, results, query);
+  }
 
-      const results = Array.from(resultMap.values());
+  /** 纯文本搜索（索引未加载时的降级方案） */
+  function textSearch(state: SearchState, query: string) {
+    const lowerQuery = query.toLowerCase();
+    const results = state.documents
+      .filter((doc: SearchDoc) => {
+        const searchText =
+          `${doc.title} ${doc.description} ${doc.content} ${(doc.tags || []).join(" ")}`.toLowerCase();
+        return searchText.includes(lowerQuery);
+      })
+      .map((doc: SearchDoc) => ({ doc, fields: new Set(["content"]) }));
+    if (results.length === 0) {
+      showNoResults(state);
+      return;
+    }
+    renderResults(state, results, query);
+  }
 
-      if (results.length === 0) {
-        textSearch(query);
-        return;
+  /** 渲染搜索结果 */
+  function renderResults(
+    state: SearchState,
+    results: Array<{ doc: SearchDoc; fields: Set<string> }>,
+    query: string,
+  ) {
+    state.hintEl?.classList.add("hidden");
+    state.noResultsEl?.classList.add("hidden");
+    state.resultsEl!.innerHTML = "";
+    if (state.statsEl) {
+      state.statsEl.textContent = `${results.length} 条结果`;
+      state.statsEl.classList.remove("hidden");
+    }
+    for (const { doc } of results) {
+      const card = createResultCard(doc, query);
+      state.resultsEl!.appendChild(card);
+    }
+    state.params.set("q", query);
+    history.replaceState(history.state, "", "?" + state.params.toString());
+    sessionStorage.setItem(
+      "backUrl",
+      `${window.location.pathname}?${state.params.toString()}`,
+    );
+    observeSearchResults(state.resultsEl!);
+  }
+
+  /** 显示初始提示 */
+  function showHint(state: SearchState) {
+    state.hintEl?.classList.remove("hidden");
+    state.noResultsEl?.classList.add("hidden");
+    state.resultsEl!.innerHTML = "";
+    state.statsEl?.classList.add("hidden");
+  }
+
+  /** 显示无结果提示 */
+  function showNoResults(state: SearchState) {
+    state.hintEl?.classList.add("hidden");
+    state.noResultsEl?.classList.remove("hidden");
+    state.resultsEl!.innerHTML = "";
+    state.statsEl?.classList.add("hidden");
+  }
+
+  /** 加载并初始化搜索索引 */
+  async function loadIndex(state: SearchState, container: HTMLElement) {
+    try {
+      let dataUrl = getAssetPath(`search/${state.locale}.json`);
+      let resp = await fetch(dataUrl);
+      if (!resp.ok) {
+        const manifestUrl = getAssetPath("search/manifest.json");
+        const manifestResp = await fetch(manifestUrl);
+        if (!manifestResp.ok) {
+          console.warn("[search] 搜索索引清单不存在");
+          return;
+        }
+        const manifest = await manifestResp.json();
+        if (manifest.length === 0) return;
+        const lang = manifest.includes(state.locale) ? state.locale : manifest[0];
+        dataUrl = getAssetPath(`search/${lang}.json`);
+        resp = await fetch(dataUrl);
+        if (!resp.ok) return;
+      }
+      state.documents = await resp.json();
+      if (!state.documents || state.documents.length === 0) return;
+
+      // 初始化 Flexsearch Document 索引
+      state.index = new FlexSearch.Document({
+        document: {
+          id: "id",
+          index: [
+            { field: "title", tokenize: "forward", resolution: 9 },
+            { field: "description", tokenize: "forward", resolution: 5 },
+            { field: "content", tokenize: "forward", resolution: 3 },
+            { field: "tags", tokenize: "forward", resolution: 5 },
+          ],
+          store: ["title", "description", "tags", "url", "content"],
+        },
+        tokenize: "forward",
+        cache: true,
+      });
+
+      for (const doc of state.documents) {
+        (state.index as FlexIndex).add(doc);
       }
 
-      renderResults(results, query);
-    }
+      // 标记搜索已就绪
+      container.dataset.searchReady = "true";
 
-    /** 纯文本搜索（索引未加载时的降级方案） */
-    function textSearch(query: string) {
-      const lowerQuery = query.toLowerCase();
-      const results = documents
-        .filter((doc: SearchDoc) => {
-          const searchText =
-            `${doc.title} ${doc.description} ${doc.content} ${(doc.tags || []).join(" ")}`.toLowerCase();
-          return searchText.includes(lowerQuery);
-        })
-        .map((doc: SearchDoc) => ({ doc, fields: new Set(["content"]) }));
-
-      if (results.length === 0) {
-        showNoResults();
-        return;
+      // 触发 URL 中的初始查询
+      const query = state.params.get("q");
+      if (query && state.input) {
+        state.input.value = query;
+        performSearch(state, query);
       }
-
-      renderResults(results, query);
+    } catch (err) {
+      console.warn("[search] 索引加载失败：", err);
     }
+  }
 
-    /** 渲染搜索结果 */
-    function renderResults(
-      results: Array<{ doc: SearchDoc; fields: Set<string> }>,
-      query: string,
-    ) {
-      hintEl?.classList.add("hidden");
-      noResultsEl?.classList.add("hidden");
-      resultsEl!.innerHTML = "";
+  /** 绑定事件监听器 */
+  function bindEvents(state: SearchState, container: HTMLElement) {
+    if (!state.input) return;
 
-      // 更新统计
-      if (statsEl) {
-        statsEl.textContent = `${results.length} 条结果`;
-        statsEl.classList.remove("hidden");
-      }
+    // 移除旧监听器（用新函数替换）
+    const oldInput = state.input;
+    const newInput = oldInput.cloneNode(true) as HTMLInputElement;
+    oldInput.parentNode?.replaceChild(newInput, oldInput);
+    state.input = newInput;
 
-      for (const { doc } of results) {
-        const card = createResultCard(doc, query);
-        resultsEl!.appendChild(card);
-      }
+    // 重新查询 DOM 元素（clearBtn 也被 clone 替换了）
+    state.clearBtn = container.querySelector("#search-clear");
+    state.resultsEl = container.querySelector("#search-results");
+    state.hintEl = container.querySelector("#search-hint");
+    state.noResultsEl = container.querySelector("#search-no-results");
+    state.statsEl = container.querySelector("#search-stats");
 
-      // 更新 URL query param
-      params.set("q", query);
-      history.replaceState(history.state, "", "?" + params.toString());
-      sessionStorage.setItem(
-        "backUrl",
-        `${window.location.pathname}?${params.toString()}`,
-      );
-
-      observeSearchResults(resultsEl!);
-    }
-
-    /** 显示初始提示 */
-    function showHint() {
-      hintEl?.classList.remove("hidden");
-      noResultsEl?.classList.add("hidden");
-      resultsEl!.innerHTML = "";
-      statsEl?.classList.add("hidden");
-    }
-
-    /** 显示无结果提示 */
-    function showNoResults() {
-      hintEl?.classList.add("hidden");
-      noResultsEl?.classList.remove("hidden");
-      resultsEl!.innerHTML = "";
-      statsEl?.classList.add("hidden");
-    }
-
-    // 防抖
-    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-    function debouncedSearch(query: string) {
-      if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        performSearch(query);
-      }, 200);
-    }
+    const newClearBtn = state.clearBtn;
 
     // 输入事件
-    input.addEventListener("input", (e: Event) => {
+    newInput.addEventListener("input", (e: Event) => {
       const target = e.target as HTMLInputElement;
       const query = target.value.trim();
       if (query) {
-        clearBtn?.classList.remove("hidden");
-        debouncedSearch(query);
+        if (newClearBtn) newClearBtn.classList.remove("hidden");
+        if (state.debounceTimer) clearTimeout(state.debounceTimer);
+        state.debounceTimer = setTimeout(() => {
+          performSearch(state, query);
+        }, 200);
       } else {
-        clearBtn?.classList.add("hidden");
-        if (debounceTimer) clearTimeout(debounceTimer);
-        showHint();
+        if (newClearBtn) newClearBtn.classList.add("hidden");
+        if (state.debounceTimer) clearTimeout(state.debounceTimer);
+        showHint(state);
         history.replaceState(history.state, "", window.location.pathname);
       }
     });
 
     // 清除按钮
-    clearBtn?.addEventListener("click", () => {
-      input.value = "";
-      clearBtn.classList.add("hidden");
-      if (debounceTimer) clearTimeout(debounceTimer);
-      showHint();
+    newClearBtn?.addEventListener("click", () => {
+      newInput.value = "";
+      newClearBtn.classList.add("hidden");
+      if (state.debounceTimer) clearTimeout(state.debounceTimer);
+      showHint(state);
       history.replaceState(history.state, "", window.location.pathname);
-      input.focus();
+      newInput.focus();
     });
 
-    // 加载索引
-    loadIndex();
-
-    // 开发模式提示
-    if (import.meta.env.DEV) {
-      const devNotice = document.createElement("div");
-      devNotice.className = "mb-4 rounded-md bg-muted p-4 text-sm";
-      devNotice.innerHTML = `
-        <p><strong>开发模式提示：</strong>需至少构建一次项目才能看到搜索结果。</p>
-        <code class="mt-2 block rounded bg-background px-2 py-1">pnpm run build</code>
-      `;
-      container.prepend(devNotice);
+    // 如果已有查询参数，触发搜索
+    const query = state.params.get("q");
+    if (query) {
+      newInput.value = query;
+      if (newClearBtn) newClearBtn.classList.remove("hidden");
+      if (container.dataset.searchReady === "true") {
+        performSearch(state, query);
+      }
     }
   }
 
+  /** 主初始化函数 */
+  function initSearch() {
+    const container = document.querySelector<HTMLElement>("#flexsearch-ui");
+    if (!container) return;
+
+    const state = getSearchState(container);
+    state.input = container.querySelector("#search-input");
+    state.clearBtn = container.querySelector("#search-clear");
+    state.resultsEl = container.querySelector("#search-results");
+    state.hintEl = container.querySelector("#search-hint");
+    state.noResultsEl = container.querySelector("#search-no-results");
+    state.statsEl = container.querySelector("#search-stats");
+    state.locale = detectLocale();
+    state.params = new URLSearchParams(window.location.search);
+
+    if (!state.input || !state.resultsEl) return;
+
+    // 绑定事件（每次 initSearch 都重新绑定，解决 View Transitions 后事件丢失问题）
+    bindEvents(state, container);
+
+    // 仅在索引未加载时加载
+    if (container.dataset.searchReady !== "true") {
+      loadIndex(state, container);
+
+      // 开发模式提示
+      if (import.meta.env.DEV) {
+        const devNotice = document.createElement("div");
+        devNotice.className = "mb-4 rounded-md bg-muted p-4 text-sm";
+        devNotice.innerHTML = `
+          <p><strong>开发模式提示：</strong>需至少构建一次项目才能看到搜索结果。</p>
+          <code class="mt-2 block rounded bg-background px-2 py-1">pnpm run build</code>
+        `;
+        container.prepend(devNotice);
+      }
+    } else {
+      // 索引已加载，检查是否需要恢复 URL 查询
+      const query = state.params.get("q");
+      if (query && state.input.value !== query) {
+        state.input.value = query;
+        performSearch(state, query);
+      }
+    }
+  }
+
+  // 首次加载
+  initSearch();
+
+  // View Transitions 导航后重新绑定事件
   document.addEventListener("astro:after-swap", () => {
-    const searchUI = document.querySelector("#flexsearch-ui");
-    if (searchUI && searchUI.querySelector("input")) return;
     initSearch();
   });
-  initSearch();
 </script>
 
 <style is:global>
