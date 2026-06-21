@@ -23,6 +23,23 @@ With `provider: false` (default), comments are off and post pages emit no commen
 
 The comment section appears only at the bottom of **post detail pages** (after the prev/next navigation), rendered by [`src/components/comments/Comments.astro`](../src/components/comments/Comments.astro).
 
+## Per-Post / Per-Page Control
+
+In addition to the global `features.comments` toggle, you can override comments on individual posts or static pages via the `comments` frontmatter field:
+
+```markdown
+---
+title: "A post without comments"
+comments: false # force comments off for this post
+---
+```
+
+- `comments` unset: follows the global `features.comments` config
+- `comments: true`: force-enable (still requires a global provider to be configured, otherwise no comment system renders)
+- `comments: false`: force-disable comments for this post/page
+
+This field applies to both the `posts` collection (post detail pages) and the `pages` collection (e.g. the about page), enabling per-post / per-page comment toggling.
+
 ## giscus
 
 A comment system based on GitHub Discussions; the repository must be public with Discussions enabled.

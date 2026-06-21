@@ -23,6 +23,23 @@ features: {
 
 评论区仅出现在**文章详情页**底部（相邻文章导航之后），由 [`src/components/comments/Comments.astro`](../src/components/comments/Comments.astro) 渲染。
 
+## 按文章/页面控制
+
+除全局 `features.comments` 开关外，可在单篇文章或静态页面的 frontmatter 中用 `comments` 字段覆盖：
+
+```markdown
+---
+title: "不需要评论的文章"
+comments: false # 强制关闭该文章评论
+---
+```
+
+- 未设置 `comments`：跟随全局 `features.comments` 配置
+- `comments: true`：强制启用（仍需全局已配置 provider，否则无评论系统可渲染）
+- `comments: false`：强制关闭该文章/页面的评论
+
+该字段同时作用于 `posts` 集合（文章详情页）与 `pages` 集合（如关于页），实现单篇/单页级别的评论开关。
+
 ## giscus
 
 基于 GitHub Discussions 的评论系统，需仓库为 public 且启用 Discussions。
