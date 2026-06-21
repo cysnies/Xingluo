@@ -1,6 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { useTranslations } from "@/i18n";
+import { getCardWidth } from "@/utils/getCardWidth";
+import config from "@/config";
 import PostCard from "@/components/PostCard.astro";
 
 interface Props {
@@ -17,12 +19,15 @@ const t = useTranslations(Astro.currentLocale);
       <h2 class="mb-4 text-2xl font-semibold tracking-tight">
         {t.post.relatedPosts}
       </h2>
-      <ul class="grid items-start gap-4 sm:grid-cols-2">
-        {posts.map((post) => (
-          <li>
-            <PostCard post={post} showTags={false} />
-          </li>
-        ))}
+      <ul class="grid grid-cols-2 items-start gap-4">
+        {posts.map((post) => {
+          const width = getCardWidth(post, config.features.showPostCardHero);
+          return (
+            <li class={width === "full" ? "col-span-2" : "col-span-1"}>
+              <PostCard post={post} showTags={false} />
+            </li>
+          );
+        })}
       </ul>
     </section>
   )

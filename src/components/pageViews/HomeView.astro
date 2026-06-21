@@ -9,6 +9,7 @@ import Socials from "@/components/Socials.astro";
 import PostCard from "@/components/PostCard.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { getPostsForLocale } from "@/utils/i18nPosts";
+import { getCardWidth } from "@/utils/getCardWidth";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import ArrowRight from "@/assets/icons/ArrowRight.astro";
@@ -68,12 +69,15 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.featured}
           </h2>
-          <ul class="grid items-start gap-4 sm:grid-cols-2">
-            {featuredPosts.map((post) => (
-              <li>
-                <PostCard post={post} />
-              </li>
-            ))}
+          <ul class="grid grid-cols-2 items-start gap-4">
+            {featuredPosts.map((post) => {
+              const width = getCardWidth(post, config.features.showPostCardHero);
+              return (
+                <li class={width === "full" ? "col-span-2" : "col-span-1"}>
+                  <PostCard post={post} />
+                </li>
+              );
+            })}
           </ul>
         </section>
       )
@@ -86,12 +90,15 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.recentPosts}
           </h2>
-          <ul class="grid items-start gap-4 sm:grid-cols-2">
-            {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
-              <li>
-                <PostCard post={post} />
-              </li>
-            ))}
+          <ul class="grid grid-cols-2 items-start gap-4">
+            {recentPosts.slice(0, postsConfig.perIndex).map((post) => {
+              const width = getCardWidth(post, config.features.showPostCardHero);
+              return (
+                <li class={width === "full" ? "col-span-2" : "col-span-1"}>
+                  <PostCard post={post} />
+                </li>
+              );
+            })}
           </ul>
         </section>
       )
