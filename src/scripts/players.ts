@@ -53,14 +53,10 @@ function ensureAPlayerCss(): Promise<void> {
   return aplayerCssPromise;
 }
 
-/** 动态加载 APlayer 模块与样式（共享 Promise 避免重复加载） */
+/** 动态加载 APlayer 模块（共享 Promise 避免重复加载，不含 CSS） */
 async function loadAPlayer(): Promise<typeof import("aplayer")> {
   if (!aplayerMod) {
-    aplayerMod = (async () => {
-      // 与 JS 模块并行加载 CSS，但确保 CSS 先于实例化完成
-      const [mod] = await Promise.all([import("aplayer"), ensureAPlayerCss()]);
-      return mod;
-    })();
+    aplayerMod = import("aplayer");
   }
   return aplayerMod;
 }
@@ -68,10 +64,7 @@ async function loadAPlayer(): Promise<typeof import("aplayer")> {
 /** 动态加载 DPlayer 模块（样式已内联于 JS） */
 async function loadDPlayer(): Promise<typeof import("dplayer")> {
   if (!dplayerMod) {
-    dplayerMod = (async () => {
-      // DPlayer 的样式打包在 JS 中，无需单独 import CSS
-      return await import("dplayer");
-    })();
+    dplayerMod = import("dplayer");
   }
   return dplayerMod;
 }
@@ -81,14 +74,21 @@ function waitForNextFrame(): Promise<void> {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }
 
-/** 实例化单个 APlayer 占位 */
+/**
+ * 实例化单个 APlayer 占位
+ *
+ * 每次调用独立检查 CSS <link> 是否在 <head> 中，因为 View Transitions 的
+ * swapHeadElements() 可能在导航时将其移除。若被移除则重新注入并等待加载完成。
+ */
 async function mountAPlayer(el: HTMLElement): Promise<void> {
   if (el.dataset.xngInit === "1") return;
   el.dataset.xngInit = "1";
   try {
     const raw = decodeURIComponent(el.dataset.config ?? "{}");
     const config = JSON.parse(raw) as Record<string, unknown>;
-    const APlayer = (await loadAPlayer()).default;
+    // 并行加载 CSS 与 JS 模块
+    const [mod] = await Promise.all([loadAPlayer(), ensureAPlayerCss()]);
+    const APlayer = mod.default;
     // 等待一帧确保浏览器已完成布局计算，避免 View Transition 动画期间尺寸异常
     await waitForNextFrame();
     new APlayer({ container: el, ...config });
