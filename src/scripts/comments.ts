@@ -37,60 +37,47 @@ function syncGiscusTheme(): void {
 /** 已初始化的 twikoo 实例句柄，用于主题切换时重建 */
 let twikooCleanup: (() => void) | null = null;
 
-// 以 ?url 形式引入 Waline 样式：仅取得资源 URL 字符串，不触发 Vite 自动注入 <link>，
-// 改为运行时按需注入，避免功能关闭时页面仍加载无用 CSS
+// 以 ?url 形式引入 Waline 与 Twikoo 样式：仅取得资源 URL 字符串，不触发 Vite 自动
+// 注入 <link>，改为运行时按需注入，避免功能关闭时页面仍加载无用 CSS
 import walineCssUrl from "@waline/client/style?url";
-
-/** 运行时注入 Waline 样式 <link> 的 Promise，确保 CSS 加载完毕后再实例化 */
-let walineCssPromise: Promise<void> | null = null;
+import twikooCssUrl from "twikoo/dist/twikoo.css?url";
 
 /**
- * 注入 Waline 样式 <link> 并等待加载完成。
- *
+ * 注入样式 <link> 并等待加载完成的通用工厂。
  * 每次调用前检查 <link> 是否仍在 <head> 中——View Transitions 的
  * swapHeadElements() 会移除仅存在于当前 head 但不在新文档 head 中的元素。
  */
-function ensureWalineCss(): Promise<void> {
-  const resolvedUrl = new URL(walineCssUrl, document.baseURI).href;
-  const linkExists = Array.from(
-    document.head.querySelectorAll<HTMLLinkElement>("link[rel=stylesheet]"),
-  ).some((link) => link.href === resolvedUrl);
-  if (!linkExists) {
-    walineCssPromise = null;
-  }
+function createEnsureCss(cssUrl: string): () => Promise<void> {
+  let promise: Promise<void> | null = null;
 
-  if (!walineCssPromise) {
-    walineCssPromise = new Promise<void>((resolve) => {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = walineCssUrl;
-      link.onload = () => resolve();
-      link.onerror = () => resolve();
-      document.head.appendChild(link);
-    });
-  }
-  return walineCssPromise;
+  return () => {
+    const resolvedUrl = new URL(cssUrl, document.baseURI).href;
+    const linkExists = Array.from(
+      document.head.querySelectorAll<HTMLLinkElement>("link[rel=stylesheet]"),
+    ).some((link) => link.href === resolvedUrl);
+    if (!linkExists) {
+      promise = null;
+    }
+
+    if (!promise) {
+      promise = new Promise<void>((resolve) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = cssUrl;
+        link.onload = () => resolve();
+        link.onerror = () => resolve();
+        document.head.appendChild(link);
+      });
+    }
+    return promise;
+  };
 }
 
-/** 缓存的 Twikoo CSS 文本内容（首次加载时从 vue-style-loader 注入的 <style> 中捕获） */
-let twikooCssContent: string | null = null;
+/** 确保 Waline CSS <link> 在 <head> 中 */
+const ensureWalineCss = createEnsureCss(walineCssUrl);
 
-/**
- * 确保 Twikoo 的 <style> 仍在 <head> 中。
- * Twikoo 使用 vue-style-loader 在模块首次执行时注入 <style>，模块缓存后不会
- * 重新注入，故需在 swapHeadElements() 移除后手动恢复。
- */
-function ensureTwikooCss(): void {
-  if (!twikooCssContent) return;
-  const styleExists = Array.from(document.head.querySelectorAll("style")).some(
-    (s) => s.textContent === twikooCssContent,
-  );
-  if (!styleExists) {
-    const style = document.createElement("style");
-    style.textContent = twikooCssContent;
-    document.head.appendChild(style);
-  }
-}
+/** 确保 Twikoo CSS <link> 在 <head> 中 */
+const ensureTwikooCss = createEnsureCss(twikooCssUrl);
 
 /** 初始化 twikoo：动态 import 后调用 init */
 async function initTwikoo(mount: HTMLElement): Promise<void> {
@@ -99,21 +86,9 @@ async function initTwikoo(mount: HTMLElement): Promise<void> {
   const lang = mount.dataset.lang ?? "zh-CN";
   if (!envId) return;
   try {
+    // 确保 CSS 存在于 <head> 中（View Transitions 可能已移除）
+    await ensureTwikooCss();
     const twikoo = (await import("twikoo")).default;
-
-    // 首次加载时捕获 vue-style-loader 注入的 CSS 内容
-    if (!twikooCssContent) {
-      for (const style of document.head.querySelectorAll("style")) {
-        if (style.textContent?.includes(".twikoo")) {
-          twikooCssContent = style.textContent;
-          break;
-        }
-      }
-    } else {
-      // 后续加载时确保 CSS 仍存在（View Transitions 可能已移除）
-      ensureTwikooCss();
-    }
-
     mount.innerHTML = "";
     twikoo({ envId, el: `#${mount.id}`, lang });
     mount.dataset.xngInit = "1";
