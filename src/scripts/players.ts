@@ -22,18 +22,34 @@ import aplayerCssUrl from "aplayer/dist/APlayer.min.css?url";
 /** 运行时注入 APlayer 样式 <link> 的 Promise，确保 CSS 加载完毕后再实例化播放器 */
 let aplayerCssPromise: Promise<void> | null = null;
 
-/** 注入 APlayer 样式 <link> 并等待加载完成（仅首次调用时生效） */
+/**
+ * 注入 APlayer 样式 <link> 并等待加载完成。
+ *
+ * 每次调用前会检查 <link> 是否仍在 <head> 中——View Transitions 的
+ * swapHeadElements() 会移除仅存在于当前 head 但不在新文档 head 中的元素，
+ * 导致导航离开再返回后 CSS 丢失。若 <link> 被移除则重新注入。
+ */
 function ensureAPlayerCss(): Promise<void> {
-  if (aplayerCssPromise) return aplayerCssPromise;
-  aplayerCssPromise = new Promise<void>((resolve) => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = aplayerCssUrl;
-    // CSS 加载完成或失败均 resolve，避免阻塞播放器初始化
-    link.onload = () => resolve();
-    link.onerror = () => resolve();
-    document.head.appendChild(link);
-  });
+  // 检查 CSS <link> 是否仍存在于 <head> 中（View Transitions 可能已将其移除）
+  const linkExists = document.head.querySelector<HTMLLinkElement>(
+    `link[rel=stylesheet][href="${aplayerCssUrl}"]`,
+  );
+  if (!linkExists) {
+    // link 被移除，重置 Promise 以便重新注入
+    aplayerCssPromise = null;
+  }
+
+  if (!aplayerCssPromise) {
+    aplayerCssPromise = new Promise<void>((resolve) => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = aplayerCssUrl;
+      // CSS 加载完成或失败均 resolve，避免阻塞播放器初始化
+      link.onload = () => resolve();
+      link.onerror = () => resolve();
+      document.head.appendChild(link);
+    });
+  }
   return aplayerCssPromise;
 }
 
