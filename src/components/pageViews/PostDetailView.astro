@@ -41,6 +41,7 @@ const {
   title,
   description,
   ogImage: initOgImage,
+  heroImage,
   canonicalURL,
   pubDatetime,
   modDatetime,
@@ -74,6 +75,19 @@ if (!ogImageUrl) {
 const ogImage = ogImageUrl
   ? new URL(ogImageUrl, Astro.url.origin).href
   : undefined;
+
+/**
+ * 头图地址解析：
+ * - image() 对象取 .src（经 Astro 资源管线优化后的带哈希路径）
+ * - 字符串直接作为 public/ 路径或外链使用
+ * - 未设置时不渲染头图
+ */
+let heroImageSrc: string | undefined;
+if (typeof heroImage === "string") {
+  heroImageSrc = heroImage;
+} else if (heroImage && typeof heroImage === "object" && "src" in heroImage) {
+  heroImageSrc = heroImage.src;
+}
 
 /** 编辑链接所需的相对源文件路径 */
 const editPath = post.filePath?.replace(/^src\//, "") ?? "";
@@ -112,6 +126,16 @@ const resolvedCanonical =
     data-pagefind-body
   >
     {config.features.showBackButton && <BackButton />}
+
+    {heroImageSrc && (
+      <img
+        src={heroImageSrc}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        class="mt-4 mb-2 w-full rounded-lg border border-border object-cover"
+      />
+    )}
 
     <article class="mt-4">
       <h1

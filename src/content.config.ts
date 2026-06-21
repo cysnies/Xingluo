@@ -26,6 +26,11 @@ const posts = defineCollection({
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),
       ogImage: image().or(z.string()).optional(),
+      /**
+       * 文章头图：显示在文章详情页返回按钮与标题之间。
+       * image() 走 Astro 资源管线优化，字符串为 public/ 路径或外链。
+       */
+      heroImage: image().or(z.string()).optional(),
       description: z.string(),
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
