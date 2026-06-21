@@ -120,10 +120,14 @@ const showHero = !!heroImageSrc;
     }
   </div>
 
-  {/* 头图背景层：全局开关开启且文章配置了头图时，作为卡片右半部分背景展示，带有从左到右的自然透明渐变过渡 */}
+  {/* 头图背景层：全局开关开启且文章配置了头图时，作为卡片背景展示，带有从左到右的透明渐变过渡。
+      移动端根据 showPostCardHeroMobile 配置决定是否隐藏，防止头图与文字挤在一起阻碍阅读 */}
   {showHero && (
     <div
-      class="pointer-events-none absolute inset-0"
+      class={cn(
+        "pointer-events-none absolute inset-0",
+        config.features.showPostCardHeroMobile ? "" : "hidden md:block"
+      )}
       style={{
         backgroundImage: `url(${heroImageSrc})`,
         backgroundSize: "cover",

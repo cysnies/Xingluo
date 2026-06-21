@@ -37,6 +37,8 @@ export default defineXingluoConfig({
     showBackButton: true,
     // 是否在文章卡片中展示文章头图（文章未配置头图时不显示）
     showPostCardHero: true,
+    // 移动端是否在文章卡片中展示文章头图，关闭可防止头图与文字挤在一起阻碍阅读
+    showPostCardHeroMobile: false,
     // 是否在文章详情页中展示文章头图（文章未配置头图时不显示）
     showPostDetailHero: true,
     editPost: {

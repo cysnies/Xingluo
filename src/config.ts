@@ -49,6 +49,8 @@ const defaultFeatures = {
   showBackButton: true,
   /** 默认在文章卡片中展示文章头图 */
   showPostCardHero: true,
+  /** 移动端默认关闭文章卡片中的头图展示，防止头图与文字挤在一起阻碍阅读 */
+  showPostCardHeroMobile: false,
   /** 默认在文章详情页中展示文章头图 */
   showPostDetailHero: true,
   editPost: {
