@@ -31,10 +31,10 @@ const isActive = (path: string) => {
 /** 导航菜单项 */
 const navItems = [
   { href: getRelativeLocaleUrl(locale, "posts"), label: t.nav.posts, path: "/posts" },
-  { href: getRelativeLocaleUrl(locale, "tags"), label: t.nav.tags, path: "/tags" },
   ...(features.showCategories
     ? [{ href: getRelativeLocaleUrl(locale, "categories"), label: t.nav.categories, path: "/categories" }]
     : []),
+  { href: getRelativeLocaleUrl(locale, "tags"), label: t.nav.tags, path: "/tags" },
   ...(features.showArchives
     ? [{ href: getRelativeLocaleUrl(locale, "archives"), label: t.nav.archives, path: "/archives" }]
     : []),
