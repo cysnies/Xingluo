@@ -64,11 +64,21 @@ const showHero = !!heroImageSrc;
 ---
 
 <Card
+  data-spotlight
+  data-reveal
   class={cn(
-    "group relative flex h-[200px] flex-row overflow-hidden transition-colors hover:bg-accent/30",
+    "group relative flex h-[200px] flex-row overflow-hidden transition-[colors,transform] hover:bg-accent/30 [perspective:800px]",
     className
   )}
+  style="transform:rotateX(var(--card-rotate-x,0deg)) rotateY(var(--card-rotate-y,0deg));transition-duration:0.3s;transition-timing-function:ease-out"
 >
+  {/* 鼠标跟随光晕层 */}
+  <div
+    data-spotlight-glow
+    class="pointer-events-none absolute inset-0 transition-opacity duration-500"
+    style="background:radial-gradient(600px circle at var(--spotlight-x,50%) var(--spotlight-y,50%),hsl(var(--primary)/0.08),transparent 60%);opacity:var(--spotlight-opacity,0)"
+    aria-hidden="true"
+  />
   {/* 左侧主内容区：标题、信息、描述、分类与标签 */}
   <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-evenly gap-0 py-2">
     {/* 标题行：固定两行高度，超出两行截断，负边距上移带动信息行，保证跨卡片对齐 */}
