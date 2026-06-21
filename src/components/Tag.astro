@@ -17,18 +17,16 @@ const { tag, tagName, size = "lg", class: className } = Astro.props;
 const locale = Astro.currentLocale ?? config.site.lang;
 ---
 
-<li>
-  <a
-    href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
-    class={cn(
-      "inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-muted-foreground transition-colors",
-      "hover:bg-accent hover:text-accent-foreground",
-      "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
-      size === "sm" ? "text-sm" : "text-base",
-      className
-    )}
-  >
-    <Hash class={cn("opacity-70", size === "lg" ? "size-4" : "size-3.5")} />
-    {tagName}
-  </a>
-</li>
+<a
+  href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
+  class={cn(
+    "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-muted-foreground transition-colors",
+    "hover:bg-accent hover:text-accent-foreground",
+    "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+    size === "sm" ? "text-sm" : "text-base",
+    className
+  )}
+>
+  <Hash class={cn("opacity-70", size === "lg" ? "size-4" : "size-3.5")} />
+  {tagName}
+</a>
