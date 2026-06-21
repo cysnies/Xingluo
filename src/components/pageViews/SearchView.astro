@@ -11,12 +11,6 @@ import config from "@/config";
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
-// 搜索未启用时重定向到 404
-const notFoundUrl = getRelativeLocaleUrl(locale, "404");
-if (config.features.search !== "flexsearch" && notFoundUrl) {
-  return Astro.rewrite(notFoundUrl);
-}
-
 const title = t.pages.searchTitle;
 const description = t.pages.searchDesc;
 const crumbs = [
