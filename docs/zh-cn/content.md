@@ -35,28 +35,30 @@ ogImage: "./cover.png" # 可选，OG 图（图片导入或字符串路径）
 canonicalURL: "https://..." # 可选，规范链接
 hideEditPost: false # 可选，隐藏编辑链接
 timezone: "Asia/Shanghai" # 可选，覆盖站点时区
+comments: true # 可选，覆盖全局评论开关（true 启用 / false 关闭）
 ---
 ```
 
 ### 字段说明
 
-| 字段             | 类型            | 默认值          | 说明                                                                        |
-| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------- |
-| `title`          | string          | 必填            | 文章标题                                                                    |
-| `pubDatetime`    | date            | 必填            | 发布时间，ISO 8601 格式                                                     |
-| `modDatetime`    | date            | —               | 更新时间，显示"更新于"标签                                                  |
-| `description`    | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                              |
-| `tags`           | string[]        | `["others"]`    | 标签数组，自动生成标签页                                                    |
-| `featured`       | boolean         | —               | 首页"精选文章"区块展示                                                      |
-| `draft`          | boolean         | —               | 草稿，生产构建过滤（开发可见）                                              |
-| `author`         | string          | `site.author`   | 作者名                                                                      |
-| `ogImage`        | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链       |
-| `canonicalURL`   | string          | —               | 规范链接，覆盖默认（详见 [SEO](./seo.md)）                                  |
-| `hideEditPost`   | boolean         | —               | 隐藏该文章的编辑链接                                                        |
-| `timezone`       | string          | `site.timezone` | 覆盖该文章的显示时区                                                        |
-| `locale`         | string          | `site.lang`     | 文章写作语言，如 `"en"`、`"ja"`。未设置时视为默认语言                       |
-| `translationKey` | string          | —               | 翻译分组键：相同 key 的文章互为译文。未设置时文章独立，不参与译文分组       |
-| `category`       | string          | —               | 文章分类（单值），生成 `/categories/<slug>/` 分类页；未设置时不属于任何分类 |
+| 字段             | 类型            | 默认值          | 说明                                                                                    |
+| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------------------- |
+| `title`          | string          | 必填            | 文章标题                                                                                |
+| `pubDatetime`    | date            | 必填            | 发布时间，ISO 8601 格式                                                                 |
+| `modDatetime`    | date            | —               | 更新时间，显示"更新于"标签                                                              |
+| `description`    | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                                          |
+| `tags`           | string[]        | `["others"]`    | 标签数组，自动生成标签页                                                                |
+| `featured`       | boolean         | —               | 首页"精选文章"区块展示                                                                  |
+| `draft`          | boolean         | —               | 草稿，生产构建过滤（开发可见）                                                          |
+| `author`         | string          | `site.author`   | 作者名                                                                                  |
+| `ogImage`        | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链                   |
+| `canonicalURL`   | string          | —               | 规范链接，覆盖默认（详见 [SEO](./seo.md)）                                              |
+| `hideEditPost`   | boolean         | —               | 隐藏该文章的编辑链接                                                                    |
+| `timezone`       | string          | `site.timezone` | 覆盖该文章的显示时区                                                                    |
+| `locale`         | string          | `site.lang`     | 文章写作语言，如 `"en"`、`"ja"`。未设置时视为默认语言                                   |
+| `translationKey` | string          | —               | 翻译分组键：相同 key 的文章互为译文。未设置时文章独立，不参与译文分组                   |
+| `category`       | string          | —               | 文章分类（单值），生成 `/categories/<slug>/` 分类页；未设置时不属于任何分类             |
+| `comments`       | boolean         | —               | 覆盖全局评论开关：`true` 启用、`false` 关闭该文章评论；未设置时跟随 `features.comments` |
 
 ### 内容级翻译
 
@@ -82,10 +84,11 @@ title: "关于"
 description: "关于本站" # 可选
 ogImage: "default-og.jpg" # 可选，仅字符串
 canonicalURL: "https://..." # 可选
+comments: true # 可选，覆盖全局评论开关（true 启用 / false 关闭）
 ---
 ```
 
-关于页通过 `getEntry("pages", "about")` 获取，需在 `src/content/pages/about.md` 创建。
+关于页通过 `getEntry("pages", "about")` 获取，需在 `src/content/pages/about.md` 创建。静态页面同样支持 `comments` 字段，用于单独控制该页面是否显示评论区（需全局已配置评论 provider）。
 
 ## Markdown 增强
 
