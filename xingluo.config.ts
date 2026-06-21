@@ -74,8 +74,8 @@ export default defineXingluoConfig({
   },
   socials: [
     { name: "github", url: "https://github.com/cysnies/Xingluo" },
-    { name: "x", url: "https://x.com/xingluo" },
-    { name: "mail", url: "mailto:hello@xingluo.example.com" },
+    { name: "x", url: "https://x.com/Cysnies" },
+    { name: "mail", url: "mailto:official@tcea.top" },
   ],
   shareLinks: [
     { name: "x", url: "https://x.com/intent/post?url=" },
