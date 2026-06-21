@@ -116,7 +116,9 @@ const crumbs = [
     id: string;
     title: string;
     description: string;
+    pubDatetime: string;
     tags: string[];
+    category: string;
     url: string;
     content: string;
   }
@@ -233,6 +235,29 @@ const crumbs = [
     return snippet;
   }
 
+  /**
+   * 提取正文中匹配关键词的片段，优先展示含匹配词的相邻句子
+   * 返回带上下文的关键词附近正文片段
+   */
+  function getContentMatchSnippet(content: string, query: string): string {
+    if (!query || !content) return "";
+    // 如果是描述已包含匹配，不重复展示正文片段
+    const lowerContent = content.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const idx = lowerContent.indexOf(lowerQuery);
+    if (idx === -1) return "";
+    // 以 150 字符为窗口展示匹配词附近内容
+    const ctxLen = 75;
+    const start = Math.max(0, idx - ctxLen);
+    const end = Math.min(content.length, idx + query.length + ctxLen);
+    let snippet = content.slice(start, end);
+    // 尝试在句号/换行处分隔
+    snippet = snippet.replace(/^[^。\n]{0,20}[\.。\n]?/, "").trim();
+    if (start > 0 && !snippet.startsWith("...")) snippet = "..." + snippet;
+    if (end < content.length && !snippet.endsWith("...")) snippet = snippet + "...";
+    return snippet.slice(0, 300);
+  }
+
   /** 创建搜索结果卡片 */
   function createResultCard(
     doc: SearchDoc,
@@ -243,30 +268,72 @@ const crumbs = [
     card.className =
       "search-result-card block rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent hover:shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
     card.setAttribute("role", "listitem");
+
+    // 标题
     const titleEl = document.createElement("h3");
     titleEl.className = "mb-1 text-lg font-semibold text-primary";
     titleEl.innerHTML = highlightText(doc.title, query);
+    card.appendChild(titleEl);
+
+    // 元信息行：日期 + 分类
+    const metaEl = document.createElement("div");
+    metaEl.className = "mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground";
+    if (doc.pubDatetime) {
+      const dateEl = document.createElement("span");
+      dateEl.className = "inline-flex items-center gap-1";
+      try {
+        const d = new Date(doc.pubDatetime);
+        dateEl.textContent = d.toLocaleDateString("zh-CN", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+      } catch {
+        dateEl.textContent = doc.pubDatetime.slice(0, 10);
+      }
+      metaEl.appendChild(dateEl);
+    }
+    if (doc.category) {
+      const catEl = document.createElement("span");
+      catEl.className =
+        "inline-flex items-center rounded-sm bg-primary/10 px-1.5 py-0.5 text-xs font-medium text-primary";
+      catEl.textContent = doc.category;
+      metaEl.appendChild(catEl);
+    }
+    if (metaEl.children.length > 0) {
+      card.appendChild(metaEl);
+    }
+
+    // 正文摘要（优先匹配正文上下文，回退到描述）
     const descEl = document.createElement("p");
-    descEl.className = "mb-2 text-sm text-muted-foreground line-clamp-2";
-    const snippet = getContextSnippet(doc.description || doc.content, query);
-    descEl.innerHTML = highlightText(snippet, query);
+    descEl.className = "mb-2 text-sm text-muted-foreground line-clamp-3";
+    const descSnippet = getContextSnippet(doc.description || doc.content, query);
+    descEl.innerHTML = highlightText(descSnippet, query);
+    card.appendChild(descEl);
+
+    // 匹配正文片段（展示含匹配词的一段正文）
+    const contentSnippet = getContentMatchSnippet(doc.content, query);
+    if (contentSnippet) {
+      const contentEl = document.createElement("p");
+      contentEl.className = "mb-2 text-xs text-muted-foreground/70 line-clamp-2 italic";
+      contentEl.innerHTML = highlightText(contentSnippet, query);
+      card.appendChild(contentEl);
+    }
+
+    // 标签行
     if (doc.tags && doc.tags.length > 0) {
       const tagsEl = document.createElement("div");
       tagsEl.className = "flex flex-wrap gap-1.5";
-      doc.tags.slice(0, 4).forEach((tag: string) => {
+      doc.tags.slice(0, 5).forEach((tag: string) => {
         const tagEl = document.createElement("span");
         tagEl.className =
           "inline-block rounded-sm bg-muted px-1.5 py-0.5 text-xs text-muted-foreground";
         tagEl.textContent = tag;
         tagsEl.appendChild(tagEl);
       });
-      card.appendChild(titleEl);
-      card.appendChild(descEl);
       card.appendChild(tagsEl);
-    } else {
-      card.appendChild(titleEl);
-      card.appendChild(descEl);
     }
+
     return card;
   }
 
@@ -399,7 +466,7 @@ const crumbs = [
             { field: "content", tokenize: "forward", resolution: 3 },
             { field: "tags", tokenize: "forward", resolution: 5 },
           ],
-          store: ["title", "description", "tags", "url", "content"],
+          store: ["title", "description", "pubDatetime", "tags", "category", "url", "content"],
         },
         tokenize: "forward",
         cache: true,
