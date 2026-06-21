@@ -120,7 +120,7 @@ const showHero = !!heroImageSrc;
     }
   </div>
 
-  {/* 头图背景层：全局开关开启且文章配置了头图时，作为卡片右侧背景展示，并带有从左到右的透明渐变过渡 */}
+  {/* 头图背景层：全局开关开启且文章配置了头图时，作为卡片右半部分背景展示，带有从左到右的自然透明渐变过渡 */}
   {showHero && (
     <div
       class="pointer-events-none absolute inset-0"
@@ -129,9 +129,9 @@ const showHero = !!heroImageSrc;
         backgroundSize: "cover",
         backgroundPosition: "right center",
         maskImage:
-          "linear-gradient(to right, transparent 0%, transparent 25%, black 55%, black 100%)",
+          "linear-gradient(to right, transparent 0%, transparent 40%, black 55%, black 100%)",
         WebkitMaskImage:
-          "linear-gradient(to right, transparent 0%, transparent 25%, black 55%, black 100%)",
+          "linear-gradient(to right, transparent 0%, transparent 40%, black 55%, black 100%)",
       }}
     />
   )}
