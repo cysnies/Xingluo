@@ -32,6 +32,8 @@ featured: true # opcional, destacado (mostrado na página inicial)
 draft: false # opcional, rascunhos não são publicados
 author: "Xingluo" # opcional, padrão site.author
 ogImage: "./cover.png" # opcional, imagem OG (importação de imagem ou caminho de string)
+heroImage: "./hero.png" # opcional, imagem principal (mostrada entre o botão voltar e o título, também à direita dos cartões)
+heroImageFit: "cover" # opcional, modo de ajuste da imagem principal (cover recorte para preencher / contain escala completa), padrão cover
 canonicalURL: "https://..." # opcional, link canônico
 hideEditPost: false # opcional, ocultar link de edição
 timezone: "Asia/Shanghai" # opcional, substituir o fuso horário do site
@@ -40,23 +42,25 @@ timezone: "Asia/Shanghai" # opcional, substituir o fuso horário do site
 
 ### Referência de Campos
 
-| Campo            | Tipo            | Padrão          | Notas                                                                                                               |
-| ---------------- | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `title`          | string          | obrigatório     | Título do post                                                                                                      |
-| `pubDatetime`    | date            | obrigatório     | Data de publicação, ISO 8601                                                                                        |
-| `modDatetime`    | date            | —               | Data de atualização; mostra um rótulo "atualizado"                                                                  |
-| `description`    | string          | obrigatório     | Resumo, usado em meta, RSS e cards de lista                                                                         |
-| `tags`           | string[]        | `["others"]`    | Array de tags; páginas de tags são geradas automaticamente                                                          |
-| `featured`       | boolean         | —               | Mostrado na seção "Destacados" da página inicial                                                                    |
-| `draft`          | boolean         | —               | Rascunho; filtrado em builds de produção (visível em dev)                                                           |
-| `author`         | string          | `site.author`   | Nome do autor                                                                                                       |
-| `ogImage`        | image \| string | —               | Imagem OG; `image()` passa pelo pipeline de assets do Astro; string é um caminho `public/` ou URL externa           |
-| `canonicalURL`   | string          | —               | Link canônico, substitui o padrão (veja [SEO](./seo.md))                                                            |
-| `hideEditPost`   | boolean         | —               | Ocultar o link de edição para este post                                                                             |
-| `timezone`       | string          | `site.timezone` | Substituir o fuso horário de exibição para este post                                                                |
-| `locale`         | string          | `site.lang`     | Idioma em que o post está escrito, ex. `"en"`, `"ja"`. Padrão é o idioma do site quando não definido                |
-| `translationKey` | string          | —               | Chave de grupo de tradução: posts com a mesma chave são traduções uns dos outros. Posts sem chave são independentes |
-| `category`       | string          | —               | Categoria do post (valor único), gera página `/categories/<slug>/`; não definido significa sem categoria            |
+| Campo            | Tipo                     | Padrão          | Notas                                                                                                                                                                            |
+| ---------------- | ------------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string                   | obrigatório     | Título do post                                                                                                                                                                   |
+| `pubDatetime`    | date                     | obrigatório     | Data de publicação, ISO 8601                                                                                                                                                     |
+| `modDatetime`    | date                     | —               | Data de atualização; mostra um rótulo "atualizado"                                                                                                                               |
+| `description`    | string                   | obrigatório     | Resumo, usado em meta, RSS e cards de lista                                                                                                                                      |
+| `tags`           | string[]                 | `["others"]`    | Array de tags; páginas de tags são geradas automaticamente                                                                                                                       |
+| `featured`       | boolean                  | —               | Mostrado na seção "Destacados" da página inicial                                                                                                                                 |
+| `draft`          | boolean                  | —               | Rascunho; filtrado em builds de produção (visível em dev)                                                                                                                        |
+| `author`         | string                   | `site.author`   | Nome do autor                                                                                                                                                                    |
+| `ogImage`        | image \| string          | —               | Imagem OG; `image()` passa pelo pipeline de assets do Astro; string é um caminho `public/` ou URL externa                                                                        |
+| `heroImage`      | image \| string          | —               | Imagem principal, mostrada na página de detalhes entre o botão voltar e o título, também à direita dos cartões (controlado por `features.showPostCardHero`/`showPostDetailHero`) |
+| `heroImageFit`   | `"cover"` \| `"contain"` | `"cover"`       | Modo de ajuste da imagem principal: `"cover"` recorta para preencher (mantém proporção, pode cortar bordas); `"contain"` escala completa (mantém proporção, pode deixar espaços) |
+| `canonicalURL`   | string                   | —               | Link canônico, substitui o padrão (veja [SEO](./seo.md))                                                                                                                         |
+| `hideEditPost`   | boolean                  | —               | Ocultar o link de edição para este post                                                                                                                                          |
+| `timezone`       | string                   | `site.timezone` | Substituir o fuso horário de exibição para este post                                                                                                                             |
+| `locale`         | string                   | `site.lang`     | Idioma em que o post está escrito, ex. `"en"`, `"ja"`. Padrão é o idioma do site quando não definido                                                                             |
+| `translationKey` | string                   | —               | Chave de grupo de tradução: posts com a mesma chave são traduções uns dos outros. Posts sem chave são independentes                                                              |
+| `category`       | string                   | —               | Categoria do post (valor único), gera página `/categories/<slug>/`; não definido significa sem categoria                                                                         |
 
 ### Tradução em Nível de Conteúdo
 

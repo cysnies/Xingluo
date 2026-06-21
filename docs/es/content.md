@@ -26,6 +26,8 @@ featured: true # opcional, destacado (se muestra en la página de inicio)
 draft: false # opcional, los borradores no se publican
 author: "Xingluo" # opcional, por defecto site.author
 ogImage: "./cover.png" # opcional, imagen OG (importación de imagen o ruta de cadena)
+heroImage: "./hero.png" # opcional, imagen principal (se muestra entre el botón de retroceso y el título, también a la derecha de las tarjetas)
+heroImageFit: "cover" # opcional, modo de ajuste de imagen principal (cover recorte para llenar / contain escala completa), predeterminado cover
 canonicalURL: "https://..." # opcional, enlace canónico
 hideEditPost: false # opcional, ocultar el enlace de edición
 timezone: "Asia/Shanghai" # opcional, anular la zona horaria del sitio
@@ -34,23 +36,25 @@ timezone: "Asia/Shanghai" # opcional, anular la zona horaria del sitio
 
 ### Referencia de campos
 
-| Campo            | Tipo            | Predeterminado  | Notas                                                                                                            |
-| ---------------- | --------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `title`          | string          | requerido       | Título del artículo                                                                                              |
-| `pubDatetime`    | date            | requerido       | Fecha de publicación, ISO 8601                                                                                   |
-| `modDatetime`    | date            | —               | Fecha de actualización; muestra una etiqueta "actualizado"                                                       |
-| `description`    | string          | requerido       | Resumen, usado en meta, RSS y tarjetas de lista                                                                  |
-| `tags`           | string[]        | `["others"]`    | Array de etiquetas; las páginas de etiquetas se generan automáticamente                                          |
-| `featured`       | boolean         | —               | Se muestra en la sección "Destacados" de la página de inicio                                                     |
-| `draft`          | boolean         | —               | Borrador; filtrado en compilaciones de producción (visible en desarrollo)                                        |
-| `author`         | string          | `site.author`   | Nombre del autor                                                                                                 |
-| `ogImage`        | image \| string | —               | Imagen OG; `image()` pasa por el pipeline de assets de Astro, una cadena es una ruta de `public/` o URL externa  |
-| `canonicalURL`   | string          | —               | Enlace canónico, anula el predeterminado (ver [SEO](./seo.md))                                                   |
-| `hideEditPost`   | boolean         | —               | Ocultar el enlace de edición para este artículo                                                                  |
-| `timezone`       | string          | `site.timezone` | Anular la zona horaria de visualización para este artículo                                                       |
-| `locale`         | string          | `site.lang`     | Idioma en el que está escrito el artículo, ej. `"en"`, `"ja"`. Por defecto el idioma del sitio                   |
-| `translationKey` | string          | —               | Clave de grupo de traducción: los artículos con la misma clave son traducciones entre sí                         |
-| `category`       | string          | —               | Categoría del artículo (valor único), genera una página `/categories/<slug>/`; sin valor significa sin categoría |
+| Campo            | Tipo                     | Predeterminado  | Notas                                                                                                                                                                                                              |
+| ---------------- | ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `title`          | string                   | requerido       | Título del artículo                                                                                                                                                                                                |
+| `pubDatetime`    | date                     | requerido       | Fecha de publicación, ISO 8601                                                                                                                                                                                     |
+| `modDatetime`    | date                     | —               | Fecha de actualización; muestra una etiqueta "actualizado"                                                                                                                                                         |
+| `description`    | string                   | requerido       | Resumen, usado en meta, RSS y tarjetas de lista                                                                                                                                                                    |
+| `tags`           | string[]                 | `["others"]`    | Array de etiquetas; las páginas de etiquetas se generan automáticamente                                                                                                                                            |
+| `featured`       | boolean                  | —               | Se muestra en la sección "Destacados" de la página de inicio                                                                                                                                                       |
+| `draft`          | boolean                  | —               | Borrador; filtrado en compilaciones de producción (visible en desarrollo)                                                                                                                                          |
+| `author`         | string                   | `site.author`   | Nombre del autor                                                                                                                                                                                                   |
+| `ogImage`        | image \| string          | —               | Imagen OG; `image()` pasa por el pipeline de assets de Astro, una cadena es una ruta de `public/` o URL externa                                                                                                    |
+| `heroImage`      | image \| string          | —               | Imagen principal, mostrada en la página de detalle entre el botón de retroceso y el título, también a la derecha de las tarjetas (controlado por `features.showPostCardHero`/`showPostDetailHero`)                 |
+| `heroImageFit`   | `"cover"` \| `"contain"` | `"cover"`       | Modo de ajuste de la imagen principal: `"cover"` recorta para llenar (mantiene la relación de aspecto, puede recortar bordes); `"contain"` escala completa (mantiene la relación de aspecto, puede dejar espacios) |
+| `canonicalURL`   | string                   | —               | Enlace canónico, anula el predeterminado (ver [SEO](./seo.md))                                                                                                                                                     |
+| `hideEditPost`   | boolean                  | —               | Ocultar el enlace de edición para este artículo                                                                                                                                                                    |
+| `timezone`       | string                   | `site.timezone` | Anular la zona horaria de visualización para este artículo                                                                                                                                                         |
+| `locale`         | string                   | `site.lang`     | Idioma en el que está escrito el artículo, ej. `"en"`, `"ja"`. Por defecto el idioma del sitio                                                                                                                     |
+| `translationKey` | string                   | —               | Clave de grupo de traducción: los artículos con la misma clave son traducciones entre sí                                                                                                                           |
+| `category`       | string                   | —               | Categoría del artículo (valor único), genera una página `/categories/<slug>/`; sin valor significa sin categoría                                                                                                   |
 
 ### Traducción a nivel de contenido
 

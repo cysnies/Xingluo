@@ -32,6 +32,8 @@ featured: true # optional, featured (shown on homepage)
 draft: false # optional, drafts are not published
 author: "Xingluo" # optional, defaults to site.author
 ogImage: "./cover.png" # optional, OG image (image import or string path)
+heroImage: "./hero.png" # optional, hero image (shown between back button and title, also on right of cards)
+heroImageFit: "cover" # optional, hero image fit mode (cover crop-to-fill / contain full-scale), defaults to cover
 canonicalURL: "https://..." # optional, canonical link
 hideEditPost: false # optional, hide the edit link
 timezone: "Asia/Shanghai" # optional, override the site timezone
@@ -40,23 +42,25 @@ timezone: "Asia/Shanghai" # optional, override the site timezone
 
 ### Kampa referenco
 
-| Kampo            | Tipo            | Defaŭlte        | Notoj                                                                                                                 |
-| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `title`          | string          | deviga          | Afiŝa titolo                                                                                                          |
-| `pubDatetime`    | date            | deviga          | Publikiga tempo, ISO 8601                                                                                             |
-| `modDatetime`    | date            | —               | Ĝisdatiga tempo; montras "ĝisdatigitan" etikedon                                                                      |
-| `description`    | string          | deviga          | Resumo, uzata en meta, RSS, kaj listaj kartoj                                                                         |
-| `tags`           | string[]        | `["others"]`    | Etikeda tabelo; etikedaj paĝoj estas aŭtomate generitaj                                                               |
-| `featured`       | boolean         | —               | Montrata en la "Elstaraj" sekcio de la ĉefpaĝo                                                                        |
-| `draft`          | boolean         | —               | Malneto; filtrita en produktaj konstruoj (videbla en dev)                                                             |
-| `author`         | string          | `site.author`   | Aŭtora nomo                                                                                                           |
-| `ogImage`        | image \| string | —               | OG-bildo; `image()` trapasas la aktivaĵdukton de Astro, string estas `public/` vojo aŭ ekstera URL                    |
-| `canonicalURL`   | string          | —               | Kanona ligilo, anstataŭas la defaŭltan (vidu [SEO](./seo.md))                                                         |
-| `hideEditPost`   | boolean         | —               | Kaŝi la redaktan ligilon por tiu afiŝo                                                                                |
-| `timezone`       | string          | `site.timezone` | Anstataŭigi la montreblan horzonon por tiu afiŝo                                                                      |
-| `locale`         | string          | `site.lang`     | Lingvo en kiu la afiŝo estas skribita, ekz. `"en"`, `"ja"`. Defaŭlte la reteja lingvo kiam ne fiksita                 |
-| `translationKey` | string          | —               | Traduka grupo-ŝlosilo: afiŝoj kun la sama ŝlosilo estas tradukoj unu de la alia. Afiŝoj sen ŝlosilo estas sendependaj |
-| `category`       | string          | —               | Afiŝa kategorio (ununura valoro), generas `/categories/<slug>/` paĝon; nefiksita signifas neniun kategorion           |
+| Kampo            | Tipo                     | Defaŭlte        | Notoj                                                                                                                                                                        |
+| ---------------- | ------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string                   | deviga          | Afiŝa titolo                                                                                                                                                                 |
+| `pubDatetime`    | date                     | deviga          | Publikiga tempo, ISO 8601                                                                                                                                                    |
+| `modDatetime`    | date                     | —               | Ĝisdatiga tempo; montras "ĝisdatigitan" etikedon                                                                                                                             |
+| `description`    | string                   | deviga          | Resumo, uzata en meta, RSS, kaj listaj kartoj                                                                                                                                |
+| `tags`           | string[]                 | `["others"]`    | Etikeda tabelo; etikedaj paĝoj estas aŭtomate generitaj                                                                                                                      |
+| `featured`       | boolean                  | —               | Montrata en la "Elstaraj" sekcio de la ĉefpaĝo                                                                                                                               |
+| `draft`          | boolean                  | —               | Malneto; filtrita en produktaj konstruoj (videbla en dev)                                                                                                                    |
+| `author`         | string                   | `site.author`   | Aŭtora nomo                                                                                                                                                                  |
+| `ogImage`        | image \| string          | —               | OG-bildo; `image()` trapasas la aktivaĵdukton de Astro, string estas `public/` vojo aŭ ekstera URL                                                                           |
+| `heroImage`      | image \| string          | —               | Hero-bildo montrata sur la detalpaĝo inter la reen-butono kaj la titolo, ankaŭ dekstre de kartoj (kontrolita de `features.showPostCardHero`/`showPostDetailHero`)            |
+| `heroImageFit`   | `"cover"` \| `"contain"` | `"cover"`       | Adapta reĝimo de hero-bildo: `"cover"` tondas por plenigi (konservas proporciojn, povas tondi randojn); `"contain"` plenskale (konservas proporciojn, povas lasi malplenojn) |
+| `canonicalURL`   | string                   | —               | Kanona ligilo, anstataŭas la defaŭltan (vidu [SEO](./seo.md))                                                                                                                |
+| `hideEditPost`   | boolean                  | —               | Kaŝi la redaktan ligilon por tiu afiŝo                                                                                                                                       |
+| `timezone`       | string                   | `site.timezone` | Anstataŭigi la montreblan horzonon por tiu afiŝo                                                                                                                             |
+| `locale`         | string                   | `site.lang`     | Lingvo en kiu la afiŝo estas skribita, ekz. `"en"`, `"ja"`. Defaŭlte la reteja lingvo kiam ne fiksita                                                                        |
+| `translationKey` | string                   | —               | Traduka grupo-ŝlosilo: afiŝoj kun la sama ŝlosilo estas tradukoj unu de la alia. Afiŝoj sen ŝlosilo estas sendependaj                                                        |
+| `category`       | string                   | —               | Afiŝa kategorio (ununura valoro), generas `/categories/<slug>/` paĝon; nefiksita signifas neniun kategorion                                                                  |
 
 ### Enhav-nivela traduko
 

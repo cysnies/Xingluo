@@ -40,23 +40,25 @@ timezone: "Asia/Shanghai" # optional, override the site timezone
 
 ### Référence des champs
 
-| Champ            | Type            | Défaut          | Notes                                                                                                            |
-| ---------------- | --------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `title`          | string          | requis          | Titre de l'article                                                                                               |
-| `pubDatetime`    | date            | requis          | Date de publication, ISO 8601                                                                                    |
-| `modDatetime`    | date            | —               | Date de mise à jour ; affiche un label "mis à jour"                                                              |
-| `description`    | string          | requis          | Résumé, utilisé dans meta, RSS et les cartes de liste                                                            |
-| `tags`           | string[]        | `["others"]`    | Tableau de tags ; les pages de tags sont générées automatiquement                                                |
-| `featured`       | boolean         | —               | Affiché dans la section "À la une" de la page d'accueil                                                          |
-| `draft`          | boolean         | —               | Brouillon ; filtré en production (visible en développement)                                                      |
-| `author`         | string          | `site.author`   | Nom de l'auteur                                                                                                  |
-| `ogImage`        | image \| string | —               | Image OG ; `image()` passe par le pipeline d'assets Astro, une chaîne est un chemin `public/` ou une URL externe |
-| `canonicalURL`   | string          | —               | Lien canonique, remplace la valeur par défaut (voir [SEO](./seo.md))                                             |
-| `hideEditPost`   | boolean         | —               | Masquer le lien d'édition pour cet article                                                                       |
-| `timezone`       | string          | `site.timezone` | Remplacer le fuseau horaire d'affichage pour cet article                                                         |
-| `locale`         | string          | `site.lang`     | Langue de rédaction de l'article, ex. `"en"`, `"ja"`. Par défaut : langue du site                                |
-| `translationKey` | string          | —               | Clé de groupe de traduction : les articles partageant la même clé sont des traductions les uns des autres        |
-| `category`       | string          | —               | Catégorie de l'article (valeur unique), génère une page `/categories/<slug>/`                                    |
+| Champ            | Type                     | Défaut          | Notes                                                                                                                                                                                            |
+| ---------------- | ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `title`          | string                   | requis          | Titre de l'article                                                                                                                                                                               |
+| `pubDatetime`    | date                     | requis          | Date de publication, ISO 8601                                                                                                                                                                    |
+| `modDatetime`    | date                     | —               | Date de mise à jour ; affiche un label "mis à jour"                                                                                                                                              |
+| `description`    | string                   | requis          | Résumé, utilisé dans meta, RSS et les cartes de liste                                                                                                                                            |
+| `tags`           | string[]                 | `["others"]`    | Tableau de tags ; les pages de tags sont générées automatiquement                                                                                                                                |
+| `featured`       | boolean                  | —               | Affiché dans la section "À la une" de la page d'accueil                                                                                                                                          |
+| `draft`          | boolean                  | —               | Brouillon ; filtré en production (visible en développement)                                                                                                                                      |
+| `author`         | string                   | `site.author`   | Nom de l'auteur                                                                                                                                                                                  |
+| `ogImage`        | image \| string          | —               | Image OG ; `image()` passe par le pipeline d'assets Astro, une chaîne est un chemin `public/` ou une URL externe                                                                                 |
+| `heroImage`      | image \| string          | —               | Image à la une affichée sur la page de détail entre le bouton retour et le titre, également à droite des cartes (contrôlé par `features.showPostCardHero`/`showPostDetailHero`)                  |
+| `heroImageFit`   | `"cover"` \| `"contain"` | `"cover"`       | Mode d'adaptation de l'image à la une : `"cover"` recadrage pour remplir (conserve le ratio, peut rogner les bords) ; `"contain"` échelle complète (conserve le ratio, peut laisser des espaces) |
+| `canonicalURL`   | string                   | —               | Lien canonique, remplace la valeur par défaut (voir [SEO](./seo.md))                                                                                                                             |
+| `hideEditPost`   | boolean                  | —               | Masquer le lien d'édition pour cet article                                                                                                                                                       |
+| `timezone`       | string                   | `site.timezone` | Remplacer le fuseau horaire d'affichage pour cet article                                                                                                                                         |
+| `locale`         | string                   | `site.lang`     | Langue de rédaction de l'article, ex. `"en"`, `"ja"`. Par défaut : langue du site                                                                                                                |
+| `translationKey` | string                   | —               | Clé de groupe de traduction : les articles partageant la même clé sont des traductions les uns des autres                                                                                        |
+| `category`       | string                   | —               | Catégorie de l'article (valeur unique), génère une page `/categories/<slug>/`                                                                                                                    |
 
 ### Traduction au niveau du contenu
 

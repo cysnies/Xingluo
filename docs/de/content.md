@@ -32,6 +32,8 @@ featured: true # optional, hervorgehoben (auf Startseite)
 draft: false # optional, Entwürfe werden nicht veröffentlicht
 author: "Xingluo" # optional, Standard site.author
 ogImage: "./cover.png" # optional, OG-Bild (Bildimport oder Zeichenfolgenpfad)
+heroImage: "./hero.png" # optional, Heldenbild (zwischen Zurück-Button und Titel angezeigt, auch rechts auf Karten)
+heroImageFit: "cover" # optional, Anpassungsmodus des Heldenbilds (cover zuschneiden / contain vollständig skalieren), Standard cover
 canonicalURL: "https://..." # optional, kanonischer Link
 hideEditPost: false # optional, Bearbeitungslink ausblenden
 timezone: "Asia/Shanghai" # optional, Zeitzone der Site überschreiben
@@ -40,23 +42,25 @@ timezone: "Asia/Shanghai" # optional, Zeitzone der Site überschreiben
 
 ### Feldreferenz
 
-| Feld             | Typ             | Standard        | Hinweise                                                                                                     |
-| ---------------- | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------ |
-| `title`          | string          | erforderlich    | Beitragstitel                                                                                                |
-| `pubDatetime`    | date            | erforderlich    | Veröffentlichungszeit, ISO 8601                                                                              |
-| `modDatetime`    | date            | —               | Aktualisierungszeit; zeigt ein "aktualisiert"-Label an                                                       |
-| `description`    | string          | erforderlich    | Zusammenfassung, verwendet in Meta, RSS und Listenkarten                                                     |
-| `tags`           | string[]        | `["others"]`    | Tag-Array; Tag-Seiten werden automatisch generiert                                                           |
-| `featured`       | boolean         | —               | Auf der Startseite im Bereich "Hervorgehoben" angezeigt                                                      |
-| `draft`          | boolean         | —               | Entwurf; in Produktions-Builds herausgefiltert (in Entwicklung sichtbar)                                     |
-| `author`         | string          | `site.author`   | Autorenname                                                                                                  |
-| `ogImage`        | image \| string | —               | OG-Bild; `image()` durchläuft Astros Asset-Pipeline, ein String ist ein `public/`-Pfad oder eine externe URL |
-| `canonicalURL`   | string          | —               | Kanonischer Link, überschreibt den Standard (siehe [SEO](./seo.md))                                          |
-| `hideEditPost`   | boolean         | —               | Bearbeitungslink für diesen Beitrag ausblenden                                                               |
-| `timezone`       | string          | `site.timezone` | Anzeigezeitzone für diesen Beitrag überschreiben                                                             |
-| `locale`         | string          | `site.lang`     | Sprache, in der der Beitrag verfasst ist, z. B. `"en"`, `"ja"`. Standardmäßig Site-Sprache                   |
-| `translationKey` | string          | —               | Übersetzungsgruppenschlüssel: Beiträge mit demselben Schlüssel sind Übersetzungen voneinander                |
-| `category`       | string          | —               | Beitragskategorie (Einzelwert), generiert eine `/categories/<slug>/`-Seite                                   |
+| Feld             | Typ                      | Standard        | Hinweise                                                                                                                                                                                              |
+| ---------------- | ------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string                   | erforderlich    | Beitragstitel                                                                                                                                                                                         |
+| `pubDatetime`    | date                     | erforderlich    | Veröffentlichungszeit, ISO 8601                                                                                                                                                                       |
+| `modDatetime`    | date                     | —               | Aktualisierungszeit; zeigt ein "aktualisiert"-Label an                                                                                                                                                |
+| `description`    | string                   | erforderlich    | Zusammenfassung, verwendet in Meta, RSS und Listenkarten                                                                                                                                              |
+| `tags`           | string[]                 | `["others"]`    | Tag-Array; Tag-Seiten werden automatisch generiert                                                                                                                                                    |
+| `featured`       | boolean                  | —               | Auf der Startseite im Bereich "Hervorgehoben" angezeigt                                                                                                                                               |
+| `draft`          | boolean                  | —               | Entwurf; in Produktions-Builds herausgefiltert (in Entwicklung sichtbar)                                                                                                                              |
+| `author`         | string                   | `site.author`   | Autorenname                                                                                                                                                                                           |
+| `ogImage`        | image \| string          | —               | OG-Bild; `image()` durchläuft Astros Asset-Pipeline, ein String ist ein `public/`-Pfad oder eine externe URL                                                                                          |
+| `heroImage`      | image \| string          | —               | Heldenbild, auf der Detailseite zwischen Zurück-Button und Titel angezeigt, auch rechts auf Karten (gesteuert von `features.showPostCardHero`/`showPostDetailHero`)                                   |
+| `heroImageFit`   | `"cover"` \| `"contain"` | `"cover"`       | Anpassungsmodus des Heldenbilds: `"cover"` füllt durch Zuschneiden (behält Seitenverhältnis, kann Ränder abschneiden); `"contain"` skaliert vollständig (behält Seitenverhältnis, kann Lücken lassen) |
+| `canonicalURL`   | string                   | —               | Kanonischer Link, überschreibt den Standard (siehe [SEO](./seo.md))                                                                                                                                   |
+| `hideEditPost`   | boolean                  | —               | Bearbeitungslink für diesen Beitrag ausblenden                                                                                                                                                        |
+| `timezone`       | string                   | `site.timezone` | Anzeigezeitzone für diesen Beitrag überschreiben                                                                                                                                                      |
+| `locale`         | string                   | `site.lang`     | Sprache, in der der Beitrag verfasst ist, z. B. `"en"`, `"ja"`. Standardmäßig Site-Sprache                                                                                                            |
+| `translationKey` | string                   | —               | Übersetzungsgruppenschlüssel: Beiträge mit demselben Schlüssel sind Übersetzungen voneinander                                                                                                         |
+| `category`       | string                   | —               | Beitragskategorie (Einzelwert), generiert eine `/categories/<slug>/`-Seite                                                                                                                            |
 
 ### Inhaltsbezogene Übersetzung
 

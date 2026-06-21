@@ -32,6 +32,8 @@ featured: true # 可選，是否精選（首頁展示）
 draft: false # 可選，草稿不發佈
 author: "星羅" # 可選，預設取 site.author
 ogImage: "./cover.png" # 可選，OG 圖（圖片匯入或字串路徑）
+heroImage: "./hero.png" # 可選，文章頭圖（顯示在返回按鈕與標題之間，亦展示於文章卡片右側）
+heroImageFit: "cover" # 可選，文章頭圖適配方式（cover 裁切填充 / contain 完整縮放），預設 cover
 canonicalURL: "https://..." # 可選，規範連結
 hideEditPost: false # 可選，隱藏編輯連結
 timezone: "Asia/Shanghai" # 可選，覆蓋站點時區
@@ -40,23 +42,25 @@ timezone: "Asia/Shanghai" # 可選，覆蓋站點時區
 
 ### 欄位說明
 
-| 欄位             | 類型            | 預設值          | 說明                                                                        |
-| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------- |
-| `title`          | string          | 必填            | 文章標題                                                                    |
-| `pubDatetime`    | date            | 必填            | 發佈時間，ISO 8601 格式                                                     |
-| `modDatetime`    | date            | —               | 更新時間，顯示"更新於"標籤                                                  |
-| `description`    | string          | 必填            | 摘要，用於 meta、RSS、列表卡片                                              |
-| `tags`           | string[]        | `["others"]`    | 標籤陣列，自動生成標籤頁                                                    |
-| `featured`       | boolean         | —               | 首頁"精選文章"區塊展示                                                      |
-| `draft`          | boolean         | —               | 草稿，生產構建過濾（開發可見）                                              |
-| `author`         | string          | `site.author`   | 作者名                                                                      |
-| `ogImage`        | image \| string | —               | OG 圖；`image()` 走 Astro 資源管線最佳化，字串為 `public/` 路徑或外鏈       |
-| `canonicalURL`   | string          | —               | 規範連結，覆蓋預設（詳見 [SEO](./seo.md)）                                  |
-| `hideEditPost`   | boolean         | —               | 隱藏該文章的編輯連結                                                        |
-| `timezone`       | string          | `site.timezone` | 覆蓋該文章的顯示時區                                                        |
-| `locale`         | string          | `site.lang`     | 文章寫作語言，如 `"en"`、`"ja"`。未設定時視為預設語言                       |
-| `translationKey` | string          | —               | 翻譯分組鍵：相同 key 的文章互為譯文。未設定時文章獨立，不參與譯文分組       |
-| `category`       | string          | —               | 文章分類（單值），生成 `/categories/<slug>/` 分類頁；未設定時不屬於任何分類 |
+| 欄位             | 類型                     | 預設值          | 說明                                                                                                                       |
+| ---------------- | ------------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string                   | 必填            | 文章標題                                                                                                                   |
+| `pubDatetime`    | date                     | 必填            | 發佈時間，ISO 8601 格式                                                                                                    |
+| `modDatetime`    | date                     | —               | 更新時間，顯示"更新於"標籤                                                                                                 |
+| `description`    | string                   | 必填            | 摘要，用於 meta、RSS、列表卡片                                                                                             |
+| `tags`           | string[]                 | `["others"]`    | 標籤陣列，自動生成標籤頁                                                                                                   |
+| `featured`       | boolean                  | —               | 首頁"精選文章"區塊展示                                                                                                     |
+| `draft`          | boolean                  | —               | 草稿，生產構建過濾（開發可見）                                                                                             |
+| `author`         | string                   | `site.author`   | 作者名                                                                                                                     |
+| `ogImage`        | image \| string          | —               | OG 圖；`image()` 走 Astro 資源管線最佳化，字串為 `public/` 路徑或外鏈                                                      |
+| `heroImage`      | image \| string          | —               | 文章頭圖，顯示在詳情頁返回按鈕與標題之間，亦展示於文章卡片右側（受 `features.showPostCardHero`/`showPostDetailHero` 控制） |
+| `heroImageFit`   | `"cover"` \| `"contain"` | `"cover"`       | 文章頭圖適配方式：`"cover"` 裁切填充（保持寬高比，可能裁切邊緣）；`"contain"` 完整縮放（保持寬高比，可能留白）             |
+| `canonicalURL`   | string                   | —               | 規範連結，覆蓋預設（詳見 [SEO](./seo.md)）                                                                                 |
+| `hideEditPost`   | boolean                  | —               | 隱藏該文章的編輯連結                                                                                                       |
+| `timezone`       | string                   | `site.timezone` | 覆蓋該文章的顯示時區                                                                                                       |
+| `locale`         | string                   | `site.lang`     | 文章寫作語言，如 `"en"`、`"ja"`。未設定時視為預設語言                                                                      |
+| `translationKey` | string                   | —               | 翻譯分組鍵：相同 key 的文章互為譯文。未設定時文章獨立，不參與譯文分組                                                      |
+| `category`       | string                   | —               | 文章分類（單值），生成 `/categories/<slug>/` 分類頁；未設定時不屬於任何分類                                                |
 
 ### 內容級翻譯
 

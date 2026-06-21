@@ -32,6 +32,8 @@ featured: true # 선택, 홈페이지에 표시
 draft: false # 선택, 초안은 게시되지 않음
 author: "Xingluo" # 선택, 기본값 site.author
 ogImage: "./cover.png" # 선택, OG 이미지(이미지 가져오기 또는 문자열 경로)
+heroImage: "./hero.png" # 선택, 히어로 이미지(뒤로 가기 버튼과 제목 사이에 표시, 카드 오른쪽에도 표시)
+heroImageFit: "cover" # 선택, 히어로 이미지 맞춤 방식(cover 잘라내기 채움 / contain 전체 표시), 기본값 cover
 canonicalURL: "https://..." # 선택, 표준 링크
 hideEditPost: false # 선택, 편집 링크 숨기기
 timezone: "Asia/Shanghai" # 선택, 사이트 타임존 재정의
@@ -40,23 +42,25 @@ timezone: "Asia/Shanghai" # 선택, 사이트 타임존 재정의
 
 ### 필드 참조
 
-| 필드             | 타입            | 기본값          | 비고                                                                                     |
-| ---------------- | --------------- | --------------- | ---------------------------------------------------------------------------------------- |
-| `title`          | string          | 필수            | 게시물 제목                                                                              |
-| `pubDatetime`    | date            | 필수            | 발행 시간, ISO 8601                                                                      |
-| `modDatetime`    | date            | —               | 업데이트 시간; "업데이트" 레이블 표시                                                    |
-| `description`    | string          | 필수            | 요약, meta·RSS·목록 카드에 사용                                                          |
-| `tags`           | string[]        | `["others"]`    | 태그 배열; 태그 페이지 자동 생성                                                         |
-| `featured`       | boolean         | —               | 홈페이지 "추천" 섹션에 표시                                                              |
-| `draft`          | boolean         | —               | 초안; 프로덕션 빌드에서 제외(개발에서는 표시)                                            |
-| `author`         | string          | `site.author`   | 저자 이름                                                                                |
-| `ogImage`        | image \| string | —               | OG 이미지; `image()`는 Astro 에셋 파이프라인 사용, 문자열은 `public/` 경로 또는 외부 URL |
-| `canonicalURL`   | string          | —               | 표준 링크, 기본값 재정의([SEO](./seo.md) 참조)                                           |
-| `hideEditPost`   | boolean         | —               | 이 게시물의 편집 링크 숨기기                                                             |
-| `timezone`       | string          | `site.timezone` | 이 게시물의 표시 타임존 재정의                                                           |
-| `locale`         | string          | `site.lang`     | 게시물이 작성된 언어(예: `"en"`, `"ja"`). 미설정 시 사이트 언어 사용                     |
-| `translationKey` | string          | —               | 번역 그룹 키: 동일한 키를 가진 게시물은 서로의 번역. 키가 없으면 독립                    |
-| `category`       | string          | —               | 게시물 카테고리(단일 값), `/categories/<slug>/` 페이지 생성. 미설정 시 카테고리 없음     |
+| 필드             | 타입                     | 기본값          | 비고                                                                                                                                        |
+| ---------------- | ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string                   | 필수            | 게시물 제목                                                                                                                                 |
+| `pubDatetime`    | date                     | 필수            | 발행 시간, ISO 8601                                                                                                                         |
+| `modDatetime`    | date                     | —               | 업데이트 시간; "업데이트" 레이블 표시                                                                                                       |
+| `description`    | string                   | 필수            | 요약, meta·RSS·목록 카드에 사용                                                                                                             |
+| `tags`           | string[]                 | `["others"]`    | 태그 배열; 태그 페이지 자동 생성                                                                                                            |
+| `featured`       | boolean                  | —               | 홈페이지 "추천" 섹션에 표시                                                                                                                 |
+| `draft`          | boolean                  | —               | 초안; 프로덕션 빌드에서 제외(개발에서는 표시)                                                                                               |
+| `author`         | string                   | `site.author`   | 저자 이름                                                                                                                                   |
+| `ogImage`        | image \| string          | —               | OG 이미지; `image()`는 Astro 에셋 파이프라인 사용, 문자열은 `public/` 경로 또는 외부 URL                                                    |
+| `heroImage`      | image \| string          | —               | 히어로 이미지, 상세 페이지 뒤로 가기 버튼과 제목 사이에 표시, 카드 오른쪽에도 표시(`features.showPostCardHero`/`showPostDetailHero`로 제어) |
+| `heroImageFit`   | `"cover"` \| `"contain"` | `"cover"`       | 히어로 이미지 맞춤 방식: `"cover"`는 잘라내기 채움(비율 유지, 가장자리 잘릴 수 있음); `"contain"`는 전체 표시(비율 유지, 여백 생길 수 있음) |
+| `canonicalURL`   | string                   | —               | 표준 링크, 기본값 재정의([SEO](./seo.md) 참조)                                                                                              |
+| `hideEditPost`   | boolean                  | —               | 이 게시물의 편집 링크 숨기기                                                                                                                |
+| `timezone`       | string                   | `site.timezone` | 이 게시물의 표시 타임존 재정의                                                                                                              |
+| `locale`         | string                   | `site.lang`     | 게시물이 작성된 언어(예: `"en"`, `"ja"`). 미설정 시 사이트 언어 사용                                                                        |
+| `translationKey` | string                   | —               | 번역 그룹 키: 동일한 키를 가진 게시물은 서로의 번역. 키가 없으면 독립                                                                       |
+| `category`       | string                   | —               | 게시물 카테고리(단일 값), `/categories/<slug>/` 페이지 생성. 미설정 시 카테고리 없음                                                        |
 
 ### 콘텐츠 수준 번역
 
