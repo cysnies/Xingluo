@@ -46,7 +46,7 @@ const crumbs = [
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
 
-    <div class="space-y-12">
+    <div class="space-y-10">
       {
         yearGroups.map((yearGroup) => (
           <section>
@@ -65,7 +65,7 @@ const crumbs = [
                       {tplStr(t.archives.postCount, { count: String(monthGroup.posts.length) })}
                     </sup>
                   </h3>
-                  <ul class="grid gap-4 sm:grid-cols-2">
+                  <ul class="grid items-start gap-4 sm:grid-cols-2">
                     {monthGroup.posts.map((post) => (
                       <li>
                         <PostCard post={post} />

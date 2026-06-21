@@ -17,7 +17,7 @@ const t = useTranslations(Astro.currentLocale);
       <h2 class="mb-4 text-2xl font-semibold tracking-tight">
         {t.post.relatedPosts}
       </h2>
-      <ul class="grid gap-4 sm:grid-cols-2">
+      <ul class="grid items-start gap-4 sm:grid-cols-2">
         {posts.map((post) => (
           <li>
             <PostCard post={post} showTags={false} />

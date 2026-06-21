@@ -46,7 +46,7 @@ const crumbs = [
       {categoryName}
     </h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
-    <ul class="grid gap-4 sm:grid-cols-2">
+    <ul class="grid items-start gap-4 sm:grid-cols-2">
       {page.data.map((post) => (
         <li>
           <PostCard post={post} />

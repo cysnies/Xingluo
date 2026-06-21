@@ -33,7 +33,7 @@ const rssHref = new URL(
   <Header />
   <Main>
     <!-- Hero 区域 -->
-    <section class="border-b border-border pb-8">
+    <section class="border-b border-border pb-6">
       <div class="flex items-center gap-3">
         <h1 class="my-4 text-4xl font-bold tracking-tight sm:my-6 sm:text-5xl">
           {site.title}
@@ -68,7 +68,7 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.featured}
           </h2>
-          <ul class="grid gap-4 sm:grid-cols-2">
+          <ul class="grid items-start gap-4 sm:grid-cols-2">
             {featuredPosts.map((post) => (
               <li>
                 <PostCard post={post} />
@@ -86,7 +86,7 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.recentPosts}
           </h2>
-          <ul class="grid gap-4 sm:grid-cols-2">
+          <ul class="grid items-start gap-4 sm:grid-cols-2">
             {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
               <li>
                 <PostCard post={post} />
