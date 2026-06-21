@@ -36,15 +36,23 @@ function addHeadingLinks(root: HTMLElement) {
     heading.classList.add("group", "heading-anchor");
 
     const link = document.createElement("a");
-    link.className =
-      "heading-link ms-1 no-underline opacity-60 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100";
+    link.className = "heading-link no-underline";
     link.href = "#" + heading.id;
     link.setAttribute("aria-label", "链接到此标题");
 
-    const span = document.createElement("span");
-    span.setAttribute("aria-hidden", "true");
-    span.textContent = "#";
-    link.appendChild(span);
+    // 将标题的所有现有子节点移入链接内（使标题文本本身也成为可点击的超链接）
+    while (heading.firstChild) {
+      link.appendChild(heading.firstChild);
+    }
+
+    // 添加 # 符号，默认隐藏，鼠标悬停到标题上时显示
+    const hashSpan = document.createElement("span");
+    hashSpan.setAttribute("aria-hidden", "true");
+    hashSpan.textContent = "#";
+    hashSpan.className =
+      "ms-1 opacity-0 transition-opacity group-hover:opacity-100";
+    link.appendChild(hashSpan);
+
     heading.appendChild(link);
   }
 }
