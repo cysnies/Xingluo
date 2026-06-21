@@ -42,7 +42,6 @@ const {
   description,
   ogImage: initOgImage,
   heroImage,
-  heroImageFit,
   canonicalURL,
   pubDatetime,
   modDatetime,
@@ -131,44 +130,43 @@ const resolvedCanonical =
   >
     {config.features.showBackButton && <BackButton />}
 
-    {heroImageSrc && (
-      <img
-        src={heroImageSrc}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        class="mt-4 mb-2 max-h-80 w-full rounded-2xl border border-border object-cover"
-        style={{ objectFit: heroImageFit ?? "cover" }}
-      />
-    )}
-
     <article class="mt-4">
-      <h1
-        style={{ viewTransitionName: toTransitionName(title) }}
-        class="text-3xl font-bold tracking-tight sm:text-4xl"
-      >
-        {title}
-      </h1>
-
-      <div class="mt-3 flex flex-wrap items-center gap-3">
-        <Datetime
-          pubDatetime={pubDatetime}
-          modDatetime={modDatetime}
-          timezone={timezone}
-          size="lg"
+      {heroImageSrc && (
+        <img
+          src={heroImageSrc}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="mb-6 w-full rounded-2xl border border-border object-cover aspect-[3/1]"
         />
-        <span class="flex items-center gap-x-1.5 text-muted-foreground">
-          <Clock class="size-4 shrink-0 scale-90" />
-          <span class="text-sm sm:text-base">
-            {tplStr(t.post.readingTime, { minutes: readingMinutes })}
-          </span>
-        </span>
-        <EditPost editPath={editPath} hide={hideEditPost} />
-      </div>
+      )}
 
       {/* 大屏双列：主文章 + 粘性目录侧栏；小屏仅单列（目录隐藏） */}
-      <div class="mt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10">
+      <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10">
         <div class="min-w-0">
+          <h1
+            style={{ viewTransitionName: toTransitionName(title) }}
+            class="text-3xl font-bold tracking-tight sm:text-4xl"
+          >
+            {title}
+          </h1>
+
+          <div class="mt-3 flex flex-wrap items-center gap-3">
+            <Datetime
+              pubDatetime={pubDatetime}
+              modDatetime={modDatetime}
+              timezone={timezone}
+              size="lg"
+            />
+            <span class="flex items-center gap-x-1.5 text-muted-foreground">
+              <Clock class="size-4 shrink-0 scale-90" />
+              <span class="text-sm sm:text-base">
+                {tplStr(t.post.readingTime, { minutes: readingMinutes })}
+              </span>
+            </span>
+            <EditPost editPath={editPath} hide={hideEditPost} />
+          </div>
+
           <article
             id="article"
             data-copy={t.post.copyCode}
