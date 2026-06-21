@@ -91,8 +91,6 @@ const defaultFeatures = {
     tocSmooth: true,
     backToTopEnhanced: true,
     adjacentPostGlow: true,
-    noiseTexture: false,
-    tagMagnet: false,
     searchResultAnim: true,
   },
 };
