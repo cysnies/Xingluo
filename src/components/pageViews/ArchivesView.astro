@@ -66,11 +66,11 @@ const crumbs = [
                       {tplStr(t.archives.postCount, { count: String(monthGroup.posts.length) })}
                     </sup>
                   </h3>
-                  <ul class="grid items-start gap-4 sm:grid-cols-2">
+                  <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
                     {monthGroup.posts.map((post) => {
                       const width = getCardWidth(post, config.features.showPostCardHero);
                       return (
-                        <li class={width === "full" ? "col-span-1 sm:col-span-2" : "col-span-1"}>
+                        <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
                           <PostCard post={post} />
                         </li>
                       );
