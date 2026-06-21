@@ -4,8 +4,9 @@
  * 职责：
  * 1. 扫描 .xng-aplayer / .xng-dplayer 占位 div
  * 2. 滚动到视口时动态 import aplayer/dplayer（含 CSS）并实例化
- * 3. View Transitions 适配：astro:page-load 重新扫描
+ * 3. View Transitions 适配：astro:after-swap / astro:page-load 重新扫描
  * 4. 防重复实例化（dataset 标记）
+ * 5. 确保 CSS 加载完成后再实例化，避免首次导航时样式错乱
  *
  * 占位 div 由 remark 围栏插件或 MDX 组件输出，data-config 为 URI 编码的 JSON 配置
  */
@@ -18,23 +19,31 @@ let dplayerMod: Promise<typeof import("dplayer")> | null = null;
 // 改为运行时按需注入，避免功能关闭时页面仍加载无用 CSS
 import aplayerCssUrl from "aplayer/dist/APlayer.min.css?url";
 
-/** 运行时注入 APlayer 样式 <link>，仅首次调用时生效 */
-let aplayerCssLoaded = false;
-function ensureAPlayerCss(): void {
-  if (aplayerCssLoaded) return;
-  aplayerCssLoaded = true;
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = aplayerCssUrl;
-  document.head.appendChild(link);
+/** 运行时注入 APlayer 样式 <link> 的 Promise，确保 CSS 加载完毕后再实例化播放器 */
+let aplayerCssPromise: Promise<void> | null = null;
+
+/** 注入 APlayer 样式 <link> 并等待加载完成（仅首次调用时生效） */
+function ensureAPlayerCss(): Promise<void> {
+  if (aplayerCssPromise) return aplayerCssPromise;
+  aplayerCssPromise = new Promise<void>((resolve) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = aplayerCssUrl;
+    // CSS 加载完成或失败均 resolve，避免阻塞播放器初始化
+    link.onload = () => resolve();
+    link.onerror = () => resolve();
+    document.head.appendChild(link);
+  });
+  return aplayerCssPromise;
 }
 
 /** 动态加载 APlayer 模块与样式（共享 Promise 避免重复加载） */
 async function loadAPlayer(): Promise<typeof import("aplayer")> {
   if (!aplayerMod) {
     aplayerMod = (async () => {
-      ensureAPlayerCss();
-      return await import("aplayer");
+      // 与 JS 模块并行加载 CSS，但确保 CSS 先于实例化完成
+      const [mod] = await Promise.all([import("aplayer"), ensureAPlayerCss()]);
+      return mod;
     })();
   }
   return aplayerMod;
@@ -51,6 +60,11 @@ async function loadDPlayer(): Promise<typeof import("dplayer")> {
   return dplayerMod;
 }
 
+/** 等待下一帧以确保 DOM 布局已稳定（View Transitions 动画可能影响容器尺寸） */
+function waitForNextFrame(): Promise<void> {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
 /** 实例化单个 APlayer 占位 */
 async function mountAPlayer(el: HTMLElement): Promise<void> {
   if (el.dataset.xngInit === "1") return;
@@ -59,6 +73,8 @@ async function mountAPlayer(el: HTMLElement): Promise<void> {
     const raw = decodeURIComponent(el.dataset.config ?? "{}");
     const config = JSON.parse(raw) as Record<string, unknown>;
     const APlayer = (await loadAPlayer()).default;
+    // 等待一帧确保浏览器已完成布局计算，避免 View Transition 动画期间尺寸异常
+    await waitForNextFrame();
     new APlayer({ container: el, ...config });
   } catch (err) {
     console.error("[xingluo] APlayer 实例化失败：", err);
@@ -73,6 +89,8 @@ async function mountDPlayer(el: HTMLElement): Promise<void> {
     const raw = decodeURIComponent(el.dataset.config ?? "{}");
     const config = JSON.parse(raw) as Record<string, unknown>;
     const DPlayer = (await loadDPlayer()).default;
+    // 等待一帧确保浏览器已完成布局计算
+    await waitForNextFrame();
     new DPlayer({ container: el, ...config });
   } catch (err) {
     console.error("[xingluo] DPlayer 实例化失败：", err);
