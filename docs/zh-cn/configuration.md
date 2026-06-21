@@ -67,7 +67,7 @@ features: {
   showPostCardHero: true,
   showPostDetailHero: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -85,7 +85,7 @@ features: {
 | `showPostDetailHero` | `true`             | 是否在文章详情页中展示文章头图（文章未配置头图时不显示）             |
 | `editPost.enabled`   | `false`            | 是否显示"编辑此页"链接                                               |
 | `editPost.url`       | `""`               | 编辑链接前缀，会拼接文章相对源文件路径                               |
-| `search`             | `"pagefind"`       | 搜索方案：`"pagefind"` 或 `false`                                    |
+| `search`             | `"flexsearch"`     | 搜索方案：`"flexsearch"` 或 `false`                                  |
 | `mdx`                | `true`             | 是否启用 MDX 解析与渲染（详见 [内容创作](./content.md)）             |
 | `comments`           | `{provider:false}` | 评论系统配置（详见 [评论系统](./comments.md)）                       |
 | `players.aplayer`    | `false`            | 是否启用 APlayer 音乐播放器（详见 [媒体播放器](./media-players.md)） |

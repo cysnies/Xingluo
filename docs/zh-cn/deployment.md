@@ -12,7 +12,7 @@ pnpm build
 
 - 全部静态 HTML 页面（含 `[locale]/` 镜像）
 - `_astro/` 下的 JS / CSS / 字体资源
-- `pagefind/` 搜索索引
+- `search/` 搜索索引
 - `og.png` 站点级 OG 图、各文章级 `og.png`
 - `rss.xml`、`sitemap-index.xml`、`robots.txt`
 - `public/` 下的静态资源（favicon、默认 OG 图等）
@@ -125,7 +125,7 @@ server {
 
 - `_astro/` 下的资源文件名含哈希，可设置长期缓存（`immutable`）
 - HTML 文件不缓存或短缓存，确保内容更新及时
-- pagefind 索引按需加载，无需特殊缓存策略
+- Flexsearch 索引按需加载，无需特殊缓存策略
 - 部署后检查 OG 图、RSS、sitemap 是否可访问
 
 ## 评论系统后端

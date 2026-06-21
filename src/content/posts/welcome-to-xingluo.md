@@ -21,7 +21,7 @@ category: 公告
 - ⚡ **极致性能**：基于 Astro 静态生成，零运行时 JavaScript 开销
 - 🎨 **现代视觉**：shadcn/ui 的 new-york 风格，OKLCH 色彩空间
 - 🌗 **暗黑模式**：无闪烁切换，跟随系统偏好
-- 🔍 **全文搜索**：基于 Pagefind 的构建时索引
+- 🔍 **全文搜索**：基于 Flexsearch 的构建时索引
 - 🌐 **多语言**：简体中文与英文双语支持
 - 📝 **Markdown**：支持 MDX、代码高亮、目录、标注框
 - 📡 **RSS 与 SEO**：开箱即用的 RSS 源与结构化数据

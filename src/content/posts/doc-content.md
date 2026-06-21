@@ -201,7 +201,7 @@ import { APlayer, DPlayer } from "@/components/mdx";
 - 按共享标签数量降序排列
 - 同分数按发布时间降序（优先推荐较新的文章）
 - 无共享标签时不显示该区块
-- 自动被 pagefind 搜索索引忽略
+- 自动被 Flexsearch 搜索索引忽略
 
 无需额外配置，自动生效。
 

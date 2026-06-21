@@ -25,7 +25,7 @@ featured: true
 | [评论系统](./doc-comments.md)        | giscus / twikoo / waline 三选一配置与接入                     |
 | [媒体播放器](./doc-media-players.md) | APlayer / DPlayer 在 MD 与 MDX 中的使用                       |
 | [SEO](./doc-seo.md)                  | OG 图、RSS、sitemap、hreflang、canonical、结构化数据          |
-| [搜索](./doc-search.md)              | Pagefind 全文搜索集成                                         |
+| [搜索](./doc-search.md)              | Flexsearch 全文检索集成                                       |
 | [部署](./doc-deployment.md)          | 静态托管、GitHub Pages、环境变量、Docker                      |
 
 ## 核心特性
@@ -40,7 +40,7 @@ featured: true
 - **粘性目录侧栏**：大屏文章页右侧粘性目录，IntersectionObserver 滚动高亮当前章节
 - **评论系统**：giscus / twikoo / waline 三选一，主题自动跟随，懒加载
 - **媒体播放器**：APlayer 音乐播放器与 DPlayer 视频播放器，MD 围栏与 MDX 组件双入口
-- **搜索**：Pagefind 全文搜索，按语言分索引，View Transitions 状态保持
+- **搜索**：Flexsearch 全文检索，按语言分索引，View Transitions 状态保持
 - **SEO**：动态 OG 图（satori + sharp）、RSS、sitemap、JSON-LD 结构化数据（BlogPosting + BreadcrumbList）、canonical 规范化
 
 ## 技术栈
@@ -52,7 +52,7 @@ featured: true
 | 图标     | astro-icon + Font Awesome（构建期内联）                      |
 | 内容     | Astro Content Collections、MDX、remark/rehype 插件链         |
 | 代码高亮 | Shiki（双主题 + 标注转换器）                                 |
-| 搜索     | Pagefind                                                     |
+| 搜索     | Flexsearch                                                   |
 | OG 图    | satori + sharp                                               |
 | 评论     | giscus / twikoo / waline                                     |
 | 播放器   | APlayer / DPlayer                                            |

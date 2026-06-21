@@ -161,7 +161,7 @@ src/pages/
 
 ## 构建流程
 
-`pnpm run build` = `astro check && astro build && pagefind --site dist`
+`pnpm run build` = `astro check && astro build && node scripts/generateSearchIndex.mjs`
 
 1. **`astro check`**：TypeScript + Astro 模板类型检查
 2. **`astro build`**：
@@ -171,7 +171,7 @@ src/pages/
    - 条件加载 `mdx()` 集成、条件注入 `remarkPlayers` 插件
    - 构建期内联 SVG 图标（astro-icon，零运行时 JS）
    - 动态 import 的评论与播放器模块拆分为独立 chunk（懒加载）
-3. **`pagefind --site dist`**：扫描 `dist/` 的 `data-pagefind-body` 标记内容，按语言生成搜索索引到 `dist/pagefind/`
+3. **`node scripts/generateSearchIndex.mjs`**：扫描 `dist/` 的 HTML 文件，解析页面内容，按语言生成搜索索引到 `dist/search/`
 
 ## 性能优化策略
 

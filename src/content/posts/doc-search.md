@@ -1,7 +1,7 @@
 ---
 title: "搜索"
 pubDatetime: 2026-06-20T12:00:00+08:00
-description: "星罗搜索功能说明，涵盖 Pagefind 全文搜索集成的索引生成、UI、多语言搜索与性能优化。"
+description: "星罗搜索功能说明，涵盖 Flexsearch 全文检索集成的索引生成、UI、多语言搜索与性能优化。"
 tags:
   - 文档
   - 搜索
@@ -9,7 +9,7 @@ category: "文档"
 translationKey: doc-search
 ---
 
-星罗集成 [Pagefind](https://pagefind.app/) 提供静态全文搜索，按语言分索引，支持 View Transitions 状态保持。
+星罗集成 [Flexsearch](https://github.com/nextapps-de/flexsearch) 提供浏览器端全文检索，构建时预生成按语言分组的索引数据，支持 View Transitions 状态保持。
 
 ## 启用
 
@@ -17,7 +17,7 @@ translationKey: doc-search
 
 ```ts
 features: {
-  search: "pagefind", // "pagefind" | false
+  search: "flexsearch", // "flexsearch" | false
 }
 ```
 
@@ -27,31 +27,31 @@ features: {
 
 ### 索引生成
 
-构建流程的第三步 `pagefind --site dist` 扫描 `dist/` 目录：
+构建流程的第三步 `node scripts/generateSearchIndex.mjs` 扫描 `dist/` 目录下的 HTML：
 
-- 仅索引带 `data-pagefind-body` 属性的页面
-- 按语言自动分索引（`zh-cn` 与 `en` 各自独立）
-- 索引输出到 `dist/pagefind/`
+- 解析文章页的标题、描述、标签和正文内容
+- 按语言分组生成 JSON 索引文件（`zh-cn` 与 `en` 各自独立）
+- 索引输出到 `dist/search/`
 
 ### 索引范围
 
-文章详情页的 `<main>` 标记 `data-pagefind-body`，故仅文章正文被索引。其他页面（首页、列表、归档等）不进入搜索索引。
+文章详情页（路径包含 `/posts/`）被纳入搜索索引，包含标题、描述、标签和正文内容。其他页面（首页、列表、归档等）不进入搜索索引。
 
 ## 搜索 UI
 
 [`src/components/pageViews/SearchView.astro`](../src/components/pageViews/SearchView.astro) 实现搜索页：
 
-- 加载 `@pagefind/default-ui` 提供搜索框与结果列表
-- 通过 `getAssetPath("pagefind/")` 定位索引资源
-- 全局样式覆盖 pagefind CSS 变量，映射到星罗主题（`--background`、`--foreground`、`--primary` 等）
+- 加载 Flexsearch 在浏览器端建立索引
+- 通过 `getAssetPath("search/")` 定位索引 JSON 数据
+- 自定义 shadcn 风格的搜索输入框与结果卡片
 - `transition:persist` 保持搜索状态跨导航
 
 ### 搜索流程
 
 1. 用户在搜索框输入
-2. Pagefind 在对应语言索引中匹配
-3. 结果列表展示匹配文章（标题、摘要高亮）
-4. `processTerm` 将带查询参数的搜索页地址写入 sessionStorage，供返回按钮回跳
+2. Flexsearch 在当前语言索引数据中多字段匹配（标题、描述、正文、标签）
+3. 结果列表展示匹配文章（标题、摘要片段高亮、标签）
+4. 将带查询参数的搜索页地址写入 sessionStorage，供返回按钮回跳
 
 ## 来源回跳
 
@@ -59,34 +59,23 @@ features: {
 
 - `Main.astro` 组件将来源页地址写入 sessionStorage 的 `backUrl`
 - 文章页的 `BackButton.astro` 优先回跳 sessionStorage 的 `backUrl`，无则回首页
-- 搜索页的 `processTerm` 写入带查询参数的地址，从文章页返回时恢复搜索状态
+- 搜索页写入带查询参数的地址，从文章页返回时恢复搜索状态
 
 ## 多语言搜索
 
-Pagefind 按 `data-pagefind-body` 元素的语言属性分索引：
+构建时按语言分组生成独立的 JSON 索引文件：
 
-- `zh-cn` 页面（根目录）→ 中文索引
-- `en` 页面（`/en/` 前缀）→ 英文索引
+- `zh-cn` 页面（根目录）→ `search/zh-cn.json`
+- `en` 页面（`/en/` 前缀）→ `search/en.json`
 
-搜索时自动匹配当前页面语言对应的索引，中文页搜中文，英文页搜英文。
+搜索时自动加载当前页面语言对应的索引数据，中文页搜中文，英文页搜英文。
 
 ## 主题适配
 
-Pagefind 默认 UI 有自己的 CSS 变量，星罗在 `SearchView.astro` 中用全局样式覆盖，映射到 shadcn 主题变量：
-
-```css
-:root {
-  --pagefind-ui-primary: var(--primary);
-  --pagefind-ui-text: var(--foreground);
-  --pagefind-ui-background: var(--background);
-  /* ... */
-}
-```
-
-暗色模式下通过 `.dark` 选择器自动切换，与全站主题一致。
+搜索 UI 使用 shadcn 主题变量（`--background`、`--foreground`、`--primary`、`--border` 等），无需额外 CSS 变量覆盖。暗色模式下通过 `.dark` 选择器自动切换，与全站主题一致。
 
 ## 性能
 
-- Pagefind 索引为静态文件，搜索在客户端完成，无服务端请求
-- 索引按需加载（仅搜索时下载索引片段）
+- 搜索索引为静态 JSON 文件，搜索在客户端完成，无服务端请求
+- Flexsearch 在浏览器端建立索引后进行高速检索
 - `transition:persist` 避免导航时重复初始化搜索 UI
