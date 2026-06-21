@@ -42,6 +42,7 @@ const {
   description,
   ogImage: initOgImage,
   heroImage,
+  heroImageFit,
   canonicalURL,
   pubDatetime,
   modDatetime,
@@ -136,7 +137,8 @@ const resolvedCanonical =
         alt=""
         loading="lazy"
         decoding="async"
-        class="mt-4 mb-2 w-full rounded-lg border border-border object-cover"
+        class="mt-4 mb-2 max-h-80 w-full rounded-2xl border border-border object-cover"
+        style={{ objectFit: heroImageFit ?? "cover" }}
       />
     )}
 
