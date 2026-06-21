@@ -64,6 +64,8 @@ features: {
   dynamicOgImage: true,
   showArchives: true,
   showBackButton: true,
+  showPostCardHero: true,
+  showPostDetailHero: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
   search: "pagefind",
   mdx: true,
@@ -72,20 +74,22 @@ features: {
 }
 ```
 
-| Field              | Default            | Notes                                                                         |
-| ------------------ | ------------------ | ----------------------------------------------------------------------------- |
-| `lightAndDarkMode` | `true`             | Enable light/dark mode toggle                                                 |
-| `dynamicOgImage`   | `true`             | Dynamically generate OG images (satori + sharp)                               |
-| `showArchives`     | `true`             | Show the archives page (sitemap filters accordingly when off)                 |
-| `showCategories`   | `true`             | Show the categories page and nav entry (sitemap filters accordingly when off) |
-| `showBackButton`   | `true`             | Show a back button on post pages                                              |
-| `editPost.enabled` | `false`            | Show an "Edit this page" link                                                 |
-| `editPost.url`     | `""`               | Edit link prefix; the post's relative source path is appended                 |
-| `search`           | `"pagefind"`       | Search solution: `"pagefind"` or `false`                                      |
-| `mdx`              | `true`             | Enable MDX parsing and rendering (see [Content Authoring](./content.md))      |
-| `comments`         | `{provider:false}` | Comment system config (see [Comment System](./comments.md))                   |
-| `players.aplayer`  | `false`            | Enable the APlayer audio player (see [Media Players](./media-players.md))     |
-| `players.dplayer`  | `false`            | Enable the DPlayer video player                                               |
+| Field                | Default            | Notes                                                                            |
+| -------------------- | ------------------ | -------------------------------------------------------------------------------- |
+| `lightAndDarkMode`   | `true`             | Enable light/dark mode toggle                                                    |
+| `dynamicOgImage`     | `true`             | Dynamically generate OG images (satori + sharp)                                  |
+| `showArchives`       | `true`             | Show the archives page (sitemap filters accordingly when off)                    |
+| `showCategories`     | `true`             | Show the categories page and nav entry (sitemap filters accordingly when off)    |
+| `showBackButton`     | `true`             | Show a back button on post pages                                                 |
+| `showPostCardHero`   | `true`             | Show the post hero image on post cards (hidden when the post has none)           |
+| `showPostDetailHero` | `true`             | Show the post hero image on the post detail page (hidden when the post has none) |
+| `editPost.enabled`   | `false`            | Show an "Edit this page" link                                                    |
+| `editPost.url`       | `""`               | Edit link prefix; the post's relative source path is appended                    |
+| `search`             | `"pagefind"`       | Search solution: `"pagefind"` or `false`                                         |
+| `mdx`                | `true`             | Enable MDX parsing and rendering (see [Content Authoring](./content.md))         |
+| `comments`           | `{provider:false}` | Comment system config (see [Comment System](./comments.md))                      |
+| `players.aplayer`    | `false`            | Enable the APlayer audio player (see [Media Players](./media-players.md))        |
+| `players.dplayer`    | `false`            | Enable the DPlayer video player                                                  |
 
 ### editPost
 

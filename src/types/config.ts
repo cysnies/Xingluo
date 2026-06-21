@@ -135,6 +135,10 @@ export interface FeaturesConfig {
   showCategories: boolean;
   /** 是否显示返回按钮 */
   showBackButton: boolean;
+  /** 是否在文章卡片中展示文章头图 */
+  showPostCardHero: boolean;
+  /** 是否在文章详情页中展示文章头图 */
+  showPostDetailHero: boolean;
   /** 编辑文章链接配置 */
   editPost: EditPostConfig;
   /** 搜索方案 */

@@ -64,6 +64,8 @@ features: {
   dynamicOgImage: true,
   showArchives: true,
   showBackButton: true,
+  showPostCardHero: true,
+  showPostDetailHero: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
   search: "pagefind",
   mdx: true,
@@ -72,20 +74,22 @@ features: {
 }
 ```
 
-| 字段               | 默认值             | 说明                                                                 |
-| ------------------ | ------------------ | -------------------------------------------------------------------- |
-| `lightAndDarkMode` | `true`             | 是否启用亮/暗模式切换                                                |
-| `dynamicOgImage`   | `true`             | 是否动态生成 OG 图（satori + sharp）                                 |
-| `showArchives`     | `true`             | 是否显示归档页（关闭时 sitemap 同步过滤）                            |
-| `showCategories`   | `true`             | 是否显示分类页与导航入口（关闭时 sitemap 同步过滤）                  |
-| `showBackButton`   | `true`             | 文章页是否显示返回按钮                                               |
-| `editPost.enabled` | `false`            | 是否显示"编辑此页"链接                                               |
-| `editPost.url`     | `""`               | 编辑链接前缀，会拼接文章相对源文件路径                               |
-| `search`           | `"pagefind"`       | 搜索方案：`"pagefind"` 或 `false`                                    |
-| `mdx`              | `true`             | 是否启用 MDX 解析与渲染（详见 [内容创作](./content.md)）             |
-| `comments`         | `{provider:false}` | 评论系统配置（详见 [评论系统](./comments.md)）                       |
-| `players.aplayer`  | `false`            | 是否启用 APlayer 音乐播放器（详见 [媒体播放器](./media-players.md)） |
-| `players.dplayer`  | `false`            | 是否启用 DPlayer 视频播放器                                          |
+| 字段                 | 默认值             | 说明                                                                 |
+| -------------------- | ------------------ | -------------------------------------------------------------------- |
+| `lightAndDarkMode`   | `true`             | 是否启用亮/暗模式切换                                                |
+| `dynamicOgImage`     | `true`             | 是否动态生成 OG 图（satori + sharp）                                 |
+| `showArchives`       | `true`             | 是否显示归档页（关闭时 sitemap 同步过滤）                            |
+| `showCategories`     | `true`             | 是否显示分类页与导航入口（关闭时 sitemap 同步过滤）                  |
+| `showBackButton`     | `true`             | 文章页是否显示返回按钮                                               |
+| `showPostCardHero`   | `true`             | 是否在文章卡片中展示文章头图（文章未配置头图时不显示）               |
+| `showPostDetailHero` | `true`             | 是否在文章详情页中展示文章头图（文章未配置头图时不显示）             |
+| `editPost.enabled`   | `false`            | 是否显示"编辑此页"链接                                               |
+| `editPost.url`       | `""`               | 编辑链接前缀，会拼接文章相对源文件路径                               |
+| `search`             | `"pagefind"`       | 搜索方案：`"pagefind"` 或 `false`                                    |
+| `mdx`                | `true`             | 是否启用 MDX 解析与渲染（详见 [内容创作](./content.md)）             |
+| `comments`           | `{provider:false}` | 评论系统配置（详见 [评论系统](./comments.md)）                       |
+| `players.aplayer`    | `false`            | 是否启用 APlayer 音乐播放器（详见 [媒体播放器](./media-players.md)） |
+| `players.dplayer`    | `false`            | 是否启用 DPlayer 视频播放器                                          |
 
 ### editPost 编辑链接
 

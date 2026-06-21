@@ -46,6 +46,10 @@ const defaultFeatures = {
   showArchives: true,
   showCategories: true,
   showBackButton: true,
+  /** 默认在文章卡片中展示文章头图 */
+  showPostCardHero: true,
+  /** 默认在文章详情页中展示文章头图 */
+  showPostDetailHero: true,
   editPost: {
     enabled: false,
     url: "",

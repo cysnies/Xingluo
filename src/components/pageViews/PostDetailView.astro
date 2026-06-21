@@ -81,12 +81,15 @@ const ogImage = ogImageUrl
  * - image() 对象取 .src（经 Astro 资源管线优化后的带哈希路径）
  * - 字符串直接作为 public/ 路径或外链使用
  * - 未设置时不渲染头图
+ * 仅在全局开关 showPostDetailHero 开启时才解析与展示
  */
 let heroImageSrc: string | undefined;
-if (typeof heroImage === "string") {
-  heroImageSrc = heroImage;
-} else if (heroImage && typeof heroImage === "object" && "src" in heroImage) {
-  heroImageSrc = heroImage.src;
+if (config.features.showPostDetailHero) {
+  if (typeof heroImage === "string") {
+    heroImageSrc = heroImage;
+  } else if (heroImage && typeof heroImage === "object" && "src" in heroImage) {
+    heroImageSrc = heroImage.src;
+  }
 }
 
 /** 编辑链接所需的相对源文件路径 */

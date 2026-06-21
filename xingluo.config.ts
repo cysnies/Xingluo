@@ -35,6 +35,10 @@ export default defineXingluoConfig({
     // 是否显示分类页与导航入口（文章通过 frontmatter 的 category 字段归类）
     showCategories: true,
     showBackButton: true,
+    // 是否在文章卡片中展示文章头图（文章未配置头图时不显示）
+    showPostCardHero: true,
+    // 是否在文章详情页中展示文章头图（文章未配置头图时不显示）
+    showPostDetailHero: true,
     editPost: {
       enabled: true,
       url: "https://github.com/cysnies/Xingluo/edit/main/",

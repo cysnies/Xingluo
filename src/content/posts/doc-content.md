@@ -50,24 +50,24 @@ timezone: "Asia/Shanghai" # 可选，覆盖站点时区
 
 ### 字段说明
 
-| 字段             | 类型            | 默认值          | 说明                                                                                          |
-| ---------------- | --------------- | --------------- | --------------------------------------------------------------------------------------------- |
-| `title`          | string          | 必填            | 文章标题                                                                                      |
-| `pubDatetime`    | date            | 必填            | 发布时间，ISO 8601 格式                                                                       |
-| `modDatetime`    | date            | —               | 更新时间，显示"更新于"标签                                                                    |
-| `description`    | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                                                |
-| `tags`           | string[]        | `["others"]`    | 标签数组，自动生成标签页                                                                      |
-| `featured`       | boolean         | —               | 首页"精选文章"区块展示                                                                        |
-| `draft`          | boolean         | —               | 草稿，生产构建过滤（开发可见）                                                                |
-| `author`         | string          | `site.author`   | 作者名                                                                                        |
-| `ogImage`        | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链                         |
-| `heroImage`      | image \| string | —               | 文章头图，显示在详情页返回按钮与标题之间；`image()` 走资源管线，字符串为 `public/` 路径或外链 |
-| `canonicalURL`   | string          | —               | 规范链接，覆盖默认（详见 [SEO](./doc-seo.md)）                                                |
-| `hideEditPost`   | boolean         | —               | 隐藏该文章的编辑链接                                                                          |
-| `timezone`       | string          | `site.timezone` | 覆盖该文章的显示时区                                                                          |
-| `locale`         | string          | `site.lang`     | 文章写作语言，如 `"en"`、`"ja"`。未设置时视为默认语言                                         |
-| `translationKey` | string          | —               | 翻译分组键：相同 key 的文章互为译文。未设置时文章独立，不参与译文分组                         |
-| `category`       | string          | —               | 文章分类（单值），生成 `/categories/<slug>/` 分类页；未设置时不属于任何分类                   |
+| 字段             | 类型            | 默认值          | 说明                                                                                                                                                                            |
+| ---------------- | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | string          | 必填            | 文章标题                                                                                                                                                                        |
+| `pubDatetime`    | date            | 必填            | 发布时间，ISO 8601 格式                                                                                                                                                         |
+| `modDatetime`    | date            | —               | 更新时间，显示"更新于"标签                                                                                                                                                      |
+| `description`    | string          | 必填            | 摘要，用于 meta、RSS、列表卡片                                                                                                                                                  |
+| `tags`           | string[]        | `["others"]`    | 标签数组，自动生成标签页                                                                                                                                                        |
+| `featured`       | boolean         | —               | 首页"精选文章"区块展示                                                                                                                                                          |
+| `draft`          | boolean         | —               | 草稿，生产构建过滤（开发可见）                                                                                                                                                  |
+| `author`         | string          | `site.author`   | 作者名                                                                                                                                                                          |
+| `ogImage`        | image \| string | —               | OG 图；`image()` 走 Astro 资源管线优化，字符串为 `public/` 路径或外链                                                                                                           |
+| `heroImage`      | image \| string | —               | 文章头图，显示在详情页返回按钮与标题之间，亦展示于文章卡片右侧（受 `features.showPostCardHero`/`showPostDetailHero` 控制）；`image()` 走资源管线，字符串为 `public/` 路径或外链 |
+| `canonicalURL`   | string          | —               | 规范链接，覆盖默认（详见 [SEO](./doc-seo.md)）                                                                                                                                  |
+| `hideEditPost`   | boolean         | —               | 隐藏该文章的编辑链接                                                                                                                                                            |
+| `timezone`       | string          | `site.timezone` | 覆盖该文章的显示时区                                                                                                                                                            |
+| `locale`         | string          | `site.lang`     | 文章写作语言，如 `"en"`、`"ja"`。未设置时视为默认语言                                                                                                                           |
+| `translationKey` | string          | —               | 翻译分组键：相同 key 的文章互为译文。未设置时文章独立，不参与译文分组                                                                                                           |
+| `category`       | string          | —               | 文章分类（单值），生成 `/categories/<slug>/` 分类页；未设置时不属于任何分类                                                                                                     |
 
 ### 内容级翻译
 
