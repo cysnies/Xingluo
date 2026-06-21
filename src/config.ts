@@ -2,6 +2,7 @@ import userConfig from "../xingluo.config";
 import type {
   CommentsConfig,
   GiscusConfig,
+  GoogleFontsMirrorConfig,
   PlayersConfig,
   TwikooConfig,
   WalineConfig,
@@ -66,6 +67,11 @@ const defaultFeatures = {
     aplayer: false,
     dplayer: false,
   },
+  /** 默认关闭 Google Fonts 镜像源 */
+  googleFontsMirror: {
+    enabled: false,
+    url: "https://fonts.googleapis.cn",
+  },
 };
 
 /** 合并评论系统配置，保留用户提供的各 provider 子配置 */
@@ -91,6 +97,16 @@ function resolvePlayers(partial?: Partial<PlayersConfig>): PlayersConfig {
   return {
     aplayer: partial?.aplayer ?? false,
     dplayer: partial?.dplayer ?? false,
+  };
+}
+
+/** 合并 Google Fonts 镜像源配置 */
+function resolveGoogleFontsMirror(
+  partial?: Partial<GoogleFontsMirrorConfig>,
+): GoogleFontsMirrorConfig {
+  return {
+    enabled: partial?.enabled ?? false,
+    url: partial?.url ?? "https://fonts.googleapis.cn",
   };
 }
 
@@ -122,6 +138,9 @@ function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
       editPost: { ...defaultFeatures.editPost, ...partial.features?.editPost },
       comments: resolveComments(partial.features?.comments),
       players: resolvePlayers(partial.features?.players),
+      googleFontsMirror: resolveGoogleFontsMirror(
+        partial.features?.googleFontsMirror,
+      ),
     },
     socials: partial.socials ?? [],
     shareLinks: partial.shareLinks ?? [],

@@ -20,6 +20,7 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeWrapTable } from "./src/utils/rehypeWrapTable";
 import { remarkPlayers } from "./src/utils/remarkPlayers";
+import { googleFontsMirrorProvider } from "./src/utils/googleFontsMirrorProvider";
 import config from "./xingluo.config";
 
 /** MDX 集成按需启用：关闭时既不加载集成，也不收集 .mdx 文件 */
@@ -140,7 +141,13 @@ export default defineConfig({
     {
       name: "Noto Sans SC",
       cssVariable: "--font-og",
-      provider: fontProviders.google(),
+      provider: config.features?.googleFontsMirror?.enabled
+        ? googleFontsMirrorProvider({
+            mirrorUrl:
+              config.features.googleFontsMirror.url ??
+              "https://fonts.googleapis.cn",
+          })
+        : fontProviders.google(),
       fallbacks: ["sans-serif"],
       weights: [400, 700],
       styles: ["normal"],

@@ -71,6 +71,12 @@ export default defineXingluoConfig({
       aplayer: false,
       dplayer: false,
     },
+    // Google Fonts 镜像源配置：构建时从镜像源下载字体，
+    // 适用于无法直接访问 Google Fonts 官方源的环境。
+    // googleFontsMirror: {
+    //   enabled: true,
+    //   url: "https://fonts.googleapis.cn",
+    // },
   },
   socials: [
     { name: "github", url: "https://github.com/cysnies/Xingluo" },

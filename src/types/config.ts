@@ -123,6 +123,14 @@ export interface PlayersConfig {
   dplayer: boolean;
 }
 
+/** Google Fonts 镜像源配置 */
+export interface GoogleFontsMirrorConfig {
+  /** 是否启用镜像源（可绕过 Google Fonts 官方源的网络限制） */
+  enabled: boolean;
+  /** 镜像源 URL，如 https://fonts.googleapis.cn */
+  url: string;
+}
+
 /** 功能开关配置 */
 export interface FeaturesConfig {
   /** 是否启用亮/暗模式切换 */
@@ -149,6 +157,8 @@ export interface FeaturesConfig {
   comments: CommentsConfig;
   /** 媒体播放器开关 */
   players: PlayersConfig;
+  /** Google Fonts 镜像源配置（构建时下载字体使用） */
+  googleFontsMirror: GoogleFontsMirrorConfig;
 }
 
 /** 社交链接项 */
