@@ -8,8 +8,6 @@ import { initScrollReveal } from "@/scripts/animations/scrollReveal";
 import { initSpotlight } from "@/scripts/animations/spotlightEffect";
 import { initRipple } from "@/scripts/animations/rippleEffect";
 import { initNavIndicator } from "@/scripts/animations/navIndicator";
-import { initNoise } from "@/scripts/animations/noiseTexture";
-import { initMagnet } from "@/scripts/animations/tagMagnet";
 
 /** 从 <html> 读取动画配置 */
 function getAnimationsConfig(): Record<string, boolean> {
@@ -37,12 +35,6 @@ export function initAnimations(): void {
   }
   if (cfg.buttonRipple !== false) {
     initRipple();
-  }
-  if (cfg.noiseTexture !== false) {
-    initNoise();
-  }
-  if (cfg.tagMagnet !== false) {
-    initMagnet();
   }
 }
 

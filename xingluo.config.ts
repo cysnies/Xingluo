@@ -93,8 +93,8 @@ export default defineXingluoConfig({
     //   tocSmooth: true,          // TOC 平滑过渡
     //   backToTopEnhanced: true,  // 返回顶部增强
     //   adjacentPostGlow: true,   // 文章导航发光
-    //   noiseTexture: true,       // 噪点纹理
-    //   tagMagnet: true,          // 标签磁吸
+    //   noiseTexture: false,      // 噪点纹理（已移除）
+    //   tagMagnet: false,         // 标签磁吸（已移除）
     //   searchResultAnim: true,   // 搜索页结果动画
     // },
   },

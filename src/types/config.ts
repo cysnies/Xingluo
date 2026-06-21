@@ -161,7 +161,7 @@ export interface AnimationsConfig {
   adjacentPostGlow: boolean;
   /** 全局噪点纹理叠加 */
   noiseTexture: boolean;
-  /** 标签悬停磁吸效果 */
+  /** 标签悬停磁吸效果（已废弃） */
   tagMagnet: boolean;
   /** 搜索页面结果渐入动画 */
   searchResultAnim: boolean;

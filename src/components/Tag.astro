@@ -19,7 +19,6 @@ const locale = Astro.currentLocale ?? config.site.lang;
 
 <a
   href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
-  data-magnet
   class={cn(
     "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-muted-foreground transition-colors",
     "hover:bg-accent hover:text-accent-foreground",

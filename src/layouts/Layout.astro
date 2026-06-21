@@ -147,18 +147,6 @@ const defaultAlternate = {
     data-animations-toc={config.features.animations.tocSmooth}
     data-animations-theme={config.features.animations.themeTransition}
   >
-    <!-- 噪点纹理叠加层 -->
-    {
-      config.features.animations.noiseTexture && (
-        <div
-          id="noise-texture"
-          class="pointer-events-none fixed inset-0 z-50 h-full w-full"
-          style="opacity:0.03;image-rendering:pixelated;"
-          aria-hidden="true"
-        />
-      )
-    }
-
     <slot />
     <script>
       import "@/scripts/theme";
@@ -168,9 +156,7 @@ const defaultAlternate = {
       (config.features.animations.spotlightCard ||
         config.features.animations.scrollReveal ||
         config.features.animations.navIndicator ||
-        config.features.animations.buttonRipple ||
-        config.features.animations.noiseTexture ||
-        config.features.animations.tagMagnet) && (
+        config.features.animations.buttonRipple) && (
         <script>
           import "@/scripts/animations";
         </script>
