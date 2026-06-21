@@ -31,6 +31,12 @@ const posts = defineCollection({
        * image() 走 Astro 资源管线优化，字符串为 public/ 路径或外链。
        */
       heroImage: image().or(z.string()).optional(),
+      /**
+       * 文章头图适配方式：
+       * - "cover"：裁切填充，保持宽高比（默认）
+       * - "contain"：完整缩放，保持宽高比
+       */
+      heroImageFit: z.enum(["cover", "contain"]).optional().default("cover"),
       description: z.string(),
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
