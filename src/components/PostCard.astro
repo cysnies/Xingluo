@@ -71,10 +71,10 @@ const showHero = !!heroImageSrc;
 >
   {/* 左侧主内容区：标题、信息、描述、分类与标签 */}
   <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-evenly gap-0 py-2">
-    {/* 标题行：固定两行高度，超出两行截断，保证跨卡片对齐 */}
+    {/* 标题行：固定两行高度，超出两行截断，负边距上移带动信息行，保证跨卡片对齐 */}
     <CardTitle
       transition:name={transitionName}
-      class="mx-4 min-h-12 line-clamp-2 leading-snug transition-colors group-hover:text-primary"
+      class="mx-4 min-h-12 line-clamp-2 leading-snug -mt-1.5 transition-colors group-hover:text-primary"
     >
       <a href={href} class="after:absolute after:inset-0">{data.title}</a>
     </CardTitle>
@@ -95,9 +95,9 @@ const showHero = !!heroImageSrc;
       </span>
     </div>
 
-    {/* 描述行：固定三行高度，保证跨卡片对齐 */}
+    {/* 描述行：固定三行高度，正边距补偿负边距偏移，保证位置不变，保证跨卡片对齐 */}
     {data.description && (
-      <CardDescription class="mx-4 min-h-[3.5rem] line-clamp-3">{data.description}</CardDescription>
+      <CardDescription class="mx-4 min-h-[3.5rem] line-clamp-3 mt-1.5">{data.description}</CardDescription>
     )}
 
     {/* 分类与标签行：单行展示，溢出该行后自动截断；相对定位提升层级，保持独立可点击 */}
