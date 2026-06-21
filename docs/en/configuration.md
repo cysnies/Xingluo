@@ -67,7 +67,7 @@ features: {
   showPostCardHero: true,
   showPostDetailHero: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "pagefind",
+  search: "flexsearch",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
@@ -85,7 +85,7 @@ features: {
 | `showPostDetailHero` | `true`             | Show the post hero image on the post detail page (hidden when the post has none) |
 | `editPost.enabled`   | `false`            | Show an "Edit this page" link                                                    |
 | `editPost.url`       | `""`               | Edit link prefix; the post's relative source path is appended                    |
-| `search`             | `"pagefind"`       | Search solution: `"pagefind"` or `false`                                         |
+| `search`             | `"flexsearch"`     | Search solution: `"flexsearch"` or `false`                                       |
 | `mdx`                | `true`             | Enable MDX parsing and rendering (see [Content Authoring](./content.md))         |
 | `comments`           | `{provider:false}` | Comment system config (see [Comment System](./comments.md))                      |
 | `players.aplayer`    | `false`            | Enable the APlayer audio player (see [Media Players](./media-players.md))        |

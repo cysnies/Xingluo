@@ -15,7 +15,7 @@ Xingluo is a modern blog CMS built on [Astro](https://astro.build/) and the [sha
 | [Comment System](./comments.md)            | Choosing and wiring up giscus / twikoo / waline                                |
 | [Media Players](./media-players.md)        | Using APlayer / DPlayer in Markdown and MDX                                    |
 | [SEO](./seo.md)                            | OG images, RSS, sitemap, hreflang, canonical, structured data                  |
-| [Search](./search.md)                      | Pagefind full-text search integration                                          |
+| [Search](./search.md)                      | Flexsearch full-text search integration                                        |
 | [Deployment](./deployment.md)              | Static hosting, GitHub Pages, environment variables, Docker                    |
 
 ## Core Features
@@ -30,7 +30,7 @@ Xingluo is a modern blog CMS built on [Astro](https://astro.build/) and the [sha
 - **Sticky TOC sidebar**: right-side sticky table of contents on large screens, IntersectionObserver scroll spying
 - **Comment system**: giscus / twikoo / waline, theme-aware, lazy-loaded
 - **Media players**: APlayer audio and DPlayer video, with both MD fence and MDX component entry points
-- **Search**: Pagefind full-text search, per-language indexes, View Transitions state persistence
+- **Search**: Flexsearch full-text search, per-language indexes, View Transitions state persistence
 - **Full SEO**: dynamic OG images (satori + sharp), RSS, sitemap, JSON-LD structured data (BlogPosting + BreadcrumbList), canonical normalization
 
 ## Tech Stack
@@ -42,7 +42,7 @@ Xingluo is a modern blog CMS built on [Astro](https://astro.build/) and the [sha
 | Icons             | astro-icon + Font Awesome                                            |
 | Content           | Astro Content Collections, MDX, remark/rehype plugin chain           |
 | Code highlighting | Shiki                                                                |
-| Search            | Pagefind                                                             |
+| Search            | Flexsearch                                                           |
 | OG images         | satori + sharp                                                       |
 | Comments          | giscus / twikoo / waline                                             |
 | Players           | APlayer / DPlayer                                                    |

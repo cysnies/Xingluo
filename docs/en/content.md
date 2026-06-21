@@ -197,7 +197,7 @@ Up to 2 related posts are shown at the bottom of post detail pages (after previo
 - Sorted by number of shared tags, descending
 - Same score sorted by publish date, descending (preferring newer posts)
 - Section is not rendered when no posts share tags
-- Automatically ignored by the pagefind search index
+- Automatically ignored by the Flexsearch search index
 
 No configuration needed.
 

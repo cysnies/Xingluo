@@ -1,6 +1,6 @@
 # Search
 
-Xingluo integrates [Pagefind](https://pagefind.app/) for static full-text search, with per-language indexes and View Transitions state persistence.
+Xingluo integrates [Flexsearch](https://github.com/nextapps-de/flexsearch) for client-side full-text search, with per-language indexes and View Transitions state persistence.
 
 ## Enabling
 
@@ -8,7 +8,7 @@ Configure via `features.search`:
 
 ```ts
 features: {
-  search: "pagefind", // "pagefind" | false
+  search: "flexsearch", // "flexsearch" | false
 }
 ```
 
@@ -18,29 +18,29 @@ When set to `false`, the search page `Astro.rewrite`s to 404 and no search UI is
 
 ### Index Generation
 
-The third build step, `pagefind --site dist`, scans the `dist/` directory:
+The third build step, `node scripts/generateSearchIndex.mjs`, scans HTML files in the `dist/` directory:
 
-- Only pages with the `data-pagefind-body` attribute are indexed
+- Parses page content and extracts post body text
 - Indexes are split automatically by language (`zh-cn` and `en` each get their own)
-- Indexes are output to `dist/pagefind/`
+- Indexes are output to `dist/search/`
 
 ### Index Scope
 
-The `<main>` on post detail pages is marked `data-pagefind-body`, so only post bodies are indexed. Other pages (home, lists, archives, etc.) do not enter the search index.
+The build script parses the `<main>` content on post detail pages, so only post bodies are indexed. Other pages (home, lists, archives, etc.) do not enter the search index.
 
 ## Search UI
 
 [`src/components/pageViews/SearchView.astro`](../src/components/pageViews/SearchView.astro) implements the search page:
 
-- Loads `@pagefind/default-ui` for the search box and result list
-- Locates index assets via `getAssetPath("pagefind/")`
-- Global styles override Pagefind CSS variables, mapping them to Xingluo's theme (`--background`, `--foreground`, `--primary`, etc.)
+- Uses Flexsearch client-side index for search matching in the browser
+- Locates index assets via `getAssetPath("search/")`
+- Uses shadcn theme variables (`--background`, `--foreground`, `--primary`, etc.) for search box and result list styling
 - `transition:persist` preserves search state across navigation
 
 ### Search Flow
 
 1. The user types in the search box
-2. Pagefind matches against the current language index
+2. Flexsearch matches against the current language index
 3. The result list shows matching posts (title, summary highlight)
 4. `processTerm` writes the search page URL with query params to sessionStorage, for the back button to restore
 
@@ -54,7 +54,7 @@ The back-navigation mechanism between the search page and post pages:
 
 ## Multilingual Search
 
-Pagefind splits indexes by the language attribute of `data-pagefind-body` elements:
+Flexsearch splits indexes by page language:
 
 - `zh-cn` pages (root) → Chinese index
 - `en` pages (`/en/` prefix) → English index
@@ -63,13 +63,13 @@ Search automatically matches the index for the current page language: Chinese on
 
 ## Theme Adaptation
 
-Pagefind's default UI has its own CSS variables; Xingluo overrides them with global styles in `SearchView.astro`, mapping to shadcn theme variables:
+Flexsearch's search UI uses shadcn theme variables, defined in `SearchView.astro` for search box and result list styling:
 
 ```css
 :root {
-  --pagefind-ui-primary: var(--primary);
-  --pagefind-ui-text: var(--foreground);
-  --pagefind-ui-background: var(--background);
+  --search-primary: var(--primary);
+  --search-text: var(--foreground);
+  --search-background: var(--background);
   /* ... */
 }
 ```
@@ -78,6 +78,6 @@ Dark mode switches automatically via the `.dark` selector, consistent with the s
 
 ## Performance
 
-- Pagefind indexes are static files; search happens client-side with no server requests
+- Flexsearch indexes are static files; search happens client-side with no server requests
 - Indexes are loaded on demand (index fragments download only when searching)
 - `transition:persist` avoids re-initializing the search UI on navigation

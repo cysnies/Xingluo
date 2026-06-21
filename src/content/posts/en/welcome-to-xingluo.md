@@ -21,7 +21,7 @@ category: announcement
 - ⚡ **Extreme performance**: static generation with Astro, zero runtime JavaScript overhead
 - 🎨 **Modern visuals**: shadcn/ui new-york style, OKLCH color space
 - 🌗 **Dark mode**: flicker-free switching, follows system preference
-- 🔍 **Full-text search**: build-time indexing powered by Pagefind
+- 🔍 **Full-text search**: build-time indexing powered by Flexsearch
 - 🌐 **Multilingual**: Simplified Chinese and English support
 - 📝 **Markdown**: MDX, syntax highlighting, table of contents, callouts
 - 📡 **RSS & SEO**: RSS feed and structured data out of the box
