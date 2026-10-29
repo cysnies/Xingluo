@@ -39,14 +39,14 @@ if (isModified) {
 
 <div
   class={cn(
-    "flex items-center gap-x-1.5 text-muted-foreground",
+    "inline-flex items-center gap-x-1.5 leading-none text-muted-foreground",
     isModified && "flex-wrap",
     className,
   )}
 >
-  <Calendar class={cn("size-4 shrink-0", size === "sm" && "scale-90")} />
+  <Calendar class={cn("size-4 shrink-0 translate-y-px", size === "sm" && "scale-90")} />
   <time
-    class={cn("text-sm", size === "lg" && "sm:text-base")}
+    class={cn("text-sm leading-none", size === "lg" && "sm:text-base")}
     datetime={pubDate.toISOString()}
   >
     {tplStr(t.post.publishedAt, { date: pubDateStr })}

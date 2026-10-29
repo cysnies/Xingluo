@@ -6,10 +6,9 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import PostCard from "@/components/PostCard.astro";
 import { getPostsForLocale } from "@/utils/i18nPosts";
 import { groupPostsByYearMonth } from "@/utils/getPostsByGroupCondition";
-import { getCardWidth } from "@/utils/getCardWidth";
+import { getPostUrl } from "@/utils/getPostPaths";
 import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
 import dayjs from "@/lib/dayjs";
@@ -18,7 +17,6 @@ const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 const timezone = config.site.timezone;
 
-// 关闭归档页时重写到 404
 const notFoundUrl = getRelativeLocaleUrl(locale, "404");
 if (!config.features.showArchives && notFoundUrl) {
   return Astro.rewrite(notFoundUrl);
@@ -27,10 +25,11 @@ if (!config.features.showArchives && notFoundUrl) {
 const posts = await getCollection("posts");
 const sortedPosts = getPostsForLocale(posts, locale);
 
-// 按年→月两级分组，年月均降序
 const yearGroups = groupPostsByYearMonth(sortedPosts, (post) =>
-  dayjs(post.data.pubDatetime).tz(timezone).toDate()
+  dayjs(post.data.pubDatetime).tz(timezone).toDate(),
 );
+
+const currentYear = dayjs().tz(timezone).year();
 
 const title = t.pages.archivesTitle;
 const description = t.pages.archivesDesc;
@@ -47,40 +46,77 @@ const crumbs = [
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
 
-    <div class="space-y-10">
+    {/* 紧凑时间线：避免每篇 PostCard 撑大 HTML；当年默认展开，往年折叠 */}
+    <div class="space-y-4">
       {
-        yearGroups.map((yearGroup) => (
-          <section>
-            <h2 class="mb-4 flex items-center gap-2 text-2xl font-semibold tracking-tight">
-              {yearGroup.year}
-              <sup class="text-sm font-normal text-muted-foreground">
-                {tplStr(t.archives.postCount, { count: String(yearGroup.posts.length) })}
-              </sup>
-            </h2>
-            <div class="space-y-8">
-              {yearGroup.months.map((monthGroup) => (
-                <div>
-                  <h3 class="mb-3 flex items-center gap-2 text-lg font-medium">
-                    {tplStr(t.archives.monthLabel, { month: String(monthGroup.month) })}
-                    <sup class="text-xs font-normal text-muted-foreground">
-                      {tplStr(t.archives.postCount, { count: String(monthGroup.posts.length) })}
-                    </sup>
-                  </h3>
-                  <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
-                    {monthGroup.posts.map((post) => {
-                      const width = getCardWidth(post, config.features.showPostCardHero);
-                      return (
-                        <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
-                          <PostCard post={post} />
-                        </li>
-                      );
+        yearGroups.map((yearGroup) => {
+          const open = yearGroup.year === currentYear;
+          return (
+            <details
+              class="group rounded-lg border border-border bg-card open:shadow-sm"
+              open={open || undefined}
+            >
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-lg font-semibold tracking-tight marker:content-none [&::-webkit-details-marker]:hidden">
+                <span class="flex items-center gap-2">
+                  {yearGroup.year}
+                  <sup class="text-sm font-normal text-muted-foreground">
+                    {tplStr(t.archives.postCount, {
+                      count: String(yearGroup.posts.length),
                     })}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))
+                  </sup>
+                </span>
+                <span
+                  class="text-muted-foreground transition-transform group-open:rotate-180"
+                  aria-hidden="true"
+                >
+                  ▾
+                </span>
+              </summary>
+              <div class="space-y-6 border-t border-border px-4 py-4">
+                {yearGroup.months.map((monthGroup) => (
+                  <div>
+                    <h3 class="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                      {tplStr(t.archives.monthLabel, {
+                        month: String(monthGroup.month),
+                      })}
+                      <span class="text-xs font-normal">
+                        {tplStr(t.archives.postCount, {
+                          count: String(monthGroup.posts.length),
+                        })}
+                      </span>
+                    </h3>
+                    <ul class="divide-y divide-border rounded-md border border-border">
+                      {monthGroup.posts.map((post) => {
+                        const href = getPostUrl(post.id, post.filePath, locale);
+                        const dateStr = dayjs(post.data.pubDatetime)
+                          .tz(post.data.timezone ?? timezone)
+                          .format("MM-DD");
+                        return (
+                          <li>
+                            <a
+                              href={href}
+                              class="flex items-baseline justify-between gap-3 px-3 py-2.5 text-sm transition-colors hover:bg-accent/40"
+                            >
+                              <span class="min-w-0 truncate font-medium text-foreground">
+                                {post.data.title}
+                              </span>
+                              <time
+                                class="shrink-0 tabular-nums text-xs text-muted-foreground"
+                                datetime={dayjs(post.data.pubDatetime).toISOString()}
+                              >
+                                {dateStr}
+                              </time>
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </details>
+          );
+        })
       }
     </div>
   </Main>

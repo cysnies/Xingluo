@@ -12,6 +12,7 @@ import { getPostsForLocale } from "@/utils/i18nPosts";
 import { getCardWidth } from "@/utils/getCardWidth";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
+import { getSiteTitle, getSiteDescription } from "@/utils/siteBrand";
 import ArrowRight from "@/assets/icons/ArrowRight.astro";
 import Rss from "@/assets/icons/Rss.astro";
 
@@ -39,8 +40,8 @@ const rssHref = new URL(
     <!-- Hero 区域 -->
     <section class="border-b border-border pb-6" data-reveal>
       <div class="flex items-center gap-3">
-        <h1 class="my-4 text-4xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
-          {site.title}
+        <h1 class="my-4 text-3xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
+          {getSiteTitle(locale)}
         </h1>
         <a
           href={rssHref}
@@ -52,7 +53,7 @@ const rssHref = new URL(
           <span class="sr-only">RSS</span>
         </a>
       </div>
-      <p class="text-muted-foreground">{site.description}</p>
+      <p class="max-w-prose text-base leading-relaxed text-muted-foreground sm:text-lg">{getSiteDescription(locale)}</p>
       {
         config.features.showHomeSocials && config.socials.length > 0 && (
           <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">

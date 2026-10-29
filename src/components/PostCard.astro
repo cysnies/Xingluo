@@ -67,7 +67,7 @@ const showHero = !!heroImageSrc;
   data-spotlight
   data-reveal
   class={cn(
-    "group relative flex h-[200px] flex-row overflow-hidden transition-[colors,transform] hover:bg-accent/30 [perspective:800px]",
+    "group relative flex h-[200px] flex-row gap-0 overflow-hidden py-0 transition-[colors,transform] hover:bg-accent/30 [perspective:800px]",
     className
   )}
   style="transform:rotateX(var(--card-rotate-x,0deg)) rotateY(var(--card-rotate-y,0deg));transition-duration:0.3s;transition-timing-function:ease-out"
@@ -76,21 +76,22 @@ const showHero = !!heroImageSrc;
   <div
     data-spotlight-glow
     class="pointer-events-none absolute inset-0 transition-opacity duration-500"
-    style="background:radial-gradient(600px circle at var(--spotlight-x,50%) var(--spotlight-y,50%),hsl(var(--primary)/0.08),transparent 60%);opacity:var(--spotlight-opacity,0)"
+    style="background:radial-gradient(600px circle at var(--spotlight-x,50%) var(--spotlight-y,50%),color-mix(in oklch, var(--primary) 8%, transparent),transparent 60%);opacity:var(--spotlight-opacity,0)"
     aria-hidden="true"
   />
-  {/* 左侧主内容区：标题、信息、描述、分类与标签 */}
-  <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-evenly gap-0 py-2">
-    {/* 标题行：固定两行高度，超出两行截断，负边距上移带动信息行，保证跨卡片对齐 */}
+  {/* 左侧主内容区：标题、信息、描述、分类与标签
+      垂直布局用 gap + justify-between，避免 -mt/mt 对消与 justify-evenly 在 CJK 字框下的垂偏 */}
+  <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-between gap-1.5 px-4 py-3">
+    {/* 标题：两行截断；leading-snug 覆盖 CardTitle 默认，适配 CJK */}
     <CardTitle
       transition:name={transitionName}
-      class="mx-4 min-h-12 line-clamp-2 leading-snug -mt-3 transition-colors group-hover:text-primary"
+      class="line-clamp-2 min-h-[2.7em] leading-snug transition-colors group-hover:text-primary"
     >
       <a href={href} class="after:absolute after:inset-0">{data.title}</a>
     </CardTitle>
 
-    {/* 文章信息行：固定高度，保证跨卡片对齐 */}
-    <div class="mx-4 flex min-h-6 items-center gap-x-3">
+    {/* 元信息：固定行高 + leading-none，图标与文字按边框盒居中更稳 */}
+    <div class="flex h-5 items-center gap-x-3 leading-none">
       <Datetime
         pubDatetime={data.pubDatetime}
         modDatetime={data.modDatetime}
@@ -98,24 +99,24 @@ const showHero = !!heroImageSrc;
         size="sm"
       />
       {config.features.showReadingTime && (
-        <span class="flex items-center gap-x-1 text-muted-foreground">
-          <Clock class="size-3.5 shrink-0" />
-          <span class="text-sm">
+        <span class="inline-flex items-center gap-x-1 text-muted-foreground leading-none">
+          <Clock class="size-3.5 shrink-0 translate-y-px" />
+          <span class="text-sm leading-none">
             {tplStr(tr.post.readingTime, { minutes: readingMinutes })}
           </span>
         </span>
       )}
     </div>
 
-    {/* 描述行：固定三行高度，正边距补偿负边距偏移，保证位置不变，保证跨卡片对齐 */}
+    {/* 描述：三行截断，用 leading-normal，不再用 mt 补偿 */}
     {data.description && (
-      <CardDescription class="mx-4 min-h-[3.5rem] line-clamp-3 mt-3">{data.description}</CardDescription>
+      <CardDescription class="line-clamp-3 min-h-[3.75em] leading-normal">{data.description}</CardDescription>
     )}
 
-    {/* 分类与标签行：单行展示，溢出该行后自动截断；相对定位提升层级，保持独立可点击 */}
+    {/* 分类与标签行：单行展示，溢出截断；相对定位保持独立可点击 */}
     {
       showTags && (tags.length > 0 || categoryHref) && (
-        <div class="relative z-10 mx-4 flex min-h-6 items-center gap-2 overflow-hidden whitespace-nowrap">
+        <div class="relative z-10 flex h-5 items-center gap-2 overflow-hidden whitespace-nowrap leading-none">
           {categoryHref && (
             <a
               href={categoryHref}
