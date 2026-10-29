@@ -1,3 +1,4 @@
+/// <reference types="astro/client" />
 /** 第三方模块类型声明补充 */
 
 declare module "remark-collapse" {

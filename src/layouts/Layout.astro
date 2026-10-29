@@ -7,6 +7,10 @@ import Favicon from "@/components/Favicon.astro";
 import { LOCALES, DEFAULT_LOCALE } from "@/i18n";
 import { parseLocaleFromPath } from "@/i18n/routing";
 import config from "@/config";
+import { getSiteTitle, getSiteDescription } from "@/utils/siteBrand";
+import FontLinks from "@/components/fonts/FontLinks.astro";
+import { resolveActiveFont, getFontCatalog } from "@/fonts/resolve";
+import { toClientFontEntry, FONT_CATALOG_SCRIPT_ID, FONT_STORAGE_KEY, FONT_LINK_ATTR } from "@/fonts/client";
 import "@/styles/global.css";
 
 interface Props {
@@ -17,17 +21,31 @@ interface Props {
 }
 
 const { site } = config;
+const currentLocale = Astro.currentLocale ?? site.lang;
 
 const {
-  title = site.title,
-  description = site.description,
+  title = getSiteTitle(currentLocale),
+  description = getSiteDescription(currentLocale),
   ogImage = resolveDefaultOgImagePath(),
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
-const currentLocale = Astro.currentLocale ?? site.lang;
 const rssHref = getRelativeLocaleUrl(currentLocale, "rss.xml");
+
+const activeFont = resolveActiveFont();
+const fontCatalogJson = JSON.stringify(getFontCatalog().map(toClientFontEntry));
+const palette = config.features.palette ?? "zinc";
+const accent = config.features.accent ?? "none";
+const uiStyle = config.features.uiStyle ?? "new-york";
+const foucScript = `(function(){try{var raw=document.getElementById(${JSON.stringify(FONT_CATALOG_SCRIPT_ID)});if(!raw||!raw.textContent)return;var catalog=JSON.parse(raw.textContent);var id=localStorage.getItem(${JSON.stringify(FONT_STORAGE_KEY)});var entry=catalog.find(function(f){return f.id===id;})||catalog.find(function(f){return f.id===document.documentElement.getAttribute("data-font");});if(!entry)return;var root=document.documentElement;root.style.setProperty("--font-sans",entry.stack);if(entry.monoStack)root.style.setProperty("--font-mono",entry.monoStack);root.setAttribute("data-font",entry.id);if(entry.source!=="system"&&entry.cssUrl){var link=document.createElement("link");link.rel="stylesheet";link.href=entry.cssUrl;link.setAttribute(${JSON.stringify(FONT_LINK_ATTR)},"1");document.head.appendChild(link);}}catch(e){}})();`;
+
+const fontStyle = [
+  `--font-sans: ${activeFont.stack}`,
+  activeFont.monoStack ? `--font-mono: ${activeFont.monoStack}` : null,
+]
+  .filter(Boolean)
+  .join("; ");
 
 /**
  * 计算当前页面各语言版本的 URL，用于 hreflang alternate 链接。
@@ -63,10 +81,24 @@ const defaultAlternate = {
   lang={Astro.currentLocale ?? site.lang}
   class="overflow-y-scroll scroll-smooth"
   data-animations={JSON.stringify(config.features.animations)}
+  data-font={activeFont.id}
+  data-palette={palette}
+  data-accent={accent === "none" ? undefined : accent}
+  data-ui-style={uiStyle}
+  style={fontStyle}
 >
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <FontLinks />
+    <script
+      is:inline
+      type="application/json"
+      id={FONT_CATALOG_SCRIPT_ID}
+      set:html={fontCatalogJson}
+    />
+    <!-- 字体 FOUC：在绘制前应用 localStorage 选择并按需注入 CSS -->
+    <script is:inline set:html={foucScript} />
     <Favicon favicon={site.favicon!} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
@@ -80,7 +112,7 @@ const defaultAlternate = {
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={site.title} />
+    <meta property="og:site_name" content={getSiteTitle(currentLocale)} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
@@ -97,7 +129,7 @@ const defaultAlternate = {
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={site.title}
+      title={getSiteTitle(currentLocale)}
       href={new URL(rssHref, Astro.site)}
     />
 
@@ -139,8 +171,9 @@ const defaultAlternate = {
       })();
     </script>
 
-    <!-- 将动画配置序列化为 JSON 嵌入 data 属性，供客户端脚本读取 -->
-    <ClientRouter />
+    {
+      config.features.viewTransitions !== false && <ClientRouter />
+    }
   </head>
   <body
     class="bg-background text-foreground app-layout"
