@@ -31,3 +31,5 @@ pnpm-debug.log*
 
 references/
 AGENTS.md
+# 网页卡片构建期缓存
+.cache/
