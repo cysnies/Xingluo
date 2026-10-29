@@ -42,6 +42,8 @@ export interface UIStrings {
     relatedPosts: string;
     /** 文章分类标签文案，如 "分类：{{category}}" */
     categoryLabel: string;
+    /** 标题锚点链接无障碍文案 */
+    linkToHeading: string;
   };
   /** 分页相关 */
   pagination: {
@@ -102,6 +104,24 @@ export interface UIStrings {
     goToPreviousPage: string;
     goToNextPage: string;
     languageSwitcher: string;
+    /** 字体切换器 */
+    fontSwitcher: string;
+    /** 桌面主导航 */
+    mainNav: string;
+    /** 移动端导航抽屉 */
+    mobileNav: string;
+    /** 面包屑导航 */
+    breadcrumb: string;
+    /** 分页导航 */
+    paginationNav: string;
+    /** 相邻文章导航 */
+    adjacentPosts: string;
+    /** 关闭对话框 */
+    closeDialog: string;
+    /** 清除搜索输入 */
+    clearSearch: string;
+    /** 搜索结果计数，如 "{{count}} 条结果" */
+    searchResultsCount: string;
   };
   /** 语言切换器 */
   languageSwitcher: {
@@ -109,6 +129,18 @@ export interface UIStrings {
     label: string;
     /** 各语言在该语言下的自称，键为 locale */
     names: Record<string, string>;
+  };
+  /** 社交链接无障碍标题模板 */
+  socials: {
+    /** 如 "发送邮件给 {{title}}" */
+    mailTo: string;
+    /** 如 "{{title}} 在 {{platform}}" */
+    onPlatform: string;
+  };
+  /** 字体切换器展示名 */
+  fonts: {
+    /** 系统默认字体项 */
+    systemDefault: string;
   };
   /** 404 页面 */
   notFound: {
@@ -120,5 +152,44 @@ export interface UIStrings {
   comments: {
     /** 评论区标题 */
     title: string;
+  };
+  /** 网页卡片标签 */
+  webcard: {
+    openLink: string;
+    stars: string;
+    forks: string;
+    language: string;
+    repos: string;
+    followers: string;
+    state: string;
+    comments: string;
+    views: string;
+    likes: string;
+    danmaku: string;
+    replies: string;
+    reposts: string;
+    downloads: string;
+    task: string;
+    author: string;
+    reading: string;
+    platformGitHub: string;
+    platformBilibili: string;
+    platformZhihu: string;
+    platformTwitter: string;
+    platformHuggingFace: string;
+    platformWeb: string;
+    kindRepo: string;
+    kindUser: string;
+    kindPull: string;
+    kindIssue: string;
+    kindVideo: string;
+    kindDynamic: string;
+    kindArticle: string;
+    kindAnswer: string;
+    kindTweet: string;
+    kindModel: string;
+    kindDataset: string;
+    kindSpace: string;
+    kindPage: string;
   };
 }
