@@ -10,13 +10,19 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && node scripts/generateSearchIndex.mjs && node scripts/cleanOrphanAssets.mjs",
+    "build": "node scripts/checkAssets.mjs && astro check && astro build && node scripts/generateSearchIndex.mjs && node scripts/cleanOrphanAssets.mjs && node scripts/budget.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:assets": "node scripts/checkAssets.mjs",
+    "budget": "node scripts/budget.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "astro check",
+    "check": "astro check"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.1",
@@ -55,6 +61,7 @@
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.60.0"
+    "typescript-eslint": "^8.60.0",
+    "vitest": "3.2.4"
   }
 }
