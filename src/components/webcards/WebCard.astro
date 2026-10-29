@@ -1,0 +1,169 @@
+---
+/**
+ * 网页卡片（构建期抓取）。
+ * 用法（MDX）：import { WebCard } from "@/components/mdx"; <WebCard url="https://..." />
+ * Markdown 裸链由 remarkWebCards 自动转换，无需本组件。
+ */
+import { resolveWebCard } from "@/webcards/resolve";
+import type { WebCardData } from "@/webcards/types";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+interface Props {
+  url: string;
+  /** 可选：跳过抓取，直接传入已解析数据（测试用） */
+  data?: WebCardData;
+  class?: string;
+}
+
+const { url, data: preset, class: className } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale).webcard;
+const wc = config.features.webCards;
+
+const data =
+  preset ??
+  (await resolveWebCard(url, {
+    enabled: wc?.enabled !== false,
+    timeoutMs: wc?.timeoutMs ?? 8000,
+    cache: wc?.cache !== false,
+  }));
+
+function platformLabel(): string {
+  switch (data.platform) {
+    case "github":
+      return t.platformGitHub;
+    case "bilibili":
+      return t.platformBilibili;
+    case "zhihu":
+      return t.platformZhihu;
+    case "twitter":
+      return t.platformTwitter;
+    case "huggingface":
+      return t.platformHuggingFace;
+    default:
+      return t.platformWeb;
+  }
+}
+
+function kindLabel(): string {
+  const map: Record<string, string> = {
+    repo: t.kindRepo,
+    user: t.kindUser,
+    pull: t.kindPull,
+    issue: t.kindIssue,
+    video: t.kindVideo,
+    dynamic: t.kindDynamic,
+    article: t.kindArticle,
+    answer: t.kindAnswer,
+    tweet: t.kindTweet,
+    model: t.kindModel,
+    dataset: t.kindDataset,
+    space: t.kindSpace,
+    page: t.kindPage,
+  };
+  return map[data.kind] || t.kindPage;
+}
+
+function statLabel(key: string): string {
+  const map: Record<string, string> = {
+    stars: t.stars,
+    forks: t.forks,
+    language: t.language,
+    repos: t.repos,
+    followers: t.followers,
+    state: t.state,
+    comments: t.comments,
+    views: t.views,
+    likes: t.likes,
+    danmaku: t.danmaku,
+    replies: t.replies,
+    reposts: t.reposts,
+    downloads: t.downloads,
+    task: t.task,
+    author: t.author,
+    reading: t.reading,
+  };
+  return map[key] || key;
+}
+
+let host = "";
+try {
+  host = new URL(data.url).hostname.replace(/^www\./, "");
+} catch {
+  host = data.siteName || "";
+}
+---
+
+<div class:list={["xng-webcard-wrap not-prose", className]}>
+  <a
+    class:list={[
+      "xng-webcard",
+      `xng-webcard--${data.platform}`,
+      `xng-webcard--${data.kind}`,
+      data.degraded && "xng-webcard--degraded",
+    ]}
+    href={data.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    data-webcard="1"
+  >
+    {
+      data.image && (
+        <div class="xng-webcard__media">
+          <img
+            src={data.image}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            referrerpolicy="no-referrer"
+          />
+        </div>
+      )
+    }
+    <div class="xng-webcard__body">
+      <div class="xng-webcard__badge">{platformLabel()} · {kindLabel()}</div>
+      <div class="xng-webcard__title">{data.title}</div>
+      {data.description && <p class="xng-webcard__desc">{data.description}</p>}
+      <div class="xng-webcard__meta">
+        {
+          data.author && (
+            <span class="xng-webcard__author">
+              {t.author}: {data.author}
+            </span>
+          )
+        }
+        {
+          data.stats && data.stats.length > 0 && (
+            <ul class="xng-webcard__stats">
+              {data.stats.map((s) => (
+                <li>
+                  <span class="xng-webcard__stat-label">{statLabel(s.key)}</span>{" "}
+                  <span class="xng-webcard__stat-value">{s.value}</span>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+      <div class="xng-webcard__footer">
+        {
+          data.favicon && (
+            <img
+              class="xng-webcard__favicon"
+              src={data.favicon}
+              alt=""
+              width="14"
+              height="14"
+              loading="lazy"
+              decoding="async"
+              referrerpolicy="no-referrer"
+            />
+          )
+        }
+        <span class="xng-webcard__site">{data.siteName || host}</span>
+        <span class="xng-webcard__open">{t.openLink}</span>
+      </div>
+    </div>
+  </a>
+</div>

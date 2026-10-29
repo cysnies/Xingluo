@@ -1,0 +1,9 @@
+---
+import WebCard from "@/components/webcards/WebCard.astro";
+interface Props {
+  url: string;
+  class?: string;
+}
+const props = Astro.props;
+---
+<WebCard {...props} />

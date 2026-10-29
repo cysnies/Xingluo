@@ -1,0 +1,39 @@
+/** 网页卡片标签文案（与 UIStrings.webcard 对齐） */
+export interface WebCardLabels {
+  openLink: string;
+  stars: string;
+  forks: string;
+  language: string;
+  repos: string;
+  followers: string;
+  state: string;
+  comments: string;
+  views: string;
+  likes: string;
+  danmaku: string;
+  replies: string;
+  reposts: string;
+  downloads: string;
+  task: string;
+  author: string;
+  reading: string;
+  platformGitHub: string;
+  platformBilibili: string;
+  platformZhihu: string;
+  platformTwitter: string;
+  platformHuggingFace: string;
+  platformWeb: string;
+  kindRepo: string;
+  kindUser: string;
+  kindPull: string;
+  kindIssue: string;
+  kindVideo: string;
+  kindDynamic: string;
+  kindArticle: string;
+  kindAnswer: string;
+  kindTweet: string;
+  kindModel: string;
+  kindDataset: string;
+  kindSpace: string;
+  kindPage: string;
+}

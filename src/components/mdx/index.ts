@@ -8,3 +8,4 @@
  */
 export { default as APlayer } from "./APlayer.astro";
 export { default as DPlayer } from "./DPlayer.astro";
+export { default as WebCard } from "./WebCard.astro";

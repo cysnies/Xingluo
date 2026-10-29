@@ -20,8 +20,62 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeWrapTable } from "./src/utils/rehypeWrapTable";
 import { remarkPlayers } from "./src/utils/remarkPlayers";
+import { remarkWebCards } from "./src/utils/remarkWebCards";
 import { googleFontsMirrorProvider } from "./src/utils/googleFontsMirrorProvider";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import config from "./xingluo.config";
+import { optionalDepsPlugin } from "./src/vite/optionalDepsPlugin";
+
+
+/** UI 语言全集（须与 src/i18n/lang/*.ts 对齐） */
+const ALL_UI_LOCALES = [
+  "zh-cn",
+  "zh-tw",
+  "en",
+  "ja",
+  "ko",
+  "fr",
+  "de",
+  "es",
+  "pt",
+  "ru",
+  "ar",
+  "eo",
+] as const;
+
+/**
+ * 按 features.enabledLocales 收缩构建语言；省略则全部启用。
+ * 始终包含默认语言 zh-cn。
+ */
+const requestedLocales = config.features?.enabledLocales;
+const enabledLocales = (
+  requestedLocales && requestedLocales.length > 0
+    ? ALL_UI_LOCALES.filter(
+        (l) => l === "zh-cn" || requestedLocales.includes(l),
+      )
+    : [...ALL_UI_LOCALES]
+) as string[];
+
+/** sitemap hreflang 映射：仅输出启用中的语言 */
+const ALL_HREFLANG: Record<string, string> = {
+  "zh-cn": "zh-CN",
+  "zh-tw": "zh-TW",
+  en: "en",
+  ja: "ja",
+  ko: "ko",
+  fr: "fr",
+  de: "de",
+  es: "es",
+  pt: "pt",
+  ru: "ru",
+  ar: "ar",
+  eo: "eo",
+};
+const enabledHreflang = Object.fromEntries(
+  enabledLocales.map((l) => [l, ALL_HREFLANG[l] ?? l]),
+);
+
 
 /** MDX 集成按需启用：关闭时既不加载集成，也不收集 .mdx 文件 */
 const mdxEnabled = config.features?.mdx !== false;
@@ -36,20 +90,7 @@ const integrations = [
     // 启用 sitemap 内 hreflang 声明，映射 locale 到 hreflang 值
     i18n: {
       defaultLocale: "zh-cn",
-      locales: {
-        "zh-cn": "zh-CN",
-        "zh-tw": "zh-TW",
-        en: "en",
-        ja: "ja",
-        ko: "ko",
-        fr: "fr",
-        de: "de",
-        es: "es",
-        pt: "pt",
-        ru: "ru",
-        ar: "ar",
-        eo: "eo",
-      },
+      locales: enabledHreflang,
     },
   }),
   // 构建期内联 Font Awesome SVG 图标，零运行时 JS
@@ -77,6 +118,19 @@ if (playersEnabled) {
   ]);
 }
 
+/** 网页卡片：构建期抓取，默认开启 */
+const webCardsCfg = config.features?.webCards;
+if (webCardsCfg?.enabled !== false) {
+  remarkPlugins.push([
+    remarkWebCards,
+    {
+      enabled: true,
+      timeoutMs: webCardsCfg?.timeoutMs ?? 8000,
+      cache: webCardsCfg?.cache !== false,
+    },
+  ]);
+}
+
 /**
  * CI 环境变量覆盖：允许在构建期通过环境变量改写站点 URL 与 base 子路径，
  * 用于 GitHub Pages 项目页（https://<user>.github.io/<repo>/）等子路径部署场景。
@@ -87,25 +141,13 @@ const ciBaseUrl = process.env.CI_BASE_URL;
 const siteUrl = ciSiteUrl || config.site?.url;
 const baseUrl = ciBaseUrl || undefined;
 
+
 export default defineConfig({
   site: siteUrl,
   base: baseUrl,
   integrations,
   i18n: {
-    locales: [
-      "zh-cn",
-      "zh-tw",
-      "en",
-      "ja",
-      "ko",
-      "fr",
-      "de",
-      "es",
-      "pt",
-      "ru",
-      "ar",
-      "eo",
-    ],
+    locales: enabledLocales,
     defaultLocale: "zh-cn",
     routing: {
       prefixDefaultLocale: false,
@@ -130,7 +172,16 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [optionalDepsPlugin(), tailwindcss()],
+    resolve: {
+      alias: {
+        // Document 搜索用 compact 构建（~28KB），避免 bundle（~51KB）的 worker/db 等能力
+        flexsearch: path.resolve(
+          path.dirname(fileURLToPath(import.meta.url)),
+          "node_modules/flexsearch/dist/flexsearch.compact.module.min.js",
+        ),
+      },
+    },
   },
   experimental: {
     // 启用 SVG 优化，自动压缩内联与引用的 SVG 图标
