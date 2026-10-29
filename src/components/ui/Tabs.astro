@@ -1,0 +1,56 @@
+---
+/**
+ * 简易 Tabs：用 details 外的按钮 + data-tabs 脚本切换面板
+ * 插槽：用多个带 data-tab-panel="id" 的子元素；触发器用 slot="triggers"
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+interface Props extends HTMLAttributes<"div"> {
+  class?: string;
+  /** 默认激活的 panel id */
+  defaultValue?: string;
+}
+const { class: className, defaultValue = "", ...rest } = Astro.props;
+---
+<div
+  data-slot="tabs"
+  data-tabs
+  data-default={defaultValue}
+  class={cn("flex flex-col gap-2", className)}
+  {...rest}
+>
+  <slot />
+</div>
+<script>
+  function setupTabs() {
+    document.querySelectorAll<HTMLElement>("[data-tabs]").forEach((root) => {
+      if (root.dataset.tabsReady === "1") return;
+      root.dataset.tabsReady = "1";
+      const triggers = root.querySelectorAll<HTMLElement>("[data-tab-trigger]");
+      const panels = root.querySelectorAll<HTMLElement>("[data-tab-panel]");
+      const activate = (id: string) => {
+        triggers.forEach((t) => {
+          const on = t.dataset.tabTrigger === id;
+          t.setAttribute("aria-selected", on ? "true" : "false");
+          t.dataset.state = on ? "active" : "inactive";
+        });
+        panels.forEach((p) => {
+          p.hidden = p.dataset.tabPanel !== id;
+        });
+      };
+      const initial =
+        root.dataset.default ||
+        triggers[0]?.dataset.tabTrigger ||
+        "";
+      if (initial) activate(initial);
+      triggers.forEach((t) => {
+        t.addEventListener("click", () => {
+          const id = t.dataset.tabTrigger;
+          if (id) activate(id);
+        });
+      });
+    });
+  }
+  setupTabs();
+  document.addEventListener("astro:page-load", setupTabs);
+</script>

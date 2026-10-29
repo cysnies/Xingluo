@@ -1,0 +1,25 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+
+interface Props extends HTMLAttributes<"div"> {
+  variant?: "default" | "destructive";
+  class?: string;
+}
+const { variant = "default", class: className, ...rest } = Astro.props;
+---
+<div
+  role="alert"
+  data-slot="alert"
+  data-variant={variant}
+  class={cn(
+    "relative w-full rounded-lg border px-4 py-3 text-sm",
+    variant === "destructive"
+      ? "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
+      : "bg-card text-card-foreground border-border",
+    className,
+  )}
+  {...rest}
+>
+  <slot />
+</div>

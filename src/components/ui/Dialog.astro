@@ -1,0 +1,59 @@
+---
+/**
+ * 原生 <dialog> 封装（零 React）
+ * 用法：给触发器 data-dialog-open="id"；本组件 id 与之对应
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "@/i18n";
+interface Props extends HTMLAttributes<"dialog"> {
+  id: string;
+  title?: string;
+  class?: string;
+}
+const { id, title, class: className, ...rest } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+---
+<dialog
+  id={id}
+  data-slot="dialog"
+  class={cn(
+    "open:flex open:flex-col fixed inset-0 z-50 m-auto max-h-[min(90dvh,40rem)] w-[min(100%-2rem,28rem)] rounded-xl border border-border bg-background p-0 text-foreground shadow-lg backdrop:bg-black/50",
+    className,
+  )}
+  {...rest}
+>
+  <div class="flex items-center justify-between border-b border-border px-4 py-3">
+    {title && <h2 class="text-base font-semibold">{title}</h2>}
+    <form method="dialog" class="ms-auto">
+      <button
+        type="submit"
+        class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-accent touch-manipulation"
+        aria-label={t.a11y.closeDialog}
+      >
+        ×
+      </button>
+    </form>
+  </div>
+  <div class="overflow-y-auto px-4 py-3">
+    <slot />
+  </div>
+</dialog>
+<script>
+  function setupDialogs() {
+    document.querySelectorAll<HTMLElement>("[data-dialog-open]").forEach((btn) => {
+      if (btn.dataset.dialogBound === "1") return;
+      btn.dataset.dialogBound = "1";
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.dialogOpen;
+        const dlg = id
+          ? document.querySelector<HTMLDialogElement>(`dialog#${CSS.escape(id)}`)
+          : null;
+        dlg?.showModal();
+        dlg?.querySelector<HTMLElement>('button[type="submit"]')?.focus();
+      });
+    });
+  }
+  setupDialogs();
+  document.addEventListener("astro:page-load", setupDialogs);
+</script>

@@ -1,0 +1,22 @@
+---
+/**
+ * 纯 CSS / title 兜底的 Tooltip：悬停或焦点时显示
+ * 用法：<Tooltip content="说明"><button>...</button></Tooltip>
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+interface Props extends HTMLAttributes<"span"> {
+  content: string;
+  class?: string;
+}
+const { content, class: className, ...rest } = Astro.props;
+---
+<span class={cn("group/tooltip relative inline-flex", className)} {...rest}>
+  <slot />
+  <span
+    role="tooltip"
+    class="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground opacity-0 shadow-md transition-opacity group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100"
+  >
+    {content}
+  </span>
+</span>

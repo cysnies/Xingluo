@@ -1,0 +1,41 @@
+---
+/**
+ * details 版下拉菜单（与 LanguageSwitcher 同模式）
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+interface Props extends HTMLAttributes<"details"> {
+  label: string;
+  class?: string;
+}
+const { label, class: className, ...rest } = Astro.props;
+---
+<details class={cn("group relative", className)} data-dropdown-menu {...rest}>
+  <summary
+    class="inline-flex h-9 items-center gap-1 rounded-md border border-input bg-background px-3 text-sm shadow-xs hover:bg-accent [&::-webkit-details-marker]:hidden touch-manipulation"
+  >
+    {label}
+  </summary>
+  <div
+    class="absolute start-0 top-full z-50 mt-2 min-w-40 overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
+    role="menu"
+  >
+    <slot />
+  </div>
+</details>
+<script>
+  let handler: ((e: MouseEvent) => void) | null = null;
+  function setup() {
+    if (handler) document.removeEventListener("click", handler);
+    handler = (e) => {
+      document.querySelectorAll<HTMLDetailsElement>("[data-dropdown-menu]").forEach((d) => {
+        if (!d.open) return;
+        if (d.contains(e.target as Node)) return;
+        d.open = false;
+      });
+    };
+    document.addEventListener("click", handler);
+  }
+  setup();
+  document.addEventListener("astro:after-swap", setup);
+</script>

@@ -1,0 +1,118 @@
+---
+title: UI 组件示例
+description: 演示星罗内置 Alert、Badge、Tabs、Separator、Dialog 等 UI 原语在 MDX 中的用法。
+pubDatetime: 2026-10-29T18:00:00+08:00
+tags:
+  - 文档
+  - 星罗
+  - UI
+category: 文档
+translationKey: doc-ui-components
+locale: zh-cn
+---
+
+import Alert from "@/components/ui/Alert.astro";
+import Badge from "@/components/ui/Badge.astro";
+import Separator from "@/components/ui/Separator.astro";
+import Tabs from "@/components/ui/Tabs.astro";
+import Dialog from "@/components/ui/Dialog.astro";
+import Button from "@/components/ui/Button.astro";
+import Skeleton from "@/components/ui/Skeleton.astro";
+import Tooltip from "@/components/ui/Tooltip.astro";
+import DropdownMenu from "@/components/ui/DropdownMenu.astro";
+
+文章与页面可通过 MDX 直接使用 `src/components/ui/` 下的原语。
+
+## Alert
+
+<Alert>
+  默认提示：用于配置说明、版本提示等非阻塞信息。
+</Alert>
+
+<Alert variant="destructive" class="mt-3">
+  危险提示：用于不可逆操作或构建失败类警告。
+</Alert>
+
+## Badge
+
+<p class="flex flex-wrap gap-2 not-prose">
+  <Badge>默认</Badge>
+  <Badge variant="secondary">次要</Badge>
+  <Badge variant="outline">描边</Badge>
+  <Badge variant="destructive">危险</Badge>
+</p>
+
+## Separator
+
+上方内容
+
+<Separator class="my-4" />
+
+下方内容
+
+## Tabs
+
+<div class="not-prose">
+  <Tabs defaultValue="astro">
+    <div class="flex gap-1 rounded-lg border border-border p-1">
+      <button type="button" data-tab-trigger="astro" class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent">
+        Astro
+      </button>
+      <button type="button" data-tab-trigger="tailwind" class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent">
+        Tailwind
+      </button>
+      <button type="button" data-tab-trigger="mdx" class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent">
+        MDX
+      </button>
+    </div>
+    <div data-tab-panel="astro" class="rounded-md border border-border p-3 text-sm">
+      静态优先，组件岛按需注水。
+    </div>
+    <div data-tab-panel="tailwind" class="rounded-md border border-border p-3 text-sm" hidden>
+      v4 + OKLCH token，与 shadcn 对齐。
+    </div>
+    <div data-tab-panel="mdx" class="rounded-md border border-border p-3 text-sm" hidden>
+      在内容里组合 UI 原语与 WebCard。
+    </div>
+  </Tabs>
+</div>
+
+## Dialog
+
+<p class="not-prose">
+  <Button data-dialog-open="ui-demo-dialog">打开对话框</Button>
+</p>
+
+<Dialog id="ui-demo-dialog" title="示例对话框">
+  <p class="text-sm text-muted-foreground">
+    Dialog 基于原生 dialog；打开后焦点移到关闭钮，Esc / 点遮罩可关。
+  </p>
+</Dialog>
+
+
+## Skeleton
+
+<div class="not-prose space-y-2">
+  <Skeleton class="h-4 w-3/4" />
+  <Skeleton class="h-4 w-1/2" />
+  <Skeleton class="h-20 w-full" />
+</div>
+
+## Tooltip
+
+<p class="not-prose">
+  <Tooltip content="悬停显示说明">
+    <Button variant="outline">带提示的按钮</Button>
+  </Tooltip>
+</p>
+
+## DropdownMenu
+
+<div class="not-prose">
+  <DropdownMenu label="更多操作">
+    <a href="#" class="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent" role="menuitem">编辑</a>
+    <a href="#" class="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent" role="menuitem">分享</a>
+  </DropdownMenu>
+</div>
+
+更多组件见 `src/components/ui/`。主题 token 说明见「主题」文档。
