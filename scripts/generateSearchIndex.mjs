@@ -165,7 +165,7 @@ function extractSearchData(html, filePath) {
     modDatetime,
     tags,
     category,
-    content: content.slice(0, 5000), // 限制内容长度
+    content: content.slice(0, 1800), // 限制内容长度
     url: relativePath,
     locale,
   };
