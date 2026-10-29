@@ -1,7 +1,7 @@
 ---
 title: "主题与样式"
 pubDatetime: 2026-06-20T08:00:00+08:00
-description: "星罗主题与样式系统说明，涵盖 shadcn 主题变量、OKLCH 色彩空间、Tailwind v4 与暗色模式。"
+description: "星罗主题与样式系统说明，涵盖 shadcn 主题变量、Zinc/HSL 语义色板、Tailwind v4 与暗色模式。"
 tags:
   - 文档
   - 主题
@@ -9,7 +9,7 @@ category: "文档"
 translationKey: doc-theming
 ---
 
-星罗采用 shadcn/ui new-york 风格组件与 OKLCH 色彩空间，基于 Tailwind CSS v4 构建。
+星罗默认采用 shadcn/ui Zinc 配色与 new-york 视觉风格，基于 Tailwind CSS v4；主题变量以 HSL 语义令牌表达（亦可混用 OKLCH）。
 
 ## 样式文件结构
 
@@ -17,29 +17,29 @@ translationKey: doc-theming
 
 | 文件             | 内容                                                  |
 | ---------------- | ----------------------------------------------------- |
-| `theme.css`      | shadcn 主题变量（OKLCH，亮色 `:root` + 暗色 `.dark`） |
+| `theme.css`      | shadcn 主题变量（默认 Zinc HSL，亮色 `:root` + 暗色 `.dark`） |
 | `global.css`     | Tailwind 入口、基础层、自定义工具类、标注框主题       |
 | `typography.css` | `.app-prose` 排版与代码块样式                         |
 
 ## 主题变量
 
-`theme.css` 使用 OKLCH 色彩空间定义语义化变量，亮色与暗色双套：
+`theme.css` 定义语义化变量（默认 Zinc），亮色与暗色双套；可通过 `features.palette` / `accent` / `uiStyle` 切换：
 
 ```css
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --primary: oklch(0.205 0 0);
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 10% 3.9%);
+  --card: hsl(0 0% 100%);
+  --primary: hsl(240 5.9% 10%);
   /* ... secondary、muted、accent、destructive、border、input、ring ... */
-  --code: oklch(0.97 0 0);
+  --code: hsl(240 4.8% 95.9%);
   --content-width: 72rem;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: hsl(240 10% 3.9%);
+  --foreground: hsl(0 0% 98%);
   /* ... 暗色对应值 ... */
 }
 ```

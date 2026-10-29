@@ -188,3 +188,5 @@ docker run -d -p 8080:80 --name xingluo xingluo
 ## 📜 License
 
 [AGPL-3.0](./LICENSE)
+
+> **AGPL 注意：** 星罗以 AGPL-3.0 发布，属于强 copyleft。"网络提供服务"亦可能触发源码 reciprocal 义务，与许多 MIT 主题不同。个人博客自用通常无妨；若计划闭源二次分发或 SaaS 封装，请先阅读 LICENSE 或咨询法务。

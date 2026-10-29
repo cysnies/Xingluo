@@ -1,7 +1,7 @@
 ---
 title: "Theme & Styles"
 pubDatetime: 2026-06-20T08:00:00+08:00
-description: "Xingluo theme and styling system covering shadcn theme variables, OKLCH color space, Tailwind v4, and dark mode."
+description: "Xingluo theme and styling system covering shadcn theme variables, Zinc/HSL semantic tokens, Tailwind v4, and dark mode."
 tags:
   - documentation
   - theming
@@ -10,7 +10,7 @@ translationKey: doc-theming
 locale: en
 ---
 
-Xingluo uses shadcn/ui new-york style components and the OKLCH color space, built on Tailwind CSS v4.
+Xingluo defaults to shadcn/ui Zinc colors and the new-york visual style on Tailwind CSS v4; theme tokens are HSL semantic variables (OKLCH also fine where used).
 
 ## Style File Structure
 
@@ -24,23 +24,23 @@ Xingluo uses shadcn/ui new-york style components and the OKLCH color space, buil
 
 ## Theme Variables
 
-`theme.css` uses the OKLCH color space to define semantic variables, with light and dark sets:
+`theme.css` uses the Zinc/HSL semantic tokens to define semantic variables, with light and dark sets:
 
 ```css
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --primary: oklch(0.205 0 0);
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 10% 3.9%);
+  --card: hsl(0 0% 100%);
+  --primary: hsl(240 5.9% 10%);
   /* ... secondary, muted, accent, destructive, border, input, ring ... */
-  --code: oklch(0.97 0 0);
+  --code: hsl(240 4.8% 95.9%);
   --content-width: 72rem;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: hsl(240 10% 3.9%);
+  --foreground: hsl(0 0% 98%);
   /* ... dark counterparts ... */
 }
 ```
