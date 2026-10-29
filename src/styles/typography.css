@@ -1,25 +1,108 @@
 /**
  * 文章正文 prose 排版样式
  * 基于 @tailwindcss/typography，覆盖为星罗主题配色
+ * 兼顾 ~375 / 768 / 1024+ 断点的阅读舒适度
  */
 
+/* 组件内 @import 时需要引用全局主题与 typography 插件 */
+@reference "@/styles/global.css";
 /* prose 容器：在 .app-prose 上应用文章排版 */
 .app-prose {
-  @apply prose prose-neutral dark:prose-invert max-w-none;
-  /* 标题使用前景色（黑色），更醒目 */
-  @apply prose-headings:text-foreground prose-headings:scroll-mt-20 prose-headings:font-semibold;
+  @apply prose dark:prose-invert max-w-none;
+  /* 灰阶跟随主题 token，勿锁死 typography 灰阶类（否则 palette=slate 等正文仍偏 Zinc） */
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-lead: var(--muted-foreground);
+  --tw-prose-links: var(--primary);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--muted-foreground);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-captions: var(--muted-foreground);
+  --tw-prose-kbd: var(--foreground);
+  --tw-prose-code: var(--code-foreground);
+  --tw-prose-pre-code: var(--code-foreground);
+  --tw-prose-pre-bg: var(--code);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+  --tw-prose-invert-body: var(--foreground);
+  --tw-prose-invert-headings: var(--foreground);
+  --tw-prose-invert-lead: var(--muted-foreground);
+  --tw-prose-invert-links: var(--primary);
+  --tw-prose-invert-bold: var(--foreground);
+  --tw-prose-invert-counters: var(--muted-foreground);
+  --tw-prose-invert-bullets: var(--muted-foreground);
+  --tw-prose-invert-hr: var(--border);
+  --tw-prose-invert-quotes: var(--foreground);
+  --tw-prose-invert-quote-borders: var(--border);
+  --tw-prose-invert-captions: var(--muted-foreground);
+  --tw-prose-invert-kbd: var(--foreground);
+  --tw-prose-invert-code: var(--code-foreground);
+  --tw-prose-invert-pre-code: var(--code-foreground);
+  --tw-prose-invert-pre-bg: var(--code);
+  --tw-prose-invert-th-borders: var(--border);
+  --tw-prose-invert-td-borders: var(--border);
+  /* 舒适行宽：优先 --prose-width，避免过宽行导致扫读困难 */
+  max-width: var(--prose-width, 42rem);
+  width: 100%;
+  font-size: var(--prose-font-size, 1.0625rem);
+  line-height: var(--prose-line-height, 1.75);
+  /* 标题层级字号阶梯 */
+  @apply prose-headings:text-foreground prose-headings:scroll-mt-20 prose-headings:font-semibold prose-headings:tracking-tight;
+  @apply prose-h1:text-3xl prose-h1:leading-tight sm:prose-h1:text-4xl;
+  @apply prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 sm:prose-h2:text-[1.65rem];
+  @apply prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3;
+  @apply prose-h4:text-lg prose-h4:mt-6;
+  /* 段落间距 */
+  @apply prose-p:my-4 sm:prose-p:my-5;
+  @apply prose-li:my-1;
   /* 链接使用主色 */
   @apply prose-a:font-medium prose-a:text-primary prose-a:underline-offset-4 hover:prose-a:text-primary/80;
   /* 代码块使用 code 表面色 */
-  @apply prose-code:rounded prose-code:bg-code prose-code:px-1.5 prose-code:py-0.5 prose-code:text-code-foreground prose-code:before:content-none prose-code:after:content-none;
+  @apply prose-code:rounded prose-code:bg-code prose-code:px-1.5 prose-code:py-0.5 prose-code:text-code-foreground prose-code:before:content-none prose-code:after:content-none prose-code:text-[0.9em] prose-code:break-words;
   /* 预格式化代码块去除内联代码背景 */
   @apply prose-pre:bg-code prose-pre:text-code-foreground prose-pre:p-0;
   /* 引用块强调 */
   @apply prose-blockquote:border-l-primary/40 prose-blockquote:not-italic prose-blockquote:text-muted-foreground;
   /* 水平线弱化 */
   @apply prose-hr:border-border;
-  /* 图片圆角 */
-  @apply prose-img:rounded-lg;
+  /* 图片：圆角、不溢出、窄屏可点 */
+  @apply prose-img:rounded-lg prose-img:max-w-full prose-img:h-auto;
+  /* 表格：窄屏横向滚动由外层 .table-wrap 承担 */
+  @apply prose-table:text-sm;
+}
+
+/* 平板及以上略增正文字号 */
+@media (min-width: 768px) {
+  .app-prose {
+    --prose-font-size: 1.125rem;
+  }
+}
+
+/* 窄屏（~375）：收紧标题与外边距，避免左右裁切 */
+@media (max-width: 639px) {
+  .app-prose {
+    --prose-font-size: 1rem;
+    --prose-line-height: 1.7;
+  }
+  .app-prose :where(h1) {
+    font-size: 1.625rem;
+    line-height: 1.25;
+  }
+  .app-prose :where(h2) {
+    font-size: 1.375rem;
+  }
+  .app-prose :where(h3) {
+    font-size: 1.2rem;
+  }
+  /* 代码块：更小字号 + 触控友好的横向滚动 */
+  .app-prose .astro-code > code {
+    font-size: 0.8125rem;
+    padding: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* 代码块容器：pre 保持 overflow:visible，避免裁切 header；
@@ -30,6 +113,8 @@
   /* Shiki 在 wrap:false 时会向 pre 内联写入 overflow-x:auto，此处强制覆盖，
      让 header（pre 内首子节点）不被裁切，横向滚动交由 code 承担 */
   overflow: visible !important;
+  /* 窄屏防止代码块撑破布局 */
+  max-width: 100%;
 }
 
 /* 暗色代码块切换为暗色 Shiki 主题背景 */
@@ -43,6 +128,10 @@
   @apply block overflow-x-auto p-4;
   background-color: transparent;
   color: var(--shiki-light);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 100%;
 }
 
 .dark .app-prose .astro-code > code {
@@ -98,6 +187,18 @@
   &:focus-visible {
     @apply outline-2 outline-offset-2 outline-dashed;
   }
+}
+
+/* 图片与视频不溢出窄屏 */
+.app-prose :where(img, video, iframe) {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 表格外层（rehypeWrapTable）窄屏可横滑 */
+.app-prose :where(.table-wrap, .overflow-x-auto) {
+  @apply -mx-1 max-w-full overflow-x-auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 标题锚点链接：使用前景色（黑色），悬停时不加下划线 */
