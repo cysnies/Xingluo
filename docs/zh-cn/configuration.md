@@ -28,6 +28,8 @@ site: {
 | 字段                     | 默认值           | 说明                                                                   |
 | ------------------------ | ---------------- | ---------------------------------------------------------------------- |
 | `url`                    | 必填             | 站点根 URL，必须以 `/` 结尾                                            |
+| `titleByLocale`          | 可选             | 按语言覆盖站点标题（如 `en: "Xingluo"`） |
+| `descriptionByLocale`    | 可选             | 按语言覆盖站点描述 |
 | `title`                  | 必填             | 站点标题，用于 `<title>` 与 OG                                         |
 | `description`            | 必填             | 站点描述，用于 meta 与 RSS                                             |
 | `author`                 | 必填             | 默认作者，文章 frontmatter 未指定时回退此值                            |
@@ -78,6 +80,7 @@ features: {
 | -------------------- | ------------------ | -------------------------------------------------------------------- |
 | `lightAndDarkMode`   | `true`             | 是否启用亮/暗模式切换                                                |
 | `dynamicOgImage`     | `true`             | 是否动态生成 OG 图（satori + sharp）                                 |
+| `viewTransitions` | `true` | 是否启用 Astro `ClientRouter`（View Transitions）；`false` 可略减全局 JS |
 | `showArchives`       | `true`             | 是否显示归档页（关闭时 sitemap 同步过滤）                            |
 | `showCategories`     | `true`             | 是否显示分类页与导航入口（关闭时 sitemap 同步过滤）                  |
 | `showBackButton`     | `true`             | 文章页是否显示返回按钮                                               |
@@ -90,6 +93,8 @@ features: {
 | `comments`           | `{provider:false}` | 评论系统配置（详见 [评论系统](./comments.md)）                       |
 | `players.aplayer`    | `false`            | 是否启用 APlayer 音乐播放器（详见 [媒体播放器](./media-players.md)） |
 | `players.dplayer`    | `false`            | 是否启用 DPlayer 视频播放器                                          |
+| `enabledLocales`     | 全部 UI 语言       | 构建启用的语言子集；演示站建议 `["zh-cn","en"]` 以控制体积           |
+| `animations.*`       | 见 `src/config.ts` | 动效开关；默认已克制，装饰类默认关闭                                 |
 
 ### editPost 编辑链接
 
@@ -151,3 +156,32 @@ pnpm build
 ## 完整配置示例
 
 见 [`xingluo.config.ts`](../xingluo.config.ts)，其中 `features.comments` 与 `features.players` 段包含 giscus / twikoo / waline 的注释示例，取消注释并填入真实值即可启用。
+
+
+## fonts 字体
+
+```ts
+fonts: {
+  family: "system", // SSR 默认；读者可用页头切换器覆盖
+  showSwitcher: true,
+  // fonts: [ /* 自定义 FontDefinition，同 id 覆盖内置 */ ],
+}
+```
+
+完整目录、运行时切换与自托管方式见 [字体配置](./fonts.md)。
+
+## 色板与视觉风格
+
+```ts
+features: {
+  palette: "zinc",       // zinc | slate | stone | gray | neutral
+  accent: "none",        // none | blue | green | rose | orange | violet
+  uiStyle: "new-york",   // new-york | default
+}
+```
+
+对应 `html[data-palette]` / `data-accent` / `data-ui-style`，样式在 `src/styles/theme.css` 与 `palettes.css`。详见 [主题与样式](./theming.md)。
+
+## 网页卡片
+
+见 [webcards.md](./webcards.md)。`features.webCards` 可开关与设置超时/缓存。

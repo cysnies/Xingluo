@@ -51,7 +51,7 @@ xingluo/
     │   └── players.ts       # 播放器懒加载
     ├── styles/              # 样式
     │   ├── global.css       # Tailwind 入口 + 基础层 + 自定义工具类
-    │   ├── theme.css        # shadcn 主题变量（OKLCH）
+    │   ├── theme.css        # shadcn 主题变量（默认 Zinc HSL）
     │   └── typography.css   # .app-prose 排版与代码块样式
     ├── types/               # 类型声明
     │   ├── config.ts        # 配置类型
@@ -179,7 +179,7 @@ src/pages/
 - **SVG 优化**：`experimental.svgOptimizer`（svgo）压缩内联与引用的 SVG
 - **按需懒加载**：评论与播放器通过 IntersectionObserver 在滚动到视口时动态 import，关闭时零打包
 - **条件集成**：MDX 关闭时不加载 `mdx()` 集成，播放器关闭时不注入 remark 插件
-- **CSS 体积**：Tailwind v4 按需生成，OKLCH 变量集中管理
+- **CSS 体积**：Tailwind v4 按需生成，语义色板变量集中管理
 - **OG 图字体**：仅供 satori 使用，不注入站点 CSS
 - **View Transitions**：`<ClientRouter/>` 实现页面切换动画，搜索框 `transition:persist` 保持状态
 

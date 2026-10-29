@@ -1,6 +1,6 @@
 # 主题与样式
 
-星罗采用 shadcn/ui new-york 风格组件与 OKLCH 色彩空间，基于 Tailwind CSS v4 构建。
+星罗采用 shadcn/ui 风格组件与语义化 CSS 变量（默认 Zinc 基色 + new-york 圆角），基于 Tailwind CSS v4 构建。色值以官方 themes 注册表 HSL 为准。
 
 ## 样式文件结构
 
@@ -8,29 +8,30 @@
 
 | 文件             | 内容                                                  |
 | ---------------- | ----------------------------------------------------- |
-| `theme.css`      | shadcn 主题变量（OKLCH，亮色 `:root` + 暗色 `.dark`） |
+| `theme.css`      | 默认 Zinc 主题变量（亮色 `:root` + 暗色 `.dark`）     |
 | `global.css`     | Tailwind 入口、基础层、自定义工具类、标注框主题       |
-| `typography.css` | `.app-prose` 排版与代码块样式                         |
+| `typography.css` | `.app-prose` 排版（文章/关于页按需加载）               |
+| `palettes.css`   | 基色 `data-palette` + 品牌强调色 `data-accent`         |
 
 ## 主题变量
 
-`theme.css` 使用 OKLCH 色彩空间定义语义化变量，亮色与暗色双套：
+`theme.css` 以 **HSL 语义令牌**定义默认 Zinc 主题（亮色 `:root` + 暗色 `.dark`）。也可自行改成 OKLCH 等，只要保持变量名稳定：
 
 ```css
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --primary: oklch(0.205 0 0);
-  /* ... secondary、muted、accent、destructive、border、input、ring ... */
-  --code: oklch(0.97 0 0);
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 10% 3.9%);
+  --card: hsl(0 0% 100%);
+  --primary: hsl(240 5.9% 10%);
+  /* ... secondary、muted、accent（表面 hover 底）、border、ring ... */
+  --code: hsl(240 4.8% 95.9%);
   --content-width: 72rem;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: hsl(240 10% 3.9%);
+  --foreground: hsl(0 0% 98%);
   /* ... 暗色对应值 ... */
 }
 ```
@@ -62,8 +63,11 @@
 
 ### 自定义工具类
 
-- `max-w-app`：内容最大宽度（`--content-width: 72rem`）
+- `max-w-app`：壳层最大宽度（`--content-width: 72rem`）
+- `max-w-prose-app`：正文舒适行宽（`--prose-width: 42rem`）
 - `app-layout`：应用布局（min-height 100vh，flex 列布局）
+
+正文排版见 `typography.css` 的 `.app-prose`（字号阶梯、窄屏代码块/图片、舒适行宽）。字体切换见 [字体配置](./fonts.md)。
 
 ## 暗色模式
 
@@ -143,17 +147,33 @@
 
 [`src/lib/socialIcons.ts`](../src/lib/socialIcons.ts) 通过 `import.meta.glob` 按文件名收集 `src/assets/icons/socials/*.astro`，`getSocialIcon(name)` 按名称解析。新增社交平台只需在 `socials/` 下加图标文件。
 
-## 自定义主题
+## 色板与视觉风格（配置切换）
 
-修改 `src/styles/theme.css` 的 CSS 变量即可调整全站配色。例如改为蓝色主色：
+构建期通过 `html[data-palette]` / `html[data-accent]` / `html[data-ui-style]` 应用 CSS 变量，零运行时主题包。
 
-```css
-:root {
-  --primary: oklch(0.55 0.2 250);
-}
-.dark {
-  --primary: oklch(0.7 0.18 250);
+在 `xingluo.config.ts`：
+
+```ts
+features: {
+  palette: "zinc",       // 基色：zinc | slate | stone | gray | neutral
+  accent: "none",        // 强调色：none | blue | green | rose | orange | violet
+  uiStyle: "new-york",   // 或 "default"
 }
 ```
 
-所有引用 `bg-primary`、`text-primary` 的组件自动跟随。
+| 配置 | 取值 | 说明 |
+| ---- | ---- | ---- |
+| `palette` | `zinc`（默认）`slate` `stone` `gray` `neutral` | 完整表面令牌；改编自 shadcn themes 注册表 |
+| `accent` | `none`（默认）`blue` `green` `rose` `orange` `violet` | **品牌强调色**（primary 族）；≠ 表面 token `--accent`（hover 底） |
+| `uiStyle` | `new-york`（默认） | 圆角 0.625rem，贴近官网 |
+| `uiStyle` | `default` | 圆角 0.5rem，略强阴影 |
+
+参考：[shadcn Theming](https://ui.shadcn.com/docs/theming)、官方 themes JSON（`ui.shadcn.com/r/themes/{zinc,slate,stone,gray,neutral}.json`）、[v4 colors](https://v4.shadcn.com/colors)、[theme generator](https://ui.shadcn.com/themes)。实现：`theme.css` + `palettes.css`（借鉴 token，未整库照搬组件）。
+
+## shadcn token 对齐
+
+含 chart、sidebar、radius 阶梯。`components.json` 标注 style；不要对 Astro 主题直接 `npx shadcn add` React 组件。
+
+## UI 原语示例
+
+见文章「UI 组件示例」（`doc-ui-components`）。

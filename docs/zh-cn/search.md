@@ -1,3 +1,5 @@
+**选型说明：** 星罗保留 FlexSearch + 每语言 JSON 索引，以贴合现有 i18n 路由；搜索页对 `flexsearch` 使用动态 `import()`，避免拖慢其它页面。Pagefind 更适合单语静态站，若你站点仅一种语言可自行替换构建链（本主题未内置 Pagefind 以免双栈）。
+
 # 搜索
 
 星罗集成 [Flexsearch](https://github.com/nextapps-de/flexsearch) 提供客户端全文搜索，按语言分索引，支持 View Transitions 状态保持。
@@ -81,3 +83,7 @@ Flexsearch 搜索 UI 使用 shadcn 主题变量，在 `SearchView.astro` 中定�
 - Flexsearch 索引为静态文件，搜索在客户端完成，无服务端请求
 - 索引按需加载（仅搜索时下载索引片段）
 - `transition:persist` 避免导航时重复初始化搜索 UI
+
+## 体积说明
+
+搜索页通过 Vite 别名使用 FlexSearch **compact** 构建，并在首次聚焦/输入（或 URL 含 `?q=`）时再加载库与索引；索引正文截断约 1800 字。

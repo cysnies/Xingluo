@@ -1,6 +1,6 @@
 # 星罗（Xingluo）文档
 
-星罗是一个基于 [Astro](https://astro.build/) 与 [shadcn/ui](https://ui.shadcn.com/) 视觉风格构建的现代化博客 CMS，以扁平、优雅的 shadcn 组件与 OKLCH 色彩体系提供更现代的视觉体验，并原生集成评论系统、MDX 可选支持与音视频播放器。
+星罗是一个基于 [Astro](https://astro.build/) 与 [shadcn/ui](https://ui.shadcn.com/) 视觉风格构建的现代化博客 CMS，以扁平、优雅的 shadcn 组件与 Zinc/HSL 语义色板提供更现代的视觉体验，并原生集成评论系统、MDX 可选支持与音视频播放器。
 
 ## 文档导航
 
@@ -11,7 +11,7 @@
 | [内容创作](./content.md)         | 文章 frontmatter、Markdown/MDX 语法、代码块、标注框、内容增强 |
 | [国际化](./i18n.md)              | 多语言路由策略、UI 文案、内容级翻译、新增语言                 |
 | [架构总览](./architecture.md)    | 目录结构、配置流、渲染流、构建流程                            |
-| [主题与样式](./theming.md)       | shadcn 主题变量、OKLCH、Tailwind v4、暗色模式                 |
+| [主题与样式](./theming.md)       | shadcn 主题变量、Zinc/HSL 色板、Tailwind v4、暗色模式           |
 | [评论系统](./comments.md)        | giscus / twikoo / waline 三选一配置与接入                     |
 | [媒体播放器](./media-players.md) | APlayer / DPlayer 在 MD 与 MDX 中的使用                       |
 | [SEO](./seo.md)                  | OG 图、RSS、sitemap、hreflang、canonical、结构化数据          |
@@ -21,7 +21,7 @@
 ## 核心特性
 
 - **极致性能**：Astro 静态生成、构建期内联 SVG 图标（零运行时 JS）、按需懒加载评论与播放器、构建后孤儿资源清理
-- **现代视觉**：shadcn/ui new-york 风格组件、OKLCH 色彩空间、平滑暗黑模式（FOUC 防护）
+- **现代视觉**：shadcn/ui Zinc + new-york 风格、HSL 语义变量、平滑暗黑模式（FOUC 防护）
 - **多语言**：UI 与内容级翻译，`prefixDefaultLocale:false` 路由策略，hreflang 与 x-default SEO 声明
 - **内容增强**：MDX 可选支持、Shiki 双主题代码高亮、标注框（callouts）、目录折叠、表格滚动
 - **阅读时长**：CJK 按字符数、拉丁文按单词数智能估算，卡片与详情页均显示
@@ -53,3 +53,7 @@
 ## 许可证
 
 AGPL-3.0
+
+- [字体配置](./fonts.md)
+- [从模板升级](./upgrading.md)
+- [网页卡片](./webcards.md)
