@@ -38,7 +38,7 @@ const crumbs = [
   <Main>
     <Breadcrumb items={crumbs} class="mb-6" />
     <h1 class="mb-8 text-3xl font-bold tracking-tight sm:text-4xl">{pageTitle}</h1>
-    <article class="app-prose max-w-app">
+    <article class="app-prose max-w-prose-app">
       <Content />
     </article>
 
@@ -56,3 +56,8 @@ const crumbs = [
     </script>
   )
 }
+
+<style is:global>
+  @import "@/styles/typography.css";
+  @import "@/styles/webcards.css";
+</style>

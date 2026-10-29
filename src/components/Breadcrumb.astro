@@ -1,5 +1,6 @@
 ---
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/i18n";
 import { buildBreadcrumbJsonLd } from "@/utils/breadcrumbJsonLd";
 
 interface Crumb {
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const { items, class: className } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
 
 /** 面包屑结构化数据，供搜索引擎理解站点层级 */
 const breadcrumbJsonLd = buildBreadcrumbJsonLd(
@@ -22,7 +24,7 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd(
 );
 ---
 
-<nav aria-label="面包屑" class={cn("text-sm text-muted-foreground", className)}>
+<nav aria-label={t.a11y.breadcrumb} class={cn("text-sm text-muted-foreground", className)}>
   <ol class="flex flex-wrap items-center gap-1.5">
     {
       items.map((item, index) => (

@@ -24,11 +24,12 @@ function readLabels(root: HTMLElement) {
     zoom: ds.zoom ?? "Zoom image",
     preview: ds.preview ?? "Image preview: ",
     close: ds.close ?? "Close image preview",
+    linkHeading: ds.linkHeading ?? "Link to this heading",
   };
 }
 
 /** 为标题元素追加锚点链接 */
-function addHeadingLinks(root: HTMLElement) {
+function addHeadingLinks(root: HTMLElement, linkHeading: string) {
   const headings = Array.from(root.querySelectorAll("h2, h3, h4, h5, h6"));
   for (const heading of headings) {
     if (heading.querySelector(".heading-link")) continue;
@@ -38,7 +39,7 @@ function addHeadingLinks(root: HTMLElement) {
     const link = document.createElement("a");
     link.className = "heading-link no-underline";
     link.href = "#" + heading.id;
-    link.setAttribute("aria-label", "链接到此标题");
+    link.setAttribute("aria-label", linkHeading);
 
     // 将标题的所有现有子节点移入链接内（使标题文本本身也成为可点击的超链接）
     while (heading.firstChild) {
@@ -430,7 +431,7 @@ function setupPostEnhancements() {
   if (!root) return;
 
   const labels = readLabels(root);
-  addHeadingLinks(root);
+  addHeadingLinks(root, labels.linkHeading);
   attachCopyButtons(root, labels);
   initLightbox(root, labels);
   setupProgressBar();
@@ -441,7 +442,8 @@ setupPostEnhancements();
 // View Transitions 切换后重新初始化，并回到顶部
 document.addEventListener("astro:after-swap", () => {
   setupPostEnhancements();
-  window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ left: 0, top: 0, behavior: reduce ? "auto" : "instant" });
 });
 
 // 切换前关闭可能打开的灯箱，避免残留

@@ -166,6 +166,17 @@ const resolvedCanonical =
             <EditPost editPath={editPath} hide={hideEditPost} />
           </div>
 
+          {/* 移动端/平板目录：大屏由侧栏承担 */}
+          <details class="mobile-toc group mb-6 rounded-lg border border-border bg-card lg:hidden">
+            <summary class="cursor-pointer list-none px-4 py-3 text-sm font-medium touch-manipulation [&::-webkit-details-marker]:hidden flex items-center justify-between">
+              <span>{t.post.tableOfContents}</span>
+              <span class="text-muted-foreground transition group-open:rotate-180" aria-hidden="true">▾</span>
+            </summary>
+            <div class="border-t border-border px-3 py-3">
+              <TableOfContents headings={headings} label={t.post.tableOfContents} />
+            </div>
+          </details>
+
           <article
             id="article"
             data-copy={t.post.copyCode}
@@ -173,7 +184,8 @@ const resolvedCanonical =
             data-zoom={t.post.zoomImage}
             data-preview={t.post.imagePreview}
             data-close={t.post.closeImagePreview}
-            class="app-prose max-w-app"
+            data-link-heading={t.post.linkToHeading}
+            class="app-prose max-w-prose-app"
           >
             <Content />
           </article>
@@ -230,3 +242,8 @@ const resolvedCanonical =
     </script>
   )
 }
+
+<style is:global>
+  @import "@/styles/typography.css";
+  @import "@/styles/webcards.css";
+</style>

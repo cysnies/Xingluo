@@ -17,10 +17,10 @@ const t = useTranslations(Astro.currentLocale);
 const locale = Astro.currentLocale ?? config.site.lang;
 ---
 
-<nav class="mt-12 grid gap-4 border-t border-border pt-8 sm:grid-cols-2" aria-label="相邻文章导航">
+<nav class="mt-12 grid gap-4 border-t border-border pt-8 sm:grid-cols-2" aria-label={t.a11y.adjacentPosts}>
   {
     prevPost ? (
-      <Button variant="outline" class="group h-auto justify-start gap-3 py-4 motion-safe:transition-shadow motion-safe:duration-300 motion-safe:ease-out hover:shadow-[0_0_15px_hsl(var(--primary)/0.15)]" href={getPostUrl(prevPost.id, prevPost.filePath, locale)}>
+      <Button variant="outline" class="group h-auto justify-start gap-3 py-4 motion-safe:transition-shadow motion-safe:duration-300 motion-safe:ease-out hover:shadow-[0_0_15px_color-mix(in oklch, var(--primary) 15%, transparent)]" href={getPostUrl(prevPost.id, prevPost.filePath, locale)}>
         <ArrowLeft class="size-4 shrink-0 motion-safe:transition-transform motion-safe:duration-300 group-hover:-translate-x-1" />
         <span class="flex flex-col items-start gap-1 text-left">
           <span class="text-xs text-muted-foreground">{t.post.previousPost}</span>
@@ -33,7 +33,7 @@ const locale = Astro.currentLocale ?? config.site.lang;
   }
   {
     nextPost ? (
-      <Button variant="outline" class="group h-auto justify-end gap-3 py-4 sm:col-start-2 motion-safe:transition-shadow motion-safe:duration-300 motion-safe:ease-out hover:shadow-[0_0_15px_hsl(var(--primary)/0.15)]" href={getPostUrl(nextPost.id, nextPost.filePath, locale)}>
+      <Button variant="outline" class="group h-auto justify-end gap-3 py-4 sm:col-start-2 motion-safe:transition-shadow motion-safe:duration-300 motion-safe:ease-out hover:shadow-[0_0_15px_color-mix(in oklch, var(--primary) 15%, transparent)]" href={getPostUrl(nextPost.id, nextPost.filePath, locale)}>
         <span class="flex flex-col items-end gap-1 text-right">
           <span class="text-xs text-muted-foreground">{t.post.nextPost}</span>
           <span class="line-clamp-1 font-medium">{nextPost.data.title}</span>

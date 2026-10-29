@@ -37,27 +37,26 @@ function syncGiscusTheme(): void {
 /** 已初始化的 twikoo 实例句柄，用于主题切换时重建 */
 let twikooCleanup: (() => void) | null = null;
 
-// 以 ?url 形式引入 Waline 与 Twikoo 样式：仅取得资源 URL 字符串，不触发 Vite 自动
-// 注入 <link>，改为运行时按需注入，避免功能关闭时页面仍加载无用 CSS
-import walineCssUrl from "@waline/client/style?url";
-import twikooCssUrl from "twikoo/dist/twikoo.css?url";
-
 /**
  * 注入样式 <link> 并等待加载完成的通用工厂。
  * 每次调用前检查 <link> 是否仍在 <head> 中——View Transitions 的
  * swapHeadElements() 会移除仅存在于当前 head 但不在新文档 head 中的元素。
  */
-function createEnsureCss(cssUrl: string): () => Promise<void> {
+function createEnsureCss(getCssUrl: () => Promise<string>): () => Promise<void> {
   let promise: Promise<void> | null = null;
+  let lastUrl = "";
 
-  return () => {
+  return async () => {
+    const cssUrl = await getCssUrl();
+    if (!cssUrl) return;
     const resolvedUrl = new URL(cssUrl, document.baseURI).href;
     const linkExists = Array.from(
       document.head.querySelectorAll<HTMLLinkElement>("link[rel=stylesheet]"),
     ).some((link) => link.href === resolvedUrl);
-    if (!linkExists) {
+    if (!linkExists || lastUrl !== cssUrl) {
       promise = null;
     }
+    lastUrl = cssUrl;
 
     if (!promise) {
       promise = new Promise<void>((resolve) => {
@@ -73,11 +72,21 @@ function createEnsureCss(cssUrl: string): () => Promise<void> {
   };
 }
 
+/** 动态解析 CSS URL（避免顶层静态 import 在功能关闭时仍进入依赖图） */
+async function resolveWalineCssUrl(): Promise<string> {
+  const mod = await import("@waline/client/style?url");
+  return (mod as { default: string }).default;
+}
+async function resolveTwikooCssUrl(): Promise<string> {
+  const mod = await import("twikoo/dist/twikoo.css?url");
+  return (mod as { default: string }).default;
+}
+
 /** 确保 Waline CSS <link> 在 <head> 中 */
-const ensureWalineCss = createEnsureCss(walineCssUrl);
+const ensureWalineCss = createEnsureCss(resolveWalineCssUrl);
 
 /** 确保 Twikoo CSS <link> 在 <head> 中 */
-const ensureTwikooCss = createEnsureCss(twikooCssUrl);
+const ensureTwikooCss = createEnsureCss(resolveTwikooCssUrl);
 
 /** 初始化 twikoo：动态 import 后调用 init */
 async function initTwikoo(mount: HTMLElement): Promise<void> {

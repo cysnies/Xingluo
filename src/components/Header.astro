@@ -3,13 +3,15 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import { stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
+import { getSiteTitle } from "@/utils/siteBrand";
 import ThemeToggle from "./ThemeToggle.astro";
 import SearchTrigger from "./SearchTrigger.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
+import FontSwitcher from "./fonts/FontSwitcher.astro";
 import Menu from "@/assets/icons/Menu.astro";
 import Close from "@/assets/icons/Close.astro";
 
-const { site, features } = config;
+const { features } = config;
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
@@ -60,11 +62,11 @@ const navItems = [
       href={getRelativeLocaleUrl(locale)}
       class="text-base font-semibold tracking-tight transition-colors hover:text-primary"
     >
-      {site.title}
+      {getSiteTitle(locale)}
     </a>
 
     <!-- 桌面端导航 -->
-    <nav class="hidden items-center gap-1 md:flex" aria-label="主导航">
+    <nav class="hidden items-center gap-1 md:flex" aria-label={t.a11y.mainNav}>
       {
         navItems.map((item) => (
           <a
@@ -86,12 +88,15 @@ const navItems = [
     <div class="flex items-center gap-1">
       <SearchTrigger />
       <ThemeToggle />
+      <FontSwitcher />
       <LanguageSwitcher />
       <!-- 移动端菜单按钮 -->
       <button
         id="mobile-menu-btn"
         type="button"
         aria-label={t.a11y.openMenu}
+        data-label-open={t.a11y.openMenu}
+        data-label-close={t.a11y.closeMenu}
         aria-expanded="false"
         class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 md:hidden"
       >
@@ -105,7 +110,7 @@ const navItems = [
   <nav
     id="mobile-menu"
     class="hidden border-t border-border bg-background md:hidden motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out"
-    aria-label="移动端导航"
+    aria-label={t.a11y.mobileNav}
   >
     <div class="mx-auto flex max-w-app flex-col gap-1 px-4 py-3 sm:px-6">
       {
@@ -113,7 +118,7 @@ const navItems = [
           <a
             href={item.href}
             class:list={[
-              "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+              "rounded-md px-3 py-2.5 text-sm font-medium transition-colors touch-manipulation",
               isActive(item.path)
                 ? "bg-accent text-accent-foreground"
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -128,25 +133,35 @@ const navItems = [
 </header>
 
 <script>
-  // 移动端菜单展开/收起逻辑（带过渡动画）
+  /** 移动端菜单：展开/收起 + 焦点陷阱 + Esc */
   function setupMobileMenu() {
     const btn = document.getElementById("mobile-menu-btn");
     const menu = document.getElementById("mobile-menu");
     const iconOpen = document.getElementById("menu-icon-open");
     const iconClose = document.getElementById("menu-icon-close");
     if (!btn || !menu) return;
+    if (btn.dataset.bound === "1") return;
+    btn.dataset.bound = "1";
 
-    // 优先使用 CSS transition，不支持时回退到 hidden
     const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
+
+    const getFocusable = (): HTMLElement[] =>
+      Array.from(
+        menu.querySelectorAll(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el): el is HTMLElement => el instanceof HTMLElement && el.offsetParent !== null);
+
+    let onKey: ((e: KeyboardEvent) => void) | null = null;
 
     const open = () => {
       menu.classList.remove("hidden");
       btn.setAttribute("aria-expanded", "true");
+      if (btn.dataset.labelClose) btn.setAttribute("aria-label", btn.dataset.labelClose);
       iconOpen?.classList.add("hidden");
       iconClose?.classList.remove("hidden");
-      // 触发重排后添加 visible 类启动过渡
       if (!prefersReduced) {
         menu.style.opacity = "0";
         menu.style.maxHeight = "0";
@@ -155,13 +170,39 @@ const navItems = [
           menu.style.maxHeight = menu.scrollHeight + "px";
         });
       }
+      const items = getFocusable();
+      items[0]?.focus();
+      onKey = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          close();
+          btn.focus();
+          return;
+        }
+        if (e.key !== "Tab" || items.length === 0) return;
+        const first = items[0]!;
+        const last = items[items.length - 1]!;
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      };
+      document.addEventListener("keydown", onKey);
     };
 
     const close = () => {
       btn.setAttribute("aria-expanded", "false");
+      if (btn.dataset.labelOpen) btn.setAttribute("aria-label", btn.dataset.labelOpen);
       iconOpen?.classList.remove("hidden");
       iconOpen?.classList.add("md:hidden");
       iconClose?.classList.add("hidden");
+      if (onKey) {
+        document.removeEventListener("keydown", onKey);
+        onKey = null;
+      }
       if (!prefersReduced) {
         menu.style.opacity = "0";
         menu.style.maxHeight = "0";
@@ -170,25 +211,24 @@ const navItems = [
           () => {
             if (menu.style.opacity === "0") menu.classList.add("hidden");
           },
-          { once: true }
+          { once: true },
         );
       } else {
         menu.classList.add("hidden");
       }
     };
 
-    const toggle = () => {
+    btn.addEventListener("click", () => {
       const isOpen = btn.getAttribute("aria-expanded") === "true";
-      if (isOpen) {
-        close();
-      } else {
-        open();
-      }
-    };
-
-    btn.addEventListener("click", toggle);
+      if (isOpen) close();
+      else open();
+    });
   }
 
   setupMobileMenu();
-  document.addEventListener("astro:after-swap", setupMobileMenu);
+  document.addEventListener("astro:after-swap", () => {
+    const btn = document.getElementById("mobile-menu-btn");
+    if (btn) delete btn.dataset.bound;
+    setupMobileMenu();
+  });
 </script>

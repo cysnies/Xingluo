@@ -2,16 +2,23 @@
 import config from "@/config";
 import LinkButton from "./LinkButton.astro";
 import { getSocialIcon, capitalizeName } from "@/lib/socialIcons";
+import { useTranslations } from "@/i18n";
+import { getSiteTitle } from "@/utils/siteBrand";
 
-const { site, socials } = config;
+const { socials } = config;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+const siteTitle = getSiteTitle(locale);
 
 /** 计算社交链接的无障碍标题 */
 function getTitle(name: string, url: string, linkTitle?: string): string {
   if (linkTitle) return linkTitle;
   if (url.startsWith("mailto:") || name === "mail") {
-    return `发送邮件给 ${site.title}`;
+    return t.socials.mailTo.replace("{{title}}", siteTitle);
   }
-  return `${site.title} 在 ${capitalizeName(name)}`;
+  return t.socials.onPlatform
+    .replace("{{title}}", siteTitle)
+    .replace("{{platform}}", capitalizeName(name));
 }
 ---
 

@@ -15,12 +15,17 @@
 let aplayerMod: Promise<typeof import("aplayer")> | null = null;
 let dplayerMod: Promise<typeof import("dplayer")> | null = null;
 
-// 以 ?url 形式引入 APlayer 样式：仅取得资源 URL 字符串，不触发 Vite 自动注入 <link>，
-// 改为运行时按需注入，避免功能关闭时页面仍加载无用 CSS
-import aplayerCssUrl from "aplayer/dist/APlayer.min.css?url";
-
 /** 运行时注入 APlayer 样式 <link> 的 Promise，确保 CSS 加载完毕后再实例化播放器 */
 let aplayerCssPromise: Promise<void> | null = null;
+let aplayerCssUrlCached: string | null = null;
+
+/** 动态解析 APlayer CSS URL（避免顶层静态 import 在关闭时仍进依赖图） */
+async function resolveAPlayerCssUrl(): Promise<string> {
+  if (aplayerCssUrlCached) return aplayerCssUrlCached;
+  const mod = await import("aplayer/dist/APlayer.min.css?url");
+  aplayerCssUrlCached = (mod as { default: string }).default;
+  return aplayerCssUrlCached;
+}
 
 /**
  * 注入 APlayer 样式 <link> 并等待加载完成。
@@ -29,15 +34,14 @@ let aplayerCssPromise: Promise<void> | null = null;
  * swapHeadElements() 会移除仅存在于当前 head 但不在新文档 head 中的元素，
  * 导致导航离开再返回后 CSS 丢失。若 <link> 被移除则重新注入。
  */
-function ensureAPlayerCss(): Promise<void> {
-  // 检查 CSS <link> 是否仍存在于 <head> 中（View Transitions 可能已将其移除）
-  // 注意：link.href 存储的是解析后的绝对 URL，需与绝对 URL 比较
+async function ensureAPlayerCss(): Promise<void> {
+  const aplayerCssUrl = await resolveAPlayerCssUrl();
+  if (!aplayerCssUrl) return;
   const resolvedUrl = new URL(aplayerCssUrl, document.baseURI).href;
   const linkExists = Array.from(
     document.head.querySelectorAll<HTMLLinkElement>("link[rel=stylesheet]"),
   ).some((link) => link.href === resolvedUrl);
   if (!linkExists) {
-    // link 被移除，重置 Promise 以便重新注入
     aplayerCssPromise = null;
   }
 
@@ -46,7 +50,6 @@ function ensureAPlayerCss(): Promise<void> {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = aplayerCssUrl;
-      // CSS 加载完成或失败均 resolve，避免阻塞播放器初始化
       link.onload = () => resolve();
       link.onerror = () => resolve();
       document.head.appendChild(link);

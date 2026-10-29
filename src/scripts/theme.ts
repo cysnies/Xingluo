@@ -27,7 +27,12 @@ function reflect(): void {
   const root = document.firstElementChild;
   root?.setAttribute("data-theme", themeValue);
   root?.classList.toggle("dark", themeValue === DARK);
-  document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
+  // 保留 SSR 的 i18n aria-label；用 aria-pressed / data-theme-value 表达状态
+  const themeBtn = document.querySelector("#theme-btn");
+  if (themeBtn) {
+    themeBtn.setAttribute("aria-pressed", themeValue === DARK ? "true" : "false");
+    themeBtn.setAttribute("data-theme-value", themeValue);
+  }
 
   // 用 body 的计算背景色填充 <meta name="theme-color">，
   // 使 Android 浏览器顶栏与页面背景一致
