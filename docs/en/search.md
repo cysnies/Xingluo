@@ -81,3 +81,7 @@ Dark mode switches automatically via the `.dark` selector, consistent with the s
 - Flexsearch indexes are static files; search happens client-side with no server requests
 - Indexes are loaded on demand (index fragments download only when searching)
 - `transition:persist` avoids re-initializing the search UI on navigation
+
+## Bundle notes
+
+The search page aliases FlexSearch to the **compact** build and loads the library + index on first focus/input (or when `?q=` is present). Index body text is truncated to ~1800 characters.

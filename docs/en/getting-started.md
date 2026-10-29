@@ -78,3 +78,6 @@ pnpm preview
 - Read the [Configuration Guide](./configuration.md) to customize site info and feature toggles
 - Read [Content Authoring](./content.md) to start writing
 - Read [Deployment](./deployment.md) to publish your site
+
+
+> Demo locale posts: `examples/locale-posts/`.

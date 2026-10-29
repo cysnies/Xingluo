@@ -51,7 +51,7 @@ xingluo/
     │   └── players.ts       # Player lazy loading
     ├── styles/              # Styles
     │   ├── global.css       # Tailwind entry + base layer + custom utilities
-    │   ├── theme.css        # shadcn theme variables (OKLCH)
+    │   ├── theme.css        # shadcn theme variables (Zinc HSL default)
     │   └── typography.css   # .app-prose typography and code block styles
     ├── types/               # Type declarations
     │   ├── config.ts        # Config types
@@ -179,7 +179,7 @@ Xingluo's client-side interactions are loaded via `<script>` tags at the bottom 
 - **SVG optimization**: `experimental.svgOptimizer` (svgo) compresses inlined and referenced SVGs
 - **On-demand lazy loading**: comments and players dynamically import via IntersectionObserver when scrolled into view; zero bundle when disabled
 - **Conditional integrations**: with MDX off, the `mdx()` integration is not loaded; with players off, the remark plugin is not injected
-- **CSS size**: Tailwind v4 generates on demand; OKLCH variables are centrally managed
+- **CSS size**: Tailwind v4 generates on demand; semantic palette variables are centrally managed
 - **OG image fonts**: used only by satori, not injected into site CSS
 - **View Transitions**: `<ClientRouter/>` powers page transition animations; the search box uses `transition:persist` to keep state
 

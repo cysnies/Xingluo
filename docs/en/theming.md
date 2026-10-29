@@ -1,6 +1,6 @@
 # Theme & Styles
 
-Xingluo uses shadcn/ui new-york style components and the OKLCH color space, built on Tailwind CSS v4.
+Xingluo uses shadcn/ui new-york style components with Zinc/HSL semantic tokens by default, built on Tailwind CSS v4.
 
 ## Style File Structure
 
@@ -8,29 +8,29 @@ Xingluo uses shadcn/ui new-york style components and the OKLCH color space, buil
 
 | File             | Content                                                      |
 | ---------------- | ------------------------------------------------------------ |
-| `theme.css`      | shadcn theme variables (OKLCH, light `:root` + dark `.dark`) |
+| `theme.css`      | shadcn theme variables (Zinc HSL default, light `:root` + dark `.dark`) |
 | `global.css`     | Tailwind entry, base layer, custom utilities, callout themes |
 | `typography.css` | `.app-prose` typography and code block styles                |
 
 ## Theme Variables
 
-`theme.css` uses the OKLCH color space to define semantic variables, with light and dark sets:
+`theme.css` defines semantic variables (Zinc HSL by default; OKLCH also fine if you prefer), with light and dark sets:
 
 ```css
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --primary: oklch(0.205 0 0);
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 10% 3.9%);
+  --card: hsl(0 0% 100%);
+  --primary: hsl(240 5.9% 10%);
   /* ... secondary, muted, accent, destructive, border, input, ring ... */
-  --code: oklch(0.97 0 0);
+  --code: hsl(240 4.8% 95.9%);
   --content-width: 72rem;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: hsl(240 10% 3.9%);
+  --foreground: hsl(0 0% 98%);
   /* ... dark counterparts ... */
 }
 ```
@@ -157,3 +157,11 @@ Edit the CSS variables in `src/styles/theme.css` to adjust site-wide colors. For
 ```
 
 All components referencing `bg-primary` / `text-primary` follow automatically.
+
+## UI primitives demo
+
+See the post **UI components demo** (`doc-ui-components`) for Alert / Badge / Tabs / Dialog in MDX.
+
+## Palettes and UI style
+
+In `xingluo.config.ts`: `features.palette` (`zinc` default | slate | stone | gray | neutral), `features.accent` (`none` default | blue | green | rose | orange | violet), and `features.uiStyle` (`new-york` | `default`). Tokens adapted from the [shadcn themes registry](https://ui.shadcn.com/docs/theming); applied via `data-palette` / `data-accent` / `data-ui-style` at build time.

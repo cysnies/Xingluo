@@ -29,14 +29,14 @@ A modern blog CMS built with Astro and the shadcn visual system
 
 </div>
 
-> Delivers a more modern visual experience through flat, elegant shadcn components and the OKLCH color system; natively integrates a comment system, optional MDX, and audio/video players.
+> Delivers a more modern visual experience through flat, elegant shadcn components and Zinc/HSL semantic tokens; natively integrates a comment system, optional MDX, and audio/video players.
 
 ---
 
 ## ✨ Features
 
 - ⚡ **Top-tier performance** — Astro static generation, zero runtime JS, lazy-loaded comments and players, orphan asset cleanup
-- 🎨 **Modern visuals** — shadcn/ui new-york style, OKLCH color space, smooth dark mode
+- 🎨 **Modern visuals** — shadcn/ui Zinc + new-york style, HSL tokens, smooth dark mode
 - 🌗 **Dark mode** — flicker-free toggle, follows system preference, comment and player themes sync automatically
 - 🔍 **Full-text search** — build-time indexing powered by Flexsearch, per-language indexes
 - 🌐 **Multilingual** — multilingual UI and content-level translation, hreflang and x-default SEO declarations
@@ -156,7 +156,7 @@ Each language edition includes the following documents:
 | Content Authoring     | Frontmatter, writing conventions, and enhancements |
 | Internationalization  | UI and content-level multilingual translation      |
 | Architecture Overview | Project structure and design decisions             |
-| Theme & Styles        | shadcn visuals and OKLCH                           |
+| Theme & Styles        | shadcn Zinc/HSL tokens and variants                |
 | Comment System        | giscus / twikoo / waline                           |
 | Media Players         | APlayer / DPlayer                                  |
 | SEO                   | OG images, RSS, sitemap, structured data           |
