@@ -10,8 +10,13 @@ export default defineXingluoConfig({
     url: "https://xingluo.tcea.top/",
     // 站点标题，用于 <title> 与 Open Graph
     title: "星罗",
+    // 英文等非默认语种可用拉丁品牌名
+    titleByLocale: { en: "Xingluo" },
     // 站点描述，用于 <meta name="description">、RSS 与 SEO
     description: "基于 Astro 与 shadcn 的现代化博客 CMS",
+    descriptionByLocale: {
+      en: "A modern blog CMS built with Astro and shadcn",
+    },
     // 默认作者名，文章 frontmatter 未指定 author 时回退此值
     author: "白鼠 Cysnies",
     // 作者主页链接（可选），注入 JSON-LD 结构化数据的 author.url
@@ -48,6 +53,8 @@ export default defineXingluoConfig({
     dynamicOgImage: true,
     // 是否显示归档页（关闭时 /archives/ 路由 Astro.rewrite 到 404）
     showArchives: true,
+    // 是否启用 View Transitions（ClientRouter）；false 可略减全局 JS
+    // viewTransitions: true,
     // 是否显示分类页与导航入口（文章通过 frontmatter 的 category 字段归类）
     showCategories: true,
     // 文章详情页是否显示返回按钮
@@ -103,31 +110,54 @@ export default defineXingluoConfig({
       // 是否启用 DPlayer 视频播放器
       dplayer: false,
     },
-    // Google Fonts 镜像源配置：构建时从镜像源下载字体，
-    // 适用于无法直接访问 Google Fonts 官方源的环境。
+    // 字体 CDN 镜像：默认已在 src/config.ts 开启（大陆友好）
+    // - Google Fonts → https://fonts.googleapis.cn（配套 gstatic.cn）
+    // - jsDelivr npm 字体（霞鹜等）→ https://cdn.npmmirror.com
+    // 若部署环境可直连官方源，可显式关闭：
     // googleFontsMirror: {
-    //   enabled: true,
+    //   enabled: false,
     //   url: "https://fonts.googleapis.cn",
     // },
-    // 动效与动画配置（默认全部开启，关闭对应项可禁用）
+    /**
+     * 构建启用的语言（须为已有 UI 语言子集）。
+     * 省略则启用全部 UI 语言（演示多语言会显著增大产物）。
+     * 个人博客建议只开实际用到的语言。
+     */
+    enabledLocales: ["zh-cn", "en"],
+    /** 色板基色/强调色：zinc|slate|stone|gray|neutral 或 blue|green|rose|orange|violet */
+    palette: "zinc",
+    accent: "none",
+    /** 视觉风格：new-york（默认）| default */
+    uiStyle: "new-york",
+    // 动效：默认已克制（见 src/config.ts）。需要装饰动效时再打开：
     // animations: {
-    //   spotlightCard: true,      // PostCard 悬停光晕
-    //   cardTilt: true,           // PostCard 悬停倾斜视差
-    //   scrollReveal: true,       // 列表滚入渐现
-    //   navIndicator: true,       // 导航指示条滑动
-    //   mobileMenuTransition: true, // 移动端菜单动画
-    //   buttonPress: true,        // 按钮按压反馈
-    //   themeTransition: true,    // 主题切换过渡
-    //   textReveal: true,         // 标题渐入动效
-    //   tocSmooth: true,          // TOC 平滑过渡
-    //   backToTopEnhanced: true,  // 返回顶部增强
-    //   adjacentPostGlow: true,   // 文章导航发光
-    //   searchResultAnim: true,   // 搜索页结果动画
+    //   spotlightCard: true,
+    //   cardTilt: true,
+    //   scrollReveal: true,
+    //   textReveal: true,
+    //   backToTopEnhanced: true,
+    //   adjacentPostGlow: true,
+    //   searchResultAnim: true,
     // },
   },
   // 社交链接：显示在首页社交区与页脚。
   // name 对应 src/assets/icons/socials/ 下的图标文件名（不含 .astro），
   // 内置支持：github / x / mail / facebook / telegram / weibo 等。
+  /**
+   * 正文字体（CJK 友好，按需启用）
+   * - family: 内置 id，见 src/fonts/catalog.ts
+   *   system | lxgw-wenkai | lxgw-wenkai-lite | lxgw-wenkai-screen |
+   *   source-han-sans | source-han-serif | inter | jetbrains-mono
+   * - 默认 system：不拉网络字体，体积与性能最优
+   * - 启用 CDN 字体时仅加载当前一项；可自备 /public/fonts/*.css 用 source: "local"
+   * - 文档：docs/zh-cn/fonts.md
+   */
+  fonts: {
+    family: "system",
+    showSwitcher: true,
+    // fonts: [{ id: "my-font", label: "自定义", family: "MyFont", stack: '"MyFont", sans-serif', source: "local", cssUrl: "/fonts/my-font.css", license: "OFL-1.1" }],
+  },
+
   socials: [
     { name: "github", url: "https://github.com/cysnies/Xingluo" },
     { name: "x", url: "https://x.com/Cysnies" },

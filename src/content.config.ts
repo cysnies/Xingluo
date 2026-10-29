@@ -8,10 +8,45 @@ export const BLOG_PATH = "src/content/posts";
 /** 静态页面内容目录 */
 export const PAGES_PATH = "src/content/pages";
 
-/** 内容文件 glob 模式：启用 MDX 时收集 md+mdx，否则仅 md */
-const contentPattern = config.features.mdx
-  ? "**/[^_]*.{md,mdx}"
-  : "**/[^_]*.md";
+/** 内容树中可能出现的非默认语种子目录（与 src/i18n/lang 对齐） */
+const CONTENT_LOCALE_DIRS = [
+  "zh-tw",
+  "en",
+  "ja",
+  "ko",
+  "fr",
+  "de",
+  "es",
+  "pt",
+  "ru",
+  "ar",
+  "eo",
+] as const;
+
+const DEFAULT_LOCALE = "zh-cn";
+
+/**
+ * 内容 glob：仅收集默认语种根目录 + enabledLocales 下的语种子目录，
+ * 避免未启用语种示例进集合。未配置 enabledLocales 时全量。
+ */
+function contentPatterns(): string | string[] {
+  const ext = config.features.mdx ? "{md,mdx}" : "md";
+  const requested = config.features.enabledLocales;
+  if (!requested || requested.length === 0) {
+    return `**/[^_]*.${ext}`;
+  }
+  const enabled = new Set(requested);
+  enabled.add(DEFAULT_LOCALE);
+  const patterns: string[] = [`[^_]*.${ext}`];
+  for (const loc of CONTENT_LOCALE_DIRS) {
+    if (enabled.has(loc)) {
+      patterns.push(`${loc}/**/[^_]*.${ext}`);
+    }
+  }
+  return patterns;
+}
+
+const contentPattern = contentPatterns();
 
 /** 文章集合 schema */
 const posts = defineCollection({

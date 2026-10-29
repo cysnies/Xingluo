@@ -1,6 +1,8 @@
 import userConfig from "../xingluo.config";
 import type {
+  AnimationsConfig,
   CommentsConfig,
+  FontsConfig,
   GiscusConfig,
   GoogleFontsMirrorConfig,
   PlayersConfig,
@@ -49,6 +51,8 @@ const defaultFeatures = {
   lightAndDarkMode: true,
   dynamicOgImage: true,
   showArchives: true,
+  /** View Transitions / ClientRouter，关可省约 5–6KB gzip */
+  viewTransitions: true,
   showCategories: true,
   showBackButton: true,
   showHomeSocials: true,
@@ -66,6 +70,15 @@ const defaultFeatures = {
     url: "",
   },
   search: "flexsearch" as const,
+  /** 默认 Zinc 色板（贴近 shadcn 官网） */
+  palette: "zinc" as const,
+  /**
+   * 品牌强调色（改 primary/ring/selection 等）
+   * 勿与 CSS 表面色 --accent（hover 底）混淆
+   */
+  accent: "none" as const,
+  /** 默认 new-york 视觉风格 */
+  uiStyle: "new-york" as const,
   /** 默认启用 MDX 解析与渲染 */
   mdx: true,
   /** 默认关闭评论系统 */
@@ -77,25 +90,40 @@ const defaultFeatures = {
     aplayer: false,
     dplayer: false,
   },
-  /** 默认关闭 Google Fonts 镜像源 */
+  /** 网页卡片默认开启（构建期抓取） */
+  webCards: {
+    enabled: true,
+    timeoutMs: 8000,
+    cache: true,
+  },
+  /**
+   * 字体 CDN 镜像（默认开启，大陆友好）
+   * - Google Fonts → fonts.googleapis.cn（gstatic.cn）
+   * - jsDelivr npm 字体包 → cdn.npmmirror.com
+   * 设 enabled:false 可回退官方源
+   */
   googleFontsMirror: {
-    enabled: false,
+    enabled: true,
     url: "https://fonts.googleapis.cn",
   },
-  /** 动效动画默认全部开启 */
+  /**
+   * 动效默认克制：保留菜单/按钮/主题/TOC 等必要反馈，
+   * 关闭光晕、倾斜、滚入、标题渐入等高开销装饰动效。
+   * 需要时在 xingluo.config.ts → features.animations 逐项打开。
+   */
   animations: {
-    spotlightCard: true,
-    cardTilt: true,
-    scrollReveal: true,
+    spotlightCard: false,
+    cardTilt: false,
+    scrollReveal: false,
     navIndicator: true,
     mobileMenuTransition: true,
     buttonPress: true,
     themeTransition: true,
-    textReveal: true,
+    textReveal: false,
     tocSmooth: true,
-    backToTopEnhanced: true,
-    adjacentPostGlow: true,
-    searchResultAnim: true,
+    backToTopEnhanced: false,
+    adjacentPostGlow: false,
+    searchResultAnim: false,
   },
 };
 
@@ -148,6 +176,23 @@ function resolveFavicon(
   };
 }
 
+
+/** 默认字体：system（零额外网络请求）。切换见 xingluo.config.ts → fonts.family */
+const defaultFonts: FontsConfig = {
+  family: "system",
+  showSwitcher: true,
+};
+
+/** 深度合并动效配置 */
+function resolveAnimations(
+  partial?: Partial<AnimationsConfig>,
+): AnimationsConfig {
+  return {
+    ...defaultFeatures.animations,
+    ...partial,
+  };
+}
+
 /** 深度合并用户配置与默认值，得到完整配置对象 */
 function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
   return {
@@ -166,6 +211,18 @@ function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
       googleFontsMirror: resolveGoogleFontsMirror(
         partial.features?.googleFontsMirror,
       ),
+      animations: resolveAnimations(partial.features?.animations),
+      enabledLocales: partial.features?.enabledLocales,
+      webCards: {
+        enabled: partial.features?.webCards?.enabled ?? defaultFeatures.webCards.enabled,
+        timeoutMs: partial.features?.webCards?.timeoutMs ?? defaultFeatures.webCards.timeoutMs,
+        cache: partial.features?.webCards?.cache ?? defaultFeatures.webCards.cache,
+      },
+    },
+    fonts: {
+      ...defaultFonts,
+      ...partial.fonts,
+      fonts: partial.fonts?.fonts,
     },
     socials: partial.socials ?? [],
     shareLinks: partial.shareLinks ?? [],
