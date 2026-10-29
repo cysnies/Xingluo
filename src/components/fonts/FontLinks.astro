@@ -1,0 +1,40 @@
+---
+/**
+ * 按 fonts 配置注入当前字体的 stylesheet（cdn / local）
+ * system 不发网络请求；一次只启用一项，避免默认拉全量 CJK 巨包
+ */
+import { resolveActiveFont, maybeMirrorCssUrl } from "@/fonts/resolve";
+
+const font = resolveActiveFont();
+const rawCss = font.cssUrl && font.source !== "system" ? font.cssUrl : undefined;
+const cssUrl = rawCss ? maybeMirrorCssUrl(rawCss) : undefined;
+
+let cssOrigin: string | undefined;
+if (cssUrl && /^https?:\/\//i.test(cssUrl)) {
+  try {
+    cssOrigin = new URL(cssUrl).origin;
+  } catch {
+    cssOrigin = undefined;
+  }
+}
+---
+
+{
+  cssUrl && (
+    <>
+      {cssOrigin && <link rel="preconnect" href={cssOrigin} crossorigin />}
+      <link
+        rel="stylesheet"
+        href={cssUrl}
+        media="print"
+        onload={"this.media='all'"}
+        data-xingluo-font-link="1"
+      />
+      <noscript>
+        <link rel="stylesheet" href={cssUrl} data-xingluo-font-link="1" />
+      </noscript>
+    </>
+  )
+}
+
+<meta name="xingluo-font" content={font.id} />

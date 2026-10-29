@@ -1,0 +1,63 @@
+---
+/**
+ * 页头字体切换器：与 catalog 联动，选择写入 localStorage，按需加载 CSS
+ */
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import { getFontCatalog } from "@/fonts/resolve";
+import { toClientFontEntry } from "@/fonts/client";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+const show = config.fonts.showSwitcher !== false;
+const catalog = getFontCatalog().map(toClientFontEntry);
+const activeId = config.fonts.family ?? "system";
+---
+
+{
+  show && catalog.length > 0 && (
+    <details
+      id="font-switcher"
+      class="group relative"
+      data-font-switcher
+    >
+      <summary
+        class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden"
+        aria-label={t.a11y.fontSwitcher}
+        title={t.a11y.fontSwitcher}
+      >
+        <Icon name="fa-solid:font" class="size-4" aria-hidden="true" />
+        <span class="sr-only">{t.a11y.fontSwitcher}</span>
+      </summary>
+      <div
+        class="absolute end-0 top-full z-50 mt-2 max-h-[min(24rem,70dvh)] min-w-44 overflow-y-auto overflow-x-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
+        role="menu"
+      >
+        {catalog.map((font) => {
+          const isCurrent = font.id === activeId;
+          return (
+            <button
+              type="button"
+              role="menuitem"
+              data-font-option={font.id}
+              aria-current={isCurrent ? "true" : "false"}
+              class:list={[
+                "flex w-full items-center rounded-sm px-3 py-2 text-start text-sm transition-colors touch-manipulation",
+                isCurrent
+                  ? "bg-accent font-medium text-accent-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+              ]}
+              style={`font-family: ${font.stack}`}
+            >
+              {font.id === "system" ? t.fonts.systemDefault : font.label}
+            </button>
+          );
+        })}
+      </div>
+    </details>
+    <script>
+      import "@/scripts/fonts";
+    </script>
+  )
+}

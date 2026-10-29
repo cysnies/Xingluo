@@ -7,6 +7,8 @@
  * 实现使用 Node.js 内置 fetch API 和正则表达式解析 CSS，无外部依赖。
  */
 
+import { isSafeFetchUrl } from "../webcards/safeUrl";
+
 /**
  * Astro FontProvider 接口的最小类型定义
  * 避免从 astro/config 引入（该模块未导出此类型）
@@ -189,7 +191,9 @@ export function googleFontsMirrorProvider(
           const url = new URL("/css2", baseUrl);
           url.searchParams.set("family", familyQuery);
 
-          const response = await fetch(url.toString(), {
+          const cssUrl = url.toString();
+          if (!isSafeFetchUrl(cssUrl)) continue;
+          const response = await fetch(cssUrl, {
             headers: { "user-agent": userAgent },
           });
 

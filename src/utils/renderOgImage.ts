@@ -178,7 +178,9 @@ export async function renderOgImage(
     },
   );
 
-  const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
+  const pngBuffer = await sharp(Buffer.from(svg))
+    .png({ compressionLevel: 9, adaptiveFiltering: true, palette: true })
+    .toBuffer();
 
   // 截取为独立 ArrayBuffer，便于直接作为 Response body
   const { buffer, byteOffset, byteLength } = pngBuffer;
