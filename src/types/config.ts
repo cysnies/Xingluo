@@ -9,8 +9,12 @@ export interface SiteConfig {
   url: string;
   /** 站点标题 */
   title: string;
+  /** 按语言覆盖站点标题（缺省回退 title） */
+  titleByLocale?: Partial<Record<string, string>>;
   /** 站点描述（用于 SEO 与 RSS） */
   description: string;
+  /** 按语言覆盖站点描述 */
+  descriptionByLocale?: Partial<Record<string, string>>;
   /** 默认作者名 */
   author: string;
   /** 作者主页链接 */
@@ -127,12 +131,59 @@ export interface PlayersConfig {
   dplayer: boolean;
 }
 
-/** Google Fonts 镜像源配置 */
+/**
+ * 字体 CDN 镜像（Google Fonts + jsDelivr npm 包）
+ * 默认建议 enabled:true，便于中国大陆访问。
+ */
 export interface GoogleFontsMirrorConfig {
-  /** 是否启用镜像源（可绕过 Google Fonts 官方源的网络限制） */
+  /** 是否启用镜像（Google Fonts + jsDelivr→npmmirror） */
   enabled: boolean;
-  /** 镜像源 URL，如 https://fonts.googleapis.cn */
+  /**
+   * Google Fonts CSS 镜像根，默认 https://fonts.googleapis.cn
+   * 官方源：https://fonts.googleapis.com
+   */
   url: string;
+  /**
+   * 是否把 cdn.jsdelivr.net/npm 字体包改写到 npmmirror
+   * 默认与 enabled 相同（true 时改写）
+   */
+  npmMirror?: boolean;
+}
+
+
+/** 单条可切换字体（与 src/fonts/catalog.ts 对齐，可在配置中覆盖/扩展） */
+export interface FontDefinitionConfig {
+  /** 配置用 id，与 fonts.family 对应 */
+  id: string;
+  /** 展示名 */
+  label: string;
+  /** CSS font-family 主名 */
+  family: string;
+  /** 完整字体栈 */
+  stack: string;
+  /** 加载来源：system 无网络；cdn/local 需 cssUrl */
+  source: "system" | "cdn" | "local";
+  /** 样式表 URL（cdn 绝对地址，或 local 如 /fonts/mine.css） */
+  cssUrl?: string;
+  /** 可选等宽栈 */
+  monoStack?: string;
+  /** 许可说明 */
+  license: string;
+  /** 备注 */
+  note?: string;
+}
+
+/** 站点字体配置 */
+export interface FontsConfig {
+  /**
+   * 启用的字体 id（内置见 src/fonts/catalog.ts）
+   * 默认 "system"：零额外请求；运行时切换器可覆盖并写入 localStorage
+   */
+  family: string;
+  /** 是否在页头显示字体切换器（读者可切换，默认 true） */
+  showSwitcher?: boolean;
+  /** 用户自定义/覆盖字体条目，同 id 覆盖内置 */
+  fonts?: FontDefinitionConfig[];
 }
 
 /** 动效与动画配置 */
@@ -163,6 +214,17 @@ export interface AnimationsConfig {
   searchResultAnim: boolean;
 }
 
+
+/** 网页卡片（构建期抓取，纯静态产物） */
+export interface WebCardsConfig {
+  /** 是否启用 remark 裸链转卡片，默认 true */
+  enabled: boolean;
+  /** 单次请求超时毫秒，默认 8000 */
+  timeoutMs: number;
+  /** 是否写入 .cache/webcards，默认 true */
+  cache: boolean;
+}
+
 /** 功能开关配置 */
 export interface FeaturesConfig {
   /** 是否启用亮/暗模式切换 */
@@ -171,6 +233,8 @@ export interface FeaturesConfig {
   dynamicOgImage: boolean;
   /** 是否显示归档页 */
   showArchives: boolean;
+  /** 是否启用 Astro View Transitions（ClientRouter），默认 true */
+  viewTransitions: boolean;
   /** 是否显示分类页与导航入口 */
   showCategories: boolean;
   /** 是否显示返回按钮 */
@@ -197,10 +261,36 @@ export interface FeaturesConfig {
   comments: CommentsConfig;
   /** 媒体播放器开关 */
   players: PlayersConfig;
-  /** Google Fonts 镜像源配置（构建时下载字体使用） */
+  /** 字体 CDN 镜像：读者端 CSS + 构建期 OG 字体；默认建议开启 */
   googleFontsMirror: GoogleFontsMirrorConfig;
   /** 动效与动画配置 */
   animations: AnimationsConfig;
+  /**
+   * 构建与路由启用的语言列表（须为已有 UI 语言子集）。
+   * 省略或空数组表示启用全部 UI 语言。
+   * 主题演示默认建议 ["zh-cn", "en"] 以控制产物体积。
+   */
+  enabledLocales?: string[];
+  /**
+   * 基色色板，对应 html[data-palette]
+   * zinc（默认）| slate | stone | gray | neutral
+   * 色值改编自 shadcn 官方 themes 注册表（HSL）
+   */
+  palette?: "zinc" | "slate" | "stone" | "gray" | "neutral";
+  /**
+   * 品牌强调色（features.accent → html[data-accent]）
+   * 仅覆盖 primary / ring / selection / sidebar-primary / chart-1 等「品牌色」族。
+   * **不是** CSS 表面 token `--accent`（按钮 hover 底等，随基色 palette 走）。
+   * none（默认）| blue | green | rose | orange | violet
+   */
+  accent?: "none" | "blue" | "green" | "rose" | "orange" | "violet";
+  /**
+   * 视觉风格：new-york（默认，贴近官网圆角）| default（经典略小圆角）
+   * 对应 html[data-ui-style]
+   */
+  uiStyle?: "new-york" | "default";
+  /** 网页卡片（构建期） */
+  webCards: WebCardsConfig;
 }
 
 /** 社交链接项 */
@@ -224,6 +314,8 @@ export interface XingluoConfig {
   site: SiteConfig;
   posts: PostsConfig;
   features: FeaturesConfig;
+  /** 正文字体（可切换；内置霞鹜/思源/Inter 等，不含文泉驿） */
+  fonts: FontsConfig;
   socials: SocialItem[];
   shareLinks: ShareLinkItem[];
 }
@@ -236,7 +328,9 @@ export type PartialXingluoConfig = {
       ? Partial<PostsConfig>
       : K extends "features"
         ? Partial<FeaturesConfig>
-        : XingluoConfig[K];
+        : K extends "fonts"
+          ? Partial<FontsConfig>
+          : XingluoConfig[K];
 };
 
 /**
