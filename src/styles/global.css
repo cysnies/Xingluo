@@ -170,13 +170,17 @@
  * 动效动画相关
  */
 
-/* 滚入渐现动画：初始隐藏，标记后可见 */
+/* 内容默认可见；仅在滚入观察者就绪后隐藏待展示元素 */
 [data-reveal] {
-  opacity: 0;
-  transform: translateY(1.5rem);
+  opacity: 1;
+  transform: translateY(0);
   transition:
     opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-reveal].reveal-pending {
+  opacity: 0;
+  transform: translateY(1.5rem);
 }
 [data-reveal].is-visible {
   opacity: 1;

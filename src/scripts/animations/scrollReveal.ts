@@ -19,6 +19,9 @@ export function initScrollReveal(): void {
     observer.disconnect();
   }
 
+  // 不支持观察者时保留静态内容，避免页面永久透明。
+  if (typeof IntersectionObserver === "undefined") return;
+
   observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -34,5 +37,6 @@ export function initScrollReveal(): void {
   const targets = document.querySelectorAll<HTMLElement>(DEFAULT_SELECTOR);
   for (const el of targets) {
     observer.observe(el);
+    el.classList.add("reveal-pending");
   }
 }
