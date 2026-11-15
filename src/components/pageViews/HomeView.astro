@@ -49,7 +49,7 @@ const rssHref = new URL(
   <Header />
   <Main>
     <!-- Hero 区域 -->
-    <section class="relative border-b border-border pb-6" data-reveal>
+    <section class="border-b border-border pb-6" data-reveal>
       <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
         {avatarUrl && (
           <img
@@ -59,7 +59,7 @@ const rssHref = new URL(
             height="160"
             decoding="async"
             class:list={[
-              "size-24 shrink-0 object-cover sm:size-40 2xl:absolute 2xl:end-full 2xl:top-1/2 2xl:me-6 2xl:-translate-y-1/2",
+              "size-24 shrink-0 object-cover sm:size-40",
               avatarShape,
             ]}
           />
