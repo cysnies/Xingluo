@@ -1,23 +1,36 @@
 # Fonts
 
-Xingluo ships a CJK-friendly open-font catalog. Default is **system** (no extra network). Set one CDN/local font in `xingluo.config.ts` when needed.
+Xingluo ships a CJK-friendly open-font catalog. Set `fonts.mode` in `xingluo.config.ts` to control the site font and reader preferences. The demo uses fixed LXGW WenKai Lite.
+
+## Font modes
+
+| `fonts.mode` | Initial font                         | Reader switcher | Saved reader preference |
+| ------------ | ------------------------------------ | --------------- | ----------------------- |
+| `fixed`      | `fonts.family`                       | Hidden          | Ignored                 |
+| `default`    | `fonts.family`                       | Available       | Takes priority          |
+| `user`       | System font, ignoring `fonts.family` | Available       | Takes priority          |
+
+Use `{ mode: "fixed", family: "lxgw-wenkai-lite" }` to enforce the site font, `mode: "default"` to allow readers to override it, or `{ mode: "user" }` to start new visitors with their system font.
+
+Existing configurations without `mode` retain the selectable global default. Legacy `showSwitcher: false` maps to `fixed`. An explicit `mode` takes priority.
 
 ## Runtime switcher
 
-Header `FontSwitcher` (`fonts.showSwitcher: false` to hide):
+The header `FontSwitcher` is available in `default` and `user` modes.
 
 1. Options from `src/fonts/catalog.ts` + optional `fonts.fonts`
 2. Choice stored in `localStorage` key `xingluo-font`
 3. Stylesheet injected only for the active non-system font
 4. Inline Layout script applies the stored choice before paint
 
-`fonts.family` is the SSR / no-storage default (keep `system` unless you want a site-wide webfont).
+In `fixed` mode, the global font takes effect even when a reader has a previously saved choice.
 
 ## Config
 
 ```ts
 export default defineXingluoConfig({
   fonts: {
+    mode: "default",
     family: "lxgw-wenkai-lite",
   },
 });

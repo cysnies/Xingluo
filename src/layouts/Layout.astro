@@ -34,6 +34,7 @@ const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 const rssHref = getRelativeLocaleUrl(currentLocale, "rss.xml");
 
 const activeFont = resolveActiveFont();
+const allowFontSelection = config.fonts.mode !== "fixed";
 const fontCatalogJson = JSON.stringify(getFontCatalog().map(toClientFontEntry));
 const palette = config.features.palette ?? "zinc";
 const accent = config.features.accent ?? "none";
@@ -82,6 +83,7 @@ const defaultAlternate = {
   class="overflow-y-scroll scroll-smooth"
   data-animations={JSON.stringify(config.features.animations)}
   data-font={activeFont.id}
+  data-font-mode={config.fonts.mode}
   data-palette={palette}
   data-accent={accent === "none" ? undefined : accent}
   data-ui-style={uiStyle}
@@ -91,14 +93,20 @@ const defaultAlternate = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <FontLinks />
-    <script
-      is:inline
-      type="application/json"
-      id={FONT_CATALOG_SCRIPT_ID}
-      set:html={fontCatalogJson}
-    />
-    <!-- 字体 FOUC：在绘制前应用 localStorage 选择并按需注入 CSS -->
-    <script is:inline set:html={foucScript} />
+    {
+      allowFontSelection && (
+        <>
+          <script
+            is:inline
+            type="application/json"
+            id={FONT_CATALOG_SCRIPT_ID}
+            set:html={fontCatalogJson}
+          />
+          <!-- 字体 FOUC：在绘制前应用读者保存的选择 -->
+          <script is:inline set:html={foucScript} />
+        </>
+      )
+    }
     <Favicon favicon={site.favicon!} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />

@@ -1,17 +1,36 @@
 # 字体配置
 
-星罗内置可切换的 CJK 友好开源字体目录，默认使用 **system**（零额外网络请求）。按需在 `xingluo.config.ts` 启用一项 CDN/本地字体，避免默认拉全量字库拖垮性能。
+星罗内置 CJK 友好的开源字体目录，通过 `xingluo.config.ts` 的 `fonts.mode` 控制全局字体与读者选择。演示站固定使用霞鹜文楷 Lite。
+
+## 字体模式
+
+| `fonts.mode` | 全局默认字体                        | 读者切换   | 已保存的读者选择 |
+| ------------ | ----------------------------------- | ---------- | ---------------- |
+| `fixed`      | 使用 `fonts.family`                 | 隐藏切换器 | 忽略             |
+| `default`    | 使用 `fonts.family`                 | 允许       | 优先应用         |
+| `user`       | 从系统字体起步，忽略 `fonts.family` | 允许       | 优先应用         |
+
+```ts
+fonts: {
+  mode: "fixed",
+  family: "lxgw-wenkai-lite",
+}
+```
+
+将 `mode` 改为 `"default"`，可让读者覆盖站点默认字体并保存选择。使用 `{ mode: "user" }` 可让新访客从系统字体起步，再自行选择字体。
+
+未设置 `mode` 的旧配置继续使用可切换的全局默认字体。旧的 `showSwitcher: false` 对应 `fixed`，显式设置的 `mode` 优先。
 
 ## 运行时切换（读者）
 
-页头提供字体按钮（`FontSwitcher`，可用 `fonts.showSwitcher: false` 关闭）：
+`default` 和 `user` 模式在页头提供字体按钮（`FontSwitcher`）。
 
 1. 选项来自 `src/fonts/catalog.ts` + 你的 `fonts.fonts` 扩展
 2. 选择写入 `localStorage` 键 `xingluo-font`
 3. 仅对当前选中项按需注入 stylesheet（system 不发网络请求）
 4. Layout 内联脚本在首屏绘制前应用已存选择，减轻闪烁
 
-配置里的 `fonts.family` 仍是 SSR / 无 localStorage 时的默认值（推荐保持 `system`）。
+`fixed` 模式直接应用全局字体，已有的 `xingluo-font` 保存值也会被忽略。
 
 ## 配置默认字体
 
@@ -19,6 +38,7 @@
 // xingluo.config.ts
 export default defineXingluoConfig({
   fonts: {
+    mode: "default",
     // 内置 id，见下方目录
     family: "lxgw-wenkai-lite",
   },

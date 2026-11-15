@@ -184,14 +184,19 @@ export interface FontDefinitionConfig {
   note?: string;
 }
 
+/** 字体模式：固定全局字体、可覆盖的全局默认、读者自选 */
+export type FontMode = "fixed" | "default" | "user";
+
 /** 站点字体配置 */
 export interface FontsConfig {
+  /** fixed 固定全局字体 | default 全局默认且允许切换（默认）| user 系统字体起步且允许切换 */
+  mode?: FontMode;
   /**
    * 启用的字体 id（内置见 src/fonts/catalog.ts）
-   * 默认 "system"：零额外请求；运行时切换器可覆盖并写入 localStorage
+   * 默认 "system"；user 模式下从系统字体起步，忽略此项
    */
   family: string;
-  /** 是否在页头显示字体切换器（读者可切换，默认 true） */
+  /** 兼容旧配置；未指定 mode 时，false 对应 fixed，true 对应 default */
   showSwitcher?: boolean;
   /** 用户自定义/覆盖字体条目，同 id 覆盖内置 */
   fonts?: FontDefinitionConfig[];

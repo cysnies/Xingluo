@@ -21,7 +21,10 @@ export function getFontCatalog(): FontDefinition[] {
 /** 当前启用的字体定义；找不到 id 时回退 system */
 export function resolveActiveFont(): FontDefinition {
   const catalog = getFontCatalog();
-  const id = config.fonts?.family ?? "system";
+  const id =
+    config.fonts?.mode === "user"
+      ? "system"
+      : (config.fonts?.family ?? "system");
   return (
     catalog.find((f) => f.id === id) ?? BUILTIN_FONT_MAP.system ?? catalog[0]!
   );

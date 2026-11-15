@@ -5,14 +5,14 @@
 import { Icon } from "astro-icon/components";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
-import { getFontCatalog } from "@/fonts/resolve";
+import { getFontCatalog, resolveActiveFont } from "@/fonts/resolve";
 import { toClientFontEntry } from "@/fonts/client";
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
-const show = config.fonts.showSwitcher !== false;
+const show = config.fonts.mode !== "fixed";
 const catalog = getFontCatalog().map(toClientFontEntry);
-const activeId = config.fonts.family ?? "system";
+const activeId = resolveActiveFont().id;
 ---
 
 {

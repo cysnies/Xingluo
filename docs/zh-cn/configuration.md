@@ -175,8 +175,8 @@ pnpm build
 
 ```ts
 fonts: {
-  family: "system", // SSR 默认；读者可用页头切换器覆盖
-  showSwitcher: true,
+  family: "system", // fixed 或 default 模式使用的全局字体
+  mode: "fixed", // fixed 固定全局 | default 全局默认可切换 | user 读者自选
   // fonts: [ /* 自定义 FontDefinition，同 id 覆盖内置 */ ],
 }
 ```

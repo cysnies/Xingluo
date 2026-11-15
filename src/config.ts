@@ -178,8 +178,8 @@ function resolveFavicon(
 
 /** 默认字体：system（零额外网络请求）。切换见 xingluo.config.ts → fonts.family */
 const defaultFonts: FontsConfig = {
+  mode: "default",
   family: "system",
-  showSwitcher: true,
 };
 
 /** 深度合并动效配置 */
@@ -226,6 +226,9 @@ function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
     fonts: {
       ...defaultFonts,
       ...partial.fonts,
+      mode:
+        partial.fonts?.mode ??
+        (partial.fonts?.showSwitcher === false ? "fixed" : "default"),
       fonts: partial.fonts?.fonts,
     },
     socials: partial.socials ?? [],

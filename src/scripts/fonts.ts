@@ -69,6 +69,9 @@ function applyFont(entry: ClientFontEntry): void {
 }
 
 function setupFontSwitcher(): void {
+  // 固定模式始终使用 SSR 全局字体，忽略此前保存的读者选择。
+  if (document.documentElement.dataset.fontMode === "fixed") return;
+
   const catalog = readCatalog();
   if (catalog.length === 0) return;
 
