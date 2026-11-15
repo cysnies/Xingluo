@@ -51,7 +51,7 @@ const de: UIStrings = {
     monthLabel: "Monat {{month}}",
   },
   categories: {
-    viewAll: "Alle anzeigen {{category}}",
+    viewAll: "Alle anzeigen",
   },
   footer: {
     copyright: "Urheberrecht",

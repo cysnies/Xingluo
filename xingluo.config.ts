@@ -148,12 +148,13 @@ export default defineXingluoConfig({
    * - family: 内置 id，见 src/fonts/catalog.ts
    *   system | lxgw-wenkai | lxgw-wenkai-lite | lxgw-wenkai-screen |
    *   source-han-sans | source-han-serif | inter | jetbrains-mono
-   * - 默认 system：不拉网络字体，体积与性能最优
+   * - 演示站默认使用霞鹜文楷 Lite；读者可通过页头切换并保存个人选择
+   * - system 使用系统字体，不拉网络字体
    * - 启用 CDN 字体时仅加载当前一项；可自备 /public/fonts/*.css 用 source: "local"
    * - 文档：docs/zh-cn/fonts.md
    */
   fonts: {
-    family: "system",
+    family: "lxgw-wenkai-lite",
     showSwitcher: true,
     // fonts: [{ id: "my-font", label: "自定义", family: "MyFont", stack: '"MyFont", sans-serif', source: "local", cssUrl: "/fonts/my-font.css", license: "OFL-1.1" }],
   },

@@ -51,7 +51,7 @@ const eo: UIStrings = {
     monthLabel: "Monato {{month}}",
   },
   categories: {
-    viewAll: "Vidi ĉiujn {{category}}",
+    viewAll: "Vidi ĉiujn",
   },
   footer: {
     copyright: "Kopirajto",

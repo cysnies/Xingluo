@@ -51,7 +51,7 @@ const zhCn: UIStrings = {
     monthLabel: "{{month}} 月",
   },
   categories: {
-    viewAll: "查看全部 {{category}}",
+    viewAll: "查看全部",
   },
   footer: {
     copyright: "版权所有",

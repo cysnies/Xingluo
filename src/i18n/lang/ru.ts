@@ -51,7 +51,7 @@ const ru: UIStrings = {
     monthLabel: "Месяц {{month}}",
   },
   categories: {
-    viewAll: "Все {{category}}",
+    viewAll: "Посмотреть все",
   },
   footer: {
     copyright: "Авторские права",

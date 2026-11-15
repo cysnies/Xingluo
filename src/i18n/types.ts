@@ -67,7 +67,7 @@ export interface UIStrings {
   };
   /** 分类页相关 */
   categories: {
-    /** 查看全部按钮文案，如 "查看全部 {{category}}" */
+    /** 查看全部按钮文案 */
     viewAll: string;
   };
   /** 页脚相关 */

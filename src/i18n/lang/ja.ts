@@ -51,7 +51,7 @@ const ja: UIStrings = {
     monthLabel: "{{month}} 月",
   },
   categories: {
-    viewAll: "すべて表示 {{category}}",
+    viewAll: "すべて表示",
   },
   footer: {
     copyright: "著作権",

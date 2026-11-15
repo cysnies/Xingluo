@@ -11,7 +11,7 @@ const { class: className, ...rest } = Astro.props as Props;
 
 <h3
   data-slot="card-title"
-  class={cn("font-semibold leading-snug tracking-tight", className)}
+  class={cn("text-xl font-semibold leading-snug tracking-tight", className)}
   {...rest}
 >
   <slot />

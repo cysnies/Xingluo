@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "./theme.css";
 @import "./palettes.css";
-@import "./shadcn-compat.css";
 @import "rehype-callouts/theme/obsidian";
 
 /* 加载 Tailwind v4 插件 */
@@ -92,14 +91,6 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
-  }
-
-  /* 渐进增强：削减标题字框上下多余空白，减轻 CJK 卡片垂感偏差 */
-  @supports (text-box-trim: trim-both) {
-    [data-slot="card-title"] {
-      text-box-trim: trim-both;
-      text-box-edge: cap alphabetic;
-    }
   }
 
   body {

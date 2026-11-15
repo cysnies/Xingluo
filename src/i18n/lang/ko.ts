@@ -51,7 +51,7 @@ const ko: UIStrings = {
     monthLabel: "{{month}}월",
   },
   categories: {
-    viewAll: "모두 보기 {{category}}",
+    viewAll: "모두 보기",
   },
   footer: {
     copyright: "저작권",

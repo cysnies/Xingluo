@@ -51,7 +51,7 @@ const ar: UIStrings = {
     monthLabel: "شهر {{month}}",
   },
   categories: {
-    viewAll: "عرض الكل {{category}}",
+    viewAll: "عرض الكل",
   },
   footer: {
     copyright: "حقوق النشر",

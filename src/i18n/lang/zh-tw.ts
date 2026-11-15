@@ -51,7 +51,7 @@ const zhTw: UIStrings = {
     monthLabel: "{{month}} 月",
   },
   categories: {
-    viewAll: "檢視全部 {{category}}",
+    viewAll: "檢視全部",
   },
   footer: {
     copyright: "版權所有",

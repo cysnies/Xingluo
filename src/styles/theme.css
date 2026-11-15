@@ -6,6 +6,7 @@
  */
 
 :root {
+  color-scheme: light;
   /* new-york 风格基准圆角（官网默认观感） */
   --radius: 0.625rem;
   --radius-4xl: calc(var(--radius) * 2.6);
@@ -66,6 +67,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: hsl(240 10% 3.9%);
   --foreground: hsl(0 0% 98%);
   --card: hsl(240 10% 3.9%);

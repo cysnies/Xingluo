@@ -51,7 +51,7 @@ const es: UIStrings = {
     monthLabel: "Mes {{month}}",
   },
   categories: {
-    viewAll: "Ver todo {{category}}",
+    viewAll: "Ver todo",
   },
   footer: {
     copyright: "Derechos de autor",
