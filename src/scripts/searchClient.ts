@@ -170,15 +170,15 @@ function renderResults(state: SearchState, docs: SearchDoc[], query: string) {
   state.noResultsEl?.classList.add("hidden");
   state.resultsEl!.innerHTML = "";
   if (state.statsEl) {
-    const tpl =
-      state.statsEl.dataset.resultsTpl?.trim() || "{{count}} results";
+    const tpl = state.statsEl.dataset.resultsTpl?.trim() || "{{count}} results";
     state.statsEl.textContent = tpl.replace(
       /\{\{\s*count\s*\}\}/g,
       String(docs.length),
     );
     state.statsEl.classList.remove("hidden");
   }
-  for (const doc of docs) state.resultsEl!.appendChild(createResultCard(doc, query));
+  for (const doc of docs)
+    state.resultsEl!.appendChild(createResultCard(doc, query));
   state.params.set("q", query);
   history.replaceState(history.state, "", "?" + state.params.toString());
   sessionStorage.setItem(
@@ -224,14 +224,16 @@ function performSearch(state: SearchState, query: string) {
 
 async function loadIndex(state: SearchState, container: HTMLElement) {
   try {
-    let dataUrl = getAssetPath(`search/${state.locale}.json`);
+    const dataUrl = getAssetPath(`search/${state.locale}.json`);
     let resp = await fetch(dataUrl);
     if (!resp.ok) {
       const mResp = await fetch(getAssetPath("search/manifest.json"));
       if (!mResp.ok) return;
       const manifest: string[] = await mResp.json();
       if (!manifest.length) return;
-      const lang = manifest.includes(state.locale) ? state.locale : manifest[0]!;
+      const lang = manifest.includes(state.locale)
+        ? state.locale
+        : manifest[0]!;
       resp = await fetch(getAssetPath(`search/${lang}.json`));
       if (!resp.ok) return;
     }
@@ -352,7 +354,7 @@ export function initSearch() {
     const n = document.createElement("div");
     n.className = "mb-4 rounded-md bg-muted p-4 text-sm";
     n.innerHTML =
-      "<p><strong>Dev:</strong> build once for search data.</p><code class=\"mt-2 block rounded bg-background px-2 py-1\">pnpm run build</code>";
+      '<p><strong>Dev:</strong> build once for search data.</p><code class="mt-2 block rounded bg-background px-2 py-1">pnpm run build</code>';
     container.prepend(n);
   }
 

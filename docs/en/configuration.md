@@ -28,8 +28,8 @@ site: {
 | Field                    | Default          | Notes                                                                                             |
 | ------------------------ | ---------------- | ------------------------------------------------------------------------------------------------- |
 | `url`                    | required         | Site root URL; must end with `/`                                                                  |
-| `titleByLocale`          | optional         | Per-locale site title override (e.g. `en: "Xingluo"`) |
-| `descriptionByLocale`    | optional         | Per-locale site description override |
+| `titleByLocale`          | optional         | Per-locale site title override (e.g. `en: "Xingluo"`)                                             |
+| `descriptionByLocale`    | optional         | Per-locale site description override                                                              |
 | `title`                  | required         | Site title, used in `<title>` and OG                                                              |
 | `description`            | required         | Site description, used in meta and RSS                                                            |
 | `author`                 | required         | Default author; post frontmatter falls back to this                                               |
@@ -76,23 +76,23 @@ features: {
 }
 ```
 
-| Field                | Default            | Notes                                                                            |
-| -------------------- | ------------------ | -------------------------------------------------------------------------------- |
-| `lightAndDarkMode`   | `true`             | Enable light/dark mode toggle                                                    |
-| `dynamicOgImage`     | `true`             | Dynamically generate OG images (satori + sharp)                                  |
-| `viewTransitions` | `true` | Enable Astro `ClientRouter` (View Transitions); set `false` to drop ~5–6KB gzip global JS |
-| `showArchives`       | `true`             | Show the archives page (sitemap filters accordingly when off)                    |
-| `showCategories`     | `true`             | Show the categories page and nav entry (sitemap filters accordingly when off)    |
-| `showBackButton`     | `true`             | Show a back button on post pages                                                 |
-| `showPostCardHero`   | `true`             | Show the post hero image on post cards (hidden when the post has none)           |
-| `showPostDetailHero` | `true`             | Show the post hero image on the post detail page (hidden when the post has none) |
-| `editPost.enabled`   | `false`            | Show an "Edit this page" link                                                    |
-| `editPost.url`       | `""`               | Edit link prefix; the post's relative source path is appended                    |
-| `search`             | `"flexsearch"`     | Search solution: `"flexsearch"` or `false`                                       |
-| `mdx`                | `true`             | Enable MDX parsing and rendering (see [Content Authoring](./content.md))         |
-| `comments`           | `{provider:false}` | Comment system config (see [Comment System](./comments.md))                      |
-| `players.aplayer`    | `false`            | Enable the APlayer audio player (see [Media Players](./media-players.md))        |
-| `players.dplayer`    | `false`            | Enable the DPlayer video player                                                  |
+| Field                | Default            | Notes                                                                                     |
+| -------------------- | ------------------ | ----------------------------------------------------------------------------------------- |
+| `lightAndDarkMode`   | `true`             | Enable light/dark mode toggle                                                             |
+| `dynamicOgImage`     | `true`             | Dynamically generate OG images (satori + sharp)                                           |
+| `viewTransitions`    | `true`             | Enable Astro `ClientRouter` (View Transitions); set `false` to drop ~5–6KB gzip global JS |
+| `showArchives`       | `true`             | Show the archives page (sitemap filters accordingly when off)                             |
+| `showCategories`     | `true`             | Show the categories page and nav entry (sitemap filters accordingly when off)             |
+| `showBackButton`     | `true`             | Show a back button on post pages                                                          |
+| `showPostCardHero`   | `true`             | Show the post hero image on post cards (hidden when the post has none)                    |
+| `showPostDetailHero` | `true`             | Show the post hero image on the post detail page (hidden when the post has none)          |
+| `editPost.enabled`   | `false`            | Show an "Edit this page" link                                                             |
+| `editPost.url`       | `""`               | Edit link prefix; the post's relative source path is appended                             |
+| `search`             | `"flexsearch"`     | Search solution: `"flexsearch"` or `false`                                                |
+| `mdx`                | `true`             | Enable MDX parsing and rendering (see [Content Authoring](./content.md))                  |
+| `comments`           | `{provider:false}` | Comment system config (see [Comment System](./comments.md))                               |
+| `players.aplayer`    | `false`            | Enable the APlayer audio player (see [Media Players](./media-players.md))                 |
+| `players.dplayer`    | `false`            | Enable the DPlayer video player                                                           |
 
 ### editPost
 

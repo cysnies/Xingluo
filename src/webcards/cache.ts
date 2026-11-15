@@ -41,12 +41,20 @@ export function cacheGet(url: string, enabled: boolean): WebCardData | null {
   }
 }
 
-export function cacheSet(url: string, data: WebCardData, enabled: boolean): void {
+export function cacheSet(
+  url: string,
+  data: WebCardData,
+  enabled: boolean,
+): void {
   MEM.set(url, data);
   if (!isDiskCacheEnabled(enabled)) return;
   try {
     if (!existsSync(CACHE_DIR)) mkdirSync(CACHE_DIR, { recursive: true });
-    writeFileSync(join(CACHE_DIR, `${keyOf(url)}.json`), JSON.stringify(data), "utf8");
+    writeFileSync(
+      join(CACHE_DIR, `${keyOf(url)}.json`),
+      JSON.stringify(data),
+      "utf8",
+    );
   } catch {
     /* 缓存失败不影响构建 */
   }

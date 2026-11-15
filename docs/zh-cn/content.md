@@ -1,7 +1,7 @@
 # 内容创作
 
 > **体积提示：** 仓库自带的 `doc-*` 演示文（尤其含多枚网页卡片）单页 HTML 可达约 100KB。上线站点可删除或精简演示文以缩小产物。
-星罗使用 Astro Content Collections 管理内容，支持 Markdown（`.md`）与 MDX（`.mdx`，需开启 `features.mdx`）。
+> 星罗使用 Astro Content Collections 管理内容，支持 Markdown（`.md`）与 MDX（`.mdx`，需开启 `features.mdx`）。
 
 ## 内容集合
 

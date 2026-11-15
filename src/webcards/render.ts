@@ -72,7 +72,10 @@ function statLabel(key: string, t: WebCardLabels): string {
  * 构建期将卡片数据渲染为静态 HTML（无客户端请求）。
  * 供 remark 插件使用；Astro 组件使用同构结构。
  */
-export function renderWebCardHtml(data: WebCardData, labels: WebCardLabels): string {
+export function renderWebCardHtml(
+  data: WebCardData,
+  labels: WebCardLabels,
+): string {
   const badge = `${esc(platformLabel(data, labels))} · ${esc(kindLabel(data, labels))}`;
   const host = (() => {
     try {

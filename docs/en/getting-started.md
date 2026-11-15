@@ -79,5 +79,4 @@ pnpm preview
 - Read [Content Authoring](./content.md) to start writing
 - Read [Deployment](./deployment.md) to publish your site
 
-
 > Demo locale posts: `examples/locale-posts/`.

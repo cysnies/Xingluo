@@ -22,7 +22,10 @@ describe("fetchText redirect SSRF guard", () => {
       if (init?.redirect === "manual") {
         return {
           status: 302,
-          headers: { get: (k: string) => (k.toLowerCase() === "location" ? "http://127.0.0.1/secret" : null) },
+          headers: {
+            get: (k: string) =>
+              k.toLowerCase() === "location" ? "http://127.0.0.1/secret" : null,
+          },
           url: "",
           text: async () => "",
         };
@@ -44,7 +47,9 @@ describe("fetchText redirect SSRF guard", () => {
           status: 302,
           headers: {
             get: (k: string) =>
-              k.toLowerCase() === "location" ? "https://example.com/page" : null,
+              k.toLowerCase() === "location"
+                ? "https://example.com/page"
+                : null,
           },
           url: "",
           text: async () => "",

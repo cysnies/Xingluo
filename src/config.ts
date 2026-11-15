@@ -176,7 +176,6 @@ function resolveFavicon(
   };
 }
 
-
 /** 默认字体：system（零额外网络请求）。切换见 xingluo.config.ts → fonts.family */
 const defaultFonts: FontsConfig = {
   family: "system",
@@ -214,9 +213,14 @@ function resolveConfig(partial: PartialXingluoConfig): XingluoConfig {
       animations: resolveAnimations(partial.features?.animations),
       enabledLocales: partial.features?.enabledLocales,
       webCards: {
-        enabled: partial.features?.webCards?.enabled ?? defaultFeatures.webCards.enabled,
-        timeoutMs: partial.features?.webCards?.timeoutMs ?? defaultFeatures.webCards.timeoutMs,
-        cache: partial.features?.webCards?.cache ?? defaultFeatures.webCards.cache,
+        enabled:
+          partial.features?.webCards?.enabled ??
+          defaultFeatures.webCards.enabled,
+        timeoutMs:
+          partial.features?.webCards?.timeoutMs ??
+          defaultFeatures.webCards.timeoutMs,
+        cache:
+          partial.features?.webCards?.cache ?? defaultFeatures.webCards.cache,
       },
     },
     fonts: {

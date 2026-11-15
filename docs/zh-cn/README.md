@@ -11,7 +11,7 @@
 | [内容创作](./content.md)         | 文章 frontmatter、Markdown/MDX 语法、代码块、标注框、内容增强 |
 | [国际化](./i18n.md)              | 多语言路由策略、UI 文案、内容级翻译、新增语言                 |
 | [架构总览](./architecture.md)    | 目录结构、配置流、渲染流、构建流程                            |
-| [主题与样式](./theming.md)       | shadcn 主题变量、Zinc/HSL 色板、Tailwind v4、暗色模式           |
+| [主题与样式](./theming.md)       | shadcn 主题变量、Zinc/HSL 色板、Tailwind v4、暗色模式         |
 | [评论系统](./comments.md)        | giscus / twikoo / waline 三选一配置与接入                     |
 | [媒体播放器](./media-players.md) | APlayer / DPlayer 在 MD 与 MDX 中的使用                       |
 | [SEO](./seo.md)                  | OG 图、RSS、sitemap、hreflang、canonical、结构化数据          |

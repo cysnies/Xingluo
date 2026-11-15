@@ -23,9 +23,7 @@ export function resolveActiveFont(): FontDefinition {
   const catalog = getFontCatalog();
   const id = config.fonts?.family ?? "system";
   return (
-    catalog.find((f) => f.id === id) ??
-    BUILTIN_FONT_MAP.system ??
-    catalog[0]!
+    catalog.find((f) => f.id === id) ?? BUILTIN_FONT_MAP.system ?? catalog[0]!
   );
 }
 

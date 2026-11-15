@@ -40,8 +40,7 @@ export async function fetchHuggingFace(
   const data = await fetchJson<HfItem>(`${apiBase}${id}`, { timeoutMs });
   if (!data?.id && !data?.modelId) return fetchGeneric(match, timeoutMs);
 
-  const title =
-    data.cardData?.pretty_name || data.id || data.modelId || id;
+  const title = data.cardData?.pretty_name || data.id || data.modelId || id;
   const tag = data.pipeline_tag || data.tags?.[0];
   return {
     url: match.url,

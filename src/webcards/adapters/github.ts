@@ -101,15 +101,19 @@ export async function fetchGitHub(
     };
   }
 
-  if ((match.kind === "issue" || match.kind === "pull") && owner && repo && number) {
+  if (
+    (match.kind === "issue" || match.kind === "pull") &&
+    owner &&
+    repo &&
+    number
+  ) {
     const path =
       match.kind === "pull"
         ? `https://api.github.com/repos/${owner}/${repo}/pulls/${number}`
         : `https://api.github.com/repos/${owner}/${repo}/issues/${number}`;
-    const data = await fetchJson<GhIssue & { additions?: number; deletions?: number }>(
-      path,
-      { timeoutMs, headers: h },
-    );
+    const data = await fetchJson<
+      GhIssue & { additions?: number; deletions?: number }
+    >(path, { timeoutMs, headers: h });
     // pulls endpoint 失败时回退 issues（PR 也是 issue）
     const issue =
       data ||

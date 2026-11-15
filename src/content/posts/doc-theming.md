@@ -15,11 +15,11 @@ translationKey: doc-theming
 
 [`src/styles/`](../src/styles/)：
 
-| 文件             | 内容                                                  |
-| ---------------- | ----------------------------------------------------- |
+| 文件             | 内容                                                          |
+| ---------------- | ------------------------------------------------------------- |
 | `theme.css`      | shadcn 主题变量（默认 Zinc HSL，亮色 `:root` + 暗色 `.dark`） |
-| `global.css`     | Tailwind 入口、基础层、自定义工具类、标注框主题       |
-| `typography.css` | `.app-prose` 排版与代码块样式                         |
+| `global.css`     | Tailwind 入口、基础层、自定义工具类、标注框主题               |
+| `typography.css` | `.app-prose` 排版与代码块样式                                 |
 
 ## 主题变量
 

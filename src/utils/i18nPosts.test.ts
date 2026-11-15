@@ -50,7 +50,11 @@ describe("i18nPosts", () => {
   });
 
   it("findTranslation returns sibling locale", () => {
-    const zh = post({ id: "zh/hello", translationKey: "hello", locale: "zh-cn" });
+    const zh = post({
+      id: "zh/hello",
+      translationKey: "hello",
+      locale: "zh-cn",
+    });
     const en = post({ id: "en/hello", translationKey: "hello", locale: "en" });
     const posts = [zh, en];
     expect(findTranslation(posts, zh, "en")?.id).toBe("en/hello");

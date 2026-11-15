@@ -150,7 +150,6 @@ export interface GoogleFontsMirrorConfig {
   npmMirror?: boolean;
 }
 
-
 /** 单条可切换字体（与 src/fonts/catalog.ts 对齐，可在配置中覆盖/扩展） */
 export interface FontDefinitionConfig {
   /** 配置用 id，与 fonts.family 对应 */
@@ -213,7 +212,6 @@ export interface AnimationsConfig {
   /** 搜索页面结果渐入动画 */
   searchResultAnim: boolean;
 }
-
 
 /** 网页卡片（构建期抓取，纯静态产物） */
 export interface WebCardsConfig {

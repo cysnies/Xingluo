@@ -2,18 +2,13 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "verbatimModuleSyntax": true,
     "allowJs": true,
     "skipLibCheck": true
   },
-  "include": [
-    ".astro/types.d.ts",
-    "**/*"
-  ],
+  "include": [".astro/types.d.ts", "**/*"],
   "exclude": [
     "dist",
     "references",

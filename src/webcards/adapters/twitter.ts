@@ -9,7 +9,10 @@ interface FxTweet {
     likes?: number;
     retweets?: number;
     replies?: number;
-    media?: { photos?: { url?: string }[]; videos?: { thumbnail_url?: string }[] };
+    media?: {
+      photos?: { url?: string }[];
+      videos?: { thumbnail_url?: string }[];
+    };
   };
 }
 
@@ -27,13 +30,18 @@ export async function fetchTwitter(
 ): Promise<WebCardData> {
   const id = match.params.id;
   if (id) {
-    const fx = await fetchJson<FxTweet>(`https://api.fxtwitter.com/status/${id}`, {
-      timeoutMs,
-    });
+    const fx = await fetchJson<FxTweet>(
+      `https://api.fxtwitter.com/status/${id}`,
+      {
+        timeoutMs,
+      },
+    );
     const t = fx?.tweet;
     if (t?.text) {
       const img =
-        t.media?.photos?.[0]?.url || t.media?.videos?.[0]?.thumbnail_url || t.author?.avatar_url;
+        t.media?.photos?.[0]?.url ||
+        t.media?.videos?.[0]?.thumbnail_url ||
+        t.author?.avatar_url;
       return {
         url: match.url,
         platform: "twitter",
@@ -58,10 +66,11 @@ export async function fetchTwitter(
 
   // oEmbed（构建期）
   const oembedUrl = `https://publish.twitter.com/oembed?omit_script=true&url=${encodeURIComponent(match.url)}`;
-  const oembed = await fetchJson<{ author_name?: string; html?: string; url?: string }>(
-    oembedUrl,
-    { timeoutMs },
-  );
+  const oembed = await fetchJson<{
+    author_name?: string;
+    html?: string;
+    url?: string;
+  }>(oembedUrl, { timeoutMs });
   if (oembed?.html) {
     const text = oembed.html
       .replace(/<[^>]+>/g, " ")
@@ -80,5 +89,10 @@ export async function fetchTwitter(
   }
 
   const og = await fetchGeneric({ ...match, platform: "twitter" }, timeoutMs);
-  return { ...og, platform: "twitter", kind: "tweet", siteName: og.siteName || "X" };
+  return {
+    ...og,
+    platform: "twitter",
+    kind: "tweet",
+    siteName: og.siteName || "X",
+  };
 }

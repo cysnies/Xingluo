@@ -15,7 +15,6 @@
 
 > **多语言示例译文：** 未默认启用的语种文章在 `examples/locale-posts/`，需要时再拷回 `src/content/posts/` 并加入 `enabledLocales`。详见 [i18n](./i18n.md)。
 
-
 克隆仓库后安装依赖：
 
 ```bash

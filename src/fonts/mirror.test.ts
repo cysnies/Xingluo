@@ -13,10 +13,7 @@ vi.mock("@/config", () => ({
   },
 }));
 
-import {
-  maybeMirrorCssUrl,
-  rewriteJsdelivrNpmToNpmmirror,
-} from "./resolve";
+import { maybeMirrorCssUrl, rewriteJsdelivrNpmToNpmmirror } from "./resolve";
 
 describe("font CDN mirrors", () => {
   it("rewrites Google Fonts CSS to fonts.googleapis.cn", () => {

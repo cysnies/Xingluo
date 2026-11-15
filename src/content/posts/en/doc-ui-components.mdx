@@ -25,9 +25,7 @@ MDX posts can import primitives from `src/components/ui/` directly.
 
 ## Alert
 
-<Alert>
-  Default alert for non-blocking tips and notices.
-</Alert>
+<Alert>Default alert for non-blocking tips and notices.</Alert>
 
 <Alert variant="destructive" class="mt-3">
   Destructive alert for irreversible actions or build failures.
@@ -55,23 +53,46 @@ Below
 <div class="not-prose">
   <Tabs defaultValue="astro">
     <div class="flex gap-1 rounded-lg border border-border p-1">
-      <button type="button" data-tab-trigger="astro" class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent">
+      <button
+        type="button"
+        data-tab-trigger="astro"
+        class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent"
+      >
         Astro
       </button>
-      <button type="button" data-tab-trigger="tailwind" class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent">
+      <button
+        type="button"
+        data-tab-trigger="tailwind"
+        class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent"
+      >
         Tailwind
       </button>
-      <button type="button" data-tab-trigger="mdx" class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent">
+      <button
+        type="button"
+        data-tab-trigger="mdx"
+        class="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-accent"
+      >
         MDX
       </button>
     </div>
-    <div data-tab-panel="astro" class="rounded-md border border-border p-3 text-sm">
+    <div
+      data-tab-panel="astro"
+      class="rounded-md border border-border p-3 text-sm"
+    >
       Static-first with optional islands.
     </div>
-    <div data-tab-panel="tailwind" class="rounded-md border border-border p-3 text-sm" hidden>
+    <div
+      data-tab-panel="tailwind"
+      class="rounded-md border border-border p-3 text-sm"
+      hidden
+    >
       Tailwind v4 + OKLCH tokens aligned with shadcn.
     </div>
-    <div data-tab-panel="mdx" class="rounded-md border border-border p-3 text-sm" hidden>
+    <div
+      data-tab-panel="mdx"
+      class="rounded-md border border-border p-3 text-sm"
+      hidden
+    >
       Compose UI primitives and WebCard in content.
     </div>
   </Tabs>
@@ -111,8 +132,20 @@ See `src/components/ui/` for more. Theming tokens are covered in the theming doc
 
 <div class="not-prose">
   <DropdownMenu label="More">
-    <a href="#" class="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent" role="menuitem">Edit</a>
-    <a href="#" class="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent" role="menuitem">Share</a>
+    <a
+      href="#"
+      class="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
+      role="menuitem"
+    >
+      Edit
+    </a>
+    <a
+      href="#"
+      class="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
+      role="menuitem"
+    >
+      Share
+    </a>
   </DropdownMenu>
 </div>
 

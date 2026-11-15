@@ -63,7 +63,11 @@ async function main() {
 
   let ogBytes = 0;
   for (const f of files) {
-    if (f.endsWith(`${sep}og.png`) || f.endsWith("/og.png") || /[/\\]og\.png$/.test(f)) {
+    if (
+      f.endsWith(`${sep}og.png`) ||
+      f.endsWith("/og.png") ||
+      /[/\\]og\.png$/.test(f)
+    ) {
       ogBytes += (await stat(f)).size;
     }
   }
@@ -74,16 +78,26 @@ async function main() {
   );
 
   const fails = [];
-  if (distMB > BUDGET.distMB) fails.push(`dist ${distMB.toFixed(2)}MB > ${BUDGET.distMB}MB`);
+  if (distMB > BUDGET.distMB)
+    fails.push(`dist ${distMB.toFixed(2)}MB > ${BUDGET.distMB}MB`);
   if (htmlPages > BUDGET.htmlPages)
-    fails.push(`html pages ${htmlPages} > ${BUDGET.htmlPages}（请检查 enabledLocales；示例多语言包勿全开）`);
+    fails.push(
+      `html pages ${htmlPages} > ${BUDGET.htmlPages}（请检查 enabledLocales；示例多语言包勿全开）`,
+    );
   if (searchJs && searchGzipKB > BUDGET.searchJsGzipKB)
-    fails.push(`search JS gzip ${searchGzipKB.toFixed(1)}KB > ${BUDGET.searchJsGzipKB}KB`);
+    fails.push(
+      `search JS gzip ${searchGzipKB.toFixed(1)}KB > ${BUDGET.searchJsGzipKB}KB`,
+    );
   if (searchJs && searchRawKB > BUDGET.searchJsRawKB)
-    fails.push(`search JS raw ${searchRawKB.toFixed(1)}KB > ${BUDGET.searchJsRawKB}KB`);
-  if (ogMB > BUDGET.ogMB) fails.push(`og png ${ogMB.toFixed(2)}MB > ${BUDGET.ogMB}MB`);
+    fails.push(
+      `search JS raw ${searchRawKB.toFixed(1)}KB > ${BUDGET.searchJsRawKB}KB`,
+    );
+  if (ogMB > BUDGET.ogMB)
+    fails.push(`og png ${ogMB.toFixed(2)}MB > ${BUDGET.ogMB}MB`);
   if (homeGzipKB > BUDGET.homeHtmlGzipKB)
-    fails.push(`home HTML gzip ${homeGzipKB.toFixed(1)}KB > ${BUDGET.homeHtmlGzipKB}KB`);
+    fails.push(
+      `home HTML gzip ${homeGzipKB.toFixed(1)}KB > ${BUDGET.homeHtmlGzipKB}KB`,
+    );
 
   if (fails.length) {
     console.error("[budget] 超限：\n - " + fails.join("\n - "));

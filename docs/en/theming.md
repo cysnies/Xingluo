@@ -6,11 +6,11 @@ Xingluo uses shadcn/ui new-york style components with Zinc/HSL semantic tokens b
 
 [`src/styles/`](../src/styles/):
 
-| File             | Content                                                      |
-| ---------------- | ------------------------------------------------------------ |
+| File             | Content                                                                 |
+| ---------------- | ----------------------------------------------------------------------- |
 | `theme.css`      | shadcn theme variables (Zinc HSL default, light `:root` + dark `.dark`) |
-| `global.css`     | Tailwind entry, base layer, custom utilities, callout themes |
-| `typography.css` | `.app-prose` typography and code block styles                |
+| `global.css`     | Tailwind entry, base layer, custom utilities, callout themes            |
+| `typography.css` | `.app-prose` typography and code block styles                           |
 
 ## Theme Variables
 

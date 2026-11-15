@@ -49,7 +49,12 @@ export function detectPlatform(rawUrl: string): PlatformMatch | null {
   // GitHub
   if (host === "github.com") {
     if (parts.length === 1 && !GITHUB_RESERVED.has(parts[0]!)) {
-      return { platform: "github", kind: "user", url, params: { user: parts[0]! } };
+      return {
+        platform: "github",
+        kind: "user",
+        url,
+        params: { user: parts[0]! },
+      };
     }
     if (parts.length >= 2 && !GITHUB_RESERVED.has(parts[0]!)) {
       const owner = parts[0]!;
@@ -82,10 +87,20 @@ export function detectPlatform(rawUrl: string): PlatformMatch | null {
     host === "t.bilibili.com"
   ) {
     if (host === "space.bilibili.com" && parts[0]) {
-      return { platform: "bilibili", kind: "user", url, params: { mid: parts[0]! } };
+      return {
+        platform: "bilibili",
+        kind: "user",
+        url,
+        params: { mid: parts[0]! },
+      };
     }
     if (host === "t.bilibili.com" && parts[0]) {
-      return { platform: "bilibili", kind: "dynamic", url, params: { id: parts[0]! } };
+      return {
+        platform: "bilibili",
+        kind: "dynamic",
+        url,
+        params: { id: parts[0]! },
+      };
     }
     if (parts[0] === "video" && parts[1]) {
       const id = parts[1]!.split("?")[0]!;
@@ -97,7 +112,12 @@ export function detectPlatform(rawUrl: string): PlatformMatch | null {
       return { platform: "bilibili", kind: "video", url, params };
     }
     if (parts[0] === "opus" && parts[1]) {
-      return { platform: "bilibili", kind: "dynamic", url, params: { id: parts[1]! } };
+      return {
+        platform: "bilibili",
+        kind: "dynamic",
+        url,
+        params: { id: parts[1]! },
+      };
     }
     if (parts[0] === "read" && parts[1]) {
       const id = parts[1]!.replace(/^cv/i, "");
@@ -108,13 +128,28 @@ export function detectPlatform(rawUrl: string): PlatformMatch | null {
   // Zhihu
   if (host === "zhihu.com" || host === "zhuanlan.zhihu.com") {
     if (host === "zhuanlan.zhihu.com" && parts[0] === "p" && parts[1]) {
-      return { platform: "zhihu", kind: "article", url, params: { id: parts[1]! } };
+      return {
+        platform: "zhihu",
+        kind: "article",
+        url,
+        params: { id: parts[1]! },
+      };
     }
     if (parts[0] === "people" && parts[1]) {
-      return { platform: "zhihu", kind: "user", url, params: { id: parts[1]! } };
+      return {
+        platform: "zhihu",
+        kind: "user",
+        url,
+        params: { id: parts[1]! },
+      };
     }
     if (parts[0] === "org" && parts[1]) {
-      return { platform: "zhihu", kind: "user", url, params: { id: parts[1]! } };
+      return {
+        platform: "zhihu",
+        kind: "user",
+        url,
+        params: { id: parts[1]! },
+      };
     }
     if (parts[0] === "question" && parts[2] === "answer" && parts[3]) {
       return {
@@ -139,7 +174,10 @@ export function detectPlatform(rawUrl: string): PlatformMatch | null {
         platform: "twitter",
         kind: "tweet",
         url,
-        params: { user: parts[statusIdx - 1]!, id: parts[statusIdx + 1]!.split("?")[0]! },
+        params: {
+          user: parts[statusIdx - 1]!,
+          id: parts[statusIdx + 1]!.split("?")[0]!,
+        },
       };
     }
   }
@@ -163,8 +201,18 @@ export function detectPlatform(rawUrl: string): PlatformMatch | null {
       };
     }
     const hfReserved = new Set([
-      "datasets", "spaces", "docs", "blog", "join", "login", "pricing",
-      "models", "api", "organizations", "spaces", "datasets",
+      "datasets",
+      "spaces",
+      "docs",
+      "blog",
+      "join",
+      "login",
+      "pricing",
+      "models",
+      "api",
+      "organizations",
+      "spaces",
+      "datasets",
     ]);
     if (parts[0] === "models" && parts.length >= 3) {
       return {

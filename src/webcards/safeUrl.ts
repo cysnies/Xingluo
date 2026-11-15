@@ -73,7 +73,6 @@ export function isSafeFetchUrl(raw: string): boolean {
   return true;
 }
 
-
 /** 字面量 IP 是否允许作为构建期请求目标 */
 export function isSafeIpAddress(ip: string): boolean {
   const h = ip.replace(/^\[|\]$/g, "").toLowerCase();

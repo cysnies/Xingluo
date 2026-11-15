@@ -57,11 +57,9 @@ export const BUILTIN_FONTS: FontDefinition[] = [
     id: "lxgw-wenkai",
     label: "LXGW WenKai",
     family: "LXGW WenKai",
-    stack:
-      '"LXGW WenKai", "LXGW WenKai Lite", "KaiTi", "STKaiti", serif',
+    stack: '"LXGW WenKai", "LXGW WenKai Lite", "KaiTi", "STKaiti", serif',
     source: "cdn",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css",
+    cssUrl: "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css",
     monoStack: '"LXGW WenKai Mono", ui-monospace, monospace',
     license: "OFL-1.1",
     note: "楷体风格；CDN 分包；默认经 npmmirror 镜像（见 googleFontsMirror）",

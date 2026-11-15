@@ -27,7 +27,6 @@ import { fileURLToPath } from "node:url";
 import config from "./xingluo.config";
 import { optionalDepsPlugin } from "./src/vite/optionalDepsPlugin";
 
-
 /** UI 语言全集（须与 src/i18n/lang/*.ts 对齐） */
 const ALL_UI_LOCALES = [
   "zh-cn",
@@ -75,7 +74,6 @@ const ALL_HREFLANG: Record<string, string> = {
 const enabledHreflang = Object.fromEntries(
   enabledLocales.map((l) => [l, ALL_HREFLANG[l] ?? l]),
 );
-
 
 /** MDX 集成按需启用：关闭时既不加载集成，也不收集 .mdx 文件 */
 const mdxEnabled = config.features?.mdx !== false;
@@ -140,7 +138,6 @@ const ciSiteUrl = process.env.CI_SITE_URL;
 const ciBaseUrl = process.env.CI_BASE_URL;
 const siteUrl = ciSiteUrl || config.site?.url;
 const baseUrl = ciBaseUrl || undefined;
-
 
 export default defineConfig({
   site: siteUrl,

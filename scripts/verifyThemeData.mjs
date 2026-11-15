@@ -42,7 +42,10 @@ for (const a of accents) {
   }
 }
 
-if (!theme.includes("data-ui-style=\"default\"") || !theme.includes("data-ui-style=\"new-york\"")) {
+if (
+  !theme.includes('data-ui-style="default"') ||
+  !theme.includes('data-ui-style="new-york"')
+) {
   errors.push("theme.css 缺少 data-ui-style default/new-york");
 }
 

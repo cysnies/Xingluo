@@ -24,14 +24,14 @@ import { WebCard } from "@/components/mdx";
 
 ## 支持的平台
 
-| 平台 | 类型 | 数据来源（构建期） |
-|------|------|-------------------|
-| 通用 | 任意 URL | Open Graph / `<title>` / favicon |
-| GitHub | 仓库、用户、PR、Issue | `api.github.com`（可选 `GITHUB_TOKEN` / `GH_TOKEN`） |
-| Bilibili | 视频、用户、专栏；动态 | 公开 API；动态等多走 OG 降级 |
-| 知乎 | 用户、回答、专栏 | 以 OG 为主（反爬严格，易降级） |
-| X（Twitter） | 推文 | fxtwitter → publish.twitter.com oEmbed → OG |
-| Hugging Face | 模型；顺带 dataset / space | `huggingface.co/api/...` |
+| 平台         | 类型                       | 数据来源（构建期）                                   |
+| ------------ | -------------------------- | ---------------------------------------------------- |
+| 通用         | 任意 URL                   | Open Graph / `<title>` / favicon                     |
+| GitHub       | 仓库、用户、PR、Issue      | `api.github.com`（可选 `GITHUB_TOKEN` / `GH_TOKEN`） |
+| Bilibili     | 视频、用户、专栏；动态     | 公开 API；动态等多走 OG 降级                         |
+| 知乎         | 用户、回答、专栏           | 以 OG 为主（反爬严格，易降级）                       |
+| X（Twitter） | 推文                       | fxtwitter → publish.twitter.com oEmbed → OG          |
+| Hugging Face | 模型；顺带 dataset / space | `huggingface.co/api/...`                             |
 
 失败或超时 → **通用静态卡片**（至少保留 URL / 标题 / 站点），构建不中断。
 
@@ -62,7 +62,6 @@ features: {
 
 本实现自研适配器与静态 HTML 渲染，不引入上述运行时依赖。
 
-
 ## 安全与缓存
 
 构建期会请求外链以填充卡片，因此：
@@ -80,7 +79,7 @@ features: {
 
 ```yaml
 translationKey: doc-webcards
-locale: zh-cn   # 或 en 等；与路径语言一致
+locale: zh-cn # 或 en 等；与路径语言一致
 ```
 
 缺 `locale` 时回退站点默认语言；缺 `translationKey` 时同 slug 多语可能互相抢路由。
@@ -102,4 +101,3 @@ locale: zh-cn   # 或 en 等；与路径语言一致
 - 对域名 `dns.lookup` 后校验全部 A/AAAA（`isSafeResolvedHostname`）
 
 **已知限制（TOCTOU）：** DNS 解析与 `fetch` 之间非原子，无法在标准 `fetch(hostname)` 下完全消除 DNS rebinding。默认信任边界是「构建环境与内容源可信」。若处理不可信用户稿件，请在隔离网络构建，或自行实现解析后对 IP 直连。
-

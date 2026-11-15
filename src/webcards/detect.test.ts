@@ -16,10 +16,18 @@ describe("detectPlatform", () => {
     });
     expect(
       detectPlatform("https://github.com/withastro/astro/issues/1"),
-    ).toMatchObject({ platform: "github", kind: "issue", params: { number: "1" } });
+    ).toMatchObject({
+      platform: "github",
+      kind: "issue",
+      params: { number: "1" },
+    });
     expect(
       detectPlatform("https://github.com/withastro/astro/pull/2"),
-    ).toMatchObject({ platform: "github", kind: "pull", params: { number: "2" } });
+    ).toMatchObject({
+      platform: "github",
+      kind: "pull",
+      params: { number: "2" },
+    });
   });
 
   it("recognizes Hugging Face model and Bilibili video", () => {
@@ -69,5 +77,4 @@ describe("isSafeFetchUrl", () => {
     expect(isSafeFetchUrl("http://100.64.0.1/")).toBe(false);
     expect(isSafeFetchUrl("http://0.0.0.0/")).toBe(false);
   });
-
 });

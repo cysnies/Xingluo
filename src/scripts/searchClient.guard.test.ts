@@ -3,10 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 describe("searchClient bundle guards", () => {
-  const src = readFileSync(
-    resolve("src/scripts/searchClient.ts"),
-    "utf8",
-  );
+  const src = readFileSync(resolve("src/scripts/searchClient.ts"), "utf8");
 
   it("does not import @/config or withBase (prevents 60KB+ client pull-in)", () => {
     expect(src).not.toMatch(/from\s+["']@\/config["']/);

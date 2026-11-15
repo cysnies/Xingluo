@@ -30,7 +30,6 @@ Built-in ids include `system`, `lxgw-wenkai`, `lxgw-wenkai-lite`, `lxgw-wenkai-s
 - Prefer system or Lite webfonts on mobile to limit layout shift and payload.
 - PostCard vertical metrics were tuned for CJK (`leading-snug`, no negative-margin hacks); re-check after changing the default family.
 
-
 ## Mainland China CDN mirrors
 
 By default `features.googleFontsMirror.enabled` is **true** (`src/config.ts`):

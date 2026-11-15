@@ -11,7 +11,8 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   --app-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
   --app-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --app-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --app-shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
 
   --background: hsl(0 0% 100%);
   --foreground: hsl(240 10% 3.9%);
@@ -56,10 +57,12 @@
   --prose-width: 42rem;
   --prose-font-size: 1.0625rem;
   --prose-line-height: 1.75;
-  --font-sans: system-ui, -apple-system, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  --font-sans:
+    system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
 }
 
 .dark {
@@ -107,8 +110,10 @@
 html[data-ui-style="default"] {
   --radius: 0.5rem;
   --app-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --app-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
-  --app-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --app-shadow-sm:
+    0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+  --app-shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 html[data-ui-style="new-york"] {

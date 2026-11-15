@@ -5,7 +5,9 @@ import { isIP } from "node:net";
 import { isSafeFetchUrl, isSafeIpAddress } from "./safeUrl";
 
 /** DNS 解析后校验全部 A/AAAA，拒绝落到私网/特殊用途地址 */
-export async function isSafeResolvedHostname(hostname: string): Promise<boolean> {
+export async function isSafeResolvedHostname(
+  hostname: string,
+): Promise<boolean> {
   const host = hostname.replace(/\.$/, "").toLowerCase();
   if (!host) return false;
   const ipVer = isIP(host);

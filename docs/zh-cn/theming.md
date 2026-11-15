@@ -6,12 +6,12 @@
 
 [`src/styles/`](../src/styles/)：
 
-| 文件             | 内容                                                  |
-| ---------------- | ----------------------------------------------------- |
-| `theme.css`      | 默认 Zinc 主题变量（亮色 `:root` + 暗色 `.dark`）     |
-| `global.css`     | Tailwind 入口、基础层、自定义工具类、标注框主题       |
-| `typography.css` | `.app-prose` 排版（文章/关于页按需加载）               |
-| `palettes.css`   | 基色 `data-palette` + 品牌强调色 `data-accent`         |
+| 文件             | 内容                                              |
+| ---------------- | ------------------------------------------------- |
+| `theme.css`      | 默认 Zinc 主题变量（亮色 `:root` + 暗色 `.dark`） |
+| `global.css`     | Tailwind 入口、基础层、自定义工具类、标注框主题   |
+| `typography.css` | `.app-prose` 排版（文章/关于页按需加载）          |
+| `palettes.css`   | 基色 `data-palette` + 品牌强调色 `data-accent`    |
 
 ## 主题变量
 
@@ -161,12 +161,12 @@ features: {
 }
 ```
 
-| 配置 | 取值 | 说明 |
-| ---- | ---- | ---- |
-| `palette` | `zinc`（默认）`slate` `stone` `gray` `neutral` | 完整表面令牌；改编自 shadcn themes 注册表 |
-| `accent` | `none`（默认）`blue` `green` `rose` `orange` `violet` | **品牌强调色**（primary 族）；≠ 表面 token `--accent`（hover 底） |
-| `uiStyle` | `new-york`（默认） | 圆角 0.625rem，贴近官网 |
-| `uiStyle` | `default` | 圆角 0.5rem，略强阴影 |
+| 配置      | 取值                                                  | 说明                                                              |
+| --------- | ----------------------------------------------------- | ----------------------------------------------------------------- |
+| `palette` | `zinc`（默认）`slate` `stone` `gray` `neutral`        | 完整表面令牌；改编自 shadcn themes 注册表                         |
+| `accent`  | `none`（默认）`blue` `green` `rose` `orange` `violet` | **品牌强调色**（primary 族）；≠ 表面 token `--accent`（hover 底） |
+| `uiStyle` | `new-york`（默认）                                    | 圆角 0.625rem，贴近官网                                           |
+| `uiStyle` | `default`                                             | 圆角 0.5rem，略强阴影                                             |
 
 参考：[shadcn Theming](https://ui.shadcn.com/docs/theming)、官方 themes JSON（`ui.shadcn.com/r/themes/{zinc,slate,stone,gray,neutral}.json`）、[v4 colors](https://v4.shadcn.com/colors)、[theme generator](https://ui.shadcn.com/themes)。实现：`theme.css` + `palettes.css`（借鉴 token，未整库照搬组件）。
 

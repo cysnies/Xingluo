@@ -6,7 +6,6 @@
  * 色值改编自 shadcn themes 注册表（HSL）
  */
 
-
 html[data-palette="slate"] {
   --background: hsl(0 0% 100%);
   --foreground: hsl(222.2 84% 4.9%);
@@ -336,8 +335,9 @@ html.dark[data-palette="neutral"] {
 }
 
 /* zinc = 默认基线，无需覆盖；保留选择器便于调试 */
-html[data-palette="zinc"] { /* 使用 :root Zinc */ }
-
+html[data-palette="zinc"] {
+  /* 使用 :root Zinc */
+}
 
 html[data-accent="blue"] {
   --primary: hsl(221.2 83.2% 53.3%);

@@ -96,7 +96,10 @@ export async function fetchBilibili(
       favicon: "https://www.bilibili.com/favicon.ico",
       image: d.face,
       authorAvatar: d.face,
-      stats: d.follower != null ? [{ key: "followers", value: fmt(d.follower) }] : undefined,
+      stats:
+        d.follower != null
+          ? [{ key: "followers", value: fmt(d.follower) }]
+          : undefined,
     };
   }
 
@@ -126,5 +129,10 @@ export async function fetchBilibili(
 
   // 动态等：公开接口不稳定，OG 降级
   const og = await fetchGeneric({ ...match, platform: "bilibili" }, timeoutMs);
-  return { ...og, platform: "bilibili", kind: match.kind, siteName: og.siteName || "哔哩哔哩" };
+  return {
+    ...og,
+    platform: "bilibili",
+    kind: match.kind,
+    siteName: og.siteName || "哔哩哔哩",
+  };
 }

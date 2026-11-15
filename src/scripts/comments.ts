@@ -42,7 +42,9 @@ let twikooCleanup: (() => void) | null = null;
  * 每次调用前检查 <link> 是否仍在 <head> 中——View Transitions 的
  * swapHeadElements() 会移除仅存在于当前 head 但不在新文档 head 中的元素。
  */
-function createEnsureCss(getCssUrl: () => Promise<string>): () => Promise<void> {
+function createEnsureCss(
+  getCssUrl: () => Promise<string>,
+): () => Promise<void> {
   let promise: Promise<void> | null = null;
   let lastUrl = "";
 

@@ -55,8 +55,9 @@ function localeFromPath(filePath: string | undefined): string {
   if (!filePath) return "zh-cn";
   const norm = filePath.replace(/\\/g, "/");
   const m =
-    norm.match(/\/(?:content\/)?(?:posts|pages)\/([a-z]{2}(?:-[a-z]{2})?)\//i) ||
-    norm.match(/(?:^|\/)([a-z]{2}(?:-[a-z]{2})?)\/[^/]+\.(?:md|mdx)$/i);
+    norm.match(
+      /\/(?:content\/)?(?:posts|pages)\/([a-z]{2}(?:-[a-z]{2})?)\//i,
+    ) || norm.match(/(?:^|\/)([a-z]{2}(?:-[a-z]{2})?)\/[^/]+\.(?:md|mdx)$/i);
   if (m?.[1] && KNOWN_LOCALES.has(m[1].toLowerCase())) {
     return m[1].toLowerCase();
   }
@@ -77,10 +78,20 @@ function isBareUrlParagraph(node: MdastNode): string | null {
   );
   if (kids.length !== 1) return null;
   const only = kids[0];
-  if (only.type === "link" && only.url && (!only.children || only.children.length <= 1)) {
+  if (
+    only.type === "link" &&
+    only.url &&
+    (!only.children || only.children.length <= 1)
+  ) {
     const text =
-      only.children?.[0]?.type === "text" ? String(only.children[0].value || "") : "";
-    if (!text || text === only.url || text.replace(/\/$/, "") === only.url.replace(/\/$/, "")) {
+      only.children?.[0]?.type === "text"
+        ? String(only.children[0].value || "")
+        : "";
+    if (
+      !text ||
+      text === only.url ||
+      text.replace(/\/$/, "") === only.url.replace(/\/$/, "")
+    ) {
       return String(only.url);
     }
   }
@@ -94,18 +105,23 @@ function isBareUrlParagraph(node: MdastNode): string | null {
 /**
  * 优先用 frontmatter.locale；否则从路径推断（posts/en/... → en）。
  */
-function resolveLocale(file: {
-  path?: string;
-  dirname?: string;
-  history?: string[];
-  data?: { astro?: { frontmatter?: { locale?: string } } };
-}, optionsLocale?: string): string {
+function resolveLocale(
+  file: {
+    path?: string;
+    dirname?: string;
+    history?: string[];
+    data?: { astro?: { frontmatter?: { locale?: string } } };
+  },
+  optionsLocale?: string,
+): string {
   if (optionsLocale) return optionsLocale;
   const fm = file.data?.astro?.frontmatter?.locale;
   if (fm) return fm;
-  const pathCandidates = [file.path, file.dirname, ...(file.history || [])].filter(
-    Boolean,
-  ) as string[];
+  const pathCandidates = [
+    file.path,
+    file.dirname,
+    ...(file.history || []),
+  ].filter(Boolean) as string[];
   for (const c of pathCandidates) {
     const loc = localeFromPath(c);
     if (loc !== "zh-cn") return loc;
@@ -126,7 +142,10 @@ export function remarkWebCards(
     if (cfg.enabled === false) return;
     if (!tree || !Array.isArray(tree.children)) return;
 
-    const locale = resolveLocale(file as Parameters<typeof resolveLocale>[0], options.locale);
+    const locale = resolveLocale(
+      file as Parameters<typeof resolveLocale>[0],
+      options.locale,
+    );
     const labels = labelsFor(locale, options.labels);
 
     const tasks: { index: number; url: string }[] = [];

@@ -30,7 +30,10 @@ function reflect(): void {
   // 保留 SSR 的 i18n aria-label；用 aria-pressed / data-theme-value 表达状态
   const themeBtn = document.querySelector("#theme-btn");
   if (themeBtn) {
-    themeBtn.setAttribute("aria-pressed", themeValue === DARK ? "true" : "false");
+    themeBtn.setAttribute(
+      "aria-pressed",
+      themeValue === DARK ? "true" : "false",
+    );
     themeBtn.setAttribute("data-theme-value", themeValue);
   }
 

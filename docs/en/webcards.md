@@ -22,14 +22,14 @@ import { WebCard } from "@/components/mdx";
 
 ## Platforms
 
-| Platform | Kinds | Build-time source |
-|----------|-------|-------------------|
-| Generic | any URL | Open Graph / `<title>` / favicon |
-| GitHub | repo, user, PR, Issue | `api.github.com` (optional `GITHUB_TOKEN` / `GH_TOKEN`) |
-| Bilibili | video, user, column; dynamics | public API; dynamics often OG-degrade |
-| Zhihu | user, answer, column | mostly OG (anti-bot; often degraded) |
-| X (Twitter) | posts | fxtwitter → publish.twitter.com oEmbed → OG |
-| Hugging Face | model; dataset / space | `huggingface.co/api/...` |
+| Platform     | Kinds                         | Build-time source                                       |
+| ------------ | ----------------------------- | ------------------------------------------------------- |
+| Generic      | any URL                       | Open Graph / `<title>` / favicon                        |
+| GitHub       | repo, user, PR, Issue         | `api.github.com` (optional `GITHUB_TOKEN` / `GH_TOKEN`) |
+| Bilibili     | video, user, column; dynamics | public API; dynamics often OG-degrade                   |
+| Zhihu        | user, answer, column          | mostly OG (anti-bot; often degraded)                    |
+| X (Twitter)  | posts                         | fxtwitter → publish.twitter.com oEmbed → OG             |
+| Hugging Face | model; dataset / space        | `huggingface.co/api/...`                                |
 
 Failure or timeout → **generic static card** (URL / title / site kept). Build continues.
 
@@ -60,7 +60,7 @@ features: {
 
 ```yaml
 translationKey: doc-webcards
-locale: zh-cn   # or en; match path language
+locale: zh-cn # or en; match path language
 ```
 
 Missing `locale` falls back to the site default; missing `translationKey` can cause slug collisions across locales.
@@ -79,4 +79,3 @@ Card labels use `src/i18n/lang/*.ts` → `webcard.*`. Remark infers locale from 
 ## Build-time SSRF trust boundary
 
 Web cards fetch link metadata at build time with URL literal checks, manual redirects, and `dns.lookup` on each hop. **TOCTOU remains:** lookup and `fetch` are not atomic. Default assumption: trusted build host and content. For untrusted Markdown, build in isolation or pin connections to resolved IPs yourself.
-
