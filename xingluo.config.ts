@@ -21,6 +21,13 @@ export default defineXingluoConfig({
     author: "白鼠 Cysnies",
     // 作者主页链接（可选），注入 JSON-LD 结构化数据的 author.url
     profile: "https://xingluo.tcea.top/",
+    // 首页头像：设为 false 可隐藏；图片路径相对 public，也可使用 HTTPS URL
+    avatar: {
+      src: "favicon.svg",
+      alt: "Xingluo Logo",
+      // square 正方形 | rounded 圆角矩形 | circle 圆形
+      shape: "circle",
+    },
     // 默认 OG 图文件名（位于 public 目录），文章未配置 ogImage 时使用
     ogImage: "default-og.jpg",
     // 默认语言代码，需与 astro.config.ts 的 i18n.defaultLocale 一致

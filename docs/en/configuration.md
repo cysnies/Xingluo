@@ -44,6 +44,20 @@ site: {
 | `favicon.appleTouchIcon` | —                | Apple Touch Icon for iOS home screen (180×180 PNG recommended)                                    |
 | `favicon.manifest`       | —                | Web App Manifest filename, Android/PWA metadata                                                   |
 
+### Homepage avatar
+
+Configure the image beside the homepage introduction with `site.avatar`. Omit this option or set it to `false` to hide the avatar.
+
+```ts
+avatar: {
+  src: "favicon.svg", // Image path in public, or an external HTTPS URL
+  alt: "Xingluo Logo", // Optional; defaults to the localized site title
+  shape: "circle", // square | rounded | circle (default)
+}
+```
+
+The demo uses the existing Xingluo logo. The avatar is 160×160px on desktop and 96×96px on narrow screens. It sits outside the introduction on wide screens and moves inside the content area on smaller screens.
+
 ## posts
 
 ```ts

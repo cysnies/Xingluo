@@ -33,6 +33,18 @@ export interface SiteConfig {
   googleVerification?: string;
   /** 站点图标配置，省略时回退到 public/favicon.svg */
   favicon?: FaviconConfig;
+  /** 首页介绍区头像；省略或设为 false 时隐藏 */
+  avatar?: AvatarConfig | false;
+}
+
+/** 首页头像配置 */
+export interface AvatarConfig {
+  /** public 目录中的图片路径或外部 HTTPS 图片 URL */
+  src: string;
+  /** 图片替代文字，省略时使用当前语言的站点标题 */
+  alt?: string;
+  /** 正方形、圆角矩形或圆形，默认圆形 */
+  shape?: "square" | "rounded" | "circle";
 }
 
 /** 站点图标配置 */

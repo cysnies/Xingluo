@@ -13,12 +13,23 @@ import { getCardWidth } from "@/utils/getCardWidth";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import { getSiteTitle, getSiteDescription } from "@/utils/siteBrand";
+import { getAssetPath } from "@/utils/withBase";
 import ArrowRight from "@/assets/icons/ArrowRight.astro";
 import Rss from "@/assets/icons/Rss.astro";
 
 const { site, posts: postsConfig } = config;
 const locale = Astro.currentLocale ?? site.lang;
 const t = useTranslations(locale);
+const avatar = site.avatar || undefined;
+const avatarSrc = avatar?.src.trim();
+const avatarUrl =
+  avatarSrc &&
+  (/^(?:https?:)?\/\//i.test(avatarSrc) ? avatarSrc : getAssetPath(avatarSrc));
+const avatarShape = {
+  square: "rounded-none",
+  rounded: "rounded-2xl",
+  circle: "rounded-full",
+}[avatar?.shape ?? "circle"];
 
 const posts = await getCollection("posts");
 const sortedPosts = getPostsForLocale(posts, locale);
@@ -38,32 +49,49 @@ const rssHref = new URL(
   <Header />
   <Main>
     <!-- Hero 区域 -->
-    <section class="border-b border-border pb-6" data-reveal>
-      <div class="flex items-center gap-3">
-        <h1 class="my-4 text-3xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
-          {getSiteTitle(locale)}
-        </h1>
-        <a
-          href={rssHref}
-          class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-          aria-label={t.nav.rss}
-          title="RSS"
-        >
-          <Rss class="size-5" />
-          <span class="sr-only">RSS</span>
-        </a>
-      </div>
-      <p class="max-w-prose text-base leading-relaxed text-muted-foreground sm:text-lg">{getSiteDescription(locale)}</p>
-      {
-        config.features.showHomeSocials && config.socials.length > 0 && (
-          <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
-            <span class="whitespace-nowrap text-sm text-muted-foreground">
-              {t.home.socialLinks}:
-            </span>
-            <Socials />
+    <section class="relative border-b border-border pb-6" data-reveal>
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+        {avatarUrl && (
+          <img
+            src={avatarUrl}
+            alt={avatar?.alt ?? getSiteTitle(locale)}
+            width="160"
+            height="160"
+            decoding="async"
+            class:list={[
+              "size-24 shrink-0 object-cover sm:size-40 2xl:absolute 2xl:end-full 2xl:top-1/2 2xl:me-6 2xl:-translate-y-1/2",
+              avatarShape,
+            ]}
+          />
+        )}
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-3">
+            <h1 class="my-4 text-3xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
+              {getSiteTitle(locale)}
+            </h1>
+            <a
+              href={rssHref}
+              class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              aria-label={t.nav.rss}
+              title="RSS"
+            >
+              <Rss class="size-5" />
+              <span class="sr-only">RSS</span>
+            </a>
           </div>
-        )
-      }
+          <p class="max-w-prose text-base leading-relaxed text-muted-foreground sm:text-lg">{getSiteDescription(locale)}</p>
+          {
+            config.features.showHomeSocials && config.socials.length > 0 && (
+              <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <span class="whitespace-nowrap text-sm text-muted-foreground">
+                  {t.home.socialLinks}:
+                </span>
+                <Socials />
+              </div>
+            )
+          }
+        </div>
+      </div>
     </section>
 
     <!-- 精选文章 -->

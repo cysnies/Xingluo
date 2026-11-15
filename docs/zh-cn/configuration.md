@@ -44,6 +44,20 @@ site: {
 | `favicon.appleTouchIcon` | —                | Apple Touch Icon，iOS 主屏图标（推荐 180×180 PNG）                     |
 | `favicon.manifest`       | —                | Web App Manifest 文件名，Android/PWA 元数据                            |
 
+### 首页头像
+
+在 `site.avatar` 中配置首页介绍区左侧的头像。省略该项或设为 `false` 可隐藏头像。
+
+```ts
+avatar: {
+  src: "favicon.svg", // public 目录中的图片路径，也支持外部 HTTPS URL
+  alt: "Xingluo Logo", // 可选，省略时使用当前语言的站点标题
+  shape: "circle", // square 正方形 | rounded 圆角矩形 | circle 圆形（默认）
+}
+```
+
+演示站使用现有 Xingluo Logo。头像在桌面端为 160×160px，在窄屏为 96×96px；宽屏时位于介绍区外侧左边，窄屏时自动回到内容区内。
+
 ## posts 文章配置
 
 ```ts
