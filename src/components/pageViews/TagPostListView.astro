@@ -52,7 +52,7 @@ const crumbs = [
         const width = getCardWidth(post, config.features.showPostCardHero);
         return (
           <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
-            <PostCard post={post} />
+            <PostCard post={post} density="compact" />
           </li>
         );
       })}

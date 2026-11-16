@@ -12,6 +12,7 @@ describe("PostCard layout contract", () => {
     expect(src).not.toMatch(/h-\[200px\]|min-h-14|min-h-15|justify-between/);
     expect(src).toContain('as="article"');
     expect(src).toContain('variant?: "featured" | "compact" | "list"');
+    expect(src).toContain('density?: "default" | "compact"');
   });
 
   it("keeps three featured posts in a single desktop row", () => {
@@ -30,18 +31,21 @@ describe("PostCard layout contract", () => {
     expect(src).toContain("<PostTaxonomy tags={tags} />");
     expect(src).not.toContain("<PostTaxonomy category=");
     expect(src).toContain('variant === "list" ? "mt-3" : "mt-auto pt-3"');
-    expect(src).toContain(
-      '<div class={variant === "list" ? "mt-3" : "mt-auto pt-3"}>',
-    );
+    expect(src).toContain('density === "compact" && "pt-2"');
   });
 
   it("places the category beside the date and reading time", () => {
     const meta = src.indexOf("data-post-card-meta");
     const category = src.indexOf("<PostCategory", meta);
+    const separator = src.indexOf(
+      '{data.category && <span aria-hidden="true">·</span>}',
+      category,
+    );
     const datetime = src.indexOf("<Datetime", meta);
     expect(meta).toBeGreaterThan(-1);
     expect(category).toBeGreaterThan(meta);
-    expect(datetime).toBeGreaterThan(category);
+    expect(separator).toBeGreaterThan(category);
+    expect(datetime).toBeGreaterThan(separator);
   });
 
   it("renders hero images as a fading right-side backdrop on every card", () => {
@@ -55,5 +59,15 @@ describe("PostCard layout contract", () => {
   it("does not render decorative arrows on article cards", () => {
     expect(src).not.toContain("@/assets/icons/ArrowRight.astro");
     expect(src).not.toContain("<ArrowRight");
+  });
+
+  it("supports a compact density for tag detail pages", () => {
+    const tagPage = readFileSync(
+      resolve(__dirname, "pageViews/TagPostListView.astro"),
+      "utf8",
+    );
+    expect(src).toContain('density === "compact" && "md:p-5"');
+    expect(src).toContain('density === "compact" && "gap-3 md:gap-4"');
+    expect(tagPage).toContain('<PostCard post={post} density="compact" />');
   });
 });

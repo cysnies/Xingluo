@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 interface Props {
   post: CollectionEntry<"posts">;
   variant?: "featured" | "compact" | "list";
+  density?: "default" | "compact";
   showTags?: boolean;
   class?: string;
 }
@@ -24,6 +25,7 @@ interface Props {
 const {
   post,
   variant = "compact",
+  density = "default",
   showTags = true,
   class: className,
 } = Astro.props;
@@ -50,6 +52,7 @@ const useBackgroundHero = Boolean(heroImageSrc);
   data-reveal
   class={cn(
     "post-card group relative h-full min-w-0 gap-0 overflow-hidden rounded-xl border-border/80 p-4 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs motion-reduce:transition-none md:p-6",
+    density === "compact" && "md:p-5",
     variant === "featured" && "bg-muted/20",
     variant === "list" &&
       "rounded-none border-0 bg-transparent px-0 py-5 hover:shadow-none md:px-0 md:py-6",
@@ -73,6 +76,7 @@ const useBackgroundHero = Boolean(heroImageSrc);
   <div
     class={cn(
       "relative z-10 flex min-w-0 flex-col gap-4 md:gap-5",
+      density === "compact" && "gap-3 md:gap-4",
       variant !== "list" && "flex-1",
       variant !== "featured" && "md:flex-row",
       useBackgroundHero && "md:pe-[42%]",
@@ -88,6 +92,7 @@ const useBackgroundHero = Boolean(heroImageSrc);
         transition:name={toTransitionName(data.title)}
         class={cn(
           "min-w-0 line-clamp-2 break-words text-xl leading-[1.4]",
+          density === "compact" && "text-lg",
           variant === "featured" && "md:text-2xl lg:text-[1.625rem]",
         )}
       >
@@ -96,9 +101,13 @@ const useBackgroundHero = Boolean(heroImageSrc);
 
       <div
         data-post-card-meta
-        class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-normal text-muted-foreground"
+        class={cn(
+          "mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-normal text-muted-foreground",
+          density === "compact" && "mt-1.5",
+        )}
       >
         <PostCategory category={data.category} />
+        {data.category && <span aria-hidden="true">·</span>}
         <Datetime
           pubDatetime={data.pubDatetime}
           modDatetime={data.modDatetime}
@@ -122,6 +131,7 @@ const useBackgroundHero = Boolean(heroImageSrc);
           <CardDescription
             class={cn(
               "mt-2 break-words text-sm leading-[1.65]",
+              density === "compact" && "mt-1.5 text-xs",
               variant === "list" ? "line-clamp-2" : "line-clamp-3",
             )}
           >
@@ -132,7 +142,12 @@ const useBackgroundHero = Boolean(heroImageSrc);
 
       {
         showTags && hasTags && (
-          <div class={variant === "list" ? "mt-3" : "mt-auto pt-3"}>
+          <div
+            class={cn(
+              variant === "list" ? "mt-3" : "mt-auto pt-3",
+              density === "compact" && "pt-2",
+            )}
+          >
             <PostTaxonomy tags={tags} />
           </div>
         )
