@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/config", () => ({
@@ -38,26 +38,22 @@ describe("font CDN mirrors", () => {
     expect(maybeMirrorCssUrl("/fonts/mine.css")).toBe("/fonts/mine.css");
   });
 
-  it("uses the npmmirror file service for every WenKai Lite subset", () => {
-    const css = readFileSync(
-      new URL(
-        "../../public/fonts/lxgw-wenkai-lite-regular.css",
-        import.meta.url,
-      ),
-      "utf8",
+  it("serves every WenKai Lite subset from the same origin", () => {
+    const cssUrl = new URL(
+      "../../public/fonts/lxgw-wenkai-lite/regular.css",
+      import.meta.url,
     );
+    const css = readFileSync(cssUrl, "utf8");
     const urls = [
       ...new Set(
-        [...css.matchAll(/https:\/\/[^"']+\.woff2/g)].map(([url]) => url),
+        [...css.matchAll(/url\("([^"]+\.woff2)"\)/g)].map(([, url]) => url),
       ),
     ];
 
     expect(urls).toHaveLength(97);
     expect(
-      urls.every((url) =>
-        url.startsWith(
-          "https://registry.npmmirror.com/lxgw-wenkai-lite-webfont/1.7.0/files/files/",
-        ),
+      urls.every(
+        (url) => url.startsWith("./files/") && existsSync(new URL(url, cssUrl)),
       ),
     ).toBe(true);
   });

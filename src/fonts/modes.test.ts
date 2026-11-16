@@ -62,7 +62,9 @@ describe("font modes", () => {
     if (active === "lxgw-wenkai-lite") {
       const lite = getFontCatalog().find((font) => font.id === active);
       expect(lite?.cssUrls).toEqual([lite?.cssUrl]);
-      expect(lite?.cssUrl).toBe("fonts/lxgw-wenkai-lite-regular.css");
+      expect(lite?.cssUrl).toBe(
+        "fonts/lxgw-wenkai-lite/regular.css?v=20261117-3",
+      );
     }
   });
 });
