@@ -9,10 +9,10 @@ describe("post card taxonomy", () => {
     });
   });
 
-  it("keeps at most two tags visible and counts only additional unique tags", () => {
+  it("keeps every unique tag available for client-side layout", () => {
     expect(getPostCardTags(["Astro", "CSS", "MDX", "CSS", "UI"])).toEqual({
-      visible: ["Astro", "CSS"],
-      hidden: ["MDX", "UI"],
+      visible: ["Astro", "CSS", "MDX", "UI"],
+      hidden: [],
     });
   });
 

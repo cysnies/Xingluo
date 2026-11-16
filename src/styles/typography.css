@@ -65,7 +65,7 @@
   /* 预格式化代码块去除内联代码背景 */
   @apply prose-pre:bg-code prose-pre:text-code-foreground prose-pre:p-0;
   /* 引用块强调 */
-  @apply prose-blockquote:border-l-primary/40 prose-blockquote:not-italic prose-blockquote:text-muted-foreground;
+  @apply prose-blockquote:border-l-primary/40 prose-blockquote:not-italic prose-blockquote:text-muted-foreground prose-blockquote:before:content-none prose-blockquote:after:content-none;
   /* 水平线弱化 */
   @apply prose-hr:border-border;
   /* 图片：圆角、不溢出、窄屏可点 */
@@ -76,6 +76,10 @@
 
 .app-prose > :first-child {
   margin-top: 0;
+}
+
+.app-prose > :last-child {
+  margin-bottom: 0;
 }
 
 /* 页面仅保留页眉与页脚的横向结构线；正文横线保留间距但不绘制。 */

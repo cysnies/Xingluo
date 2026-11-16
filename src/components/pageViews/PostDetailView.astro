@@ -132,104 +132,104 @@ const resolvedCanonical =
     {config.features.showBackButton && <BackButton />}
 
     <article class="mt-4">
-      {heroImageSrc && (
-        <img
-          src={heroImageSrc}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          class="mb-6 w-full rounded-2xl border border-border object-cover aspect-[3/1]"
-        />
-      )}
-
-      {/* 大屏双列：主文章 + 粘性目录侧栏；小屏仅单列（目录隐藏） */}
+      {/* 大屏双列：目录的粘性范围止于正文标签与分享区底部 */}
       <div class:list={["lg:grid", hasToc && "lg:grid-cols-[minmax(0,1fr)_16rem]"]}>
         <div class="min-w-0">
-          <div class="mx-auto flex w-full max-w-prose-app flex-col gap-5">
-          <h1
-            style={{ viewTransitionName: toTransitionName(title) }}
-            class="text-3xl font-bold tracking-tight sm:text-4xl"
-          >
-            {title}
-          </h1>
-
-          <div class="flex flex-wrap items-center gap-3">
-            <Datetime
-              pubDatetime={pubDatetime}
-              modDatetime={modDatetime}
-              timezone={timezone}
-              size="lg"
-            />
-            <span class="flex items-center gap-x-1.5 text-muted-foreground">
-              <Clock class="size-4 shrink-0 scale-90" />
-              <span class="text-sm sm:text-base">
-                {tplStr(t.post.readingTime, { minutes: readingMinutes })}
-              </span>
-            </span>
-            <EditPost editPath={editPath} hide={hideEditPost} />
-          </div>
-
-          {/* 移动端/平板目录：大屏由侧栏承担 */}
-          {hasToc && (
-            <details data-toc-mobile class="mobile-toc group sticky top-[calc(3.5rem+1px)] z-30 rounded-lg border border-border bg-background/95 backdrop-blur-sm lg:hidden">
-              <summary class="flex min-h-12 cursor-pointer list-none items-center gap-3 px-4 py-3 text-sm touch-manipulation [&::-webkit-details-marker]:hidden">
-                <span class="shrink-0 font-medium">{t.post.tableOfContents}</span>
-                <span data-toc-current class="min-w-0 flex-1 truncate text-muted-foreground">{tocHeadings[0]?.text}</span>
-                <span
-                  data-reading-progress-meter
-                  role="progressbar"
-                  aria-label={t.post.readingProgress}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-valuenow="0"
-                  class="shrink-0 text-xs tabular-nums text-muted-foreground"
-                >
-                  <span data-reading-progress-value aria-hidden="true">0%</span>
-                </span>
-                <span class="shrink-0 text-muted-foreground transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true">▾</span>
-              </summary>
-              <div data-toc-scroll class="absolute inset-x-0 top-full mt-2 max-h-[min(65dvh,28rem)] overflow-y-auto overscroll-contain rounded-lg border border-border bg-background p-3 shadow-md">
-                <TableOfContents headings={headings} label={t.post.tableOfContents} showTitle={false} />
-              </div>
-            </details>
+          {heroImageSrc && (
+            <div class="mx-auto mb-6 w-full max-w-[46rem]">
+              <img
+                src={heroImageSrc}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="aspect-[3/1] w-full rounded-2xl border border-border object-cover"
+              />
+            </div>
           )}
 
-          <article
-            id="article"
-            data-copy={t.post.copyCode}
-            data-copied={t.post.copied}
-            data-zoom={t.post.zoomImage}
-            data-preview={t.post.imagePreview}
-            data-close={t.post.closeImagePreview}
-            data-link-heading={t.post.linkToHeading}
-            class="app-prose max-w-prose-app"
+          <div
+            class="mx-auto flex w-full max-w-[46rem] flex-col gap-5"
+            style="--prose-width: 46rem"
           >
-            <Content />
-          </article>
-          </div>
+            <h1
+              style={{ viewTransitionName: toTransitionName(title) }}
+              class="text-3xl font-bold tracking-tight sm:text-4xl"
+            >
+              {title}
+            </h1>
 
-          <div class="mb-8 flex flex-wrap items-center gap-2">
-            {categoryHref && (
-              <a
-                href={categoryHref}
-                class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
-              >
-                {category}
-              </a>
+            <div class="flex flex-wrap items-center gap-3">
+              <Datetime
+                pubDatetime={pubDatetime}
+                modDatetime={modDatetime}
+                timezone={timezone}
+                size="lg"
+              />
+              <span class="flex items-center gap-x-1.5 text-muted-foreground">
+                <Clock class="size-4 shrink-0 scale-90" />
+                <span class="text-sm sm:text-base">
+                  {tplStr(t.post.readingTime, { minutes: readingMinutes })}
+                </span>
+              </span>
+              <EditPost editPath={editPath} hide={hideEditPost} />
+            </div>
+
+            {/* 移动端/平板目录：大屏由侧栏承担 */}
+            {hasToc && (
+              <details data-toc-mobile class="mobile-toc group sticky top-[calc(3.5rem+1px)] z-30 rounded-lg border border-border bg-background/95 backdrop-blur-sm lg:hidden">
+                <summary class="flex min-h-12 cursor-pointer list-none items-center gap-3 px-4 py-3 text-sm touch-manipulation [&::-webkit-details-marker]:hidden">
+                  <span class="shrink-0 font-medium">{t.post.tableOfContents}</span>
+                  <span data-toc-current class="min-w-0 flex-1 truncate text-muted-foreground">{tocHeadings[0]?.text}</span>
+                  <span
+                    data-reading-progress-meter
+                    role="progressbar"
+                    aria-label={t.post.readingProgress}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                    class="shrink-0 text-xs tabular-nums text-muted-foreground"
+                  >
+                    <span data-reading-progress-value aria-hidden="true">0%</span>
+                  </span>
+                  <span class="shrink-0 text-muted-foreground transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true">▾</span>
+                </summary>
+                <div data-toc-scroll class="absolute inset-x-0 top-full mt-2 max-h-[min(65dvh,28rem)] overflow-y-auto overscroll-contain rounded-lg border border-border bg-background p-3 shadow-md">
+                  <TableOfContents headings={headings} label={t.post.tableOfContents} showTitle={false} />
+                </div>
+              </details>
             )}
-            {tags.map((tag) => (
-              <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />
-            ))}
+
+            <div class="flex flex-col gap-6">
+              <article
+                id="article"
+                data-copy={t.post.copyCode}
+                data-copied={t.post.copied}
+                data-zoom={t.post.zoomImage}
+                data-preview={t.post.imagePreview}
+                data-close={t.post.closeImagePreview}
+                data-link-heading={t.post.linkToHeading}
+                class="app-prose max-w-prose-app"
+              >
+                <Content />
+              </article>
+
+              <div class="flex flex-wrap items-center gap-2">
+                {categoryHref && (
+                  <a
+                    href={categoryHref}
+                    class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+                  >
+                    {category}
+                  </a>
+                )}
+                {tags.map((tag) => (
+                  <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />
+                ))}
+              </div>
+
+              <ShareLinks url={articleUrl} title={title} />
+            </div>
           </div>
-
-          <ShareLinks url={articleUrl} title={title} />
-
-          <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
-
-          <RelatedPosts posts={relatedPosts} />
-
-          {/* 评论区：受文章 frontmatter comments 字段覆盖，未设置时跟随全局配置 */}
-          <Comments locale={locale} enabled={comments} />
         </div>
 
         {hasToc && (
@@ -239,6 +239,19 @@ const resolvedCanonical =
             </div>
           </aside>
         )}
+      </div>
+
+      <div
+        class:list={[
+          hasToc && "lg:max-w-[calc(100%-16rem)]",
+        ]}
+      >
+        <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
+
+        <RelatedPosts posts={relatedPosts} />
+
+        {/* 评论区：受文章 frontmatter comments 字段覆盖，未设置时跟随全局配置 */}
+        <Comments locale={locale} enabled={comments} />
       </div>
     </article>
   </Main>

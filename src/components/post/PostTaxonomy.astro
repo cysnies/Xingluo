@@ -1,0 +1,129 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations, tplStr } from "@/i18n";
+import { slugifyStr } from "@/utils/slugify";
+import { cn } from "@/lib/utils";
+import Tag from "@/components/Tag.astro";
+
+interface Props {
+  category?: string;
+  tags: string[];
+  class?: string;
+}
+
+const { category = "", tags, class: className } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+const locale = Astro.currentLocale ?? "zh-cn";
+const categoryHref = category
+  ? getRelativeLocaleUrl(locale, `categories/${slugifyStr(category)}/`)
+  : undefined;
+
+const chipClass =
+  "relative z-10 inline-flex h-7 min-h-0 min-w-0 items-center justify-center rounded-md border border-transparent bg-muted px-2.5 py-0 text-xs leading-none font-medium text-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
+---
+
+{
+  (categoryHref || tags.length > 0) && (
+    <div
+      data-post-card-taxonomy
+      data-taxonomy-row
+      class={cn(
+        "flex h-7 max-w-full min-w-0 items-center gap-1.5 whitespace-nowrap",
+        className,
+      )}
+    >
+      {categoryHref && (
+        <a
+          data-taxonomy-category
+          href={categoryHref}
+          aria-label={tplStr(t.post.categoryLabel, { category })}
+          class={cn(chipClass, "shrink-0")}
+        >
+          <span class="truncate">{category}</span>
+        </a>
+      )}
+      {tags.map((tag) => (
+        <span data-taxonomy-tag class="inline-flex shrink-0">
+          <Tag
+            tag={slugifyStr(tag)}
+            tagName={tag}
+            size="sm"
+            showHash={false}
+            class={cn(chipClass, "shrink-0 shadow-none")}
+          />
+        </span>
+      ))}
+      <span
+        data-taxonomy-overflow
+        class={cn(chipClass, "shrink-0 text-muted-foreground shadow-none")}
+        hidden
+      />
+    </div>
+  )
+}
+
+<script>
+  const observers = new WeakMap<HTMLElement, ResizeObserver>();
+
+  function layoutTaxonomy(row: HTMLElement) {
+    if (row.dataset.taxonomyLayouting === "1") return;
+    row.dataset.taxonomyLayouting = "1";
+
+    requestAnimationFrame(() => {
+      const tags = Array.from(
+        row.querySelectorAll<HTMLElement>("[data-taxonomy-tag]"),
+      );
+      const overflow = row.querySelector<HTMLElement>(
+        "[data-taxonomy-overflow]",
+      );
+
+      tags.forEach((tag) => {
+        tag.hidden = false;
+      });
+      if (overflow) overflow.hidden = true;
+
+      if (row.scrollWidth <= row.clientWidth || !overflow || tags.length === 0) {
+        delete row.dataset.taxonomyLayouting;
+        return;
+      }
+
+      const hiddenTags: string[] = [];
+      for (let index = tags.length - 1; index >= 0; index -= 1) {
+        const tag = tags[index]!;
+        tag.hidden = true;
+        hiddenTags.unshift(tag.textContent?.trim() ?? "");
+        overflow.hidden = false;
+        overflow.textContent = `+${hiddenTags.length}`;
+        overflow.title = hiddenTags.join(", ");
+        overflow.setAttribute("aria-label", hiddenTags.join(", "));
+
+        if (row.scrollWidth <= row.clientWidth) break;
+      }
+
+      delete row.dataset.taxonomyLayouting;
+    });
+  }
+
+  function setupTaxonomies() {
+    document
+      .querySelectorAll<HTMLElement>("[data-taxonomy-row]")
+      .forEach((row) => {
+        layoutTaxonomy(row);
+        if (observers.has(row)) return;
+        const observer = new ResizeObserver(() => layoutTaxonomy(row));
+        observer.observe(row);
+        observers.set(row, observer);
+      });
+  }
+
+  function refreshTaxonomies() {
+    document
+      .querySelectorAll<HTMLElement>("[data-taxonomy-row]")
+      .forEach(layoutTaxonomy);
+  }
+
+  setupTaxonomies();
+  document.addEventListener("astro:page-load", setupTaxonomies);
+  window.addEventListener("resize", refreshTaxonomies);
+  void document.fonts.ready.then(refreshTaxonomies);
+</script>
