@@ -74,6 +74,10 @@
   @apply prose-table:text-sm;
 }
 
+.app-prose > :first-child {
+  margin-top: 0;
+}
+
 /* 页面仅保留页眉与页脚的横向结构线；正文横线保留间距但不绘制。 */
 .app-prose :where(hr) {
   border-block: 0;

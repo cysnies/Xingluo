@@ -61,12 +61,12 @@ const navItems = [
 <header
   class="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md"
 >
-  <div class="site-frame mx-auto flex h-[3.75rem] max-w-app items-center justify-between gap-3 px-4 sm:px-6 lg:h-[4.5rem] lg:gap-5 lg:px-8">
+  <div class="site-frame mx-auto flex h-14 max-w-app items-center justify-between gap-3 px-4 sm:px-6 lg:h-[4.25rem] lg:gap-5 lg:px-8">
     <!-- Logo / 站点标题 -->
     <a
       href={getRelativeLocaleUrl(locale)}
       data-navbar-brand={brand.mode}
-      class="flex min-w-0 items-center gap-2.5 text-lg font-semibold tracking-tight transition-colors hover:text-primary lg:text-xl"
+      class="flex min-w-0 items-center gap-2.5 text-[1.0625rem] font-semibold tracking-tight transition-colors hover:text-primary lg:text-lg"
     >
       {brand.mode !== "text" && brandImageUrl && (
         <img
@@ -74,7 +74,7 @@ const navItems = [
           alt={brand.mode === "image" ? (brand.alt ?? brandText) : (brand.alt ?? "")}
           width="36"
           height="36"
-          class="h-8 w-auto min-w-0 max-w-24 object-contain lg:h-9 lg:max-w-36"
+          class="h-7 w-auto min-w-0 max-w-24 object-contain lg:h-8 lg:max-w-36"
         />
       )}
       {(brand.mode !== "image" || !brandImageUrl) && <span class="truncate">{brandText}</span>}
@@ -88,7 +88,7 @@ const navItems = [
             href={item.href}
             aria-current={isActive(item.path) ? "page" : undefined}
             class:list={[
-              "inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-[1.0625rem] font-medium transition-colors",
+              "inline-flex min-h-9 items-center rounded-md px-2.5 py-1.5 text-base font-medium transition-colors",
               isActive(item.path)
                 ? "bg-accent text-accent-foreground"
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -114,10 +114,10 @@ const navItems = [
         data-label-open={t.a11y.openMenu}
         data-label-close={t.a11y.closeMenu}
         aria-expanded="false"
-        class="inline-flex size-10 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 lg:hidden"
+        class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 lg:hidden"
       >
-        <Menu class="size-[1.125rem] lg:hidden" id="menu-icon-open" />
-        <Close class="hidden size-[1.125rem]" id="menu-icon-close" />
+        <Menu class="size-[1.0625rem] lg:hidden" id="menu-icon-open" />
+        <Close class="hidden size-[1.0625rem]" id="menu-icon-close" />
       </button>
     </div>
   </div>

@@ -50,7 +50,7 @@ const rssHref = new URL(
   <Main fullWidth>
     <!-- Hero 区域 -->
     <section class="home-section" data-reveal>
-      <div class="home-section-content site-frame py-8 sm:py-10">
+      <div class="home-section-content site-frame py-4 sm:py-5">
         <div class:list={[avatarUrl ? "grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-x-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-x-6" : "block"]}>
           {avatarUrl && (
             <img
@@ -100,7 +100,7 @@ const rssHref = new URL(
     {
       featuredPosts.length > 0 && (
         <section class="home-section" data-reveal>
-          <div class="home-section-content site-frame py-8 sm:py-10">
+          <div class="home-section-content site-frame py-4 sm:py-5">
             <h2 class="mb-4 text-2xl font-semibold tracking-tight">
               {t.home.featured}
             </h2>
@@ -114,14 +114,14 @@ const rssHref = new URL(
     {
       recentPosts.length > 0 && (
         <section class="home-section">
-          <div class="home-section-content site-frame py-8 sm:py-10">
+          <div class="home-section-content site-frame py-4 sm:py-5">
             <h2 class="mb-4 text-2xl font-semibold tracking-tight">
               {t.home.recentPosts}
             </h2>
             <ul data-latest-posts class="grid max-w-[65rem] gap-5">
               {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
                 <li class="min-w-0">
-                  <PostCard post={post} variant="list" />
+                  <PostCard post={post} />
                 </li>
               ))}
             </ul>
@@ -132,7 +132,7 @@ const rssHref = new URL(
 
     <!-- 查看全部文章 -->
     <div class="home-section">
-      <div class="home-section-content site-frame py-8 text-center">
+      <div class="home-section-content site-frame py-4 text-center">
         <LinkButton href={allPostsHref} variant="outline" size="lg">
           {t.home.allPosts}
           <ArrowRight class="size-4 rtl:-rotate-180" />
