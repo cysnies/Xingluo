@@ -4,13 +4,18 @@
  * system 不发网络请求；一次只启用一项，避免默认拉全量 CJK 巨包
  */
 import { resolveActiveFont, maybeMirrorCssUrl } from "@/fonts/resolve";
+import { getAssetPath } from "@/utils/withBase";
 
 const font = resolveActiveFont();
 const rawCssUrls =
   font.source === "system"
     ? []
     : (font.cssUrls ?? (font.cssUrl ? [font.cssUrl] : []));
-const cssUrls = rawCssUrls.map(maybeMirrorCssUrl);
+const cssUrls = rawCssUrls.map((cssUrl) =>
+  /^https?:\/\//i.test(cssUrl)
+    ? maybeMirrorCssUrl(cssUrl)
+    : getAssetPath(cssUrl),
+);
 
 let cssOrigin: string | undefined;
 if (cssUrls[0] && /^https?:\/\//i.test(cssUrls[0])) {
@@ -28,11 +33,8 @@ if (cssUrls[0] && /^https?:\/\//i.test(cssUrls[0])) {
       {cssOrigin && <link rel="preconnect" href={cssOrigin} crossorigin />}
       {cssUrls.map((cssUrl) => (
         <link
-          rel="stylesheet"
-          href={cssUrl}
-          media="print"
-          onload={"this.media='all'"}
-          fetchpriority="low"
+          data-xingluo-font-pending
+          data-href={cssUrl}
           data-xingluo-font-link="1"
         />
       ))}
@@ -41,6 +43,35 @@ if (cssUrls[0] && /^https?:\/\//i.test(cssUrls[0])) {
           <link rel="stylesheet" href={cssUrl} data-xingluo-font-link="1" />
         ))}
       </noscript>
+      <script is:inline>
+        (() => {
+          const pending = Array.from(
+            document.querySelectorAll("link[data-xingluo-font-pending]"),
+          );
+          if (pending.length === 0) return;
+          const connection = navigator.connection;
+          if (connection?.saveData) return;
+
+          const activate = () => {
+            for (const link of pending) {
+              const href = link.dataset.href;
+              if (!href) continue;
+              link.rel = "stylesheet";
+              link.href = href;
+            }
+          };
+          const schedule = () => {
+            if ("requestIdleCallback" in window) {
+              window.requestIdleCallback(activate, { timeout: 1000 });
+            } else {
+              window.setTimeout(activate, 0);
+            }
+          };
+
+          if (document.readyState === "complete") schedule();
+          else window.addEventListener("load", schedule, { once: true });
+        })();
+      </script>
     </>
   )
 }

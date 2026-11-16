@@ -4,6 +4,7 @@
  */
 import type { FontDefinition } from "./catalog";
 import { maybeMirrorCssUrl } from "./resolve";
+import { getAssetPath } from "@/utils/withBase";
 
 export const FONT_STORAGE_KEY = "xingluo-font";
 export const FONT_LINK_ATTR = "data-xingluo-font-link";
@@ -22,13 +23,18 @@ export interface ClientFontEntry {
 
 /** 序列化给浏览器：CDN URL 已按镜像策略改写 */
 export function toClientFontEntry(f: FontDefinition): ClientFontEntry {
+  const resolveCssUrl = (cssUrl: string) =>
+    /^https?:\/\//i.test(cssUrl)
+      ? maybeMirrorCssUrl(cssUrl)
+      : getAssetPath(cssUrl);
+
   return {
     id: f.id,
     label: f.label,
     stack: f.stack,
     monoStack: f.monoStack,
-    cssUrl: f.cssUrl ? maybeMirrorCssUrl(f.cssUrl) : undefined,
-    cssUrls: f.cssUrls?.map(maybeMirrorCssUrl),
+    cssUrl: f.cssUrl ? resolveCssUrl(f.cssUrl) : undefined,
+    cssUrls: f.cssUrls?.map(resolveCssUrl),
     source: f.source,
   };
 }

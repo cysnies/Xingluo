@@ -16,6 +16,7 @@ import { getSiteTitle, getSiteDescription } from "@/utils/siteBrand";
 import { getAssetPath } from "@/utils/withBase";
 import ArrowRight from "@/assets/icons/ArrowRight.astro";
 import Rss from "@/assets/icons/Rss.astro";
+import { getPostHeroSources } from "@/utils/postHeroImage";
 
 const { site, posts: postsConfig } = config;
 const locale = Astro.currentLocale ?? site.lang;
@@ -39,25 +40,37 @@ const visibleFeaturedPosts =
   featuredPosts.length >= 7 ? featuredPosts.slice(0, 4) : featuredPosts;
 const visibleRecentPosts = recentPosts.slice(0, postsConfig.perIndex);
 
-function getPostHeroSrc(post: (typeof sortedPosts)[number] | undefined) {
+function getRawPostHero(post: (typeof sortedPosts)[number] | undefined) {
   if (!post || !config.features.showPostCardHero) return undefined;
-  const heroImage = post.data.heroImage;
-  return typeof heroImage === "string" ? heroImage : heroImage?.src;
+  return post.data.heroImage;
 }
 
 const priorityPost = [...visibleFeaturedPosts, ...visibleRecentPosts].find(
-  (post) => Boolean(getPostHeroSrc(post)),
+  (post) => Boolean(getRawPostHero(post)),
 );
-const priorityHeroSrc = getPostHeroSrc(priorityPost);
+const rawPriorityHero = getRawPostHero(priorityPost);
+const priorityHeroSources =
+  rawPriorityHero && typeof rawPriorityHero === "object"
+    ? await getPostHeroSources(rawPriorityHero)
+    : undefined;
+const priorityHeroSrc =
+  priorityHeroSources?.src ??
+  (typeof rawPriorityHero === "string" ? rawPriorityHero : undefined);
+const priorityHeroIsRemote =
+  priorityHeroSrc &&
+  (/^https?:\/\//i.test(priorityHeroSrc) ||
+    priorityHeroSrc.startsWith("//"));
 const priorityHeroUrl = priorityHeroSrc
   ? priorityHeroSrc.startsWith("//")
     ? `https:${priorityHeroSrc}`
     : /^https?:\/\//i.test(priorityHeroSrc)
       ? priorityHeroSrc
-      : new URL(priorityHeroSrc, Astro.site ?? Astro.url).href
+      : priorityHeroSrc.startsWith("/")
+        ? priorityHeroSrc
+        : new URL(priorityHeroSrc, Astro.site ?? Astro.url).href
   : undefined;
-const priorityHeroOrigin = priorityHeroUrl
-  ? new URL(priorityHeroUrl).origin
+const priorityHeroOrigin = priorityHeroIsRemote
+  ? new URL(priorityHeroUrl!).origin
   : undefined;
 const allPostsHref = getRelativeLocaleUrl(locale, "posts");
 // 直接构建 RSS URL，不通过 getRelativeLocaleUrl（该函数会附加尾部斜杠且为非默认语言添加前缀），

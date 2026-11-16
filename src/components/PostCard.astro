@@ -13,6 +13,7 @@ import CardDescription from "@/components/ui/CardDescription.astro";
 import PostCategory from "@/components/post/PostCategory.astro";
 import PostTaxonomy from "@/components/post/PostTaxonomy.astro";
 import { cn } from "@/lib/utils";
+import { getPostHeroSources } from "@/utils/postHeroImage";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -41,7 +42,13 @@ const readingMinutes = getReadingTime(post.body ?? "", locale);
 
 // 沿用字符串和 Astro 图片对象两种内容格式。
 const heroImage = config.features.showPostCardHero ? data.heroImage : undefined;
-const heroImageSrc = typeof heroImage === "string" ? heroImage : heroImage?.src;
+const optimizedHero =
+  heroImage && typeof heroImage === "object"
+    ? await getPostHeroSources(heroImage)
+    : undefined;
+const heroImageSrc =
+  optimizedHero?.src ??
+  (typeof heroImage === "string" ? heroImage : heroImage?.src);
 /** 所有带图文章卡片统一使用右侧背景式头图。 */
 const useBackgroundHero = Boolean(heroImageSrc);
 ---
@@ -66,9 +73,11 @@ const useBackgroundHero = Boolean(heroImageSrc);
       <img
         data-post-card-image
         src={heroImageSrc}
+        srcset={optimizedHero?.srcSet}
+        sizes="(min-width: 768px) 58vw, 100vw"
         alt=""
-        width="1200"
-        height="630"
+        width={optimizedHero?.width ?? 1200}
+        height={optimizedHero?.height ?? 630}
         loading={
           priority && config.features.showPostCardHeroMobile ? "eager" : "lazy"
         }
