@@ -129,12 +129,6 @@
   white-space: nowrap;
 }
 
-.xng-webcard__open {
-  flex-shrink: 0;
-  color: var(--primary);
-  font-weight: 500;
-}
-
 .xng-webcard--degraded .xng-webcard__badge::after {
   content: "";
 }

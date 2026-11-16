@@ -118,7 +118,7 @@ export function renderWebCardHtml(
     <div class="xng-webcard__title">${esc(data.title)}</div>
     ${desc}
     <div class="xng-webcard__meta">${author}${stats}</div>
-    <div class="xng-webcard__footer">${favicon}<span class="xng-webcard__site">${esc(data.siteName || host)}</span><span class="xng-webcard__open">${esc(labels.openLink)}</span></div>
+    <div class="xng-webcard__footer">${favicon}<span class="xng-webcard__site">${esc(data.siteName || host)}</span></div>
   </div>
 </a>`;
 }
