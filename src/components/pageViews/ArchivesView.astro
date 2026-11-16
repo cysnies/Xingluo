@@ -72,7 +72,7 @@ const crumbs = [
                   ▾
                 </span>
               </summary>
-              <div class="space-y-6 border-t border-border px-4 py-4">
+              <div class="space-y-6 px-4 py-4">
                 {yearGroup.months.map((monthGroup) => (
                   <div>
                     <h3 class="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
@@ -85,7 +85,7 @@ const crumbs = [
                         })}
                       </span>
                     </h3>
-                    <ul class="divide-y divide-border rounded-md border border-border">
+                    <ul class="rounded-md border border-border">
                       {monthGroup.posts.map((post) => {
                         const href = getPostUrl(post.id, post.filePath, locale);
                         const dateStr = dayjs(post.data.pubDatetime)

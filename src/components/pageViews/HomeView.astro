@@ -118,7 +118,7 @@ const rssHref = new URL(
             <h2 class="mb-4 text-2xl font-semibold tracking-tight">
               {t.home.recentPosts}
             </h2>
-            <ul data-latest-posts class="max-w-[65rem] divide-y divide-border">
+            <ul data-latest-posts class="max-w-[65rem]">
               {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
                 <li class="min-w-0">
                   <PostCard post={post} variant="list" />
@@ -151,26 +151,4 @@ const rssHref = new URL(
     padding-inline: var(--frame-gutter);
   }
 
-  /* 分隔带随页面铺满可用宽度，两侧斜纹渐淡，细线保持贯通。 */
-  .home-section + .home-section::before {
-    display: block;
-    height: 0.75rem;
-    border-block: 1px solid var(--border);
-    background:
-      linear-gradient(
-        to right,
-        var(--background),
-        transparent 20%,
-        transparent 80%,
-        var(--background)
-      ),
-      repeating-linear-gradient(
-        135deg,
-        transparent 0 6px,
-        var(--border) 6px 7px,
-        transparent 7px 12px
-      );
-    content: "";
-    pointer-events: none;
-  }
 </style>

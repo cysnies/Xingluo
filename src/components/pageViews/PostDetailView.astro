@@ -5,6 +5,7 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
 import { getPostUrl } from "@/utils/getPostPaths";
@@ -127,10 +128,7 @@ const resolvedCanonical =
 >
   <Header />
 
-  <main
-    id="main-content"
-    class="mx-auto w-full max-w-app flex-1 px-4 py-8 sm:px-6 lg:max-w-[90rem] lg:px-8"
-  >
+  <Main class="py-8 sm:py-8 lg:py-8">
     {config.features.showBackButton && <BackButton />}
 
     <article class="mt-4">
@@ -208,8 +206,6 @@ const resolvedCanonical =
             <Content />
           </article>
 
-          <hr class="my-8 border-dashed border-border" />
-
           <div class="mb-8 flex flex-wrap items-center gap-2">
             {categoryHref && (
               <a
@@ -243,7 +239,7 @@ const resolvedCanonical =
         )}
       </div>
     </article>
-  </main>
+  </Main>
 
   <BackToTopButton />
   <Footer />

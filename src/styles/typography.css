@@ -74,6 +74,17 @@
   @apply prose-table:text-sm;
 }
 
+/* 页面仅保留页眉与页脚的横向结构线；正文横线保留间距但不绘制。 */
+.app-prose :where(hr) {
+  border-block: 0;
+  height: 1.5rem;
+  margin-block: 0.5rem;
+}
+
+.app-prose :where(thead, tbody, tr, th, td) {
+  border-block: 0;
+}
+
 /* 平板及以上略增正文字号 */
 @media (min-width: 768px) {
   .app-prose {
