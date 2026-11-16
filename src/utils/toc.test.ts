@@ -21,4 +21,9 @@ describe("TOC section selection", () => {
     expect(getActiveHeadingIndex([-1000, -300, 600], 80)).toBe(1);
     expect(getActiveHeadingIndex([-400, 300, 1200], 80)).toBe(0);
   });
+
+  it("tolerates fractional-pixel anchor alignment without selecting later headings", () => {
+    expect(getActiveHeadingIndex([-500, 129.1875, 1000], 129)).toBe(1);
+    expect(getActiveHeadingIndex([-500, 130.25, 1000], 129)).toBe(0);
+  });
 });

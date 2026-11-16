@@ -3,7 +3,8 @@ export function getActiveHeadingIndex(tops: number[], offset: number): number {
   if (tops.length === 0) return -1;
   let active = 0;
   for (let index = 1; index < tops.length; index++) {
-    if (tops[index] > offset) break;
+    // 浏览器的锚点滚动可能产生小数像素取整。
+    if (tops[index] > offset + 1) break;
     active = index;
   }
   return active;
