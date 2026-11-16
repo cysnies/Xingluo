@@ -13,13 +13,20 @@ describe("post taxonomy chips", () => {
     expect(src).toContain("h-7");
     expect(src).toContain("rounded-md");
     expect(src).toContain("shadow-xs");
-    expect(src.match(/shadow-none/g)?.length).toBeGreaterThanOrEqual(2);
+    expect(src).toContain("bg-muted/60");
+    expect(src).toContain("shadow-[0_1px_2px_rgb(24_24_27/0.035)]");
+    expect(src).toContain("hover:shadow-md");
+    expect(src).toContain(
+      "transition-[background-color,color,box-shadow] duration-200",
+    );
+    expect(src).not.toContain("shadow-none");
     expect(src).toContain(
       'import PostCategory from "@/components/post/PostCategory.astro"',
     );
     expect(src).toContain("<PostCategory category={category} />");
-    expect(src.match(/class=\{cn\(chipClass/g)?.length).toBeGreaterThanOrEqual(
-      2,
+    expect(src).toContain("const tagChipClass = cn(");
+    expect(src.match(/class=\{tagChipClass\}/g)?.length).toBeGreaterThanOrEqual(
+      1,
     );
   });
 
