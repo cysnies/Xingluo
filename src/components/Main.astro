@@ -7,9 +7,11 @@ import config from "@/config";
 interface Props extends HTMLAttributes<"main"> {
   /** 自定义追加的类名，会与默认布局类合并 */
   class?: string;
+  /** 首页分区需要横向铺满视口，由内部容器约束内容宽度 */
+  fullWidth?: boolean;
 }
 
-const { class: className, ...rest } = Astro.props as Props;
+const { class: className, fullWidth = false, ...rest } = Astro.props as Props;
 
 const locale = Astro.currentLocale ?? config.site.lang;
 // 记录当前页地址，供文章页返回按钮回跳到来源列表/搜索页
@@ -22,7 +24,9 @@ const backUrl = config.features.showBackButton
   id="main-content"
   data-backurl={backUrl}
   class={cn(
-    "mx-auto w-full max-w-app flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8",
+    fullWidth
+      ? "mx-auto w-full flex-1"
+      : "site-frame mx-auto w-full max-w-app flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8",
     className
   )}
   {...rest}

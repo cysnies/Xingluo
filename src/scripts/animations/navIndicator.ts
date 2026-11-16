@@ -5,7 +5,7 @@
  */
 
 /** 导航容器选择器（桌面端 nav 元素） */
-const NAV_SELECTOR = "nav.hidden.md\\:flex";
+const NAV_SELECTOR = "[data-desktop-nav]";
 /** 跨导航保存的旧指示条状态 */
 let savedIndicatorState: { width: string; transform: string } | null = null;
 

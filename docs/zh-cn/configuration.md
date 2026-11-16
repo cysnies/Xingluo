@@ -58,6 +58,28 @@ avatar: {
 
 演示站使用现有 Xingluo Logo。头像在桌面端为 160×160px，在窄屏为 72×72px。头像左边缘与下方文章卡片对齐，窄屏时头像与标题并排，描述和社交链接排列在下方。
 
+### 导航栏品牌
+
+`site.navbarBrand` 控制导航栏左上角的内容。省略时显示当前语言的站点标题，演示站使用纯文字。
+
+```ts
+// 纯文字，默认跟随 site.title / site.titleByLocale
+navbarBrand: { mode: "text" }
+
+// 图片与文字，可覆盖品牌文字和多语言文字
+navbarBrand: {
+  mode: "image-text",
+  src: "favicon.svg",
+  text: "星罗",
+  textByLocale: { en: "Xingluo" },
+}
+
+// 纯图片，alt 提供无障碍名称，省略时使用品牌文字或站点标题
+navbarBrand: { mode: "image", src: "logo.svg", alt: "星罗" }
+```
+
+图片路径相对 `public/`，也支持外部 HTTPS URL。本地路径会自动附加部署子目录前缀。导航图片独立于首页头像 `site.avatar` 配置。
+
 ## posts 文章配置
 
 ```ts

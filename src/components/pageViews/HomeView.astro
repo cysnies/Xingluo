@@ -47,49 +47,51 @@ const rssHref = new URL(
 
 <Layout>
   <Header />
-  <Main>
+  <Main fullWidth>
     <!-- Hero 区域 -->
-    <section class="border-b border-border pb-6" data-reveal>
-      <div class:list={[avatarUrl ? "grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-x-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-x-6" : "block"]}>
-        {avatarUrl && (
-          <img
-            src={avatarUrl}
-            alt={avatar?.alt ?? getSiteTitle(locale)}
-            width="160"
-            height="160"
-            decoding="async"
-            class:list={[
-              "size-18 shrink-0 object-cover sm:size-40",
-              avatarShape,
-            ]}
-          />
-        )}
-        <div class="contents sm:block sm:min-w-0">
-          <div class="flex min-w-0 items-center gap-2 sm:gap-3">
-            <h1 class="min-w-0 break-words text-3xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
-              {getSiteTitle(locale)}
-            </h1>
-            <a
-              href={rssHref}
-              class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-              aria-label={t.nav.rss}
-              title="RSS"
-            >
-              <Rss class="size-5" />
-              <span class="sr-only">RSS</span>
-            </a>
+    <section class="home-section" data-reveal>
+      <div class="home-section-content site-frame py-8 sm:py-10">
+        <div class:list={[avatarUrl ? "grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-x-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-x-6" : "block"]}>
+          {avatarUrl && (
+            <img
+              src={avatarUrl}
+              alt={avatar?.alt ?? getSiteTitle(locale)}
+              width="160"
+              height="160"
+              decoding="async"
+              class:list={[
+                "size-18 shrink-0 object-cover sm:size-40",
+                avatarShape,
+              ]}
+            />
+          )}
+          <div class="contents sm:block sm:min-w-0">
+            <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+              <h1 class="min-w-0 break-words text-3xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
+                {getSiteTitle(locale)}
+              </h1>
+              <a
+                href={rssHref}
+                class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                aria-label={t.nav.rss}
+                title="RSS"
+              >
+                <Rss class="size-5" />
+                <span class="sr-only">RSS</span>
+              </a>
+            </div>
+            <p class="col-span-2 mt-4 max-w-prose text-base leading-relaxed text-muted-foreground sm:mt-0 sm:text-lg">{getSiteDescription(locale)}</p>
+            {
+              config.features.showHomeSocials && config.socials.length > 0 && (
+                <div class="col-span-2 mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 [&_a]:size-11 sm:mt-6 sm:[&_a]:size-9">
+                  <span class="whitespace-nowrap text-sm text-muted-foreground">
+                    {t.home.socialLinks}:
+                  </span>
+                  <Socials />
+                </div>
+              )
+            }
           </div>
-          <p class="col-span-2 mt-4 max-w-prose text-base leading-relaxed text-muted-foreground sm:mt-0 sm:text-lg">{getSiteDescription(locale)}</p>
-          {
-            config.features.showHomeSocials && config.socials.length > 0 && (
-              <div class="col-span-2 mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 [&_a]:size-11 sm:mt-6 sm:[&_a]:size-9">
-                <span class="whitespace-nowrap text-sm text-muted-foreground">
-                  {t.home.socialLinks}:
-                </span>
-                <Socials />
-              </div>
-            )
-          }
         </div>
       </div>
     </section>
@@ -97,11 +99,13 @@ const rssHref = new URL(
     <!-- 精选文章 -->
     {
       featuredPosts.length > 0 && (
-        <section class="py-8" data-reveal>
-          <h2 class="mb-4 text-2xl font-semibold tracking-tight">
-            {t.home.featured}
-          </h2>
-          <FeaturedPosts posts={featuredPosts} />
+        <section class="home-section" data-reveal>
+          <div class="home-section-content site-frame py-8 sm:py-10">
+            <h2 class="mb-4 text-2xl font-semibold tracking-tight">
+              {t.home.featured}
+            </h2>
+            <FeaturedPosts posts={featuredPosts} />
+          </div>
         </section>
       )
     }
@@ -109,28 +113,64 @@ const rssHref = new URL(
     <!-- 最新文章 -->
     {
       recentPosts.length > 0 && (
-        <section class="py-8">
-          <h2 class="mb-4 text-2xl font-semibold tracking-tight">
-            {t.home.recentPosts}
-          </h2>
-          <ul data-latest-posts class="max-w-[65rem] divide-y divide-border">
-            {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
-              <li class="min-w-0">
-                <PostCard post={post} variant="list" />
-              </li>
-            ))}
-          </ul>
+        <section class="home-section">
+          <div class="home-section-content site-frame py-8 sm:py-10">
+            <h2 class="mb-4 text-2xl font-semibold tracking-tight">
+              {t.home.recentPosts}
+            </h2>
+            <ul data-latest-posts class="max-w-[65rem] divide-y divide-border">
+              {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
+                <li class="min-w-0">
+                  <PostCard post={post} variant="list" />
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       )
     }
 
     <!-- 查看全部文章 -->
-    <div class="py-8 text-center">
-      <LinkButton href={allPostsHref} variant="outline" size="lg">
-        {t.home.allPosts}
-        <ArrowRight class="size-4 rtl:-rotate-180" />
-      </LinkButton>
+    <div class="home-section">
+      <div class="home-section-content site-frame py-8 text-center">
+        <LinkButton href={allPostsHref} variant="outline" size="lg">
+          {t.home.allPosts}
+          <ArrowRight class="size-4 rtl:-rotate-180" />
+        </LinkButton>
+      </div>
     </div>
   </Main>
   <Footer />
 </Layout>
+
+<style>
+  .home-section-content {
+    width: 100%;
+    max-width: var(--content-width);
+    margin-inline: auto;
+    padding-inline: var(--frame-gutter);
+  }
+
+  /* 分隔带随页面铺满可用宽度，两侧斜纹渐淡，细线保持贯通。 */
+  .home-section + .home-section::before {
+    display: block;
+    height: 0.75rem;
+    border-block: 1px solid var(--border);
+    background:
+      linear-gradient(
+        to right,
+        var(--background),
+        transparent 20%,
+        transparent 80%,
+        var(--background)
+      ),
+      repeating-linear-gradient(
+        135deg,
+        transparent 0 6px,
+        var(--border) 6px 7px,
+        transparent 7px 12px
+      );
+    content: "";
+    pointer-events: none;
+  }
+</style>

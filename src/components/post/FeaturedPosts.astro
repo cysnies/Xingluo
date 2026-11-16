@@ -9,7 +9,7 @@ interface Props {
 const { posts } = Astro.props;
 // 大量精选只在首页展示前四篇，完整内容仍可通过全部文章访问。
 const visiblePosts = posts.length >= 7 ? posts.slice(0, 4) : posts;
-const bento = visiblePosts.length === 3;
+const threeColumns = visiblePosts.length === 3;
 ---
 
 {
@@ -18,15 +18,15 @@ const bento = visiblePosts.length === 3;
       data-featured-posts
       class:list={[
         "grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-5",
-        bento && "lg:auto-rows-fr lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]",
+        threeColumns && "lg:grid-cols-3",
       ]}
     >
       {visiblePosts.map((post, index) => (
         <li
           class:list={[
             "min-w-0",
-            bento && index === 0 && "md:col-span-2 lg:col-span-1 lg:row-span-2",
-            !bento &&
+            threeColumns && index === 2 && "md:col-span-2 lg:col-span-1",
+            !threeColumns &&
               index === visiblePosts.length - 1 &&
               visiblePosts.length % 2 === 1 &&
               "md:col-span-2",
@@ -35,7 +35,7 @@ const bento = visiblePosts.length === 3;
           <PostCard
             post={post}
             variant={
-              index === 0 && (bento || visiblePosts.length === 1)
+              threeColumns || visiblePosts.length === 1
                 ? "featured"
                 : "compact"
             }

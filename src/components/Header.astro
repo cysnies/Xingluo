@@ -1,6 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { stripBase, stripLocale } from "@/utils/withBase";
+import { getAssetPath, stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import { getSiteTitle } from "@/utils/siteBrand";
@@ -14,6 +14,11 @@ import Close from "@/assets/icons/Close.astro";
 const { features } = config;
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
+const brand = config.site.navbarBrand ?? { mode: "text" };
+const brandText = brand.textByLocale?.[locale] ?? brand.text ?? getSiteTitle(locale);
+const brandImage = brand.mode === "text" ? undefined : brand.src.trim();
+const brandImageUrl = brandImage &&
+  (/^(?:https?:)?\/\//i.test(brandImage) ? brandImage : getAssetPath(brandImage));
 
 // 剥离 base 前缀，使 isActive 判断不受部署子目录影响
 const relativePath = stripBase(Astro.url.pathname);
@@ -56,23 +61,34 @@ const navItems = [
 <header
   class="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md"
 >
-  <div class="mx-auto flex h-14 max-w-app items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+  <div class="site-frame mx-auto flex h-16 max-w-app items-center justify-between gap-3 px-4 sm:px-6 lg:h-20 lg:gap-5 lg:px-8">
     <!-- Logo / 站点标题 -->
     <a
       href={getRelativeLocaleUrl(locale)}
-      class="text-base font-semibold tracking-tight transition-colors hover:text-primary"
+      data-navbar-brand={brand.mode}
+      class="flex min-w-0 items-center gap-2.5 text-xl font-semibold tracking-tight transition-colors hover:text-primary lg:text-2xl"
     >
-      {getSiteTitle(locale)}
+      {brand.mode !== "text" && brandImageUrl && (
+        <img
+          src={brandImageUrl}
+          alt={brand.mode === "image" ? (brand.alt ?? brandText) : (brand.alt ?? "")}
+          width="36"
+          height="36"
+          class="h-9 w-auto min-w-0 max-w-24 object-contain lg:h-10 lg:max-w-36"
+        />
+      )}
+      {(brand.mode !== "image" || !brandImageUrl) && <span class="truncate">{brandText}</span>}
     </a>
 
     <!-- 桌面端导航 -->
-    <nav class="hidden items-center gap-1 md:flex" aria-label={t.a11y.mainNav}>
+    <nav data-desktop-nav class="hidden shrink-0 items-center gap-1 lg:flex" aria-label={t.a11y.mainNav}>
       {
         navItems.map((item) => (
           <a
             href={item.href}
+            aria-current={isActive(item.path) ? "page" : undefined}
             class:list={[
-              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+              "inline-flex min-h-11 items-center rounded-md px-3 py-2 text-lg font-medium transition-colors",
               isActive(item.path)
                 ? "bg-accent text-accent-foreground"
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -85,7 +101,7 @@ const navItems = [
     </nav>
 
     <!-- 右侧操作区 -->
-    <div class="flex items-center gap-1">
+    <div class="flex shrink-0 items-center gap-0 sm:gap-1">
       <SearchTrigger />
       <ThemeToggle />
       <FontSwitcher />
@@ -98,10 +114,10 @@ const navItems = [
         data-label-open={t.a11y.openMenu}
         data-label-close={t.a11y.closeMenu}
         aria-expanded="false"
-        class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 md:hidden"
+        class="inline-flex size-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 lg:hidden"
       >
-        <Menu class="size-4 md:hidden" id="menu-icon-open" />
-        <Close class="hidden size-4" id="menu-icon-close" />
+        <Menu class="size-5 lg:hidden" id="menu-icon-open" />
+        <Close class="hidden size-5" id="menu-icon-close" />
       </button>
     </div>
   </div>
@@ -109,7 +125,7 @@ const navItems = [
   <!-- 移动端菜单（默认隐藏，JS 控制展开收起动画） -->
   <nav
     id="mobile-menu"
-    class="hidden border-t border-border bg-background md:hidden motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out"
+    class="hidden border-t border-border bg-background lg:hidden motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out"
     aria-label={t.a11y.mobileNav}
   >
     <div class="mx-auto flex max-w-app flex-col gap-1 px-4 py-3 sm:px-6">
@@ -117,8 +133,9 @@ const navItems = [
         navItems.map((item) => (
           <a
             href={item.href}
+            aria-current={isActive(item.path) ? "page" : undefined}
             class:list={[
-              "rounded-md px-3 py-2.5 text-sm font-medium transition-colors touch-manipulation",
+              "rounded-md px-3 py-2.5 text-base font-medium transition-colors touch-manipulation",
               isActive(item.path)
                 ? "bg-accent text-accent-foreground"
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -197,7 +214,7 @@ const navItems = [
       btn.setAttribute("aria-expanded", "false");
       if (btn.dataset.labelOpen) btn.setAttribute("aria-label", btn.dataset.labelOpen);
       iconOpen?.classList.remove("hidden");
-      iconOpen?.classList.add("md:hidden");
+      iconOpen?.classList.add("lg:hidden");
       iconClose?.classList.add("hidden");
       if (onKey) {
         document.removeEventListener("keydown", onKey);

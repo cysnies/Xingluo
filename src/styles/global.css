@@ -145,6 +145,20 @@
   max-width: var(--content-width);
 }
 
+/* 页面边框与各区块的灰色分割线共用内容边界。 */
+@utility site-frame {
+  --frame-gutter: 1rem;
+  border-inline: 1px solid var(--color-border);
+
+  @media (min-width: 40rem) {
+    --frame-gutter: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    --frame-gutter: 2rem;
+  }
+}
+
 /* 正文舒适阅读宽度 */
 @utility max-w-prose-app {
   max-width: var(--prose-width);

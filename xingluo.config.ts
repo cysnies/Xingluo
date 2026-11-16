@@ -12,6 +12,11 @@ export default defineXingluoConfig({
     title: "星罗",
     // 英文等非默认语种可用拉丁品牌名
     titleByLocale: { en: "Xingluo" },
+    // 导航栏品牌：text 纯文字 | image-text 图片+文字 | image 纯图片
+    // 文字默认跟随当前语言的站点标题，也可设置 text / textByLocale
+    navbarBrand: { mode: "text" },
+    // navbarBrand: { mode: "image-text", src: "favicon.svg", text: "星罗" },
+    // navbarBrand: { mode: "image", src: "favicon.svg", alt: "星罗" },
     // 站点描述，用于 <meta name="description">、RSS 与 SEO
     description: "基于 Astro 与 shadcn 的现代化博客 CMS",
     descriptionByLocale: {

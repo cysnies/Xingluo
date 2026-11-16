@@ -35,7 +35,26 @@ export interface SiteConfig {
   favicon?: FaviconConfig;
   /** 首页介绍区头像；省略或设为 false 时隐藏 */
   avatar?: AvatarConfig | false;
+  /** 导航栏品牌，省略时显示当前语言的站点标题 */
+  navbarBrand?: NavbarBrandConfig;
 }
+
+/** 导航栏左上角的文字与图片 */
+export type NavbarBrandConfig = {
+  /** 文字内容，省略时使用站点标题 */
+  text?: string;
+  /** 按语言覆盖文字，未命中时使用 text 或当前语言的站点标题 */
+  textByLocale?: Partial<Record<string, string>>;
+} & (
+  | { mode: "text" }
+  | {
+      mode: "image-text" | "image";
+      /** public 目录中的图片路径或外部 HTTPS 图片 URL */
+      src: string;
+      /** 图片替代文字，纯图片模式省略时使用品牌文字 */
+      alt?: string;
+    }
+);
 
 /** 首页头像配置 */
 export interface AvatarConfig {
