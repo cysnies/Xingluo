@@ -2,48 +2,20 @@ import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 import config from "@/config";
+import { createContentPatterns } from "@/utils/contentPatterns";
 
 /** 博客文章内容目录 */
 export const BLOG_PATH = "src/content/posts";
 /** 静态页面内容目录 */
 export const PAGES_PATH = "src/content/pages";
 
-/** 内容树中可能出现的非默认语种子目录（与 src/i18n/lang 对齐） */
-const CONTENT_LOCALE_DIRS = [
-  "zh-tw",
-  "en",
-  "ja",
-  "ko",
-  "fr",
-  "de",
-  "es",
-  "pt",
-  "ru",
-  "ar",
-  "eo",
-] as const;
-
-const DEFAULT_LOCALE = "zh-cn";
-
 /**
- * 内容 glob：仅收集默认语种根目录 + enabledLocales 下的语种子目录，
- * 避免未启用语种示例进集合。未配置 enabledLocales 时全量。
+ * 内容 glob：收集默认语言的任意层级内容，并排除未启用语种目录；
+ * 未配置 enabledLocales 时收集全部语种。
  */
 function contentPatterns(): string | string[] {
   const ext = config.features.mdx ? "{md,mdx}" : "md";
-  const requested = config.features.enabledLocales;
-  if (!requested || requested.length === 0) {
-    return `**/[^_]*.${ext}`;
-  }
-  const enabled = new Set(requested);
-  enabled.add(DEFAULT_LOCALE);
-  const patterns: string[] = [`[^_]*.${ext}`];
-  for (const loc of CONTENT_LOCALE_DIRS) {
-    if (enabled.has(loc)) {
-      patterns.push(`${loc}/**/[^_]*.${ext}`);
-    }
-  }
-  return patterns;
+  return createContentPatterns(ext, config.features.enabledLocales);
 }
 
 const contentPattern = contentPatterns();

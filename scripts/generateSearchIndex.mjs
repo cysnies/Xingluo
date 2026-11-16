@@ -8,6 +8,7 @@
  */
 import { readdir, readFile, mkdir, writeFile, stat } from "node:fs/promises";
 import { resolve, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const distDir = resolve("dist");
 const searchDir = join(distDir, "search");
@@ -68,33 +69,61 @@ async function walk(dir) {
   return files;
 }
 
+/** 将 dist 内文件路径转换为站内 URL 路径 */
+function getRelativeUrlPath(filePath) {
+  const normalized = filePath.replace(/\\/g, "/");
+  const relative = normalized
+    .slice(distDir.replace(/\\/g, "/").length)
+    .replace(/\/index\.html$/i, "/")
+    .replace(/\.html$/i, "/");
+  return relative.startsWith("/") ? relative : `/${relative}`;
+}
+
 /**
- * 判断文件路径是否为文章页（URL 中包含 /posts/）
+ * 判断文件路径是否为文章详情页，排除列表页和分页页。
  */
 function isPostPage(filePath) {
-  const normalized = filePath.replace(/\\/g, "/");
-  // 排除搜索页自身和 404 等
-  if (normalized.includes("/search/")) return false;
-  if (normalized.includes("/404")) return false;
-  // 文章页路径包含 /posts/
-  return /\/posts\//.test(normalized);
+  const segments = getRelativeUrlPath(filePath).split("/").filter(Boolean);
+  const first = segments[0];
+  if (first && LOCALES.includes(first)) segments.shift();
+  if (segments.shift() !== "posts" || segments.length === 0) return false;
+  // /posts/2/、/posts/3/ 等为文章列表分页页
+  return !(segments.length === 1 && /^\d+$/.test(segments[0]));
+}
+
+/** 解码搜索正文中的常见 HTML 实体 */
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) =>
+      String.fromCodePoint(Number.parseInt(code, 16)),
+    )
+    .replace(
+      /&(nbsp|amp|lt|gt|quot|apos);/gi,
+      (_, entity) =>
+        ({
+          nbsp: " ",
+          amp: "&",
+          lt: "<",
+          gt: ">",
+          quot: '"',
+          apos: "'",
+        })[entity.toLowerCase()] ?? "",
+    );
 }
 
 /**
  * 从 HTML 中提取搜索所需数据
  */
 function extractSearchData(html, filePath) {
-  const normalizedPath = filePath.replace(/\\/g, "/");
-  // 计算 URL 路径：从 dist 相对路径到 URL
-  const relativePath = normalizedPath
-    .slice(distDir.replace(/\\/g, "/").length)
-    .replace(/\/index\.html$/, "/")
-    .replace(/\.html$/, "/");
+  if (!/<article\b[^>]*\bid=["']article["'][^>]*>/i.test(html)) return null;
+
+  const relativePath = getRelativeUrlPath(filePath);
 
   // 提取标题（去除站点后缀）
   const titleMatch = html.match(/<title>([^<]*)<\/title>/);
   if (!titleMatch) return null;
-  let title = titleMatch[1];
+  let title = decodeHtmlEntities(titleMatch[1]);
   // 去掉 " - 星罗" 或 " | Xingluo" 等站点名后缀
   title = title.replace(/\s*[-–—|]\s*[^<]*$/, "").trim();
   if (!title) return null;
@@ -124,34 +153,38 @@ function extractSearchData(html, filePath) {
   }
 
   // 提取分类（第一个 /categories/ 链接的文本）
+  const localePrefix = `(?:/(?:${LOCALES.join("|")}))?`;
   const catMatch = html.match(
-    /href=["']\/categories\/([^"']+)["'][^>]*>\s*([^<]+)\s*<\//i,
+    new RegExp(
+      `href=["']${localePrefix}/categories/([^"']+)["'][^>]*>\\s*([^<]+)\\s*</`,
+      "i",
+    ),
   );
   const category = catMatch ? catMatch[2].trim() : "";
 
   // 提取标签（所有 /tags/ 链接的文本，去重）
   const tagLinkMatches = html.matchAll(
-    /href=["']\/tags\/([^"']+)["'][^>]*>\s*([^<]+)\s*<\//gi,
+    new RegExp(
+      `href=["']${localePrefix}/tags/([^"']+)["'][^>]*>\\s*([^<]+)\\s*</`,
+      "gi",
+    ),
   );
   const tags = [...new Set([...tagLinkMatches].map((m) => m[2].trim()))];
 
-  // 提取正文内容（<main> 或 <article> 内的文本）
+  // 只提取正文容器，避免把标题、分享区、相关文章和评论混入正文。
   let content = "";
-  const contentMatch =
-    html.match(/<main[^>]*>([\s\S]*?)<\/main>/i) ||
-    html.match(/<article[^>]*>([\s\S]*?)<\/article>/i);
+  const contentMatch = html.match(
+    /<article\b[^>]*\bid=["']article["'][^>]*>([\s\S]*?)<\/article>/i,
+  );
   if (contentMatch) {
-    // 去除 HTML 标签，保留文本
-    content = contentMatch[1]
+    const stripped = contentMatch[1]
       .replace(/<script[\s\S]*?<\/script>/gi, "")
       .replace(/<style[\s\S]*?<\/style>/gi, "")
       .replace(/<nav[\s\S]*?<\/nav>/gi, "")
       .replace(/<header[^>]*>[\s\S]*?<\/header>/gi, "")
       .replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, "")
-      .replace(/<[^>]*>/g, " ")
-      .replace(/&[^;]+;/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+      .replace(/<[^>]*>/g, " ");
+    content = decodeHtmlEntities(stripped).replace(/\s+/g, " ").trim();
   }
 
   const locale = detectLocale(relativePath);
@@ -165,7 +198,7 @@ function extractSearchData(html, filePath) {
     modDatetime,
     tags,
     category,
-    content: content.slice(0, 1800), // 限制内容长度
+    content,
     url: relativePath,
     locale,
   };
@@ -243,7 +276,19 @@ async function main() {
   );
 }
 
-main().catch((err) => {
-  console.error("[search index] 生成失败：", err);
-  process.exit(1);
-});
+if (
+  process.argv[1] &&
+  resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  main().catch((err) => {
+    console.error("[search index] 生成失败：", err);
+    process.exit(1);
+  });
+}
+
+export {
+  decodeHtmlEntities,
+  extractSearchData,
+  getRelativeUrlPath,
+  isPostPage,
+};

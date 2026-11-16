@@ -1,3 +1,5 @@
+import type { Encoders } from "flexsearch";
+
 /** 轻量 base 拼接，避免拉入 withBase→config 整包 */
 function getAssetPath(path: string): string {
   const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
@@ -7,7 +9,7 @@ function getAssetPath(path: string): string {
   return root + norm;
 }
 
-interface SearchDoc {
+export interface SearchDoc {
   [key: string]: unknown;
   id: string;
   title: string;
@@ -59,6 +61,54 @@ function getSearchState(container: HTMLElement): SearchState {
 }
 
 const LOCALES = "zh-cn,zh-tw,en,ja,ko,fr,de,es,pt,ru,ar,eo".split(",");
+const CJK_LOCALES = new Set(["zh-cn", "zh-tw", "ja", "ko"]);
+
+function normalizeSearchText(text: string): string {
+  return text.normalize("NFKC").toLocaleLowerCase();
+}
+
+function getSearchableText(doc: SearchDoc): string {
+  return normalizeSearchText(
+    `${doc.title} ${doc.description} ${doc.content} ${doc.category} ${(doc.tags || []).join(" ")}`,
+  );
+}
+
+function rankSearchDocs(docs: SearchDoc[], query: string): SearchDoc[] {
+  const phrase = normalizeSearchText(query).replace(/\s+/g, " ").trim();
+  const terms = phrase.split(" ").filter(Boolean);
+  if (!terms.length) return [];
+
+  return docs
+    .map((doc, index) => {
+      const text = getSearchableText(doc);
+      const title = normalizeSearchText(doc.title);
+      if (!terms.every((term) => text.includes(term))) return null;
+
+      let score = 0;
+      if (text.includes(phrase)) score += 8;
+      if (title.includes(phrase)) score += 16;
+      if (terms.every((term) => title.includes(term))) score += 6;
+      return { doc, index, score };
+    })
+    .filter(
+      (item): item is { doc: SearchDoc; index: number; score: number } =>
+        item !== null,
+    )
+    .sort((left, right) => right.score - left.score || left.index - right.index)
+    .map(({ doc }) => doc);
+}
+
+function createSearchEncoder(locale: string): Encoders {
+  if (!CJK_LOCALES.has(locale)) return "Default";
+  if (typeof Intl.Segmenter !== "function") return "CJK";
+
+  const segmenter = new Intl.Segmenter(locale, { granularity: "word" });
+  return (text: string): string[] => {
+    return [...segmenter.segment(normalizeSearchText(text))]
+      .filter((part) => part.isWordLike)
+      .map((part) => part.segment);
+  };
+}
 
 function detectLocale(): string {
   const segs = window.location.pathname.replace(/\/+$/, "").split("/");
@@ -89,14 +139,43 @@ function highlightText(text: string, query: string): string {
   );
 }
 
+function findMatchIndex(text: string, query: string): number {
+  if (!text || !query) return -1;
+  const haystack = text.toLocaleLowerCase();
+  const phrase = query.replace(/\s+/g, " ").trim().toLocaleLowerCase();
+  const candidates = [phrase, ...phrase.split(" ")].filter(Boolean);
+  return candidates.reduce((earliest, term) => {
+    const index = haystack.indexOf(term);
+    if (index < 0) return earliest;
+    return earliest < 0 ? index : Math.min(earliest, index);
+  }, -1);
+}
+
 function snippet(text: string, query: string, win = 80): string {
   if (!text) return "";
   if (!query) return text.slice(0, 200);
-  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  const idx = findMatchIndex(text, query);
   if (idx < 0) return text.slice(0, 200);
+  const matchedLength =
+    text.toLocaleLowerCase().indexOf(query.toLocaleLowerCase(), idx) >= 0
+      ? query.length
+      : query.split(/\s+/)[0]?.length || 1;
   const start = Math.max(0, idx - win);
-  const end = Math.min(text.length, idx + query.length + win);
+  const end = Math.min(text.length, idx + matchedLength + win);
   return `${start > 0 ? "..." : ""}${text.slice(start, end)}${end < text.length ? "..." : ""}`;
+}
+
+export function getSearchSnippet(
+  doc: Pick<SearchDoc, "content" | "description">,
+  query: string,
+): string {
+  if (findMatchIndex(doc.content, query) >= 0) {
+    return snippet(doc.content, query);
+  }
+  if (findMatchIndex(doc.description, query) >= 0) {
+    return snippet(doc.description, query);
+  }
+  return snippet(doc.description || doc.content, query);
 }
 
 function fmtDate(iso: string): string {
@@ -111,12 +190,18 @@ function fmtDate(iso: string): string {
   }
 }
 
-function createResultCard(doc: SearchDoc, query: string): HTMLAnchorElement {
+function createResultCard(
+  doc: SearchDoc,
+  query: string,
+  index: number,
+): HTMLAnchorElement {
   const card = document.createElement("a");
-  card.href = doc.url;
+  card.id = `search-result-${index}`;
+  card.href = getAssetPath(doc.url);
   card.className =
     "search-result-card search-result-enter block rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent hover:shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
   card.setAttribute("role", "listitem");
+  card.setAttribute("aria-label", doc.title);
 
   const meta: string[] = [];
   if (doc.pubDatetime) meta.push(fmtDate(doc.pubDatetime));
@@ -135,7 +220,7 @@ function createResultCard(doc: SearchDoc, query: string): HTMLAnchorElement {
     );
   }
 
-  const desc = snippet(doc.description || doc.content, query);
+  const desc = getSearchSnippet(doc, query);
   const tags = (doc.tags || [])
     .slice(0, 5)
     .map(
@@ -156,6 +241,7 @@ function showHint(state: SearchState) {
   state.noResultsEl?.classList.add("hidden");
   if (state.resultsEl) state.resultsEl.innerHTML = "";
   state.statsEl?.classList.add("hidden");
+  state.input?.setAttribute("aria-expanded", "false");
 }
 
 function showNoResults(state: SearchState) {
@@ -163,6 +249,7 @@ function showNoResults(state: SearchState) {
   state.noResultsEl?.classList.remove("hidden");
   if (state.resultsEl) state.resultsEl.innerHTML = "";
   state.statsEl?.classList.add("hidden");
+  state.input?.setAttribute("aria-expanded", "false");
 }
 
 function renderResults(state: SearchState, docs: SearchDoc[], query: string) {
@@ -177,8 +264,9 @@ function renderResults(state: SearchState, docs: SearchDoc[], query: string) {
     );
     state.statsEl.classList.remove("hidden");
   }
-  for (const doc of docs)
-    state.resultsEl!.appendChild(createResultCard(doc, query));
+  for (const [index, doc] of docs.entries())
+    state.resultsEl!.appendChild(createResultCard(doc, query, index));
+  state.input?.setAttribute("aria-expanded", "true");
   state.params.set("q", query);
   history.replaceState(history.state, "", "?" + state.params.toString());
   sessionStorage.setItem(
@@ -188,14 +276,9 @@ function renderResults(state: SearchState, docs: SearchDoc[], query: string) {
 }
 
 function textSearch(state: SearchState, query: string) {
-  const q = query.toLowerCase();
-  const docs = state.documents.filter((d) =>
-    `${d.title} ${d.description} ${d.content} ${(d.tags || []).join(" ")}`
-      .toLowerCase()
-      .includes(q),
-  );
+  const docs = rankSearchDocs(state.documents, query);
   if (!docs.length) showNoResults(state);
-  else renderResults(state, docs, query);
+  else renderResults(state, docs.slice(0, 50), query);
 }
 
 function performSearch(state: SearchState, query: string) {
@@ -207,7 +290,7 @@ function performSearch(state: SearchState, query: string) {
     textSearch(state, query);
     return;
   }
-  const raw = state.index.search(query, { limit: 50, enrich: true }) as Array<{
+  const raw = state.index.search(query, { limit: 100, enrich: true }) as Array<{
     field: string;
     result: Array<{ doc: SearchDoc }>;
   }>;
@@ -217,9 +300,9 @@ function performSearch(state: SearchState, query: string) {
       if (item.doc?.id && !map.has(item.doc.id)) map.set(item.doc.id, item.doc);
     }
   }
-  const docs = Array.from(map.values());
+  const docs = rankSearchDocs(Array.from(map.values()), query);
   if (!docs.length) textSearch(state, query);
-  else renderResults(state, docs, query);
+  else renderResults(state, docs.slice(0, 50), query);
 }
 
 async function loadIndex(state: SearchState, container: HTMLElement) {
@@ -236,20 +319,23 @@ async function loadIndex(state: SearchState, container: HTMLElement) {
         : manifest[0]!;
       resp = await fetch(getAssetPath(`search/${lang}.json`));
       if (!resp.ok) return;
+      state.locale = lang;
     }
     state.documents = await resp.json();
     if (!state.documents?.length) return;
 
     const flexMod = await import("flexsearch");
     const FlexSearch = flexMod.default ?? flexMod;
+    const tokenize = CJK_LOCALES.has(state.locale) ? "strict" : "forward";
     state.index = new FlexSearch.Document({
+      encoder: createSearchEncoder(state.locale),
       document: {
         id: "id",
         index: [
-          { field: "title", tokenize: "forward", resolution: 9 },
-          { field: "description", tokenize: "forward", resolution: 5 },
-          { field: "content", tokenize: "forward", resolution: 3 },
-          { field: "tags", tokenize: "forward", resolution: 5 },
+          { field: "title", tokenize, resolution: 9 },
+          { field: "description", tokenize, resolution: 5 },
+          { field: "content", tokenize, resolution: 3 },
+          { field: "tags", tokenize, resolution: 5 },
         ],
         store: [
           "title",
@@ -262,7 +348,7 @@ async function loadIndex(state: SearchState, container: HTMLElement) {
           "content",
         ],
       },
-      tokenize: "forward",
+      tokenize,
       cache: true,
     });
     for (const doc of state.documents) state.index.add(doc);
@@ -275,7 +361,49 @@ async function loadIndex(state: SearchState, container: HTMLElement) {
   } catch (err) {
     console.warn("[search] index load failed:", err);
     delete container.dataset.searchLoading;
+  } finally {
+    container.removeAttribute("aria-busy");
   }
+}
+
+function focusSearchResult(
+  state: SearchState,
+  direction: "first" | "next" | "previous",
+) {
+  const cards = Array.from(
+    state.resultsEl?.querySelectorAll<HTMLAnchorElement>(
+      ".search-result-card",
+    ) ?? [],
+  );
+  if (!cards.length) return;
+
+  if (direction === "first") {
+    cards[0]?.focus();
+    return;
+  }
+
+  const active = document.activeElement;
+  const current = cards.findIndex((card) => card === active);
+  const offset = direction === "next" ? 1 : -1;
+  const next =
+    current < 0
+      ? direction === "next"
+        ? 0
+        : cards.length - 1
+      : (current + offset + cards.length) % cards.length;
+  cards[next]?.focus();
+}
+
+function clearSearch(
+  state: SearchState,
+  input: HTMLInputElement,
+  clearBtn: HTMLElement | null,
+) {
+  input.value = "";
+  clearBtn?.classList.add("hidden");
+  if (state.debounceTimer) clearTimeout(state.debounceTimer);
+  showHint(state);
+  history.replaceState(history.state, "", window.location.pathname);
 }
 
 function bindEvents(state: SearchState, container: HTMLElement) {
@@ -298,21 +426,34 @@ function bindEvents(state: SearchState, container: HTMLElement) {
       if (state.debounceTimer) clearTimeout(state.debounceTimer);
       state.debounceTimer = setTimeout(() => performSearch(state, query), 200);
     } else {
-      clearBtn?.classList.add("hidden");
-      if (state.debounceTimer) clearTimeout(state.debounceTimer);
-      showHint(state);
-      history.replaceState(history.state, "", window.location.pathname);
+      clearSearch(state, newInput, clearBtn);
     }
   });
 
   clearBtn?.addEventListener("click", () => {
-    newInput.value = "";
-    clearBtn.classList.add("hidden");
-    if (state.debounceTimer) clearTimeout(state.debounceTimer);
-    showHint(state);
-    history.replaceState(history.state, "", window.location.pathname);
+    clearSearch(state, newInput, clearBtn);
     newInput.focus();
   });
+
+  newInput.addEventListener("keydown", (event: KeyboardEvent) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      focusSearchResult(state, "first");
+    } else if (event.key === "Escape" && newInput.value) {
+      event.preventDefault();
+      clearSearch(state, newInput, clearBtn);
+    }
+  });
+
+  state.resultsEl!.onkeydown = (event: KeyboardEvent) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      focusSearchResult(state, event.key === "ArrowDown" ? "next" : "previous");
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      newInput.focus();
+    }
+  };
 
   const query = state.params.get("q");
   if (query) {
@@ -335,6 +476,7 @@ export function initSearch() {
   state.locale = detectLocale();
   state.params = new URLSearchParams(window.location.search);
   if (!state.input || !state.resultsEl) return;
+  state.input.setAttribute("aria-expanded", "false");
 
   bindEvents(state, container);
 
@@ -346,6 +488,7 @@ export function initSearch() {
       return;
     }
     container.dataset.searchLoading = "true";
+    container.setAttribute("aria-busy", "true");
     void loadIndex(state, container);
   };
 

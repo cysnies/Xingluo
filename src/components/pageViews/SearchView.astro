@@ -45,6 +45,11 @@ const crumbs = [
         <input
           id="search-input"
           type="search"
+          aria-label={t.a11y.searchPlaceholder}
+          aria-controls="search-results"
+          aria-describedby="search-stats"
+          aria-expanded="false"
+          aria-autocomplete="list"
           placeholder={t.a11y.searchPlaceholder}
           class="search-input w-full rounded-md border border-input bg-background py-3 pl-10 pr-10 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
           autocomplete="off"
@@ -78,6 +83,7 @@ const crumbs = [
       <div
         id="search-stats"
         class="hidden text-sm text-muted-foreground"
+        role="status"
         aria-live="polite"
         data-results-tpl={t.a11y.searchResultsCount}
       ></div>
@@ -102,7 +108,12 @@ const crumbs = [
           <p>{t.a11y.searchPlaceholder}</p>
         </div>
         <!-- 无结果提示（由 JS 控制显示） -->
-        <div id="search-no-results" class="hidden py-12 text-center text-muted-foreground">
+        <div
+          id="search-no-results"
+          class="hidden py-12 text-center text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
           <p>{t.a11y.noResults}</p>
         </div>
       </div>
