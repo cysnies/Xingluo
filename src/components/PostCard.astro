@@ -43,30 +43,48 @@ const readingMinutes = getReadingTime(post.body ?? "", locale);
 // 沿用字符串和 Astro 图片对象两种内容格式。
 const heroImage = config.features.showPostCardHero ? data.heroImage : undefined;
 const heroImageSrc = typeof heroImage === "string" ? heroImage : heroImage?.src;
+/** 列表卡片沿用旧版背景式头图，其他卡片继续使用独立缩略图。 */
+const useBackgroundHero = variant === "list" && Boolean(heroImageSrc);
 ---
 
 <Card
   as="article"
   data-post-card
   data-variant={variant}
+  data-direction={config.site.dir}
   data-reveal
   class={cn(
-    "post-card group relative h-full min-w-0 gap-0 rounded-xl border-border/80 p-4 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs motion-reduce:transition-none md:p-6",
+    "post-card group relative h-full min-w-0 gap-0 overflow-hidden rounded-xl border-border/80 p-4 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs motion-reduce:transition-none md:p-6",
     variant === "featured" && "bg-muted/20",
     variant === "list" &&
       "rounded-none border-0 bg-transparent px-0 py-5 hover:shadow-none md:px-0 md:py-6",
     className,
   )}
 >
+  {
+    useBackgroundHero && heroImageSrc && (
+      <div
+        data-post-card-image
+        class={cn(
+          "post-card__hero pointer-events-none absolute inset-y-0 end-0 w-[58%] bg-cover",
+          config.features.showPostCardHeroMobile ? "block" : "hidden md:block",
+        )}
+        style={{ backgroundImage: `url("${heroImageSrc}")` }}
+        aria-hidden="true"
+      />
+    )
+  }
+
   <div
     class={cn(
-      "flex min-w-0 flex-col gap-4 md:gap-5",
+      "relative z-10 flex min-w-0 flex-col gap-4 md:gap-5",
       variant !== "list" && "flex-1",
       variant !== "featured" && "md:flex-row",
+      useBackgroundHero && "md:pe-[42%]",
     )}
   >
     {
-      heroImageSrc && (
+      heroImageSrc && !useBackgroundHero && (
         <div
           data-post-card-image
           class={cn(
@@ -194,6 +212,42 @@ const heroImageSrc = typeof heroImage === "string" ? heroImage : heroImage?.src;
 </Card>
 
 <style>
+  .post-card__hero {
+    background-position: right center;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 0.08) 12%,
+      black 38%,
+      black 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 0.08) 12%,
+      black 38%,
+      black 100%
+    );
+  }
+
+  .post-card[data-direction="rtl"] .post-card__hero {
+    background-position: left center;
+    mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgb(0 0 0 / 0.08) 12%,
+      black 38%,
+      black 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgb(0 0 0 / 0.08) 12%,
+      black 38%,
+      black 100%
+    );
+  }
+
   .post-card__title-link::after {
     position: absolute;
     inset: 0;

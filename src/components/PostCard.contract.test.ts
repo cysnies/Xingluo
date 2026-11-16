@@ -28,4 +28,14 @@ describe("PostCard layout contract", () => {
     expect(src).toContain('variant !== "list" && "flex flex-col"');
     expect(src).toContain('variant === "list" ? "mt-3" : "mt-auto pt-3"');
   });
+
+  it("renders list hero images as a fading right-side backdrop", () => {
+    expect(src).toContain(
+      'const useBackgroundHero = variant === "list" && Boolean(heroImageSrc);',
+    );
+    expect(src).toContain('"post-card__hero pointer-events-none');
+    expect(src).toContain("useBackgroundHero && \"md:pe-[42%]\"");
+    expect(src).toContain("mask-image: linear-gradient(");
+    expect(src).toContain("background-position: right center");
+  });
 });
