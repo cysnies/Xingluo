@@ -38,6 +38,8 @@ export interface UIStrings {
     closeImagePreview: string;
     /** 阅读时长，如 "{{minutes}} 分钟阅读" */
     readingTime: string;
+    /** 文章目录中的阅读进度 */
+    readingProgress: string;
     /** 相关文章区块标题 */
     relatedPosts: string;
     /** 文章分类标签文案，如 "分类：{{category}}" */

@@ -31,6 +31,7 @@ const ru: UIStrings = {
     imagePreview: "Предпросмотр: ",
     closeImagePreview: "Закрыть предпросмотр",
     readingTime: "{{minutes}} мин чтения",
+    readingProgress: "Прогресс чтения",
     relatedPosts: "Похожие статьи",
     categoryLabel: "Категория: {{category}}",
     linkToHeading: "Ссылка на этот заголовок",

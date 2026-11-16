@@ -3,13 +3,14 @@ import type { HTMLAttributes } from "astro/types";
 import { cn } from "@/lib/utils";
 
 interface CardProps extends HTMLAttributes<"div"> {
+  as?: "div" | "article";
   class?: string;
 }
 
-const { class: className, ...rest } = Astro.props as CardProps;
+const { as: Tag = "div", class: className, ...rest } = Astro.props as CardProps;
 ---
 
-<div
+<Tag
   data-slot="card"
   class={cn(
     "flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm",
@@ -18,4 +19,4 @@ const { class: className, ...rest } = Astro.props as CardProps;
   {...rest}
 >
   <slot />
-</div>
+</Tag>

@@ -31,6 +31,7 @@ const zhTw: UIStrings = {
     imagePreview: "圖片預覽：",
     closeImagePreview: "關閉圖片預覽",
     readingTime: "{{minutes}} 分鐘閱讀",
+    readingProgress: "閱讀進度",
     relatedPosts: "相關文章",
     categoryLabel: "分類：{{category}}",
     linkToHeading: "連結到此標題",

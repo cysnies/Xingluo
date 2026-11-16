@@ -31,6 +31,7 @@ const pt: UIStrings = {
     imagePreview: "Pré-visualização: ",
     closeImagePreview: "Fechar pré-visualização",
     readingTime: "{{minutes}} min de leitura",
+    readingProgress: "Progresso de leitura",
     relatedPosts: "Artigos relacionados",
     categoryLabel: "Categoria: {{category}}",
     linkToHeading: "Link para este título",

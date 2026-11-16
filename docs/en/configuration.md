@@ -56,7 +56,7 @@ avatar: {
 }
 ```
 
-The demo uses the existing Xingluo logo. The avatar is 160×160px on desktop and 96×96px on narrow screens. Its left edge aligns with the post cards below. On narrow screens, the introduction text appears below the avatar.
+The demo uses the existing Xingluo logo. The avatar is 160×160px on desktop and 72×72px on narrow screens. Its left edge aligns with the post cards below. On narrow screens, the avatar and title share a row, with the description and social links underneath.
 
 ## posts
 

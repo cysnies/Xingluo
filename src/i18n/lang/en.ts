@@ -31,6 +31,7 @@ const en: UIStrings = {
     imagePreview: "Image preview: ",
     closeImagePreview: "Close image preview",
     readingTime: "{{minutes}} min read",
+    readingProgress: "Reading progress",
     relatedPosts: "Related posts",
     categoryLabel: "Category: {{category}}",
     linkToHeading: "Link to this heading",

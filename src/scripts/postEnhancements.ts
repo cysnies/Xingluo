@@ -10,6 +10,8 @@
  * 所有功能在 View Transitions 切换后重新初始化
  */
 
+import { getReadingProgress } from "@/utils/readingProgress";
+
 /** 文章正文容器 */
 const ARTICLE_SELECTOR = "#article";
 /** 进度条容器 id */
@@ -119,33 +121,73 @@ function attachCopyButtons(
 
 /** 阅读进度条：创建并绑定滚动监听（监听仅绑定一次，跨导航复用） */
 let progressBarBound = false;
+let progressFrame: number | null = null;
+let progressResizeObserver: ResizeObserver | null = null;
+
+function updateReadingProgress() {
+  const article = document.querySelector<HTMLElement>(ARTICLE_SELECTOR);
+  if (!article) return;
+  const rect = article.getBoundingClientRect();
+  const headerBottom =
+    document.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
+  const ratio = getReadingProgress(
+    rect.top,
+    rect.height,
+    window.innerHeight,
+    Math.max(0, headerBottom) + 16,
+  );
+  const percent = Math.round(ratio * 100);
+  const bar = document.getElementById(PROGRESS_BAR_ID);
+  if (bar) bar.style.transform = `scaleX(${ratio})`;
+  document
+    .querySelectorAll<HTMLElement>("[data-reading-progress-value]")
+    .forEach((value) => {
+      value.textContent = `${percent}%`;
+    });
+  document
+    .querySelectorAll<HTMLElement>("[data-reading-progress-meter]")
+    .forEach((meter) => {
+      meter.setAttribute("aria-valuenow", String(percent));
+    });
+  document
+    .querySelectorAll<HTMLElement>("[data-reading-progress-fill]")
+    .forEach((fill) => {
+      fill.style.transform = `scaleX(${ratio})`;
+    });
+}
+
+function scheduleReadingProgress() {
+  if (progressFrame !== null) return;
+  progressFrame = requestAnimationFrame(() => {
+    progressFrame = null;
+    updateReadingProgress();
+  });
+}
+
 function setupProgressBar() {
   const existing = document.getElementById(PROGRESS_BAR_ID);
   if (!existing) {
     const bar = document.createElement("div");
     bar.id = PROGRESS_BAR_ID;
+    bar.setAttribute("aria-hidden", "true");
     bar.className =
-      "fixed inset-x-0 top-0 z-50 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-75 ease-out motion-reduce:transition-none";
+      "fixed inset-x-0 top-0 z-50 h-0.5 origin-left bg-primary transition-transform duration-75 ease-out motion-reduce:transition-none";
+    bar.style.transform = "scaleX(0)";
     document.body.appendChild(bar);
   }
 
+  progressResizeObserver?.disconnect();
+  const article = document.querySelector(ARTICLE_SELECTOR);
+  if (article && typeof ResizeObserver !== "undefined") {
+    progressResizeObserver = new ResizeObserver(scheduleReadingProgress);
+    progressResizeObserver.observe(article);
+  }
+  updateReadingProgress();
   if (progressBarBound) return;
   progressBarBound = true;
-
-  const update = () => {
-    const bar = document.getElementById(PROGRESS_BAR_ID);
-    if (!bar) return;
-    const scrollTop =
-      document.body.scrollTop || document.documentElement.scrollTop;
-    const height =
-      document.documentElement.scrollHeight -
-      document.documentElement.clientHeight;
-    const ratio = height > 0 ? scrollTop / height : 0;
-    bar.style.transform = `scaleX(${ratio})`;
-  };
-
-  window.addEventListener("scroll", update, { passive: true });
-  window.addEventListener("resize", update, { passive: true });
+  window.addEventListener("scroll", scheduleReadingProgress, { passive: true });
+  window.addEventListener("resize", scheduleReadingProgress, { passive: true });
+  document.addEventListener("astro:page-load", scheduleReadingProgress);
 }
 
 /** 灯箱相关状态 */
@@ -449,10 +491,16 @@ document.addEventListener("astro:after-swap", () => {
 // 切换前关闭可能打开的灯箱，避免残留
 document.addEventListener("astro:before-swap", () => {
   window.__closeLightbox?.();
+  progressResizeObserver?.disconnect();
+  if (progressFrame !== null) {
+    cancelAnimationFrame(progressFrame);
+    progressFrame = null;
+  }
 });
 
 // 扩展全局 Window 类型声明（声明合并，无直接引用）
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface Window {
-  __closeLightbox?: (() => void) | null;
+declare global {
+  interface Window {
+    __closeLightbox?: (() => void) | null;
+  }
 }

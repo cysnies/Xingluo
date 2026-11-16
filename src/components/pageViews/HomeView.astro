@@ -7,9 +7,9 @@ import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import Socials from "@/components/Socials.astro";
 import PostCard from "@/components/PostCard.astro";
+import FeaturedPosts from "@/components/post/FeaturedPosts.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { getPostsForLocale } from "@/utils/i18nPosts";
-import { getCardWidth } from "@/utils/getCardWidth";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import { getSiteTitle, getSiteDescription } from "@/utils/siteBrand";
@@ -50,7 +50,7 @@ const rssHref = new URL(
   <Main>
     <!-- Hero 区域 -->
     <section class="border-b border-border pb-6" data-reveal>
-      <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+      <div class:list={[avatarUrl ? "grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-x-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-x-6" : "block"]}>
         {avatarUrl && (
           <img
             src={avatarUrl}
@@ -59,14 +59,14 @@ const rssHref = new URL(
             height="160"
             decoding="async"
             class:list={[
-              "size-24 shrink-0 object-cover sm:size-40",
+              "size-18 shrink-0 object-cover sm:size-40",
               avatarShape,
             ]}
           />
         )}
-        <div class="min-w-0 flex-1">
-          <div class="flex items-center gap-3">
-            <h1 class="my-4 text-3xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
+        <div class="contents sm:block sm:min-w-0">
+          <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+            <h1 class="min-w-0 break-words text-3xl font-bold tracking-tight sm:my-6 sm:text-5xl motion-safe:animate-fade-in-down">
               {getSiteTitle(locale)}
             </h1>
             <a
@@ -79,10 +79,10 @@ const rssHref = new URL(
               <span class="sr-only">RSS</span>
             </a>
           </div>
-          <p class="max-w-prose text-base leading-relaxed text-muted-foreground sm:text-lg">{getSiteDescription(locale)}</p>
+          <p class="col-span-2 mt-4 max-w-prose text-base leading-relaxed text-muted-foreground sm:mt-0 sm:text-lg">{getSiteDescription(locale)}</p>
           {
             config.features.showHomeSocials && config.socials.length > 0 && (
-              <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <div class="col-span-2 mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 [&_a]:size-11 sm:mt-6 sm:[&_a]:size-9">
                 <span class="whitespace-nowrap text-sm text-muted-foreground">
                   {t.home.socialLinks}:
                 </span>
@@ -101,16 +101,7 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.featured}
           </h2>
-          <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
-            {featuredPosts.map((post) => {
-              const width = getCardWidth(post, config.features.showPostCardHero);
-              return (
-                <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
-                  <PostCard post={post} />
-                </li>
-              );
-            })}
-          </ul>
+          <FeaturedPosts posts={featuredPosts} />
         </section>
       )
     }
@@ -122,15 +113,12 @@ const rssHref = new URL(
           <h2 class="mb-4 text-2xl font-semibold tracking-tight">
             {t.home.recentPosts}
           </h2>
-          <ul class="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
-            {recentPosts.slice(0, postsConfig.perIndex).map((post) => {
-              const width = getCardWidth(post, config.features.showPostCardHero);
-              return (
-                <li class={width === "full" ? "col-span-1 md:col-span-2" : "col-span-1"}>
-                  <PostCard post={post} />
-                </li>
-              );
-            })}
+          <ul data-latest-posts class="max-w-[65rem] divide-y divide-border">
+            {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
+              <li class="min-w-0">
+                <PostCard post={post} variant="list" />
+              </li>
+            ))}
           </ul>
         </section>
       )

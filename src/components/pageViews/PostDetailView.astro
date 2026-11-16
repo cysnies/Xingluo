@@ -170,10 +170,11 @@ const resolvedCanonical =
           <details class="mobile-toc group mb-6 rounded-lg border border-border bg-card lg:hidden">
             <summary class="cursor-pointer list-none px-4 py-3 text-sm font-medium touch-manipulation [&::-webkit-details-marker]:hidden flex items-center justify-between">
               <span>{t.post.tableOfContents}</span>
+              <span data-reading-progress-value class="ms-auto me-3 text-xs tabular-nums text-muted-foreground group-open:hidden" aria-hidden="true">0%</span>
               <span class="text-muted-foreground transition group-open:rotate-180" aria-hidden="true">▾</span>
             </summary>
             <div class="border-t border-border px-3 py-3">
-              <TableOfContents headings={headings} label={t.post.tableOfContents} />
+              <TableOfContents headings={headings} label={t.post.tableOfContents} showTitle={false} />
             </div>
           </details>
 

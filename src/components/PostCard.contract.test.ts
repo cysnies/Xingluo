@@ -8,9 +8,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 describe("PostCard layout contract", () => {
   const src = readFileSync(resolve(__dirname, "PostCard.astro"), "utf8");
 
-  it("overrides Card default py-6/gap-6 for fixed-height row", () => {
-    expect(src).toMatch(/h-\[200px\]/);
-    expect(src).toMatch(/\bpy-0\b/);
-    expect(src).toMatch(/\bgap-0\b/);
+  it("keeps title, metadata and description in natural content flow", () => {
+    expect(src).not.toMatch(/h-\[200px\]|min-h-14|min-h-15|justify-between/);
+    expect(src).toContain('as="article"');
+    expect(src).toContain('variant?: "featured" | "compact" | "list"');
   });
 });

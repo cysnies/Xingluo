@@ -31,6 +31,7 @@ const ko: UIStrings = {
     imagePreview: "이미지 미리보기: ",
     closeImagePreview: "이미지 미리보기 닫기",
     readingTime: "{{minutes}}분 분량",
+    readingProgress: "읽기 진행률",
     relatedPosts: "관련 글",
     categoryLabel: "카테고리: {{category}}",
     linkToHeading: "이 제목으로 링크",

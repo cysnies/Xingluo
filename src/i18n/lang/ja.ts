@@ -31,6 +31,7 @@ const ja: UIStrings = {
     imagePreview: "画像プレビュー：",
     closeImagePreview: "画像プレビューを閉じる",
     readingTime: "{{minutes}} 分で読了",
+    readingProgress: "読書の進捗",
     relatedPosts: "関連記事",
     categoryLabel: "カテゴリー：{{category}}",
     linkToHeading: "この見出しへのリンク",

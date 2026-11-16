@@ -31,6 +31,7 @@ const zhCn: UIStrings = {
     imagePreview: "图片预览：",
     closeImagePreview: "关闭图片预览",
     readingTime: "{{minutes}} 分钟阅读",
+    readingProgress: "阅读进度",
     relatedPosts: "相关文章",
     categoryLabel: "分类：{{category}}",
     linkToHeading: "链接到此标题",

@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 interface Props {
   class?: string;
   size?: "sm" | "lg";
+  /** 卡片元信息使用纯日期和紧凑字号 */
+  compact?: boolean;
   pubDatetime: string | Date;
   timezone?: string;
   modDatetime?: string | Date | null;
@@ -18,6 +20,7 @@ const {
   pubDatetime,
   modDatetime,
   size = "sm",
+  compact = false,
   class: className,
   timezone: postTimezone,
 } = Astro.props;
@@ -27,7 +30,8 @@ const t = useTranslations(Astro.currentLocale);
 const pubDate = dayjs(pubDatetime).tz(postTimezone ?? config.site.timezone);
 const pubDateStr = pubDate.format("YYYY-MM-DD");
 
-const isModified = modDatetime && dayjs(modDatetime).valueOf() > dayjs(pubDatetime).valueOf();
+const isModified =
+  modDatetime && dayjs(modDatetime).valueOf() > dayjs(pubDatetime).valueOf();
 let modDateStr = "";
 let modifiedTime = "";
 if (isModified) {
@@ -44,22 +48,44 @@ if (isModified) {
     className,
   )}
 >
-  <Calendar class={cn("size-4 shrink-0 translate-y-px", size === "sm" && "scale-90")} />
+  {
+    !compact && (
+      <Calendar
+        class={cn(
+          "size-4 shrink-0 translate-y-px",
+          size === "sm" && "scale-90",
+        )}
+      />
+    )
+  }
   <time
-    class={cn("text-sm leading-none", size === "lg" && "sm:text-base")}
+    class={cn(
+      compact ? "text-xs leading-normal" : "text-sm leading-none",
+      !compact && size === "lg" && "sm:text-base",
+    )}
     datetime={pubDate.toISOString()}
+    aria-label={compact
+      ? tplStr(t.post.publishedAt, { date: pubDateStr })
+      : undefined}
   >
-    {tplStr(t.post.publishedAt, { date: pubDateStr })}
+    {compact ? pubDateStr : tplStr(t.post.publishedAt, { date: pubDateStr })}
   </time>
-  {isModified && (
-    <>
-      <span class="text-sm text-muted-foreground/50" aria-hidden="true">·</span>
-      <time
-        class={cn("text-sm", size === "lg" && "sm:text-base")}
-        datetime={modifiedTime}
-      >
-        {tplStr(t.post.updatedAt, { date: modDateStr })}
-      </time>
-    </>
-  )}
+  {
+    isModified && (
+      <>
+        <span class="text-sm text-muted-foreground/50" aria-hidden="true">
+          ·
+        </span>
+        <time
+          class={cn(
+            compact ? "text-xs leading-normal" : "text-sm",
+            !compact && size === "lg" && "sm:text-base",
+          )}
+          datetime={modifiedTime}
+        >
+          {tplStr(t.post.updatedAt, { date: modDateStr })}
+        </time>
+      </>
+    )
+  }
 </div>

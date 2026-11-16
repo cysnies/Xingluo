@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getPostUrl } from "@/utils/getPostPaths";
+import { getPostCardTags } from "@/utils/getPostCardTags";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import { useTranslations, tplStr } from "@/i18n";
@@ -9,7 +10,7 @@ import { getReadingTime } from "@/utils/readingTime";
 import config from "@/config";
 import Datetime from "./Datetime.astro";
 import Tag from "./Tag.astro";
-import Clock from "@/assets/icons/Clock.astro";
+import ArrowRight from "@/assets/icons/ArrowRight.astro";
 import Card from "@/components/ui/Card.astro";
 import CardTitle from "@/components/ui/CardTitle.astro";
 import CardDescription from "@/components/ui/CardDescription.astro";
@@ -17,178 +18,186 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   post: CollectionEntry<"posts">;
-  /** 是否显示标签 */
+  variant?: "featured" | "compact" | "list";
   showTags?: boolean;
   class?: string;
 }
 
-const { post, showTags = true, class: className } = Astro.props;
+const {
+  post,
+  variant = "compact",
+  showTags = true,
+  class: className,
+} = Astro.props;
 const { data, id, filePath } = post;
 const locale = Astro.currentLocale ?? config.site.lang;
 const tr = useTranslations(locale);
 const href = getPostUrl(id, filePath, locale);
-const tags = data.tags.map((tag) => ({
-  tag: slugifyStr(tag),
-  tagName: tag,
-}));
-const transitionName = toTransitionName(data.title);
-/** 阅读时长（分钟）：按当前语言的字符/单词速率估算 */
-const readingMinutes = getReadingTime(post.body ?? "", locale);
-/** 分类链接：设置 category 时生成对应分类页地址 */
-const categorySlug = data.category ? slugifyStr(data.category) : undefined;
-const categoryHref = categorySlug
-  ? getRelativeLocaleUrl(locale, `categories/${categorySlug}/`)
+const tags = getPostCardTags(data.tags, data.category);
+const categoryName = data.category ?? "";
+const categoryHref = categoryName
+  ? getRelativeLocaleUrl(locale, `categories/${slugifyStr(categoryName)}/`)
   : undefined;
+const readingMinutes = getReadingTime(post.body ?? "", locale);
 
-/**
- * 文章头图地址解析：
- * - image() 对象取 .src（经 Astro 资源管线优化后的带哈希路径）
- * - 字符串直接作为 public/ 路径或外链使用
- * - 未设置时不渲染头图
- * 仅在全局开关 showPostCardHero 开启时才解析与展示
- */
-let heroImageSrc: string | undefined;
-if (config.features.showPostCardHero) {
-  if (typeof data.heroImage === "string") {
-    heroImageSrc = data.heroImage;
-  } else if (
-    data.heroImage &&
-    typeof data.heroImage === "object" &&
-    "src" in data.heroImage
-  ) {
-    heroImageSrc = data.heroImage.src;
-  }
-}
-/** 是否展示头图：全局开关开启且文章配置了头图 */
-const showHero = !!heroImageSrc;
+// 沿用字符串和 Astro 图片对象两种内容格式。
+const heroImage = config.features.showPostCardHero ? data.heroImage : undefined;
+const heroImageSrc = typeof heroImage === "string" ? heroImage : heroImage?.src;
 ---
 
 <Card
-  data-spotlight
+  as="article"
+  data-post-card
+  data-variant={variant}
   data-reveal
   class={cn(
-    "group relative flex h-[200px] flex-row gap-0 overflow-hidden py-0 transition-[colors,transform] hover:bg-accent/30 [perspective:800px]",
-    className
+    "post-card group relative h-full min-w-0 gap-0 rounded-xl border-border/80 p-4 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs motion-reduce:transition-none md:p-6",
+    variant === "featured" && "bg-muted/20",
+    variant === "list" &&
+      "rounded-none border-0 bg-transparent px-0 py-5 hover:shadow-none md:px-0 md:py-6",
+    className,
   )}
-  style="transform:rotateX(var(--card-rotate-x,0deg)) rotateY(var(--card-rotate-y,0deg));transition-duration:0.3s;transition-timing-function:ease-out"
 >
-  {/* 鼠标跟随光晕层 */}
   <div
-    data-spotlight-glow
-    class="pointer-events-none absolute inset-0 transition-opacity duration-500"
-    style="background:radial-gradient(600px circle at var(--spotlight-x,50%) var(--spotlight-y,50%),color-mix(in oklch, var(--primary) 8%, transparent),transparent 60%);opacity:var(--spotlight-opacity,0)"
-    aria-hidden="true"
-  />
-  {/* 左侧主内容区：标题、信息、描述、分类与标签
-      垂直布局用 gap + justify-between，避免 -mt/mt 对消与 justify-evenly 在 CJK 字框下的垂偏 */}
-  <div class="relative z-10 flex min-w-0 flex-1 flex-col justify-between gap-1.5 px-4 py-3">
-    {/* 标题：保留完整中文行框，固定两行空间并避免被其他内容压缩 */}
-    <CardTitle
-      transition:name={transitionName}
-      class="line-clamp-2 min-h-14 shrink-0 leading-7 transition-colors group-hover:text-primary"
-    >
-      <a href={href} class="after:absolute after:inset-0">{data.title}</a>
-    </CardTitle>
-
-    {/* 元信息：固定行高 + leading-none，图标与文字按边框盒居中更稳 */}
-    <div class="flex h-5 shrink-0 items-center gap-x-3 leading-none">
-      <Datetime
-        pubDatetime={data.pubDatetime}
-        modDatetime={data.modDatetime}
-        timezone={data.timezone}
-        size="sm"
-      />
-      {config.features.showReadingTime && (
-        <span class="inline-flex items-center gap-x-1 text-muted-foreground leading-none">
-          <Clock class="size-3.5 shrink-0 translate-y-px" />
-          <span class="text-sm leading-none">
-            {tplStr(tr.post.readingTime, { minutes: readingMinutes })}
-          </span>
-        </span>
-      )}
-    </div>
-
-    {/* 描述：三行行高与标题、元信息及标签共同适配卡片高度 */}
-    {data.description && (
-      <CardDescription class="line-clamp-3 min-h-15 leading-5">{data.description}</CardDescription>
+    class={cn(
+      "flex min-w-0 flex-col gap-4 md:gap-5",
+      variant !== "featured" && "md:flex-row",
     )}
-
-    {/* 分类与标签行：单行展示，溢出截断；相对定位保持独立可点击 */}
+  >
     {
-      showTags && (tags.length > 0 || categoryHref) && (
-        <div class="relative z-10 flex h-5 shrink-0 items-center gap-2 overflow-hidden whitespace-nowrap leading-none">
-          {categoryHref && (
-            <a
-              href={categoryHref}
-              class="inline-flex shrink-0 items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
-            >
-              {data.category}
-            </a>
+      heroImageSrc && (
+        <div
+          data-post-card-image
+          class={cn(
+            "aspect-video w-full shrink-0 overflow-hidden rounded-lg bg-muted",
+            !config.features.showPostCardHeroMobile && "hidden md:block",
+            variant !== "featured" && "md:order-last md:w-40 md:self-start",
           )}
-          {tags.map((t) => (
-            <Tag tag={t.tag} tagName={t.tagName} size="sm" />
-          ))}
+        >
+          <img
+            src={heroImageSrc}
+            alt=""
+            width="640"
+            height="360"
+            loading="lazy"
+            decoding="async"
+            class="h-full w-full object-cover"
+            style={{ objectFit: data.heroImageFit }}
+          />
         </div>
       )
     }
-  </div>
 
-  {/* 头图背景层：全局开关开启且文章配置了头图时，作为卡片背景展示，带有从左到右的透明渐变过渡。
-      移动端根据 showPostCardHeroMobile 配置决定是否隐藏，防止头图与文字挤在一起阻碍阅读 */}
-  {showHero && (
-    <div
-      class={cn(
-        "pointer-events-none absolute inset-0",
-        config.features.showPostCardHeroMobile ? "" : "hidden md:block"
-      )}
-      style={{
-        backgroundImage: `url(${heroImageSrc})`,
-        backgroundSize: "cover",
-        backgroundPosition: "right center",
-        maskImage:
-          "linear-gradient(to right, transparent 0%, transparent 40%, black 55%, black 100%)",
-        WebkitMaskImage:
-          "linear-gradient(to right, transparent 0%, transparent 40%, black 55%, black 100%)",
-      }}
-    />
-  )}
+    <div class="min-w-0 flex-1">
+      <div class="flex items-start gap-3">
+        <CardTitle
+          transition:name={toTransitionName(data.title)}
+          class={cn(
+            "min-w-0 flex-1 line-clamp-2 break-words text-xl leading-[1.4]",
+            variant === "featured" && "md:text-2xl lg:text-[1.625rem]",
+          )}
+        >
+          <a href={href} class="post-card__title-link">{data.title}</a>
+        </CardTitle>
+        <ArrowRight
+          class="mt-1.5 size-4 shrink-0 text-muted-foreground transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 rtl:rotate-180 rtl:motion-safe:group-hover:-translate-x-0.5 motion-reduce:transition-none"
+          aria-hidden="true"
+        />
+      </div>
+
+      <div
+        data-post-card-meta
+        class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-normal text-muted-foreground"
+      >
+        <Datetime
+          pubDatetime={data.pubDatetime}
+          modDatetime={data.modDatetime}
+          timezone={data.timezone}
+          compact
+        />
+        {
+          config.features.showReadingTime && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                {tplStr(tr.post.readingTime, { minutes: readingMinutes })}
+              </span>
+            </>
+          )
+        }
+      </div>
+
+      {
+        data.description && (
+          <CardDescription
+            class={cn(
+              "mt-2 break-words text-sm leading-[1.65]",
+              variant === "list" ? "line-clamp-2" : "line-clamp-3",
+            )}
+          >
+            {data.description}
+          </CardDescription>
+        )
+      }
+
+      {
+        showTags && (categoryHref || tags.visible.length > 0) && (
+          <div
+            data-post-card-taxonomy
+            class="mt-3 flex flex-wrap items-center gap-x-1 gap-y-0"
+          >
+            {categoryHref && (
+              <a
+                href={categoryHref}
+                aria-label={tplStr(tr.post.categoryLabel, {
+                  category: categoryName,
+                })}
+                class="relative z-10 inline-flex min-h-11 min-w-11 max-w-full items-center justify-center rounded-md px-1 transition-colors hover:bg-accent"
+              >
+                <span class="truncate rounded-md bg-muted px-2 py-1 text-xs leading-normal text-foreground">
+                  {categoryName}
+                </span>
+              </a>
+            )}
+            {tags.visible.map((tag) => (
+              <Tag
+                tag={slugifyStr(tag)}
+                tagName={tag}
+                size="sm"
+                showHash={false}
+                class="relative z-10 min-h-11 min-w-11 justify-center text-xs leading-normal"
+              />
+            ))}
+            {tags.hidden.length > 0 && (
+              <span
+                class="relative z-10 inline-flex min-h-11 items-center px-2 text-xs text-muted-foreground"
+                title={tags.hidden.join(", ")}
+                aria-label={`${tr.post.tagLabel} ${tags.hidden.join(", ")}`}
+              >
+                +{tags.hidden.length}
+              </span>
+            )}
+          </div>
+        )
+      }
+    </div>
+  </div>
 </Card>
 
-<script>
-  // PostCard 点击涟漪效果：点击卡片时在点击位置生成波纹
-  function setupCardRipple() {
-    const cards = document.querySelectorAll<HTMLElement>('[data-spotlight]');
-    for (const card of cards) {
-      if (card.dataset.rippleReady === "true") continue;
-      card.dataset.rippleReady = "true";
-
-      card.addEventListener("click", (e: MouseEvent) => {
-        // 如果点击的是链接或按钮内部，不触发涟漪
-        const target = e.target as HTMLElement;
-        if (target.closest("a, button, [role='button']")) return;
-
-        const rect = card.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-
-        const ripple = document.createElement("span");
-        ripple.className =
-          "pointer-events-none absolute rounded-full bg-primary/10";
-        ripple.style.cssText = `
-          width: ${size}px;
-          height: ${size}px;
-          left: ${x}px;
-          top: ${y}px;
-          transform: scale(0);
-          animation: card-ripple 0.5s ease-out forwards;
-        `;
-        card.appendChild(ripple);
-        ripple.addEventListener("animationend", () => ripple.remove());
-      });
-    }
+<style>
+  .post-card__title-link::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    border-radius: var(--radius-xl);
   }
 
-  document.addEventListener("astro:page-load", setupCardRipple);
-  setupCardRipple();
-</script>
+  .post-card__title-link:focus-visible {
+    outline: none;
+  }
+
+  :global(.post-card:has(.post-card__title-link:focus-visible)) {
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+  }
+</style>

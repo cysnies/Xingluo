@@ -31,6 +31,7 @@ const fr: UIStrings = {
     imagePreview: "Aperçu de l'image : ",
     closeImagePreview: "Fermer l'aperçu",
     readingTime: "{{minutes}} min de lecture",
+    readingProgress: "Progression de lecture",
     relatedPosts: "Articles associés",
     categoryLabel: "Catégorie : {{category}}",
     linkToHeading: "Lien vers ce titre",

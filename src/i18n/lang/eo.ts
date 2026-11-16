@@ -31,6 +31,7 @@ const eo: UIStrings = {
     imagePreview: "Antaŭrigardo: ",
     closeImagePreview: "Fermi antaŭrigardon",
     readingTime: "{{minutes}} min legado",
+    readingProgress: "Legoprogreso",
     relatedPosts: "Rilataj artikoloj",
     categoryLabel: "Kategorio: {{category}}",
     linkToHeading: "Ligo al ĉi tiu titolo",

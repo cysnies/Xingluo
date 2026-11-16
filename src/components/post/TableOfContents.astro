@@ -1,13 +1,16 @@
 ---
 import type { MarkdownHeading } from "astro";
+import { useTranslations } from "@/i18n";
 
 interface Props {
   headings: MarkdownHeading[];
   /** 目录标题文案 */
   label: string;
+  showTitle?: boolean;
 }
 
-const { headings, label } = Astro.props;
+const { headings, label, showTitle = true } = Astro.props;
+const progressLabel = useTranslations(Astro.currentLocale).post.readingProgress;
 
 // 仅取 h2~h6 作为目录项
 const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
@@ -19,7 +22,24 @@ const hasToc = tocHeadings.length >= 2;
 {
   hasToc && (
     <nav aria-label={label} class="text-sm">
-      <p class="mb-3 font-medium text-foreground">{label}</p>
+      {showTitle && <p class="mb-3 font-medium text-foreground">{label}</p>}
+      <div class="mb-4 space-y-2">
+        <div class="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+          <span>{progressLabel}</span>
+          <span data-reading-progress-value class="tabular-nums" aria-hidden="true">0%</span>
+        </div>
+        <div
+          data-reading-progress-meter
+          role="progressbar"
+          aria-label={progressLabel}
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          class="h-1.5 overflow-hidden rounded-full bg-muted"
+        >
+          <div data-reading-progress-fill style="transform:scaleX(0)" class="h-full w-full origin-left bg-primary transition-transform duration-75 motion-reduce:transition-none rtl:origin-right" />
+        </div>
+      </div>
       <ul class="space-y-1.5 border-l border-border">
         {tocHeadings.map((heading) => (
           <li>

@@ -31,6 +31,7 @@ const de: UIStrings = {
     imagePreview: "Bildvorschau: ",
     closeImagePreview: "Bildvorschau schließen",
     readingTime: "{{minutes}} Min. Lesezeit",
+    readingProgress: "Lesefortschritt",
     relatedPosts: "Verwandte Beiträge",
     categoryLabel: "Kategorie: {{category}}",
     linkToHeading: "Link zu dieser Überschrift",

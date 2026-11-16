@@ -31,6 +31,7 @@ const ar: UIStrings = {
     imagePreview: "معاينة الصورة: ",
     closeImagePreview: "إغلاق المعاينة",
     readingTime: "{{minutes}} دقيقة قراءة",
+    readingProgress: "تقدم القراءة",
     relatedPosts: "مقالات ذات صلة",
     categoryLabel: "التصنيف: {{category}}",
     linkToHeading: "رابط إلى هذا العنوان",
