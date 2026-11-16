@@ -17,29 +17,38 @@ const cssUrls = rawCssUrls.map((cssUrl) =>
     : getAssetPath(cssUrl),
 );
 
-let cssOrigin: string | undefined;
-if (cssUrls[0] && /^https?:\/\//i.test(cssUrls[0])) {
+const preconnectOrigins = new Set(font.preconnectOrigins ?? []);
+for (const cssUrl of cssUrls) {
+  if (!/^https?:\/\//i.test(cssUrl)) continue;
   try {
-    cssOrigin = new URL(cssUrls[0]).origin;
-  } catch {
-    cssOrigin = undefined;
-  }
+    preconnectOrigins.add(new URL(cssUrl).origin);
+  } catch {}
 }
 ---
 
 {
   cssUrls.length > 0 && (
     <>
-      {cssOrigin && <link rel="preconnect" href={cssOrigin} crossorigin />}
+      {[...preconnectOrigins].map((origin) => (
+        <link rel="preconnect" href={origin} crossorigin />
+      ))}
       {cssUrls.map((cssUrl) => (
-        <link
-          rel="stylesheet"
-          href={cssUrl}
-          media="print"
-          onload={"this.media='all'"}
-          fetchpriority="low"
-          data-xingluo-font-link="1"
-        />
+        <>
+          <link
+            rel="preload"
+            as="style"
+            href={cssUrl}
+            fetchpriority="high"
+          />
+          <link
+            rel="stylesheet"
+            href={cssUrl}
+            media="print"
+            onload={"this.media='all'"}
+            fetchpriority="low"
+            data-xingluo-font-link="1"
+          />
+        </>
       ))}
       <noscript>
         {cssUrls.map((cssUrl) => (

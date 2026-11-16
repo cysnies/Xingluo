@@ -32,6 +32,8 @@ export interface FontDefinition {
   cssUrl?: string;
   /** 需要同时加载多份字体样式表时使用（例如只加载指定字重） */
   cssUrls?: string[];
+  /** 字体文件所在的源，用于在首次加载前建立连接 */
+  preconnectOrigins?: string[];
   /** 可选等宽栈（代码块），省略则沿用全局 --font-mono */
   monoStack?: string;
   /** 许可说明 */
@@ -74,6 +76,7 @@ export const BUILTIN_FONTS: FontDefinition[] = [
     source: "cdn",
     cssUrl: "fonts/lxgw-wenkai-lite-regular.css",
     cssUrls: ["fonts/lxgw-wenkai-lite-regular.css"],
+    preconnectOrigins: ["https://cdn.npmmirror.com"],
     monoStack:
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
     license: "OFL-1.1",
