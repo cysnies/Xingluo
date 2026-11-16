@@ -6,13 +6,16 @@
 import { resolveActiveFont, maybeMirrorCssUrl } from "@/fonts/resolve";
 
 const font = resolveActiveFont();
-const rawCss = font.cssUrl && font.source !== "system" ? font.cssUrl : undefined;
-const cssUrl = rawCss ? maybeMirrorCssUrl(rawCss) : undefined;
+const rawCssUrls =
+  font.source === "system"
+    ? []
+    : (font.cssUrls ?? (font.cssUrl ? [font.cssUrl] : []));
+const cssUrls = rawCssUrls.map(maybeMirrorCssUrl);
 
 let cssOrigin: string | undefined;
-if (cssUrl && /^https?:\/\//i.test(cssUrl)) {
+if (cssUrls[0] && /^https?:\/\//i.test(cssUrls[0])) {
   try {
-    cssOrigin = new URL(cssUrl).origin;
+    cssOrigin = new URL(cssUrls[0]).origin;
   } catch {
     cssOrigin = undefined;
   }
@@ -20,18 +23,23 @@ if (cssUrl && /^https?:\/\//i.test(cssUrl)) {
 ---
 
 {
-  cssUrl && (
+  cssUrls.length > 0 && (
     <>
       {cssOrigin && <link rel="preconnect" href={cssOrigin} crossorigin />}
-      <link
-        rel="stylesheet"
-        href={cssUrl}
-        media="print"
-        onload={"this.media='all'"}
-        data-xingluo-font-link="1"
-      />
+      {cssUrls.map((cssUrl) => (
+        <link
+          rel="stylesheet"
+          href={cssUrl}
+          media="print"
+          onload={"this.media='all'"}
+          fetchpriority="low"
+          data-xingluo-font-link="1"
+        />
+      ))}
       <noscript>
-        <link rel="stylesheet" href={cssUrl} data-xingluo-font-link="1" />
+        {cssUrls.map((cssUrl) => (
+          <link rel="stylesheet" href={cssUrl} data-xingluo-font-link="1" />
+        ))}
       </noscript>
     </>
   )

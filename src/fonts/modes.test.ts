@@ -55,9 +55,14 @@ describe("font modes", () => {
     vi.resetModules();
     vi.doMock("../../xingluo.config", () => ({ default: { fonts } }));
     const { default: config } = await import("../config");
-    const { resolveActiveFont } = await import("./resolve");
+    const { getFontCatalog, resolveActiveFont } = await import("./resolve");
 
     expect(config.fonts.mode).toBe(mode);
     expect(resolveActiveFont().id).toBe(active);
+    if (active === "lxgw-wenkai-lite") {
+      const lite = getFontCatalog().find((font) => font.id === active);
+      expect(lite?.cssUrls).toEqual([lite?.cssUrl]);
+      expect(lite?.cssUrl).toMatch(/lxgwwenkailite-regular\.css$/);
+    }
   });
 });

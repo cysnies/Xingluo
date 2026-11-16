@@ -19,6 +19,7 @@ interface Props {
   variant?: "featured" | "compact" | "list";
   density?: "default" | "compact";
   showTags?: boolean;
+  priority?: boolean;
   class?: string;
 }
 
@@ -27,6 +28,7 @@ const {
   variant = "compact",
   density = "default",
   showTags = true,
+  priority = false,
   class: className,
 } = Astro.props;
 const { data, id, filePath } = post;
@@ -61,13 +63,21 @@ const useBackgroundHero = Boolean(heroImageSrc);
 >
   {
     useBackgroundHero && heroImageSrc && (
-      <div
+      <img
         data-post-card-image
+        src={heroImageSrc}
+        alt=""
+        width="1200"
+        height="630"
+        loading={
+          priority && config.features.showPostCardHeroMobile ? "eager" : "lazy"
+        }
+        fetchpriority={priority ? "high" : undefined}
+        decoding="async"
         class={cn(
-          "post-card__hero pointer-events-none absolute inset-y-0 end-0 w-[58%] bg-cover",
+          "post-card__hero pointer-events-none absolute inset-y-0 end-0 h-full w-[58%] object-cover",
           config.features.showPostCardHeroMobile ? "block" : "hidden md:block",
         )}
-        style={{ backgroundImage: `url("${heroImageSrc}")` }}
         aria-hidden="true"
       />
     )
@@ -158,7 +168,7 @@ const useBackgroundHero = Boolean(heroImageSrc);
 
 <style>
   .post-card__hero {
-    background-position: right center;
+    object-position: right center;
     mask-image: linear-gradient(
       to right,
       transparent 0%,
@@ -176,7 +186,7 @@ const useBackgroundHero = Boolean(heroImageSrc);
   }
 
   .post-card[data-direction="rtl"] .post-card__hero {
-    background-position: left center;
+    object-position: left center;
     mask-image: linear-gradient(
       to left,
       transparent 0%,

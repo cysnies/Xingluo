@@ -35,6 +35,30 @@ const posts = await getCollection("posts");
 const sortedPosts = getPostsForLocale(posts, locale);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const visibleFeaturedPosts =
+  featuredPosts.length >= 7 ? featuredPosts.slice(0, 4) : featuredPosts;
+const visibleRecentPosts = recentPosts.slice(0, postsConfig.perIndex);
+
+function getPostHeroSrc(post: (typeof sortedPosts)[number] | undefined) {
+  if (!post || !config.features.showPostCardHero) return undefined;
+  const heroImage = post.data.heroImage;
+  return typeof heroImage === "string" ? heroImage : heroImage?.src;
+}
+
+const priorityPost = [...visibleFeaturedPosts, ...visibleRecentPosts].find(
+  (post) => Boolean(getPostHeroSrc(post)),
+);
+const priorityHeroSrc = getPostHeroSrc(priorityPost);
+const priorityHeroUrl = priorityHeroSrc
+  ? priorityHeroSrc.startsWith("//")
+    ? `https:${priorityHeroSrc}`
+    : /^https?:\/\//i.test(priorityHeroSrc)
+      ? priorityHeroSrc
+      : new URL(priorityHeroSrc, Astro.site ?? Astro.url).href
+  : undefined;
+const priorityHeroOrigin = priorityHeroUrl
+  ? new URL(priorityHeroUrl).origin
+  : undefined;
 const allPostsHref = getRelativeLocaleUrl(locale, "posts");
 // 直接构建 RSS URL，不通过 getRelativeLocaleUrl（该函数会附加尾部斜杠且为非默认语言添加前缀），
 // 因为 RSS 端点仅存在于根级别 src/pages/rss.xml.ts，不受语言路由影响。
@@ -46,6 +70,24 @@ const rssHref = new URL(
 ---
 
 <Layout>
+  {
+    priorityHeroUrl && (
+      <Fragment slot="head">
+        <link rel="preconnect" href={priorityHeroOrigin} />
+        <link
+          rel="preload"
+          as="image"
+          href={priorityHeroUrl}
+          fetchpriority="high"
+          media={
+            config.features.showPostCardHeroMobile
+              ? undefined
+              : "(min-width: 768px)"
+          }
+        />
+      </Fragment>
+    )
+  }
   <Header />
   <Main fullWidth>
     <!-- Hero 区域 -->
@@ -58,6 +100,8 @@ const rssHref = new URL(
               alt={avatar?.alt ?? getSiteTitle(locale)}
               width="160"
               height="160"
+              loading="eager"
+              fetchpriority="high"
               decoding="async"
               class:list={[
                 "size-18 shrink-0 object-cover sm:size-40",
@@ -104,7 +148,10 @@ const rssHref = new URL(
             <h2 class="mb-4 text-2xl font-semibold tracking-tight">
               {t.home.featured}
             </h2>
-            <FeaturedPosts posts={featuredPosts} />
+            <FeaturedPosts
+              posts={visibleFeaturedPosts}
+              priorityPostId={priorityPost?.id}
+            />
           </div>
         </section>
       )
@@ -119,9 +166,12 @@ const rssHref = new URL(
               {t.home.recentPosts}
             </h2>
             <ul data-latest-posts class="grid gap-5">
-              {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
+              {visibleRecentPosts.map((post) => (
                 <li class="min-w-0">
-                  <PostCard post={post} />
+                  <PostCard
+                    post={post}
+                    priority={post.id === priorityPost?.id}
+                  />
                 </li>
               ))}
             </ul>

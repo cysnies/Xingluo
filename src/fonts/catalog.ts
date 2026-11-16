@@ -30,6 +30,8 @@ export interface FontDefinition {
    * system 无需填写
    */
   cssUrl?: string;
+  /** 需要同时加载多份字体样式表时使用（例如只加载指定字重） */
+  cssUrls?: string[];
   /** 可选等宽栈（代码块），省略则沿用全局 --font-mono */
   monoStack?: string;
   /** 许可说明 */
@@ -71,10 +73,14 @@ export const BUILTIN_FONTS: FontDefinition[] = [
     stack: '"LXGW WenKai Lite", "LXGW WenKai", "KaiTi", serif',
     source: "cdn",
     cssUrl:
-      "https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/style.css",
-    monoStack: '"LXGW WenKai Mono Lite", ui-monospace, monospace',
+      "https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/lxgwwenkailite-regular.css",
+    cssUrls: [
+      "https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/lxgwwenkailite-regular.css",
+    ],
+    monoStack:
+      "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
     license: "OFL-1.1",
-    note: "文楷精简版；默认经 npmmirror 镜像，大陆可访问",
+    note: "文楷精简版；仅加载常规字重，粗体由浏览器合成以避免重复下载 CJK 子集",
   },
   {
     id: "lxgw-wenkai-screen",

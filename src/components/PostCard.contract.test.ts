@@ -22,6 +22,7 @@ describe("PostCard layout contract", () => {
     );
     expect(featured).toContain("lg:grid-cols-3");
     expect(featured).not.toMatch(/row-span-2|auto-rows-fr/);
+    expect(featured).toContain("priority={post.id === priorityPostId}");
   });
 
   it("anchors card taxonomy below descriptions of different lengths", () => {
@@ -51,9 +52,23 @@ describe("PostCard layout contract", () => {
   it("renders hero images as a fading right-side backdrop on every card", () => {
     expect(src).toContain("const useBackgroundHero = Boolean(heroImageSrc);");
     expect(src).toContain('"post-card__hero pointer-events-none');
+    expect(src).toContain("<img");
+    expect(src).toContain('fetchpriority={priority ? "high" : undefined}');
+    expect(src).toContain('config.features.showPostCardHeroMobile ? "eager"');
     expect(src).toContain('useBackgroundHero && "md:pe-[42%]"');
     expect(src).toContain("mask-image: linear-gradient(");
-    expect(src).toContain("background-position: right center");
+    expect(src).toContain("object-position: right center");
+  });
+
+  it("preloads the first homepage card image and prioritizes the avatar", () => {
+    const home = readFileSync(
+      resolve(__dirname, "pageViews/HomeView.astro"),
+      "utf8",
+    );
+    expect(home).toContain('rel="preload"');
+    expect(home).toContain('as="image"');
+    expect(home).toContain('fetchpriority="high"');
+    expect(home).toContain('loading="eager"');
   });
 
   it("does not render decorative arrows on article cards", () => {

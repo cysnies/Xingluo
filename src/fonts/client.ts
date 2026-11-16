@@ -16,6 +16,7 @@ export interface ClientFontEntry {
   stack: string;
   monoStack?: string;
   cssUrl?: string;
+  cssUrls?: string[];
   source: FontDefinition["source"];
 }
 
@@ -27,6 +28,7 @@ export function toClientFontEntry(f: FontDefinition): ClientFontEntry {
     stack: f.stack,
     monoStack: f.monoStack,
     cssUrl: f.cssUrl ? maybeMirrorCssUrl(f.cssUrl) : undefined,
+    cssUrls: f.cssUrls?.map(maybeMirrorCssUrl),
     source: f.source,
   };
 }

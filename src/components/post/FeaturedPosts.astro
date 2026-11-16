@@ -4,9 +4,10 @@ import PostCard from "@/components/PostCard.astro";
 
 interface Props {
   posts: CollectionEntry<"posts">[];
+  priorityPostId?: string;
 }
 
-const { posts } = Astro.props;
+const { posts, priorityPostId } = Astro.props;
 // 大量精选只在首页展示前四篇，完整内容仍可通过全部文章访问。
 const visiblePosts = posts.length >= 7 ? posts.slice(0, 4) : posts;
 const threeColumns = visiblePosts.length === 3;
@@ -34,6 +35,7 @@ const threeColumns = visiblePosts.length === 3;
         >
           <PostCard
             post={post}
+            priority={post.id === priorityPostId}
             variant={
               threeColumns || visiblePosts.length === 1
                 ? "featured"
