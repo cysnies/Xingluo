@@ -239,19 +239,15 @@ const resolvedCanonical =
             </div>
           </aside>
         )}
-      </div>
 
-      <div
-        class:list={[
-          hasToc && "lg:max-w-[calc(100%-16rem)]",
-        ]}
-      >
-        <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
+        <div class="mx-auto w-full max-w-[46rem] lg:col-start-1 lg:row-start-2">
+          <AdjacentPostNav prevPost={prevPost ?? undefined} nextPost={nextPost ?? undefined} />
 
-        <RelatedPosts posts={relatedPosts} />
+          <RelatedPosts posts={relatedPosts} />
 
-        {/* 评论区：受文章 frontmatter comments 字段覆盖，未设置时跟随全局配置 */}
-        <Comments locale={locale} enabled={comments} />
+          {/* 评论区：受文章 frontmatter comments 字段覆盖，未设置时跟随全局配置 */}
+          <Comments locale={locale} enabled={comments} />
+        </div>
       </div>
     </article>
   </Main>

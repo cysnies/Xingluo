@@ -28,12 +28,19 @@ describe("PostDetail content alignment", () => {
     expect(src).not.toContain('class="mt-3 flex flex-wrap items-center gap-3"');
   });
 
-  it("ends the sticky table of contents before adjacent posts", () => {
+  it("aligns adjacent posts and comments with the prose column", () => {
     const aside = src.indexOf("data-toc-scroll");
+    const ancillary = src.indexOf("lg:col-start-1 lg:row-start-2");
     const adjacentPosts = src.indexOf("<AdjacentPostNav");
+    const comments = src.indexOf("<Comments", adjacentPosts);
     expect(aside).toBeGreaterThan(-1);
-    expect(adjacentPosts).toBeGreaterThan(aside);
-    expect(src).toContain('hasToc && "lg:max-w-[calc(100%-16rem)]"');
+    expect(ancillary).toBeGreaterThan(aside);
+    expect(adjacentPosts).toBeGreaterThan(ancillary);
+    expect(comments).toBeGreaterThan(adjacentPosts);
+    expect(src).toContain(
+      'class="mx-auto w-full max-w-[46rem] lg:col-start-1 lg:row-start-2"',
+    );
+    expect(src).not.toContain("lg:max-w-[calc(100%-16rem)]");
   });
 
   it("removes quote glyphs while keeping the quote block styling", () => {

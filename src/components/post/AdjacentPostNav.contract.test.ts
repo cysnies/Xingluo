@@ -14,9 +14,11 @@ describe("AdjacentPostNav card style", () => {
     expect(src).toContain("rounded-xl border-border/80 p-0 shadow-none");
     expect(src).toContain("hover:border-muted-foreground/50 hover:shadow-xs");
     expect(src).not.toContain("@/assets/icons/Arrow");
-    expect(src).toContain("<PostTaxonomy");
-    expect(src).toContain("category={prevPost.data.category}");
-    expect(src).toContain("category={nextPost.data.category}");
-    expect(src).not.toContain("px-6 pb-6");
+    expect(src).not.toContain("PostTaxonomy");
+    expect(src).not.toContain("getPostCardTags");
+    expect(src).toContain("{t.post.previousPost}");
+    expect(src).toContain("{t.post.nextPost}");
+    expect(src).toContain('data-adjacent-direction="previous"');
+    expect(src).toContain('data-adjacent-direction="next"');
   });
 });

@@ -4,8 +4,6 @@ import { getPostUrl } from "@/utils/getPostPaths";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import Card from "@/components/ui/Card.astro";
-import PostTaxonomy from "@/components/post/PostTaxonomy.astro";
-import { getPostCardTags } from "@/utils/getPostCardTags";
 
 interface Props {
   prevPost?: CollectionEntry<"posts">;
@@ -15,32 +13,22 @@ interface Props {
 const { prevPost, nextPost } = Astro.props;
 const t = useTranslations(Astro.currentLocale);
 const locale = Astro.currentLocale ?? config.site.lang;
-const prevTags = prevPost
-  ? getPostCardTags(prevPost.data.tags, prevPost.data.category).visible
-  : [];
-const nextTags = nextPost
-  ? getPostCardTags(nextPost.data.tags, nextPost.data.category).visible
-  : [];
 ---
 
 <nav class="mt-12 grid gap-4 sm:grid-cols-2" aria-label={t.a11y.adjacentPosts}>
   {
     prevPost ? (
-      <Card class="group h-full gap-0 rounded-xl border-border/80 p-0 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/20 motion-reduce:transition-none">
+      <Card class="h-full gap-0 rounded-xl border-border/80 p-0 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/20 motion-reduce:transition-none">
         <a
           href={getPostUrl(prevPost.id, prevPost.filePath, locale)}
-          class="flex flex-col gap-2 p-6 pb-3 focus-visible:outline-none"
+          data-adjacent-direction="previous"
+          class="flex min-h-24 flex-col justify-center gap-2 p-6 focus-visible:outline-none"
         >
           <span class="block text-xs text-muted-foreground">{t.post.previousPost}</span>
           <span class="block line-clamp-2 break-words text-xl leading-[1.4] font-semibold">
             {prevPost.data.title}
           </span>
         </a>
-        <PostTaxonomy
-          category={prevPost.data.category}
-          tags={prevTags}
-          class="relative z-10 mx-6 mb-6"
-        />
       </Card>
     ) : (
       <div class="hidden sm:block" />
@@ -48,21 +36,17 @@ const nextTags = nextPost
   }
   {
     nextPost ? (
-      <Card class="group h-full gap-0 rounded-xl border-border/80 p-0 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/20 sm:col-start-2 motion-reduce:transition-none">
+      <Card class="h-full gap-0 rounded-xl border-border/80 p-0 shadow-none transition-[border-color,box-shadow] duration-200 hover:border-muted-foreground/50 hover:shadow-xs focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/20 sm:col-start-2 motion-reduce:transition-none">
         <a
           href={getPostUrl(nextPost.id, nextPost.filePath, locale)}
-          class="flex flex-col gap-2 p-6 pb-3 focus-visible:outline-none"
+          data-adjacent-direction="next"
+          class="flex min-h-24 flex-col justify-center gap-2 p-6 focus-visible:outline-none"
         >
           <span class="block text-xs text-muted-foreground">{t.post.nextPost}</span>
           <span class="block line-clamp-2 break-words text-xl leading-[1.4] font-semibold">
             {nextPost.data.title}
           </span>
         </a>
-        <PostTaxonomy
-          category={nextPost.data.category}
-          tags={nextTags}
-          class="relative z-10 mx-6 mb-6"
-        />
       </Card>
     ) : null
   }
