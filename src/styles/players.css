@@ -179,7 +179,11 @@
   bottom: 35px;
 }
 
-.app-prose .xng-dplayer.dplayer .dplayer-controller .dplayer-bar-wrap .dplayer-bar,
+.app-prose
+  .xng-dplayer.dplayer
+  .dplayer-controller
+  .dplayer-bar-wrap
+  .dplayer-bar,
 .app-prose
   .xng-dplayer.dplayer
   .dplayer-controller
@@ -251,7 +255,10 @@
 
 .app-prose .xng-dplayer.dplayer .dplayer-menu .dplayer-menu-item:hover,
 .app-prose .xng-dplayer.dplayer .dplayer-setting .dplayer-setting-item:hover,
-.app-prose .xng-dplayer.dplayer .dplayer-quality-list .dplayer-quality-item:hover {
+.app-prose
+  .xng-dplayer.dplayer
+  .dplayer-quality-list
+  .dplayer-quality-item:hover {
   background: rgb(255 255 255 / 0.1);
 }
 
