@@ -34,13 +34,13 @@ const crumbs = [
     <p class="mb-8 text-muted-foreground">{description}</p>
     {
       tags.length > 0 ? (
-        <ul class="flex flex-wrap gap-2">
+        <ul class="flex flex-wrap gap-3">
           {tags.map(({ tag, tagName }) => (
             <li>
               <a
                 href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
                 transition:name={toTransitionName(tag)}
-                class="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-card-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                class="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-4 py-1.5 text-base font-medium text-card-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
               >
                 #{tagName}
               </a>
