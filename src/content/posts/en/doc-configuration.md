@@ -65,27 +65,27 @@ features: {
   showArchives: true,
   showBackButton: true,
   editPost: { enabled: true, url: "https://github.com/.../edit/main/" },
-  search: "flexsearch",
+  search: "pagefind",
   mdx: true,
   comments: { provider: false /* giscus | twikoo | waline */ },
   players: { aplayer: false, dplayer: false },
 }
 ```
 
-| Field              | Default            | Notes                                                                         |
-| ------------------ | ------------------ | ----------------------------------------------------------------------------- |
-| `lightAndDarkMode` | `true`             | Enable light/dark mode toggle                                                 |
-| `dynamicOgImage`   | `true`             | Dynamically generate OG images (satori + sharp)                               |
-| `showArchives`     | `true`             | Show the archives page (sitemap filters accordingly when off)                 |
-| `showCategories`   | `true`             | Show the categories page and nav entry (sitemap filters accordingly when off) |
-| `showBackButton`   | `true`             | Show a back button on post pages                                              |
-| `editPost.enabled` | `false`            | Show an "Edit this page" link                                                 |
-| `editPost.url`     | `""`               | Edit link prefix; the post's relative source path is appended                 |
-| `search`           | `"flexsearch"`     | Search solution: `"flexsearch"` or `false`                                    |
-| `mdx`              | `true`             | Enable MDX parsing and rendering (see [Content Authoring](./doc-content.md))  |
-| `comments`         | `{provider:false}` | Comment system config (see [Comment System](./doc-comments.md))               |
-| `players.aplayer`  | `false`            | Enable the APlayer audio player (see [Media Players](./doc-media-players.md)) |
-| `players.dplayer`  | `false`            | Enable the DPlayer video player                                               |
+| Field              | Default            | Notes                                                                          |
+| ------------------ | ------------------ | ------------------------------------------------------------------------------ |
+| `lightAndDarkMode` | `true`             | Enable light/dark mode toggle                                                  |
+| `dynamicOgImage`   | `true`             | Dynamically generate OG images (satori + sharp)                                |
+| `showArchives`     | `true`             | Show the archives page (sitemap filters accordingly when off)                  |
+| `showCategories`   | `true`             | Show the categories page and nav entry (sitemap filters accordingly when off)  |
+| `showBackButton`   | `true`             | Show a back button on post pages                                               |
+| `editPost.enabled` | `false`            | Show an "Edit this page" link                                                  |
+| `editPost.url`     | `""`               | Edit link prefix; the post's relative source path is appended                  |
+| `search`           | `"pagefind"`       | Search solution: `"pagefind"` or `false`; legacy `"flexsearch"` enables search |
+| `mdx`              | `true`             | Enable MDX parsing and rendering (see [Content Authoring](./doc-content.md))   |
+| `comments`         | `{provider:false}` | Comment system config (see [Comment System](./doc-comments.md))                |
+| `players.aplayer`  | `false`            | Enable the APlayer audio player (see [Media Players](./doc-media-players.md))  |
+| `players.dplayer`  | `false`            | Enable the DPlayer video player                                                |
 
 ### editPost
 

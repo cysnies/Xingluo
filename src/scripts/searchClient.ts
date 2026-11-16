@@ -1,6 +1,4 @@
-import type { Encoders } from "flexsearch";
-
-/** 轻量 base 拼接，避免拉入 withBase→config 整包 */
+/** 轻量 base 拼接，避免把站点配置引入搜索脚本。 */
 function getAssetPath(path: string): string {
   const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
   const root = base === "" ? "/" : `${base}/`;
@@ -9,33 +7,71 @@ function getAssetPath(path: string): string {
   return root + norm;
 }
 
-export interface SearchDoc {
-  [key: string]: unknown;
-  id: string;
+interface PagefindSubResult {
+  title?: string;
+  url: string;
+  excerpt: string;
+}
+
+interface PagefindResultData {
+  url: string;
+  excerpt: string;
+  meta: Record<string, string>;
+  filters?: Record<string, string[]>;
+  sub_results?: PagefindSubResult[];
+}
+
+interface PagefindResult {
+  data(): Promise<PagefindResultData>;
+}
+
+interface PagefindSearchResponse {
+  results: PagefindResult[];
+  unfilteredResultCount?: number;
+}
+
+interface PagefindModule {
+  init(): Promise<void>;
+  options(options: Record<string, unknown>): Promise<void> | void;
+  search(
+    query: string,
+    options?: Record<string, unknown>,
+  ): Promise<PagefindSearchResponse>;
+  filters(): Promise<Record<string, Record<string, number>>>;
+}
+
+interface SearchRecord {
+  url: string;
   title: string;
   description: string;
   pubDatetime: string;
-  modDatetime: string;
-  tags: string[];
   category: string;
-  url: string;
-  content: string;
+  tags: string[];
+  excerpt: string;
+  subResults: PagefindSubResult[];
 }
 
-type FlexIndex = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-
 interface SearchState {
-  index: FlexIndex | null;
-  documents: SearchDoc[];
+  pagefind: PagefindModule | null;
+  loading: Promise<PagefindModule> | null;
+  records: SearchRecord[];
+  allRecords: SearchRecord[];
+  availableCategories: string[];
   locale: string;
+  requestId: number;
   params: URLSearchParams;
   debounceTimer: ReturnType<typeof setTimeout> | null;
   input: HTMLInputElement | null;
   clearBtn: HTMLElement | null;
   resultsEl: HTMLElement | null;
+  workspaceEl: HTMLElement | null;
+  filterPanelEl: HTMLElement | null;
+  filtersEl: HTMLElement | null;
   hintEl: HTMLElement | null;
   noResultsEl: HTMLElement | null;
   statsEl: HTMLElement | null;
+  lastQuery: string;
+  selectedCategories: Set<string>;
 }
 
 function getSearchState(container: HTMLElement): SearchState {
@@ -43,83 +79,46 @@ function getSearchState(container: HTMLElement): SearchState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const c = container as any;
   if (c[key]) return c[key] as SearchState;
+
   const state: SearchState = {
-    index: null,
-    documents: [],
-    locale: "",
+    pagefind: null,
+    loading: null,
+    records: [],
+    allRecords: [],
+    availableCategories: [],
+    locale: "zh-cn",
+    requestId: 0,
     params: new URLSearchParams(window.location.search),
     debounceTimer: null,
     input: null,
     clearBtn: null,
     resultsEl: null,
+    workspaceEl: null,
+    filterPanelEl: null,
+    filtersEl: null,
     hintEl: null,
     noResultsEl: null,
     statsEl: null,
+    lastQuery: "",
+    selectedCategories: new Set(),
   };
   c[key] = state;
   return state;
 }
 
 const LOCALES = "zh-cn,zh-tw,en,ja,ko,fr,de,es,pt,ru,ar,eo".split(",");
-const CJK_LOCALES = new Set(["zh-cn", "zh-tw", "ja", "ko"]);
-
-function normalizeSearchText(text: string): string {
-  return text.normalize("NFKC").toLocaleLowerCase();
-}
-
-function getSearchableText(doc: SearchDoc): string {
-  return normalizeSearchText(
-    `${doc.title} ${doc.description} ${doc.content} ${doc.category} ${(doc.tags || []).join(" ")}`,
-  );
-}
-
-function rankSearchDocs(docs: SearchDoc[], query: string): SearchDoc[] {
-  const phrase = normalizeSearchText(query).replace(/\s+/g, " ").trim();
-  const terms = phrase.split(" ").filter(Boolean);
-  if (!terms.length) return [];
-
-  return docs
-    .map((doc, index) => {
-      const text = getSearchableText(doc);
-      const title = normalizeSearchText(doc.title);
-      if (!terms.every((term) => text.includes(term))) return null;
-
-      let score = 0;
-      if (text.includes(phrase)) score += 8;
-      if (title.includes(phrase)) score += 16;
-      if (terms.every((term) => title.includes(term))) score += 6;
-      return { doc, index, score };
-    })
-    .filter(
-      (item): item is { doc: SearchDoc; index: number; score: number } =>
-        item !== null,
-    )
-    .sort((left, right) => right.score - left.score || left.index - right.index)
-    .map(({ doc }) => doc);
-}
-
-function createSearchEncoder(locale: string): Encoders {
-  if (!CJK_LOCALES.has(locale)) return "Default";
-  if (typeof Intl.Segmenter !== "function") return "CJK";
-
-  const segmenter = new Intl.Segmenter(locale, { granularity: "word" });
-  return (text: string): string[] => {
-    return [...segmenter.segment(normalizeSearchText(text))]
-      .filter((part) => part.isWordLike)
-      .map((part) => part.segment);
-  };
-}
 
 function detectLocale(): string {
-  const segs = window.location.pathname.replace(/\/+$/, "").split("/");
-  for (let i = 1; i < segs.length; i++) {
-    if (LOCALES.includes(segs[i]!)) return segs[i]!;
+  const segments = window.location.pathname.replace(/\/+$/, "").split("/");
+  for (let index = 1; index < segments.length; index += 1) {
+    const segment = segments[index]!;
+    if (LOCALES.includes(segment)) return segment;
   }
   return "zh-cn";
 }
 
-function escapeHtml(str: string): string {
-  return str
+function escapeHtml(value: string): string {
+  return value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -131,7 +130,7 @@ function highlightText(text: string, query: string): string {
   const terms = query
     .split(/\s+/)
     .filter(Boolean)
-    .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    .map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   if (!terms.length) return escapeHtml(text);
   return escapeHtml(text).replace(
     new RegExp(`(${terms.map(escapeHtml).join("|")})`, "gi"),
@@ -139,46 +138,8 @@ function highlightText(text: string, query: string): string {
   );
 }
 
-function findMatchIndex(text: string, query: string): number {
-  if (!text || !query) return -1;
-  const haystack = text.toLocaleLowerCase();
-  const phrase = query.replace(/\s+/g, " ").trim().toLocaleLowerCase();
-  const candidates = [phrase, ...phrase.split(" ")].filter(Boolean);
-  return candidates.reduce((earliest, term) => {
-    const index = haystack.indexOf(term);
-    if (index < 0) return earliest;
-    return earliest < 0 ? index : Math.min(earliest, index);
-  }, -1);
-}
-
-function snippet(text: string, query: string, win = 80): string {
-  if (!text) return "";
-  if (!query) return text.slice(0, 200);
-  const idx = findMatchIndex(text, query);
-  if (idx < 0) return text.slice(0, 200);
-  const matchedLength =
-    text.toLocaleLowerCase().indexOf(query.toLocaleLowerCase(), idx) >= 0
-      ? query.length
-      : query.split(/\s+/)[0]?.length || 1;
-  const start = Math.max(0, idx - win);
-  const end = Math.min(text.length, idx + matchedLength + win);
-  return `${start > 0 ? "..." : ""}${text.slice(start, end)}${end < text.length ? "..." : ""}`;
-}
-
-export function getSearchSnippet(
-  doc: Pick<SearchDoc, "content" | "description">,
-  query: string,
-): string {
-  if (findMatchIndex(doc.content, query) >= 0) {
-    return snippet(doc.content, query);
-  }
-  if (findMatchIndex(doc.description, query) >= 0) {
-    return snippet(doc.description, query);
-  }
-  return snippet(doc.description || doc.content, query);
-}
-
 function fmtDate(iso: string): string {
+  if (!iso) return "";
   try {
     return new Date(iso).toLocaleDateString(undefined, {
       year: "numeric",
@@ -190,38 +151,96 @@ function fmtDate(iso: string): string {
   }
 }
 
+function normalizeResultUrl(url: string): string {
+  if (/^(?:https?:)?\/\//.test(url)) return url;
+  const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+  const normalized = `/${url.replace(/^\/+/, "")}`;
+  if (base && (normalized === base || normalized.startsWith(`${base}/`))) {
+    return normalized;
+  }
+  return getAssetPath(normalized);
+}
+
+export interface CategoryFacet {
+  category: string;
+  count: number;
+}
+
+export function getCategoryFacets(
+  categories: string[],
+  results: Array<Pick<SearchRecord, "category">>,
+): CategoryFacet[] {
+  const counts = new Map(categories.map((category) => [category, 0]));
+  for (const result of results) {
+    if (!result.category) continue;
+    counts.set(result.category, (counts.get(result.category) ?? 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .map(([category, count]) => ({ category, count }))
+    .sort((left, right) =>
+      left.category.localeCompare(right.category, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      }),
+    );
+}
+
+function normalizeResult(data: PagefindResultData): SearchRecord {
+  const tags = (data.meta.tags ?? "")
+    .split("|")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+  const category = data.meta.category ?? data.filters?.category?.[0] ?? "";
+
+  return {
+    url: normalizeResultUrl(data.url),
+    title: data.meta.title ?? data.url,
+    description: data.meta.description ?? "",
+    pubDatetime: data.meta.pubDatetime ?? "",
+    category,
+    tags,
+    excerpt: data.excerpt ?? "",
+    subResults: (data.sub_results ?? []).filter((result) => result.excerpt),
+  };
+}
+
 function createResultCard(
-  doc: SearchDoc,
+  record: SearchRecord,
   query: string,
   index: number,
 ): HTMLAnchorElement {
   const card = document.createElement("a");
   card.id = `search-result-${index}`;
-  card.href = getAssetPath(doc.url);
+  card.href = record.url;
   card.className =
-    "search-result-card search-result-enter block rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent hover:shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
+    "search-result-card search-result-enter group block border-b border-border py-6 first:pt-0 last:border-b-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
   card.setAttribute("role", "listitem");
-  card.setAttribute("aria-label", doc.title);
+  card.setAttribute("aria-label", record.title);
 
-  const meta: string[] = [];
-  if (doc.pubDatetime) meta.push(fmtDate(doc.pubDatetime));
-  if (doc.modDatetime && doc.pubDatetime) {
-    try {
-      if (new Date(doc.modDatetime) > new Date(doc.pubDatetime)) {
-        meta.push("↻ " + fmtDate(doc.modDatetime));
-      }
-    } catch {
-      /* ignore */
-    }
-  }
-  if (doc.category) {
-    meta.push(
-      `<span class="inline-flex items-center rounded-sm bg-primary/10 px-1.5 py-0.5 text-xs font-medium text-primary">${escapeHtml(doc.category)}</span>`,
-    );
-  }
-
-  const desc = getSearchSnippet(doc, query);
-  const tags = (doc.tags || [])
+  const metadata = [fmtDate(record.pubDatetime), record.category].filter(
+    Boolean,
+  );
+  const excerpts = record.subResults.length
+    ? record.subResults
+        .map((result) => ({
+          title: result.title ?? "",
+          excerpt: result.excerpt,
+        }))
+        .slice(0, 3)
+    : [{ title: "", excerpt: record.excerpt }];
+  const excerptHtml = excerpts
+    .filter((result) => result.excerpt)
+    .map(
+      (result) =>
+        `<div class="relative text-sm leading-7 text-muted-foreground"><span class="absolute -start-5 top-0 text-muted-foreground/70" aria-hidden="true">↳</span>${
+          result.title
+            ? `<p class="font-medium text-foreground">${highlightText(result.title, query)}</p>`
+            : ""
+        }<div class="search-excerpt">${result.excerpt}</div></div>`,
+    )
+    .join("");
+  const tags = record.tags
     .slice(0, 5)
     .map(
       (tag) =>
@@ -229,140 +248,158 @@ function createResultCard(
     )
     .join("");
 
-  card.innerHTML = `<h3 class="mb-1 text-lg font-semibold text-primary">${highlightText(doc.title, query)}</h3>
-${meta.length ? `<div class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">${meta.join(" · ")}</div>` : ""}
-<p class="mb-2 text-sm text-muted-foreground line-clamp-3">${highlightText(desc, query)}</p>
-${tags ? `<div class="flex flex-wrap gap-1.5">${tags}</div>` : ""}`;
+  card.innerHTML = `<h3 class="mb-2 text-xl font-semibold text-foreground transition-colors group-hover:text-primary">${highlightText(record.title, query)}</h3>
+${metadata.length ? `<div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">${metadata.map((item) => escapeHtml(item)).join(" · ")}</div>` : ""}
+<div class="space-y-2 border-s border-border ps-5">${excerptHtml}</div>
+${tags ? `<div class="mt-4 flex flex-wrap gap-1.5">${tags}</div>` : ""}`;
   return card;
 }
 
-function showHint(state: SearchState) {
-  state.hintEl?.classList.remove("hidden");
-  state.noResultsEl?.classList.add("hidden");
-  if (state.resultsEl) state.resultsEl.innerHTML = "";
-  state.statsEl?.classList.add("hidden");
-  state.input?.setAttribute("aria-expanded", "false");
+function renderCategoryFilters(state: SearchState) {
+  if (!state.filterPanelEl || !state.filtersEl) return;
+  const facets = getCategoryFacets(state.availableCategories, state.allRecords);
+  const available = new Set(facets.map(({ category }) => category));
+  for (const category of state.selectedCategories) {
+    if (!available.has(category)) state.selectedCategories.delete(category);
+  }
+
+  state.filtersEl.replaceChildren();
+  if (!facets.length) {
+    state.filterPanelEl.classList.add("hidden");
+    return;
+  }
+  state.filterPanelEl.classList.remove("hidden");
+
+  for (const facet of facets) {
+    const label = document.createElement("label");
+    label.className =
+      "flex cursor-pointer items-start gap-2.5 text-sm text-foreground";
+    label.innerHTML =
+      '<input type="checkbox" data-search-category class="mt-0.5 size-4 shrink-0 rounded border-border accent-primary" /><span class="min-w-0 flex-1 break-words"></span><span class="shrink-0 tabular-nums text-muted-foreground"></span>';
+    const input = label.querySelector("input")!;
+    input.value = facet.category;
+    input.checked = state.selectedCategories.has(facet.category);
+    const text = label.querySelectorAll("span");
+    text[0]!.textContent = facet.category;
+    text[1]!.textContent = `(${facet.count})`;
+    state.filtersEl.appendChild(label);
+  }
 }
 
-function showNoResults(state: SearchState) {
-  state.hintEl?.classList.add("hidden");
-  state.noResultsEl?.classList.remove("hidden");
-  if (state.resultsEl) state.resultsEl.innerHTML = "";
-  state.statsEl?.classList.add("hidden");
-  state.input?.setAttribute("aria-expanded", "false");
+function visibleRecords(state: SearchState): SearchRecord[] {
+  return state.selectedCategories.size
+    ? state.allRecords.filter((record) =>
+        state.selectedCategories.has(record.category),
+      )
+    : state.allRecords;
 }
 
-function renderResults(state: SearchState, docs: SearchDoc[], query: string) {
+function renderResults(state: SearchState, query: string) {
+  const records = visibleRecords(state).slice(0, 50);
+  state.records = records;
   state.hintEl?.classList.add("hidden");
-  state.noResultsEl?.classList.add("hidden");
-  state.resultsEl!.innerHTML = "";
+  state.workspaceEl?.classList.remove("hidden");
+  state.noResultsEl?.classList.toggle("hidden", records.length > 0);
+  state.resultsEl!.replaceChildren();
+
   if (state.statsEl) {
-    const tpl = state.statsEl.dataset.resultsTpl?.trim() || "{{count}} results";
-    state.statsEl.textContent = tpl.replace(
+    const template =
+      state.statsEl.dataset.resultsTpl?.trim() || "{{count}} results";
+    state.statsEl.textContent = `${query} · ${template.replace(
       /\{\{\s*count\s*\}\}/g,
-      String(docs.length),
-    );
+      String(records.length),
+    )}`;
     state.statsEl.classList.remove("hidden");
   }
-  for (const [index, doc] of docs.entries())
-    state.resultsEl!.appendChild(createResultCard(doc, query, index));
-  state.input?.setAttribute("aria-expanded", "true");
+
+  for (const [index, record] of records.entries()) {
+    state.resultsEl!.appendChild(createResultCard(record, query, index));
+  }
+  state.input?.setAttribute("aria-expanded", String(records.length > 0));
   state.params.set("q", query);
+  state.params.delete("category");
+  for (const category of state.selectedCategories) {
+    state.params.append("category", category);
+  }
   history.replaceState(history.state, "", "?" + state.params.toString());
   sessionStorage.setItem(
     "backUrl",
     `${window.location.pathname}?${state.params.toString()}`,
   );
+  renderCategoryFilters(state);
 }
 
-function textSearch(state: SearchState, query: string) {
-  const docs = rankSearchDocs(state.documents, query);
-  if (!docs.length) showNoResults(state);
-  else renderResults(state, docs.slice(0, 50), query);
+function showHint(state: SearchState) {
+  state.hintEl?.classList.remove("hidden");
+  state.noResultsEl?.classList.add("hidden");
+  state.workspaceEl?.classList.add("hidden");
+  state.filterPanelEl?.classList.add("hidden");
+  state.resultsEl?.replaceChildren();
+  state.statsEl?.classList.add("hidden");
+  state.records = [];
+  state.allRecords = [];
+  state.lastQuery = "";
+  state.selectedCategories.clear();
+  state.input?.setAttribute("aria-expanded", "false");
 }
 
-function performSearch(state: SearchState, query: string) {
+async function loadPagefind(state: SearchState): Promise<PagefindModule> {
+  if (state.pagefind) return state.pagefind;
+  if (state.loading) return state.loading;
+
+  state.loading = (async () => {
+    const moduleUrl = getAssetPath("pagefind/pagefind.js");
+    const imported = (await import(/* @vite-ignore */ moduleUrl)) as {
+      default?: PagefindModule;
+    } & PagefindModule;
+    const pagefind = imported.default ?? imported;
+    await pagefind.options({ excerptLength: 30 });
+    await pagefind.init();
+    state.pagefind = pagefind;
+
+    try {
+      const filters = await pagefind.filters();
+      state.availableCategories = Object.keys(filters.category ?? {});
+    } catch {
+      state.availableCategories = [];
+    }
+    return pagefind;
+  })();
+
+  try {
+    return await state.loading;
+  } finally {
+    state.loading = null;
+  }
+}
+
+async function performSearch(state: SearchState, query: string) {
   if (!query.trim()) {
     showHint(state);
     return;
   }
-  if (!state.index) {
-    textSearch(state, query);
-    return;
-  }
-  const raw = state.index.search(query, { limit: 100, enrich: true }) as Array<{
-    field: string;
-    result: Array<{ doc: SearchDoc }>;
-  }>;
-  const map = new Map<string, SearchDoc>();
-  for (const fr of raw || []) {
-    for (const item of fr.result || []) {
-      if (item.doc?.id && !map.has(item.doc.id)) map.set(item.doc.id, item.doc);
-    }
-  }
-  const docs = rankSearchDocs(Array.from(map.values()), query);
-  if (!docs.length) textSearch(state, query);
-  else renderResults(state, docs.slice(0, 50), query);
-}
 
-async function loadIndex(state: SearchState, container: HTMLElement) {
+  const requestId = ++state.requestId;
+  state.lastQuery = query;
   try {
-    const dataUrl = getAssetPath(`search/${state.locale}.json`);
-    let resp = await fetch(dataUrl);
-    if (!resp.ok) {
-      const mResp = await fetch(getAssetPath("search/manifest.json"));
-      if (!mResp.ok) return;
-      const manifest: string[] = await mResp.json();
-      if (!manifest.length) return;
-      const lang = manifest.includes(state.locale)
-        ? state.locale
-        : manifest[0]!;
-      resp = await fetch(getAssetPath(`search/${lang}.json`));
-      if (!resp.ok) return;
-      state.locale = lang;
-    }
-    state.documents = await resp.json();
-    if (!state.documents?.length) return;
-
-    const flexMod = await import("flexsearch");
-    const FlexSearch = flexMod.default ?? flexMod;
-    const tokenize = CJK_LOCALES.has(state.locale) ? "strict" : "forward";
-    state.index = new FlexSearch.Document({
-      encoder: createSearchEncoder(state.locale),
-      document: {
-        id: "id",
-        index: [
-          { field: "title", tokenize, resolution: 9 },
-          { field: "description", tokenize, resolution: 5 },
-          { field: "content", tokenize, resolution: 3 },
-          { field: "tags", tokenize, resolution: 5 },
-        ],
-        store: [
-          "title",
-          "description",
-          "pubDatetime",
-          "modDatetime",
-          "tags",
-          "category",
-          "url",
-          "content",
-        ],
-      },
-      tokenize,
-      cache: true,
+    const pagefind = await loadPagefind(state);
+    const response = await pagefind.search(query, {
+      filters: { language: state.locale },
+      showEmptyFilters: true,
     });
-    for (const doc of state.documents) state.index.add(doc);
-    container.dataset.searchReady = "true";
-    const query = state.params.get("q");
-    if (query && state.input) {
-      state.input.value = query;
-      performSearch(state, query);
-    }
-  } catch (err) {
-    console.warn("[search] index load failed:", err);
-    delete container.dataset.searchLoading;
-  } finally {
-    container.removeAttribute("aria-busy");
+    if (requestId !== state.requestId) return;
+
+    const data = await Promise.all(
+      response.results.slice(0, 50).map((result) => result.data()),
+    );
+    if (requestId !== state.requestId) return;
+    state.allRecords = data.map(normalizeResult);
+    renderResults(state, query);
+  } catch (error) {
+    if (requestId !== state.requestId) return;
+    console.warn("[search] Pagefind 查询失败：", error);
+    state.allRecords = [];
+    renderResults(state, query);
   }
 }
 
@@ -382,8 +419,7 @@ function focusSearchResult(
     return;
   }
 
-  const active = document.activeElement;
-  const current = cards.findIndex((card) => card === active);
+  const current = cards.findIndex((card) => card === document.activeElement);
   const offset = direction === "next" ? 1 : -1;
   const next =
     current < 0
@@ -402,6 +438,7 @@ function clearSearch(
   input.value = "";
   clearBtn?.classList.add("hidden");
   if (state.debounceTimer) clearTimeout(state.debounceTimer);
+  state.requestId += 1;
   showHint(state);
   history.replaceState(history.state, "", window.location.pathname);
 }
@@ -414,17 +451,30 @@ function bindEvents(state: SearchState, container: HTMLElement) {
   state.input = newInput;
   state.clearBtn = container.querySelector("#search-clear");
   state.resultsEl = container.querySelector("#search-results");
+  state.workspaceEl = container.querySelector("#search-workspace");
+  state.filterPanelEl = container.querySelector("#search-filter-panel");
+  state.filtersEl = container.querySelector("#search-filters");
   state.hintEl = container.querySelector("#search-hint");
   state.noResultsEl = container.querySelector("#search-no-results");
   state.statsEl = container.querySelector("#search-stats");
   const clearBtn = state.clearBtn;
 
-  newInput.addEventListener("input", (e: Event) => {
-    const query = (e.target as HTMLInputElement).value.trim();
+  state.filtersEl!.onchange = (event: Event) => {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement)) return;
+    if (input.checked) state.selectedCategories.add(input.value);
+    else state.selectedCategories.delete(input.value);
+    renderResults(state, state.lastQuery);
+  };
+
+  newInput.addEventListener("input", () => {
+    const query = newInput.value.trim();
     if (query) {
       clearBtn?.classList.remove("hidden");
       if (state.debounceTimer) clearTimeout(state.debounceTimer);
-      state.debounceTimer = setTimeout(() => performSearch(state, query), 200);
+      state.debounceTimer = setTimeout(() => {
+        void performSearch(state, query);
+      }, 180);
     } else {
       clearSearch(state, newInput, clearBtn);
     }
@@ -459,58 +509,38 @@ function bindEvents(state: SearchState, container: HTMLElement) {
   if (query) {
     newInput.value = query;
     clearBtn?.classList.remove("hidden");
-    if (container.dataset.searchReady === "true") performSearch(state, query);
   }
 }
 
 export function initSearch() {
-  const container = document.querySelector<HTMLElement>("#flexsearch-ui");
+  const container = document.querySelector<HTMLElement>("#site-search-ui");
   if (!container) return;
+
   const state = getSearchState(container);
   state.input = container.querySelector("#search-input");
   state.clearBtn = container.querySelector("#search-clear");
   state.resultsEl = container.querySelector("#search-results");
+  state.workspaceEl = container.querySelector("#search-workspace");
+  state.filterPanelEl = container.querySelector("#search-filter-panel");
+  state.filtersEl = container.querySelector("#search-filters");
   state.hintEl = container.querySelector("#search-hint");
   state.noResultsEl = container.querySelector("#search-no-results");
   state.statsEl = container.querySelector("#search-stats");
   state.locale = detectLocale();
   state.params = new URLSearchParams(window.location.search);
+  state.selectedCategories = new Set(state.params.getAll("category"));
   if (!state.input || !state.resultsEl) return;
   state.input.setAttribute("aria-expanded", "false");
 
   bindEvents(state, container);
 
-  const bootIndex = () => {
-    if (
-      container.dataset.searchReady === "true" ||
-      container.dataset.searchLoading === "true"
-    ) {
-      return;
-    }
-    container.dataset.searchLoading = "true";
+  const query = state.params.get("q");
+  if (query && state.input) {
+    state.input.value = query;
+    state.clearBtn?.classList.remove("hidden");
     container.setAttribute("aria-busy", "true");
-    void loadIndex(state, container);
-  };
-
-  if (import.meta.env.DEV && !container.dataset.devNotice) {
-    container.dataset.devNotice = "1";
-    const n = document.createElement("div");
-    n.className = "mb-4 rounded-md bg-muted p-4 text-sm";
-    n.innerHTML =
-      '<p><strong>Dev:</strong> build once for search data.</p><code class="mt-2 block rounded bg-background px-2 py-1">pnpm run build</code>';
-    container.prepend(n);
-  }
-
-  if (container.dataset.searchReady === "true") {
-    const query = state.params.get("q");
-    if (query && state.input.value !== query) {
-      state.input.value = query;
-      performSearch(state, query);
-    }
-  } else if (state.params.get("q")) {
-    bootIndex();
-  } else {
-    state.input.addEventListener("focus", bootIndex, { once: true });
-    state.input.addEventListener("input", bootIndex, { once: true });
+    void performSearch(state, query).finally(() => {
+      container.removeAttribute("aria-busy");
+    });
   }
 }

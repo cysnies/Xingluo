@@ -26,11 +26,11 @@ const crumbs = [
     <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
     <p class="mb-8 text-muted-foreground">{description}</p>
 
-    <div id="flexsearch-ui" transition:persist class="space-y-6">
+    <div id="site-search-ui" transition:persist class="space-y-6">
       <!-- 搜索输入框 -->
       <div class="relative">
         <svg
-          class="search-icon absolute left-3 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
+          class="search-icon absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
@@ -51,7 +51,7 @@ const crumbs = [
           aria-expanded="false"
           aria-autocomplete="list"
           placeholder={t.a11y.searchPlaceholder}
-          class="search-input w-full rounded-md border border-input bg-background py-3 pl-10 pr-10 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+          class="search-input min-h-14 w-full rounded-xl border border-input bg-background py-4 pl-12 pr-28 text-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
           autocomplete="off"
           autocorrect="off"
           spellcheck="false"
@@ -59,7 +59,7 @@ const crumbs = [
         />
         <button
           id="search-clear"
-          class="search-clear absolute right-3 top-1/2 hidden -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+          class="search-clear absolute right-4 top-1/2 hidden -translate-y-1/2 items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           aria-label={t.a11y.clearSearch}
           type="button"
         >
@@ -71,51 +71,91 @@ const crumbs = [
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="size-4"
+            class="size-3.5"
           >
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
           </svg>
+          <span>{t.a11y.clearSearch}</span>
         </button>
       </div>
 
-      <!-- 搜索统计 -->
-      <div
-        id="search-stats"
-        class="hidden text-sm text-muted-foreground"
-        role="status"
-        aria-live="polite"
-        data-results-tpl={t.a11y.searchResultsCount}
-      ></div>
-
-      <!-- 搜索结果列表 -->
-      <div id="search-results" class="space-y-4" role="list" aria-label={t.pages.searchTitle}>
-        <!-- 初始提示 -->
-        <div id="search-hint" class="py-12 text-center text-muted-foreground">
-          <svg
-            class="mx-auto mb-4 size-12 opacity-40"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-          <p>{t.a11y.searchPlaceholder}</p>
-        </div>
-        <!-- 无结果提示（由 JS 控制显示） -->
-        <div
-          id="search-no-results"
-          class="hidden py-12 text-center text-muted-foreground"
-          role="status"
-          aria-live="polite"
+      <!-- 初始提示 -->
+      <div id="search-hint" class="py-12 text-center text-muted-foreground">
+        <svg
+          class="mx-auto mb-4 size-12 opacity-40"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-          <p>{t.a11y.noResults}</p>
-        </div>
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <p>{t.a11y.searchPlaceholder}</p>
+      </div>
+
+      <div
+        id="search-workspace"
+        class="hidden grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]"
+      >
+        <aside
+          id="search-filter-panel"
+          class="hidden self-start lg:sticky lg:top-24"
+          aria-label={t.nav.categories}
+        >
+          <details open class="group">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-base font-semibold touch-manipulation [&::-webkit-details-marker]:hidden">
+              <span>{t.nav.categories}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-4 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                aria-hidden="true"
+              >
+                <path d="m18 15-6-6-6 6" />
+              </svg>
+            </summary>
+            <fieldset
+              id="search-filters"
+              class="mt-4 space-y-3 border-t border-border pt-4"
+            >
+            </fieldset>
+          </details>
+        </aside>
+
+        <section class="min-w-0" aria-label={t.pages.searchTitle}>
+          <div
+            id="search-stats"
+            class="mb-2 hidden border-b border-border pb-4 text-base font-medium text-foreground"
+            role="status"
+            aria-live="polite"
+            data-results-tpl={t.a11y.searchResultsCount}
+          ></div>
+
+          <div
+            id="search-results"
+            class="min-w-0"
+            role="list"
+            aria-label={t.pages.searchTitle}
+          ></div>
+          <div
+            id="search-no-results"
+            class="hidden py-12 text-center text-muted-foreground"
+            role="status"
+            aria-live="polite"
+          >
+            <p>{t.a11y.noResults}</p>
+          </div>
+        </section>
       </div>
     </div>
   </Main>
@@ -130,17 +170,16 @@ const crumbs = [
 
 <style is:global>
   /* 搜索图标颜色 */
-  #flexsearch-ui .search-icon {
+  #site-search-ui .search-icon {
     pointer-events: none;
   }
 
-  /* 清除按钮在输入框有内容时显示 */
-  #flexsearch-ui .search-clear {
-    display: none;
+  #site-search-ui .search-clear:not(.hidden) {
+    display: flex;
   }
 
   /* 搜索结果卡片入场动画 */
-  #flexsearch-ui .search-result-card.search-result-enter {
+  #site-search-ui .search-result-card.search-result-enter {
     animation: search-result-in 0.28s ease-out both;
   }
   @keyframes search-result-in {
@@ -155,16 +194,22 @@ const crumbs = [
   }
 
   /* 高亮关键词 */
-  #flexsearch-ui .search-highlight {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
+  #site-search-ui .search-highlight,
+  #site-search-ui .search-excerpt mark {
+    background-color: #facc15;
+    color: #18181b;
     border-radius: 2px;
-    padding: 0 2px;
+    padding: 0;
   }
 
   /* 结果卡片字号 */
-  #flexsearch-ui .search-result-card h3 {
+  #site-search-ui .search-result-card h3 {
     line-height: 1.4;
   }
 
+  #site-search-ui #search-filters {
+    max-height: min(60dvh, 34rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
 </style>

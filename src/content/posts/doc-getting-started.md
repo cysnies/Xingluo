@@ -62,10 +62,10 @@ pnpm build
 ```
 
 1. **`astro check`**：TypeScript 与 Astro 模板类型检查，任何错误都会中断构建
-2. **`astro build`**：静态生成全站到 `dist/`（含动态 OG 图、RSS、sitemap、robots.txt、Flexsearch 搜索索引）
-3. **`node scripts/generateSearchIndex.mjs`**：扫描 `dist/` 生成 Flexsearch 搜索索引到 `dist/search/`
+2. **`astro build`**：静态生成全站到 `dist/`（含动态 OG 图、RSS、sitemap 与 robots.txt）
+3. **`node scripts/generatePagefindIndex.mjs`**：扫描 `dist/` 生成 Pagefind 分片搜索索引到 `dist/pagefind/`
 
-> 注：搜索索引生成脚本基于 Flexsearch，构建时自动执行。
+> 注：搜索索引使用 Pagefind 1.6 分片方案，构建时自动执行。
 
 ## 预览构建产物
 

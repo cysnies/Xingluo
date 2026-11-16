@@ -69,7 +69,7 @@ const defaultFeatures = {
     enabled: false,
     url: "",
   },
-  search: "flexsearch" as const,
+  search: "pagefind" as const,
   /** 默认 Zinc 色板（贴近 shadcn 官网） */
   palette: "zinc" as const,
   /**

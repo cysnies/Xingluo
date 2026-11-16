@@ -22,8 +22,6 @@ import { rehypeWrapTable } from "./src/utils/rehypeWrapTable";
 import { remarkPlayers } from "./src/utils/remarkPlayers";
 import { remarkWebCards } from "./src/utils/remarkWebCards";
 import { googleFontsMirrorProvider } from "./src/utils/googleFontsMirrorProvider";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import config from "./xingluo.config";
 import { optionalDepsPlugin } from "./src/vite/optionalDepsPlugin";
 
@@ -170,15 +168,6 @@ export default defineConfig({
   },
   vite: {
     plugins: [optionalDepsPlugin(), tailwindcss()],
-    resolve: {
-      alias: {
-        // Document 搜索用 compact 构建（~28KB），避免 bundle（~51KB）的 worker/db 等能力
-        flexsearch: path.resolve(
-          path.dirname(fileURLToPath(import.meta.url)),
-          "node_modules/flexsearch/dist/flexsearch.compact.module.min.js",
-        ),
-      },
-    },
   },
   experimental: {
     // 启用 SVG 优化，自动压缩内联与引用的 SVG 图标

@@ -31,7 +31,7 @@
 - ⚡ **极致性能** — Astro 静态生成、零运行时 JS、评论与播放器按需懒加载
 - 🎨 **现代视觉** — shadcn/ui new-york 风格、OKLCH 色彩空间、平滑暗黑模式
 - 🌗 **暗黑模式** — 无闪烁切换，跟随系统偏好，评论与播放器主题自动同步
-- 🔍 **全文搜索** — 基于 Flexsearch 实现浏览器端全文检索，构建时预生成按语言分组的索引数据
+- 🔍 **全文搜索** — 基于 Pagefind 构建分片索引，按查询加载词典与命中正文片段
 - 🌐 **多语言** — 多语言 UI 与内容级翻译，hreflang 与 x-default SEO 声明
 - 📝 **内容增强** — 支持 Markdown 与 MDX，Shiki 双主题代码高亮、标注框、目录折叠、表格滚动
 - 📖 **阅读时长** — CJK 按字符数、拉丁文按单词数智能估算，卡片与详情页均显示
@@ -153,7 +153,7 @@ import { APlayer, DPlayer } from "@/components/mdx";
 | 评论系统   | giscus / twikoo / waline         |
 | 媒体播放器 | APlayer / DPlayer                |
 | SEO        | OG 图、RSS、sitemap、结构化数据  |
-| 搜索       | Flexsearch 全文检索索引          |
+| 搜索       | Pagefind 分片全文索引            |
 | 部署       | 静态托管、GitHub Pages 与 Docker |
 
 ## 🛠️ 技术栈
@@ -164,7 +164,7 @@ import { APlayer, DPlayer } from "@/components/mdx";
 | 样式     | [Tailwind CSS](https://tailwindcss.com) v4、[shadcn/ui](https://ui.shadcn.com) |
 | 图标     | astro-icon + Font Awesome                                                      |
 | 代码高亮 | Shiki                                                                          |
-| 搜索     | [Flexsearch](https://github.com/nextapps-de/flexsearch)                        |
+| 搜索     | [Pagefind](https://pagefind.app/)                                              |
 | OG 图    | satori + sharp                                                                 |
 | 评论     | giscus / twikoo / waline                                                       |
 | 播放器   | APlayer / DPlayer                                                              |

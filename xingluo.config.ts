@@ -90,8 +90,8 @@ export default defineXingluoConfig({
       // 编辑链接前缀，会拼接文章相对源文件路径
       url: "https://github.com/cysnies/Xingluo/edit/main/",
     },
-    // 搜索方案："flexsearch" 或 false（关闭搜索）
-    search: "flexsearch",
+    // 搜索方案："pagefind" 或 false（关闭搜索）
+    search: "pagefind",
     // 是否启用 MDX 解析与渲染（关闭后仅收集 .md，不加载 mdx 集成）
     mdx: true,
     // 评论系统配置：三选一或关闭。provider 为某值时需提供对应子配置。

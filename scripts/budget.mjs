@@ -13,6 +13,8 @@ const BUDGET = {
   /** 精简 searchClient 后约 2–3KB；收紧以防再拖入 config */
   searchJsGzipKB: 15,
   searchJsRawKB: 25,
+  /** 默认语言示例站点的 Pagefind 分片索引总量 */
+  pagefindMB: 4,
   homeHtmlGzipKB: 20,
   /** 动态 OG 合计上限（MB） */
   ogMB: 2.0,
@@ -62,7 +64,11 @@ async function main() {
   }
 
   let ogBytes = 0;
+  let pagefindBytes = 0;
   for (const f of files) {
+    if (f.includes(`${sep}pagefind${sep}`)) {
+      pagefindBytes += (await stat(f)).size;
+    }
     if (
       f.endsWith(`${sep}og.png`) ||
       f.endsWith("/og.png") ||
@@ -72,9 +78,10 @@ async function main() {
     }
   }
   const ogMB = ogBytes / (1024 * 1024);
+  const pagefindMB = pagefindBytes / (1024 * 1024);
 
   console.log(
-    `[budget] dist=${distMB.toFixed(2)}MB htmlPages=${htmlPages} searchJsGzip=${searchGzipKB.toFixed(1)}KB searchJsRaw=${searchRawKB.toFixed(1)}KB homeGzip=${homeGzipKB.toFixed(1)}KB og=${ogMB.toFixed(2)}MB`,
+    `[budget] dist=${distMB.toFixed(2)}MB htmlPages=${htmlPages} searchJsGzip=${searchGzipKB.toFixed(1)}KB searchJsRaw=${searchRawKB.toFixed(1)}KB pagefind=${pagefindMB.toFixed(2)}MB homeGzip=${homeGzipKB.toFixed(1)}KB og=${ogMB.toFixed(2)}MB`,
   );
 
   const fails = [];
@@ -94,6 +101,10 @@ async function main() {
     );
   if (ogMB > BUDGET.ogMB)
     fails.push(`og png ${ogMB.toFixed(2)}MB > ${BUDGET.ogMB}MB`);
+  if (pagefindMB > BUDGET.pagefindMB)
+    fails.push(
+      `Pagefind index ${pagefindMB.toFixed(2)}MB > ${BUDGET.pagefindMB}MB`,
+    );
   if (homeGzipKB > BUDGET.homeHtmlGzipKB)
     fails.push(
       `home HTML gzip ${homeGzipKB.toFixed(1)}KB > ${BUDGET.homeHtmlGzipKB}KB`,
