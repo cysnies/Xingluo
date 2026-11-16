@@ -118,7 +118,7 @@ const rssHref = new URL(
             <h2 class="mb-4 text-2xl font-semibold tracking-tight">
               {t.home.recentPosts}
             </h2>
-            <ul data-latest-posts class="max-w-[65rem]">
+            <ul data-latest-posts class="grid max-w-[65rem] gap-5">
               {recentPosts.slice(0, postsConfig.perIndex).map((post) => (
                 <li class="min-w-0">
                   <PostCard post={post} variant="list" />

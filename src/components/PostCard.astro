@@ -10,7 +10,6 @@ import { getReadingTime } from "@/utils/readingTime";
 import config from "@/config";
 import Datetime from "./Datetime.astro";
 import Tag from "./Tag.astro";
-import ArrowRight from "@/assets/icons/ArrowRight.astro";
 import Card from "@/components/ui/Card.astro";
 import CardTitle from "@/components/ui/CardTitle.astro";
 import CardDescription from "@/components/ui/CardDescription.astro";
@@ -43,8 +42,8 @@ const readingMinutes = getReadingTime(post.body ?? "", locale);
 // 沿用字符串和 Astro 图片对象两种内容格式。
 const heroImage = config.features.showPostCardHero ? data.heroImage : undefined;
 const heroImageSrc = typeof heroImage === "string" ? heroImage : heroImage?.src;
-/** 列表卡片沿用旧版背景式头图，其他卡片继续使用独立缩略图。 */
-const useBackgroundHero = variant === "list" && Boolean(heroImageSrc);
+/** 所有带图文章卡片统一使用右侧背景式头图。 */
+const useBackgroundHero = Boolean(heroImageSrc);
 ---
 
 <Card
@@ -83,51 +82,21 @@ const useBackgroundHero = variant === "list" && Boolean(heroImageSrc);
       useBackgroundHero && "md:pe-[42%]",
     )}
   >
-    {
-      heroImageSrc && !useBackgroundHero && (
-        <div
-          data-post-card-image
-          class={cn(
-            "aspect-video w-full shrink-0 overflow-hidden rounded-lg bg-muted",
-            !config.features.showPostCardHeroMobile && "hidden md:block",
-            variant !== "featured" && "md:order-last md:w-40 md:self-start",
-          )}
-        >
-          <img
-            src={heroImageSrc}
-            alt=""
-            width="640"
-            height="360"
-            loading="lazy"
-            decoding="async"
-            class="h-full w-full object-cover"
-            style={{ objectFit: data.heroImageFit }}
-          />
-        </div>
-      )
-    }
-
     <div
       class={cn(
         "min-w-0 flex-1",
         variant !== "list" && "flex flex-col",
       )}
     >
-      <div class="flex items-start gap-3">
-        <CardTitle
-          transition:name={toTransitionName(data.title)}
-          class={cn(
-            "min-w-0 flex-1 line-clamp-2 break-words text-xl leading-[1.4]",
-            variant === "featured" && "md:text-2xl lg:text-[1.625rem]",
-          )}
-        >
-          <a href={href} class="post-card__title-link">{data.title}</a>
-        </CardTitle>
-        <ArrowRight
-          class="mt-1.5 size-4 shrink-0 text-muted-foreground transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 rtl:rotate-180 rtl:motion-safe:group-hover:-translate-x-0.5 motion-reduce:transition-none"
-          aria-hidden="true"
-        />
-      </div>
+      <CardTitle
+        transition:name={toTransitionName(data.title)}
+        class={cn(
+          "min-w-0 line-clamp-2 break-words text-xl leading-[1.4]",
+          variant === "featured" && "md:text-2xl lg:text-[1.625rem]",
+        )}
+      >
+        <a href={href} class="post-card__title-link">{data.title}</a>
+      </CardTitle>
 
       <div
         data-post-card-meta
