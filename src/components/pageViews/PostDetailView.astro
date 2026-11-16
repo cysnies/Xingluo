@@ -53,6 +53,10 @@ const {
 } = post.data;
 
 const { Content, headings } = await render(post);
+const tocHeadings = headings.filter(
+  (heading) => heading.depth >= 2 && heading.depth <= 6,
+);
+const hasToc = tocHeadings.length >= 2;
 
 /** 分类链接：设置 category 时生成对应分类页地址 */
 const categoryHref = category
@@ -141,7 +145,7 @@ const resolvedCanonical =
       )}
 
       {/* 大屏双列：主文章 + 粘性目录侧栏；小屏仅单列（目录隐藏） */}
-      <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10">
+      <div class:list={["lg:grid lg:gap-10", hasToc && "lg:grid-cols-[minmax(0,1fr)_16rem]"]}>
         <div class="min-w-0">
           <h1
             style={{ viewTransitionName: toTransitionName(title) }}
@@ -167,16 +171,29 @@ const resolvedCanonical =
           </div>
 
           {/* 移动端/平板目录：大屏由侧栏承担 */}
-          <details class="mobile-toc group mb-6 rounded-lg border border-border bg-card lg:hidden">
-            <summary class="cursor-pointer list-none px-4 py-3 text-sm font-medium touch-manipulation [&::-webkit-details-marker]:hidden flex items-center justify-between">
-              <span>{t.post.tableOfContents}</span>
-              <span data-reading-progress-value class="ms-auto me-3 text-xs tabular-nums text-muted-foreground group-open:hidden" aria-hidden="true">0%</span>
-              <span class="text-muted-foreground transition group-open:rotate-180" aria-hidden="true">▾</span>
-            </summary>
-            <div class="border-t border-border px-3 py-3">
-              <TableOfContents headings={headings} label={t.post.tableOfContents} showTitle={false} />
-            </div>
-          </details>
+          {hasToc && (
+            <details data-toc-mobile class="mobile-toc group sticky top-[calc(3.5rem+1px)] z-30 my-6 rounded-lg border border-border bg-background/95 backdrop-blur-sm lg:hidden">
+              <summary class="flex min-h-12 cursor-pointer list-none items-center gap-3 px-4 py-3 text-sm touch-manipulation [&::-webkit-details-marker]:hidden">
+                <span class="shrink-0 font-medium">{t.post.tableOfContents}</span>
+                <span data-toc-current class="min-w-0 flex-1 truncate text-muted-foreground">{tocHeadings[0]?.text}</span>
+                <span
+                  data-reading-progress-meter
+                  role="progressbar"
+                  aria-label={t.post.readingProgress}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow="0"
+                  class="shrink-0 text-xs tabular-nums text-muted-foreground"
+                >
+                  <span data-reading-progress-value aria-hidden="true">0%</span>
+                </span>
+                <span class="shrink-0 text-muted-foreground transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true">▾</span>
+              </summary>
+              <div data-toc-scroll class="absolute inset-x-0 top-full mt-2 max-h-[min(65dvh,28rem)] overflow-y-auto overscroll-contain rounded-lg border border-border bg-background p-3 shadow-md">
+                <TableOfContents headings={headings} label={t.post.tableOfContents} showTitle={false} />
+              </div>
+            </details>
+          )}
 
           <article
             id="article"
@@ -217,11 +234,13 @@ const resolvedCanonical =
           <Comments locale={locale} enabled={comments} />
         </div>
 
-        <aside class="hidden lg:block" aria-label={t.post.tableOfContents}>
-          <div class="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pe-1">
-            <TableOfContents headings={headings} label={t.post.tableOfContents} />
-          </div>
-        </aside>
+        {hasToc && (
+          <aside class="hidden lg:block" aria-label={t.post.tableOfContents}>
+            <div data-toc-scroll class="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pe-1">
+              <TableOfContents headings={headings} label={t.post.tableOfContents} />
+            </div>
+          </aside>
+        )}
       </div>
     </article>
   </main>

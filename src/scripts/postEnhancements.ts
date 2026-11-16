@@ -130,11 +130,15 @@ function updateReadingProgress() {
   const rect = article.getBoundingClientRect();
   const headerBottom =
     document.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
+  const summaryHeight =
+    document
+      .querySelector("[data-toc-mobile] > summary")
+      ?.getBoundingClientRect().height ?? 0;
   const ratio = getReadingProgress(
     rect.top,
     rect.height,
     window.innerHeight,
-    Math.max(0, headerBottom) + 16,
+    Math.max(0, headerBottom) + summaryHeight + 24,
   );
   const percent = Math.round(ratio * 100);
   const bar = document.getElementById(PROGRESS_BAR_ID);
@@ -148,11 +152,6 @@ function updateReadingProgress() {
     .querySelectorAll<HTMLElement>("[data-reading-progress-meter]")
     .forEach((meter) => {
       meter.setAttribute("aria-valuenow", String(percent));
-    });
-  document
-    .querySelectorAll<HTMLElement>("[data-reading-progress-fill]")
-    .forEach((fill) => {
-      fill.style.transform = `scaleX(${ratio})`;
     });
 }
 
@@ -481,12 +480,8 @@ function setupPostEnhancements() {
 
 setupPostEnhancements();
 
-// View Transitions 切换后重新初始化，并回到顶部
-document.addEventListener("astro:after-swap", () => {
-  setupPostEnhancements();
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window.scrollTo({ left: 0, top: 0, behavior: reduce ? "auto" : "instant" });
-});
+// 页面位置由 Astro 路由恢复，锚点和历史位置对应的进度随页面初始化更新。
+document.addEventListener("astro:after-swap", setupPostEnhancements);
 
 // 切换前关闭可能打开的灯箱，避免残留
 document.addEventListener("astro:before-swap", () => {
