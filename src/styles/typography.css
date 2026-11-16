@@ -132,6 +132,11 @@
   max-width: 100%;
 }
 
+.app-prose .xng-code-header {
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+  border-start-end-radius: calc(var(--radius-lg) - 1px);
+}
+
 /* 暗色代码块切换为暗色 Shiki 主题背景 */
 .dark .app-prose .astro-code {
   background-color: var(--shiki-dark-bg);

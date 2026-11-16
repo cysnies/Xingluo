@@ -58,7 +58,7 @@ function parseFileNameFromMeta(meta: unknown): string | undefined {
  * 通过 ```ts filename="src/lib/utils.ts" 语法在代码块顶部显示语言徽标与文件名
  *
  * 在 pre 内部最前方注入一个 header div（作为 code 的前置兄弟节点），
- * 左侧放语言徽标（可选）与文件名（可选），右侧放复制按钮占位。
+ * 左侧放语言徽标，中间放文件名，右侧放复制按钮占位。
  * header 为常规文档流块级元素，不依赖绝对定位，因此不会被 pre 的
  * overflow 裁切，复制按钮也共享同一行，避免半在内半在外的错位
  */
@@ -74,7 +74,7 @@ export function transformerFileName(
       const lang = String(this.options?.lang ?? "").toLowerCase();
       const showLang = !HIDDEN_LANGS.has(lang);
 
-      // header 左侧：语言徽标与文件名（带可选绿色圆点）
+      // header 左侧：语言徽标
       const leftChildren: ShikiHastNode[] = [];
       if (showLang) {
         leftChildren.push({
@@ -87,22 +87,40 @@ export function transformerFileName(
           children: [{ type: "text", value: lang }],
         });
       }
+      const leftMeta: ShikiHastNode = {
+        type: "element",
+        tagName: "div",
+        properties: {
+          class: "xng-code-meta flex min-w-0 items-center gap-2",
+        },
+        children: leftChildren,
+      };
+
+      // header 中间：文件名（带可选绿色圆点）
+      const centeredChildren: ShikiHastNode[] = [];
       if (filename) {
         const dotClass = hideDot
           ? ""
           : "before:inline-block before:size-1.5 before:rounded-full before:bg-green-500";
-        leftChildren.push({
+        centeredChildren.push({
           type: "element",
           tagName: "span",
           properties: {
             class: [
-              "xng-code-filename inline-flex items-center gap-1.5 font-medium text-foreground",
+              "xng-code-filename pointer-events-none absolute left-1/2 flex max-w-[55%] -translate-x-1/2 items-center gap-1.5 font-medium text-foreground",
               dotClass,
             ]
               .filter(Boolean)
               .join(" "),
           },
-          children: [{ type: "text", value: filename }],
+          children: [
+            {
+              type: "element",
+              tagName: "span",
+              properties: { class: "truncate" },
+              children: [{ type: "text", value: filename }],
+            },
+          ],
         });
       }
 
@@ -124,9 +142,9 @@ export function transformerFileName(
         tagName: "div",
         properties: {
           class:
-            "xng-code-header flex items-center gap-2 border-b border-border bg-black/5 px-3 py-1.5 text-xs dark:bg-white/5",
+            "xng-code-header relative flex items-center gap-2 border-b border-border bg-black/5 px-3 py-1.5 text-xs dark:bg-white/5",
         },
-        children: [...leftChildren, actions],
+        children: [leftMeta, ...centeredChildren, actions],
       };
 
       // header 作为 pre 的首种子节点，置于 code 之前

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./theme.css";
 @import "./palettes.css";
+@import "./players.css";
 @import "rehype-callouts/theme/obsidian";
 
 /* 加载 Tailwind v4 插件 */

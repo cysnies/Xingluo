@@ -1,0 +1,277 @@
+/**
+ * APlayer / DPlayer 的 shadcn new-york 视觉覆盖
+ * 只调整容器与控件外观，播放器行为和配置由组件和客户端脚本负责。
+ */
+
+.app-prose :where(.xng-aplayer, .xng-dplayer) {
+  width: 100%;
+  margin-block: 1.75rem;
+}
+
+/* APlayer */
+.app-prose .xng-aplayer.aplayer {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  color: var(--card-foreground);
+  box-shadow: var(--app-shadow-xs);
+  font-family: var(--font-sans);
+  line-height: 1.4;
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-pic {
+  box-sizing: border-box;
+  width: 72px;
+  height: 72px;
+  border-inline-end: 1px solid var(--border);
+  background-color: var(--muted) !important;
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-info {
+  height: 72px;
+  margin-inline-start: 72px;
+  padding: 12px 14px 0;
+  border-color: var(--border);
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-music .aplayer-title {
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-music .aplayer-author,
+.app-prose .xng-aplayer.aplayer .aplayer-time {
+  color: var(--muted-foreground);
+}
+
+.app-prose
+  .xng-aplayer.aplayer
+  .aplayer-info
+  .aplayer-controller
+  .aplayer-bar-wrap
+  .aplayer-bar {
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--muted-foreground) 24%, transparent);
+}
+
+.app-prose
+  .xng-aplayer.aplayer
+  .aplayer-info
+  .aplayer-controller
+  .aplayer-bar-wrap
+  .aplayer-bar
+  .aplayer-loaded {
+  height: 3px;
+  border-radius: inherit;
+  background: color-mix(in oklch, var(--muted-foreground) 42%, transparent);
+}
+
+.app-prose
+  .xng-aplayer.aplayer
+  .aplayer-info
+  .aplayer-controller
+  .aplayer-bar-wrap
+  .aplayer-bar
+  .aplayer-played {
+  height: 3px;
+  border-radius: inherit;
+  background: var(--primary) !important;
+}
+
+.app-prose
+  .xng-aplayer.aplayer
+  .aplayer-info
+  .aplayer-controller
+  .aplayer-bar-wrap
+  .aplayer-bar
+  .aplayer-played
+  .aplayer-thumb {
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  background: var(--primary) !important;
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+.app-prose
+  .xng-aplayer.aplayer
+  .aplayer-info
+  .aplayer-controller
+  .aplayer-time
+  .aplayer-icon
+  path {
+  fill: var(--muted-foreground);
+}
+
+.app-prose
+  .xng-aplayer.aplayer
+  .aplayer-info
+  .aplayer-controller
+  .aplayer-time
+  .aplayer-icon:hover
+  path {
+  fill: var(--foreground);
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-list {
+  border-color: var(--border);
+  background: var(--card);
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-list ol li {
+  border-color: var(--border);
+  color: var(--muted-foreground);
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-list ol li:hover,
+.app-prose .xng-aplayer.aplayer .aplayer-list ol li.aplayer-list-light {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-list-cur,
+.app-prose .xng-aplayer.aplayer .aplayer-volume {
+  background: var(--primary) !important;
+}
+
+.app-prose .xng-aplayer.aplayer .aplayer-notice {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--popover);
+  color: var(--popover-foreground);
+}
+
+/* DPlayer */
+.app-prose .xng-dplayer.dplayer {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: #09090b;
+  box-shadow: var(--app-shadow-xs);
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-video-wrap,
+.app-prose .xng-dplayer.dplayer .dplayer-video-wrap video {
+  border-radius: inherit;
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-controller-mask {
+  height: 112px;
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / 0.78),
+    rgb(0 0 0 / 0.36) 52%,
+    transparent
+  );
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-controller {
+  height: 44px;
+  padding-inline: 16px;
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-controller .dplayer-bar-wrap {
+  width: calc(100% - 32px);
+  bottom: 35px;
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-controller .dplayer-bar-wrap .dplayer-bar,
+.app-prose
+  .xng-dplayer.dplayer
+  .dplayer-controller
+  .dplayer-bar-wrap
+  .dplayer-bar
+  .dplayer-loaded,
+.app-prose
+  .xng-dplayer.dplayer
+  .dplayer-controller
+  .dplayer-bar-wrap
+  .dplayer-bar
+  .dplayer-played {
+  height: 3px;
+  border-radius: 999px;
+}
+
+.app-prose
+  .xng-dplayer.dplayer
+  .dplayer-controller
+  .dplayer-bar-wrap
+  .dplayer-bar
+  .dplayer-played,
+.app-prose
+  .xng-dplayer.dplayer
+  .dplayer-controller
+  .dplayer-bar-wrap
+  .dplayer-bar
+  .dplayer-played
+  .dplayer-thumb {
+  background: var(--primary) !important;
+}
+
+.app-prose
+  .xng-dplayer.dplayer
+  .dplayer-controller
+  .dplayer-bar-wrap
+  .dplayer-bar
+  .dplayer-played
+  .dplayer-thumb {
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.35);
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-icons {
+  bottom: 0;
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-icons .dplayer-icon {
+  color: rgb(250 250 250 / 0.9);
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-icons .dplayer-icon svg {
+  fill: currentColor;
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-menu,
+.app-prose .xng-dplayer.dplayer .dplayer-setting-box,
+.app-prose .xng-dplayer.dplayer .dplayer-quality-list,
+.app-prose .xng-dplayer.dplayer .dplayer-notice {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: var(--radius-md);
+  background: rgb(24 24 27 / 0.96);
+  color: var(--primary-foreground);
+  box-shadow: var(--app-shadow-md);
+  backdrop-filter: blur(12px);
+}
+
+.app-prose .xng-dplayer.dplayer .dplayer-menu .dplayer-menu-item:hover,
+.app-prose .xng-dplayer.dplayer .dplayer-setting .dplayer-setting-item:hover,
+.app-prose .xng-dplayer.dplayer .dplayer-quality-list .dplayer-quality-item:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.app-prose .xng-dplayer.dplayer video::cue {
+  font-family: var(--font-sans);
+}
+
+@media (max-width: 639px) {
+  .app-prose :where(.xng-aplayer, .xng-dplayer) {
+    margin-block: 1.25rem;
+  }
+
+  .app-prose .xng-aplayer.aplayer .aplayer-pic {
+    width: 64px;
+    height: 64px;
+  }
+
+  .app-prose .xng-aplayer.aplayer .aplayer-info {
+    height: 64px;
+    margin-inline-start: 64px;
+    padding-inline: 10px;
+  }
+}
