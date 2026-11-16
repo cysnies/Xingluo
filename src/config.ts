@@ -99,7 +99,7 @@ const defaultFeatures = {
   /**
    * 字体 CDN 镜像（默认开启，大陆友好）
    * - Google Fonts → fonts.googleapis.cn（gstatic.cn）
-   * - jsDelivr npm 字体包 → cdn.npmmirror.com
+   * - jsDelivr npm 字体包 → registry.npmmirror.com
    * 设 enabled:false 可回退官方源
    */
   googleFontsMirror: {

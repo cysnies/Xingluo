@@ -76,11 +76,11 @@ export const BUILTIN_FONTS: FontDefinition[] = [
     source: "cdn",
     cssUrl: "fonts/lxgw-wenkai-lite-regular.css",
     cssUrls: ["fonts/lxgw-wenkai-lite-regular.css"],
-    preconnectOrigins: ["https://cdn.npmmirror.com"],
+    preconnectOrigins: ["https://registry.npmmirror.com"],
     monoStack:
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
     license: "OFL-1.1",
-    note: "文楷精简版；仅加载常规字重，并延迟到页面加载后启用可选的字体子集",
+    note: "文楷精简版；仅加载常规字重，字体子集在页面解析时按需加载",
   },
   {
     id: "lxgw-wenkai-screen",

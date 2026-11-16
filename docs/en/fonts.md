@@ -48,6 +48,6 @@ Built-in ids include `system`, `lxgw-wenkai`, `lxgw-wenkai-lite`, `lxgw-wenkai-s
 By default `features.googleFontsMirror.enabled` is **true** (`src/config.ts`):
 
 - Google Fonts CSS → `https://fonts.googleapis.cn` (files on `gstatic.cn`)
-- jsDelivr npm webfonts (e.g. LXGW) → `https://cdn.npmmirror.com`
+- jsDelivr npm webfonts (e.g. LXGW) → `https://registry.npmmirror.com`
 
 Set `enabled: false` to use official Google / jsDelivr. See `docs/zh-cn/fonts.md` for details.

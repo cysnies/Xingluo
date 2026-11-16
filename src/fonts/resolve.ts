@@ -35,7 +35,7 @@ const DEFAULT_GF_MIRROR = "https://fonts.googleapis.cn";
 /**
  * 将字体 stylesheet URL 改写到镜像（若启用 googleFontsMirror）
  * - fonts.googleapis.com → 配置的镜像根（默认 fonts.googleapis.cn）
- * - cdn.jsdelivr.net/npm/pkg@version/path → cdn.npmmirror.com/packages/pkg/version/files/path
+ * - cdn.jsdelivr.net/npm/pkg@version/path → registry.npmmirror.com/pkg/version/files/path
  *
  * 仅改写已知公共 CDN 前缀，不接受任意用户主机名（降低开放重定向风险）。
  */
@@ -62,9 +62,9 @@ export function maybeMirrorCssUrl(cssUrl: string): string {
 }
 
 /**
- * jsDelivr npm 字体包 → npmmirror CDN
+ * jsDelivr npm 字体包 → npmmirror 文件服务
  * 例：https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/style.css
- *   → https://cdn.npmmirror.com/packages/lxgw-wenkai-lite-webfont/1.7.0/files/style.css
+ *   → https://registry.npmmirror.com/lxgw-wenkai-lite-webfont/1.7.0/files/style.css
  */
 export function rewriteJsdelivrNpmToNpmmirror(cssUrl: string): string {
   const m = cssUrl.match(
@@ -72,5 +72,5 @@ export function rewriteJsdelivrNpmToNpmmirror(cssUrl: string): string {
   );
   if (!m) return cssUrl;
   const [, pkg, ver, path] = m;
-  return `https://cdn.npmmirror.com/packages/${pkg}/${ver}/files/${path}`;
+  return `https://registry.npmmirror.com/${pkg}/${ver}/files/${path}`;
 }

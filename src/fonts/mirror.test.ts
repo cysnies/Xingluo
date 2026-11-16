@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/config", () => ({
@@ -28,12 +29,36 @@ describe("font CDN mirrors", () => {
     const src =
       "https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/style.css";
     expect(rewriteJsdelivrNpmToNpmmirror(src)).toBe(
-      "https://cdn.npmmirror.com/packages/lxgw-wenkai-lite-webfont/1.7.0/files/style.css",
+      "https://registry.npmmirror.com/lxgw-wenkai-lite-webfont/1.7.0/files/style.css",
     );
-    expect(maybeMirrorCssUrl(src)).toContain("cdn.npmmirror.com");
+    expect(maybeMirrorCssUrl(src)).toContain("registry.npmmirror.com");
   });
 
   it("leaves local paths untouched", () => {
     expect(maybeMirrorCssUrl("/fonts/mine.css")).toBe("/fonts/mine.css");
+  });
+
+  it("uses the npmmirror file service for every WenKai Lite subset", () => {
+    const css = readFileSync(
+      new URL(
+        "../../public/fonts/lxgw-wenkai-lite-regular.css",
+        import.meta.url,
+      ),
+      "utf8",
+    );
+    const urls = [
+      ...new Set(
+        [...css.matchAll(/https:\/\/[^"']+\.woff2/g)].map(([url]) => url),
+      ),
+    ];
+
+    expect(urls).toHaveLength(97);
+    expect(
+      urls.every((url) =>
+        url.startsWith(
+          "https://registry.npmmirror.com/lxgw-wenkai-lite-webfont/1.7.0/files/files/",
+        ),
+      ),
+    ).toBe(true);
   });
 });

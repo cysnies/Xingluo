@@ -124,7 +124,7 @@ export default defineXingluoConfig({
     },
     // 字体 CDN 镜像：默认已在 src/config.ts 开启（大陆友好）
     // - Google Fonts → https://fonts.googleapis.cn（配套 gstatic.cn）
-    // - jsDelivr npm 字体（霞鹜等）→ https://cdn.npmmirror.com
+    // - jsDelivr npm 字体（霞鹜等）→ https://registry.npmmirror.com
     // 若部署环境可直连官方源，可显式关闭：
     // googleFontsMirror: {
     //   enabled: false,

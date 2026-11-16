@@ -70,10 +70,10 @@ export default defineXingluoConfig({
 
 默认 `features.googleFontsMirror.enabled = true`（见 `src/config.ts`），读者切换 CDN 字体时无需额外配置即可访问：
 
-| 类型                       | 官方源                     | 默认镜像                                                              | 说明                                                          |
-| -------------------------- | -------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Google Fonts CSS           | `fonts.googleapis.com`     | [`fonts.googleapis.cn`](https://fonts.googleapis.cn)                  | 返回的字文件走 `fonts.gstatic.cn`；社区常用、稳定             |
-| npm 网页字体（霞鹜文楷等） | `cdn.jsdelivr.net/npm/...` | [`cdn.npmmirror.com`](https://npmmirror.com/)（npmmirror / 淘宝镜像） | 将 jsDelivr npm 路径改写为 npmmirror `packages/.../files/...` |
+| 类型                       | 官方源                     | 默认镜像                                                                   | 说明                                                       |
+| -------------------------- | -------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Google Fonts CSS           | `fonts.googleapis.com`     | [`fonts.googleapis.cn`](https://fonts.googleapis.cn)                       | 返回的字文件走 `fonts.gstatic.cn`；社区常用、稳定          |
+| npm 网页字体（霞鹜文楷等） | `cdn.jsdelivr.net/npm/...` | [`registry.npmmirror.com`](https://npmmirror.com/)（npmmirror / 淘宝镜像） | 将 jsDelivr npm 路径改写为 npmmirror `包名/版本/files/...` |
 
 关闭镜像、改用官方源：
 
