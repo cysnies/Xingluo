@@ -6,9 +6,6 @@
 
 基于 Astro 与 shadcn 视觉风格的现代化博客主题
 
-[![CI](https://github.com/cysnies/Xingluo/actions/workflows/ci.yml/badge.svg)](https://github.com/cysnies/Xingluo/actions/workflows/ci.yml)
-[![Deploy Pages](https://github.com/cysnies/Xingluo/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/cysnies/Xingluo/actions/workflows/deploy-pages.yml)
-[![Publish Image](https://github.com/cysnies/Xingluo/actions/workflows/publish-image.yml/badge.svg)](https://github.com/cysnies/Xingluo/pkgs/container/xingluo)
 [![License: AGPL-3.0](https://img.shields.io/github/license/cysnies/Xingluo?label=License&color=blue)](./LICENSE)
 [![Astro](https://img.shields.io/badge/Astro-6.x-FF5D01?logo=astro&logoColor=white)](https://astro.build)
 [![Node](https://img.shields.io/badge/Node-%E2%89%A5%2022.12-339933?logo=node.js&logoColor=white)](https://nodejs.org)
@@ -188,5 +185,3 @@ docker run -d -p 8080:80 --name xingluo xingluo
 ## 📜 License
 
 [AGPL-3.0](./LICENSE)
-
-> **AGPL 注意：** 星罗以 AGPL-3.0 发布，属于强 copyleft。"网络提供服务"亦可能触发源码 reciprocal 义务，与许多 MIT 主题不同。个人博客自用通常无妨；若计划闭源二次分发或 SaaS 封装，请先阅读 LICENSE 或咨询法务。
