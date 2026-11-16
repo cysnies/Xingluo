@@ -10,6 +10,7 @@ import Datetime from "./Datetime.astro";
 import Card from "@/components/ui/Card.astro";
 import CardTitle from "@/components/ui/CardTitle.astro";
 import CardDescription from "@/components/ui/CardDescription.astro";
+import PostCategory from "@/components/post/PostCategory.astro";
 import PostTaxonomy from "@/components/post/PostTaxonomy.astro";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +32,7 @@ const locale = Astro.currentLocale ?? config.site.lang;
 const tr = useTranslations(locale);
 const href = getPostUrl(id, filePath, locale);
 const tags = getPostCardTags(data.tags, data.category).visible;
-const hasTaxonomy = Boolean(data.category || tags.length > 0);
+const hasTags = tags.length > 0;
 const readingMinutes = getReadingTime(post.body ?? "", locale);
 
 // 沿用字符串和 Astro 图片对象两种内容格式。
@@ -97,6 +98,7 @@ const useBackgroundHero = Boolean(heroImageSrc);
         data-post-card-meta
         class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-normal text-muted-foreground"
       >
+        <PostCategory category={data.category} />
         <Datetime
           pubDatetime={data.pubDatetime}
           modDatetime={data.modDatetime}
@@ -129,9 +131,9 @@ const useBackgroundHero = Boolean(heroImageSrc);
       }
 
       {
-        showTags && hasTaxonomy && (
+        showTags && hasTags && (
           <div class={variant === "list" ? "mt-3" : "mt-auto pt-3"}>
-            <PostTaxonomy category={data.category} tags={tags} />
+            <PostTaxonomy tags={tags} />
           </div>
         )
       }

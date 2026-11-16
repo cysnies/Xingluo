@@ -1,0 +1,36 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations, tplStr } from "@/i18n";
+import { slugifyStr } from "@/utils/slugify";
+import { cn } from "@/lib/utils";
+import config from "@/config";
+
+interface Props {
+  category?: string;
+  class?: string;
+}
+
+const { category = "", class: className } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+const categoryHref = category
+  ? getRelativeLocaleUrl(locale, `categories/${slugifyStr(category)}/`)
+  : undefined;
+---
+
+{
+  categoryHref && (
+    <a
+      data-post-card-category
+      data-taxonomy-category
+      href={categoryHref}
+      aria-label={tplStr(t.post.categoryLabel, { category })}
+      class={cn(
+        "relative z-10 inline-flex h-7 min-h-0 min-w-0 shrink-0 items-center justify-center rounded-md border border-transparent bg-muted px-2.5 py-0 text-xs leading-none font-medium text-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        className,
+      )}
+    >
+      <span class="truncate">{category}</span>
+    </a>
+  )
+}

@@ -27,10 +27,21 @@ describe("PostCard layout contract", () => {
     expect(src).toContain('variant !== "list" && "flex-1"');
     expect(src).toContain('variant !== "list" && "flex flex-col"');
     expect(src).toContain("<PostTaxonomy");
+    expect(src).toContain("<PostTaxonomy tags={tags} />");
+    expect(src).not.toContain("<PostTaxonomy category=");
     expect(src).toContain('variant === "list" ? "mt-3" : "mt-auto pt-3"');
     expect(src).toContain(
       '<div class={variant === "list" ? "mt-3" : "mt-auto pt-3"}>',
     );
+  });
+
+  it("places the category beside the date and reading time", () => {
+    const meta = src.indexOf("data-post-card-meta");
+    const category = src.indexOf("<PostCategory", meta);
+    const datetime = src.indexOf("<Datetime", meta);
+    expect(meta).toBeGreaterThan(-1);
+    expect(category).toBeGreaterThan(meta);
+    expect(datetime).toBeGreaterThan(category);
   });
 
   it("renders hero images as a fading right-side backdrop on every card", () => {

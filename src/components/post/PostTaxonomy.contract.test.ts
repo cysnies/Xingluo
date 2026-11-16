@@ -14,8 +14,12 @@ describe("post taxonomy chips", () => {
     expect(src).toContain("rounded-md");
     expect(src).toContain("shadow-xs");
     expect(src.match(/shadow-none/g)?.length).toBeGreaterThanOrEqual(2);
+    expect(src).toContain(
+      'import PostCategory from "@/components/post/PostCategory.astro"',
+    );
+    expect(src).toContain("<PostCategory category={category} />");
     expect(src.match(/class=\{cn\(chipClass/g)?.length).toBeGreaterThanOrEqual(
-      3,
+      2,
     );
   });
 

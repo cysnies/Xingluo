@@ -1,9 +1,8 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
-import { useTranslations, tplStr } from "@/i18n";
 import { slugifyStr } from "@/utils/slugify";
 import { cn } from "@/lib/utils";
 import Tag from "@/components/Tag.astro";
+import PostCategory from "@/components/post/PostCategory.astro";
 
 interface Props {
   category?: string;
@@ -12,18 +11,13 @@ interface Props {
 }
 
 const { category = "", tags, class: className } = Astro.props;
-const t = useTranslations(Astro.currentLocale);
-const locale = Astro.currentLocale ?? "zh-cn";
-const categoryHref = category
-  ? getRelativeLocaleUrl(locale, `categories/${slugifyStr(category)}/`)
-  : undefined;
 
 const chipClass =
   "relative z-10 inline-flex h-7 min-h-0 min-w-0 items-center justify-center rounded-md border border-transparent bg-muted px-2.5 py-0 text-xs leading-none font-medium text-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 ---
 
 {
-  (categoryHref || tags.length > 0) && (
+  (category || tags.length > 0) && (
     <div
       data-post-card-taxonomy
       data-taxonomy-row
@@ -32,16 +26,7 @@ const chipClass =
         className,
       )}
     >
-      {categoryHref && (
-        <a
-          data-taxonomy-category
-          href={categoryHref}
-          aria-label={tplStr(t.post.categoryLabel, { category })}
-          class={cn(chipClass, "shrink-0")}
-        >
-          <span class="truncate">{category}</span>
-        </a>
-      )}
+      <PostCategory category={category} />
       {tags.map((tag) => (
         <span data-taxonomy-tag class="inline-flex shrink-0">
           <Tag
