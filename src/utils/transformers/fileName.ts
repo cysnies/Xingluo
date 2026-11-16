@@ -55,10 +55,10 @@ function parseFileNameFromMeta(meta: unknown): string | undefined {
 
 /**
  * Shiki 代码块头部转换器
- * 通过 ```ts filename="src/lib/utils.ts" 语法在代码块顶部显示文件名与语言徽标
+ * 通过 ```ts filename="src/lib/utils.ts" 语法在代码块顶部显示语言徽标与文件名
  *
  * 在 pre 内部最前方注入一个 header div（作为 code 的前置兄弟节点），
- * 左侧放文件名（可选），右侧放语言徽标（可选）与复制按钮占位。
+ * 左侧放语言徽标（可选）与文件名（可选），右侧放复制按钮占位。
  * header 为常规文档流块级元素，不依赖绝对定位，因此不会被 pre 的
  * overflow 裁切，复制按钮也共享同一行，避免半在内半在外的错位
  */
@@ -74,8 +74,19 @@ export function transformerFileName(
       const lang = String(this.options?.lang ?? "").toLowerCase();
       const showLang = !HIDDEN_LANGS.has(lang);
 
-      // header 左侧：文件名（带可选绿色圆点）
+      // header 左侧：语言徽标与文件名（带可选绿色圆点）
       const leftChildren: ShikiHastNode[] = [];
+      if (showLang) {
+        leftChildren.push({
+          type: "element",
+          tagName: "span",
+          properties: {
+            class:
+              "xng-code-lang font-mono text-[0.7rem] uppercase tracking-wide text-muted-foreground",
+          },
+          children: [{ type: "text", value: lang }],
+        });
+      }
       if (filename) {
         const dotClass = hideDot
           ? ""
@@ -95,19 +106,8 @@ export function transformerFileName(
         });
       }
 
-      // header 右侧操作区：语言徽标 + 复制按钮（复制按钮由 postEnhancements 注入）
+      // header 右侧操作区：复制按钮（由 postEnhancements 注入）
       const actionsChildren: ShikiHastNode[] = [];
-      if (showLang) {
-        actionsChildren.push({
-          type: "element",
-          tagName: "span",
-          properties: {
-            class:
-              "xng-code-lang font-mono text-[0.7rem] uppercase tracking-wide text-muted-foreground",
-          },
-          children: [{ type: "text", value: lang }],
-        });
-      }
 
       const actions: ShikiHastNode = {
         type: "element",

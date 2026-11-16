@@ -1,23 +1,38 @@
 ---
-import { tplStr } from "@/i18n";
+import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
 import Socials from "./Socials.astro";
+import Rss from "@/assets/icons/Rss.astro";
 
 const { site, features } = config;
+const t = useTranslations(Astro.currentLocale ?? site.lang);
 const year = String(new Date().getFullYear());
 const copyright = tplStr(site.copyright ?? "© {{year}} {{author}}", {
   year,
   author: site.author,
 });
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+const rssHref = new URL(`${base}/rss.xml`, Astro.site ?? Astro.url).href;
 ---
 
-<footer class="mt-auto border-t border-border bg-background">
+<footer class="border-border bg-background mt-auto border-t">
   <div
-    class="mx-auto flex max-w-app flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row sm:px-6 lg:px-8"
+    class="max-w-app mx-auto flex flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row sm:px-6 lg:px-8"
   >
-    <p class="text-sm text-muted-foreground">
+    <p class="text-muted-foreground text-sm">
       {copyright}
     </p>
-    {features.showFooterSocials && <Socials />}
+    <div class="flex items-center gap-1">
+      {features.showFooterSocials && <Socials />}
+      <a
+        href={rssHref}
+        class="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 inline-flex size-9 items-center justify-center rounded-md transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
+        aria-label={t.nav.rss}
+        title="RSS"
+      >
+        <Rss class="size-4" />
+        <span class="sr-only">RSS</span>
+      </a>
+    </div>
   </div>
 </footer>

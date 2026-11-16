@@ -68,7 +68,7 @@ function attachCopyButtons(
   const codeBlocks = Array.from(root.querySelectorAll("pre"));
   for (const codeBlock of codeBlocks) {
     // transformerFileName 在 pre 内注入了 .xng-code-header
-    // 复制按钮放入 header 右侧操作区，与文件名/语言徽标同行
+    // 复制按钮放入 header 右侧操作区，语言徽标和文件名位于左侧
     const header = codeBlock.querySelector<HTMLElement>(
       ":scope > .xng-code-header",
     );
